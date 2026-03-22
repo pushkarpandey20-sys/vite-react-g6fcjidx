@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { useApp } from '../../store/AppCtx';
-import { Spinner, StatusBadge } from '../../components/common/UIElements';
+import BookingRiskMonitor from '../../features/admin-panel/components/BookingRiskMonitor';
 
 export default function AdminHome() {
   const { db } = useApp();
@@ -43,6 +41,11 @@ export default function AdminHome() {
       ))}
     </div>
 
+    <div className="sh"><div className="sh-title">Sacred Trust & Integrity Monitor</div></div>
+    <div style={{ marginBottom: '30px' }}>
+      <BookingRiskMonitor />
+    </div>
+
     <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 18, marginBottom: 22 }}>
       <div className="ac">
         <div className="sh"><div className="sh-title">Platform Revenue Growth</div></div>
@@ -61,6 +64,7 @@ export default function AdminHome() {
         ))}
       </div>
     </div>
+
 
     <div className="sh"><div className="sh-title">Recent Platform Activity</div></div>
     <div className="dtable">
