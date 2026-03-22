@@ -1,5 +1,7 @@
+import { db } from '../services/supabase';
 import { withRetry } from '../utils/production/errorHandler';
 import { logger } from '../utils/production/logger';
+
 
 export const bookingApi = {
   createBooking: async (bookingData) => {

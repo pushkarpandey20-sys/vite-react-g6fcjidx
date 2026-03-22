@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useApp } from '../../store/AppCtx';
-import { bookingApi } from '../../api/bookingApi';
+import { useApp } from '../../../store/AppCtx';
+import { bookingApi } from '../../../api/bookingApi';
 import { AvailablePanditList } from '../components/AvailablePanditList';
-import { paymentService } from '../../services/paymentService';
-import { notificationService } from '../../services/notificationService';
-import { Spinner } from '../../components/common/UIElements';
+import { paymentService } from '../../../services/paymentService';
+import { notificationService } from '../../../services/notificationService';
+import { Spinner } from '../../../components/common/UIElements';
 
 export default function InstantPanditBooking() {
   const { devoteeId, devoteeName, toast } = useApp();
@@ -59,7 +59,7 @@ export default function InstantPanditBooking() {
     setSubmitting(true);
     try {
       const payment = await paymentService.processPayment({
-        amount: 501, // Default base amount for instant booking
+        amount: 501, 
         name: devoteeName,
         description: `Instant Booking with Pt. ${pandit.name}`
       });
@@ -158,7 +158,7 @@ export default function InstantPanditBooking() {
       </div>
 
       {submitting && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(255,255,255,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(255,255,107,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
           <div style={{ textAlign: 'center' }}>
             <Spinner />
             <p style={{ marginTop: '15px', color: '#FF6B00', fontWeight: 800 }}>Securing Your Instant Booking...</p>

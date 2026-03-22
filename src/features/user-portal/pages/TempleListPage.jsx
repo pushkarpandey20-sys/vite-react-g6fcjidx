@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useApp } from '../../store/AppCtx';
-import { db } from '../../services/supabase';
-import { Spinner } from '../../components/common/UIElements';
+import { useApp } from '../../../store/AppCtx';
+import { db } from '../../../services/supabase';
+import { Spinner } from '../../../components/common/UIElements';
 
 export default function TempleListPage() {
   const { devoteeId, setShowLogin } = useApp();

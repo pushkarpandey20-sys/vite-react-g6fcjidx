@@ -1,0 +1,47 @@
+
+> vite-react-typescript-starter@0.0.0 build
+> vite build
+
+vite v2.7.13 building for production...
+<script src="https://checkout.razorpay.com/v1/checkout.js"> in "/index.html" can't be bundled without type="module" attribute
+transforming...
+Browserslist: caniuse-lite is outdated. Please run:
+  npx browserslist@latest --update-db
+  Why you should do it regularly: https://github.com/browserslist/browserslist#browsers-data-updating
+✓ 48 modules transformed.
+Could not resolve '../../store/AppCtx' from src/features/user-portal/pages/InstantPanditBooking.jsx
+error during build:
+Error: Could not resolve '../../store/AppCtx' from src/features/user-portal/pages/InstantPanditBooking.jsx
+    at error (/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/node_modules/rollup/dist/shared/rollup.js:160:30)
+    at ModuleLoader.handleResolveId (/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/node_modules/rollup/dist/shared/rollup.js:22374:24)
+    at /Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/node_modules/rollup/dist/shared/rollup.js:22353:26
+    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)
+[!] Error: unfinished hook action(s) on exit:
+(vite:css) transform "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/assets/styles/globals.css"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/services/supabase.js"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/api/constants.js"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/node_modules/react/cjs/react-jsx-runtime.production.min.js"
+(commonjs) load "\u0000/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/node_modules/react/cjs/react-jsx-runtime.production.min.js?commonjs-proxy"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/node_modules/object-assign/index.js"
+(commonjs) load "\u0000/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/node_modules/object-assign/index.js?commonjs-proxy"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/node_modules/scheduler/index.js"
+(commonjs) load "\u0000/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/node_modules/scheduler/index.js?commonjs-proxy"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/layouts/MainLayout.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/components/Sidebar.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/components/NotificationOverlay.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/components/Cards.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/components/common/UIElements.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/user-portal/sankalp-engine/SpiritualCalendarWidget.jsx"
+(vite:esbuild) transform "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/user-portal/pages/SamagriStorePage.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/user-portal/components/Muhurtas/MuhuratFinder.jsx"
+(vite:esbuild) transform "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/user-portal/pages/TemplePoojaBookingPage.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/services/paymentService.js"
+(vite:esbuild) transform "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/user-portal/pages/TempleListPage.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/services/notificationService.js"
+(vite:esbuild) transform "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/user-portal/pages/ReferralPage.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/admin-panel/components/PanditVerificationTable.jsx"
+(vite:esbuild) transform "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/store/AppCtx.jsx"
+(vite:esbuild) transform "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/user-portal/sankalp-engine/SankalpProfile.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/user-portal/components/PanditFilters.jsx"
+(vite:load-fallback) load "/Users/pushkhar/Desktop/Devsetu_final/vite-react-g6fcjidx/src/features/user-portal/components/PanditGrid.jsx"
+

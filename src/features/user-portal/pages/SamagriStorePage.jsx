@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useApp } from '../../store/AppCtx';
-import { useCart } from '../../hooks/useCart';
+import { useApp } from '../../../store/AppCtx';
+import { useCart } from '../../../hooks/useCart';
 import SamagriCard from '../components/SamagriCard';
 import CartDrawer from '../components/CartDrawer';
 import CheckoutModal from '../components/CheckoutModal';
-import { samagriApi } from '../../api/samagriApi';
-import { Spinner } from '../../components/common/UIElements';
+import { samagriApi } from '../../../api/samagriApi';
+import { Spinner } from '../../../components/common/UIElements';
 
 export default function SamagriStorePage() {
   const { devoteeId, toast } = useApp();

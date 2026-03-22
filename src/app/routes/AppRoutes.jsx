@@ -6,12 +6,12 @@ import UserLayout from '../../layouts/UserLayout';
 import PanditLayout from '../../layouts/PanditLayout';
 import AdminLayout from '../../layouts/AdminLayout';
 
-// Devotee Pages
+// Pages
+import Landing from '../../pages/Landing';
 import UserHome from '../../pages/devotee/UserHome';
 import MuhuratPage from '../../pages/devotee/MuhuratPage';
 import BookPandit from '../../pages/devotee/BookPandit';
 import HistoryPage from '../../pages/devotee/HistoryPage';
-import TemplePage from '../../pages/devotee/TemplePage';
 import SevaPage from '../../pages/devotee/SevaPage';
 
 // Pandit Pages
@@ -30,16 +30,16 @@ import AdminTempleList from '../../pages/admin/AdminTempleList';
 import AdminSamagriList from '../../pages/admin/AdminSamagriList';
 import AdminPermissionPage from '../../pages/admin/AdminPermissionPage';
 
+// Feature Pages
 import PanditMarketplacePage from '../../features/user-portal/pages/PanditMarketplacePage';
 import BookingWizard from '../../features/user-portal/pages/BookingWizard';
 import RitualCatalogPage from '../../features/user-portal/pages/RitualCatalogPage';
 import InstantPanditBooking from '../../features/user-portal/pages/InstantPanditBooking';
-
 import SamagriStorePage from '../../features/user-portal/pages/SamagriStorePage';
-
 import TempleListPage from '../../features/user-portal/pages/TempleListPage';
 import TemplePoojaBookingPage from '../../features/user-portal/pages/TemplePoojaBookingPage';
 import ReferralPage from '../../features/user-portal/pages/ReferralPage';
+import SankalpProfile from '../../features/user-portal/sankalp-engine/SankalpProfile';
 
 export default function AppRoutes() {
   return (

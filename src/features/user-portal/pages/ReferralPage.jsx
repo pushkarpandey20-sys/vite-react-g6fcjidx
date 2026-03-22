@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useApp } from '../../store/AppCtx';
-import { db } from '../../services/supabase';
+import { useApp } from '../../../store/AppCtx';
+import { db } from '../../../services/supabase';
+
 
 export default function ReferralPage() {
   const { devoteeId, toast } = useApp();

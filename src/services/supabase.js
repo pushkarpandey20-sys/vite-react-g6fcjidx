@@ -14,7 +14,9 @@ export const db = {
   donations: () => supabase.from("donations"),
   orders: () => supabase.from("orders"),
   devotees: () => supabase.from("devotees"),
+  referral_rewards: () => supabase.from("referral_rewards"),
   notifications: () => supabase.from("notifications"),
+
 };
 
 export function genId(prefix) {
