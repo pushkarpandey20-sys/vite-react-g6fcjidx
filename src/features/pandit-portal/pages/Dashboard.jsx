@@ -11,8 +11,12 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!panditId) {
+      setLoading(false);
+      return;
+    }
+
     (async () => {
-      if (!panditId) return;
       const { data } = await db.bookings()
         .select("*")
         .eq("pandit_id", panditId)
@@ -21,7 +25,6 @@ export default function Dashboard() {
       setLoading(false);
     })();
 
-    if (!panditId) return;
     const channel = supabase.channel(`dashboard_${panditId}`)
       .on('postgres_changes', { 
         event: '*', 
@@ -40,6 +43,7 @@ export default function Dashboard() {
 
     return () => supabase.removeChannel(channel);
   }, [panditId]);
+
 
   const stats = useMemo(() => {
     const today = new Date().toISOString().split('T')[0];
@@ -65,6 +69,19 @@ export default function Dashboard() {
 
   if (loading) return <Spinner />;
 
+  if (!panditId) {
+    return (
+      <div className="pandit-dashboard ac" style={{ padding: '80px 20px' }}>
+        <div className="card" style={{ maxWidth: '600px', margin: '0 auto', padding: '40px' }}>
+          <div style={{ fontSize: '60px', marginBottom: '20px' }}>📿</div>
+          <h2 className="ph-title">Sacred Scholar Gateway</h2>
+          <p className="ph-sub">Please onboard as a Vedic scholar to manage your sacred schedule and earnings.</p>
+          <button className="btn btn-primary btn-sm" style={{ marginTop: '30px' }}>Join as a Scholar</button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="pandit-dashboard">
       <header className="dashboard-header wb">
@@ -72,6 +89,7 @@ export default function Dashboard() {
           <h2 className="ph-title animate-glow">🙏 Namaste, Pt. {panditName || "Ji"}</h2>
           <p className="ph-sub">Managing your sacred throughput for today.</p>
         </div>
+
         <div className="status-toggle-box card">
           <span className={`status-dot ${panditOnline ? 'online' : 'offline'}`} />
           <span className="status-lbl">{panditOnline ? "LIVE: ONLINE" : "LIVE: PAUSED"}</span>
