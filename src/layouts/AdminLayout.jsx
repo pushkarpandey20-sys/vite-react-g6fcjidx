@@ -1,37 +1,60 @@
 import React from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import MainLayout from './MainLayout';
 import { AdminSidebar } from '../components/Sidebar';
 import { useApp } from '../store/AppCtx';
 
 export default function AdminLayout() {
   const { adminRole, setAdminRole } = useApp();
+  const location = useLocation();
+  const path = location.pathname;
+
+  if (!adminRole) {
+    return (
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',height:'100vh',gap:20,background:'#0d0700'}}>
+        <div style={{fontSize:64}}>🛡️</div>
+        <h2 style={{fontFamily:"'Cinzel',serif",color:'#3498db'}}>Admin Command Centre</h2>
+        <p style={{color:'#888'}}>Please authenticate to access the admin panel</p>
+        <button onClick={()=>setAdminRole('manager')} style={{background:'linear-gradient(135deg,#2980B9,#3498db)',color:'#fff',border:'none',borderRadius:28,padding:'12px 36px',fontWeight:800,cursor:'pointer'}}>🔐 Login as Admin</button>
+      </div>
+    );
+  }
+
+  let title = 'Admin Command Centre';
+  let sub = 'DevSetu Platform Analytics & Operations';
+  if (path.includes('pandits')) { title = 'Pandit Management'; sub = 'Verify and manage pandit profiles'; }
+  else if (path.includes('rituals')) { title = 'Ritual Catalog'; sub = 'Manage available rituals and services'; }
+  else if (path.includes('bookings')) { title = 'All Transactions'; sub = 'View and manage all platform bookings'; }
+  else if (path.includes('temples')) { title = 'Temple Network'; sub = 'Manage the sacred temple directory'; }
+  else if (path.includes('samagri')) { title = 'Inventory Control'; sub = 'Manage pooja samagri stock and listings'; }
+  else if (path.includes('settings')) { title = 'System Settings'; sub = 'Super admin platform configuration'; }
 
   return (
     <div>
-      <div style={{ background: '#1a0f07', padding: '10px 24px', display: 'flex', gap: '16px', alignItems: 'center', borderBottom: '1px solid rgba(212,160,23,0.3)' }}>
-        <span style={{ color: '#F0C040', fontFamily: "'Cinzel', serif", fontWeight: 'bold' }}>⚙️ Admin Role Demo</span>
-        <select 
-          value={adminRole} 
+      {/* Admin role demo bar */}
+      <div style={{ background: '#1a0f07', padding: '8px 20px', display: 'flex', gap: '14px', alignItems: 'center', borderBottom: '1px solid rgba(212,160,23,0.3)', flexWrap: 'wrap' }}>
+        <span style={{ color: '#F0C040', fontFamily: "'Cinzel', serif", fontWeight: 'bold', fontSize: 13 }}>⚙️ Admin Role Demo</span>
+        <select
+          value={adminRole}
           onChange={e => setAdminRole(e.target.value)}
-          style={{ padding: '6px 12px', borderRadius: '20px', background: '#3d2211', color: '#fff', border: '1px solid rgba(212,160,23,0.6)', outline: 'none' }}
+          style={{ padding: '5px 12px', borderRadius: '20px', background: '#3d2211', color: '#fff', border: '1px solid rgba(212,160,23,0.6)', outline: 'none', fontSize: 13 }}
         >
           <option value="viewer">Viewer</option>
           <option value="manager">Manager</option>
           <option value="superadmin">Super Admin</option>
         </select>
-        <span style={{ color: 'rgba(255,248,240,0.6)', fontSize: '13px', fontStyle: 'italic', fontFamily: "'Crimson Pro',serif" }}>
-          {adminRole === 'superadmin' ? 'Full Access: Payments, Approvals, Everything' 
-            : adminRole === 'manager' ? 'Manage Bookings & Verifications' 
+        <span style={{ color: 'rgba(255,248,240,0.6)', fontSize: '12px', fontStyle: 'italic', fontFamily: "'Crimson Pro',serif" }}>
+          {adminRole === 'superadmin' ? 'Full Access: Payments, Approvals, Everything'
+            : adminRole === 'manager' ? 'Manage Bookings & Verifications'
             : 'Read-only viewing of Analytics'}
         </span>
       </div>
 
       <div style={{ pointerEvents: adminRole === 'viewer' ? 'none' : 'auto' }}>
-        <MainLayout sidebar={<AdminSidebar />}>
+        <MainLayout sidebar={<AdminSidebar />} portalLabel="🛡️ Admin Panel" portalColor="#2980B9">
           <header className="ph">
-            <h1 className="ph-title">{path.includes('pandits') ? 'Pandit Management' : path.includes('rituals') ? 'Ritual Catalog' : path.includes('bookings') ? 'All Transactions' : path.includes('temples') ? 'Temple Network' : path.includes('samagri') ? 'Inventory Control' : path.includes('settings') ? 'System Settings' : 'Admin Command Centre'}</h1>
-            <p className="ph-sub">{path.includes('overview') ? 'DevSetu Platform Analytics & Operations' : 'Platform management with administrative controls'}</p>
+            <h1 className="ph-title">{title}</h1>
+            <p className="ph-sub">{sub}</p>
           </header>
           <main className="cb">
             <Outlet />
@@ -41,4 +64,3 @@ export default function AdminLayout() {
     </div>
   );
 }
-

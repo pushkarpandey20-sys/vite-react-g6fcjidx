@@ -2114,3 +2114,272 @@ body {
 .no-notif { padding: 40px; text-align: center; font-size: 12px; font-style: italic; color: #8B6347; opacity: 0.6; }
 
 @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* =============================================
+   HAMBURGER MENU & MOBILE SIDEBAR
+   ============================================= */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 38px;
+  height: 38px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(212,160,23,.3);
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 8px;
+  flex-shrink: 0;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  background: var(--gl);
+  border-radius: 2px;
+  transition: all .3s;
+}
+
+.sidebar-wrap {
+  display: flex;
+  flex-shrink: 0;
+}
+
+.sidebar-overlay {
+  display: none;
+}
+
+.nav-portal-badge {
+  display: flex;
+  align-items: center;
+}
+
+/* =============================================
+   MOBILE RESPONSIVE — 768px
+   ============================================= */
+@media (max-width: 768px) {
+  /* Nav */
+  .tnav {
+    padding: 0 14px;
+    height: 56px;
+    gap: 8px;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+
+  .logo-tagline {
+    display: none;
+  }
+
+  .logo-name {
+    font-size: 16px;
+  }
+
+  .nav-portal-badge {
+    display: none;
+  }
+
+  .icon-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+
+  /* Layout */
+  .layout {
+    position: relative;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* Sidebar becomes a slide-out drawer */
+  .sidebar-wrap {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    bottom: 0;
+    z-index: 300;
+    transform: translateX(-100%);
+    transition: transform .3s ease;
+  }
+
+  .sidebar-wrap.sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar {
+    width: 240px;
+    height: 100%;
+    top: 0;
+    box-shadow: 4px 0 24px rgba(0,0,0,.4);
+  }
+
+  /* Overlay when sidebar open */
+  .sidebar-overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    top: 56px;
+    background: rgba(0,0,0,.5);
+    z-index: 299;
+    backdrop-filter: blur(2px);
+  }
+
+  /* Content takes full width */
+  .content {
+    width: 100%;
+  }
+
+  /* Page header */
+  .ph {
+    padding: 18px 16px 14px;
+  }
+
+  .ph-title {
+    font-size: 18px;
+  }
+
+  .ph-sub {
+    font-size: 12px;
+  }
+
+  /* Content body */
+  .cb {
+    padding: 16px 14px;
+  }
+
+  /* Stat grids: 4-col → 2-col */
+  .sg4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sg3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sgrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Pandit / ritual grids */
+  .pgrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .rgrid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Form grids */
+  .fgrid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Seva/donation grid */
+  .sev-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  /* Samagri grid */
+  .sgrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Notification dropdown */
+  .notification-dropdown {
+    width: 280px;
+    right: -60px;
+  }
+
+  /* Express banner wraps */
+  .express-banner {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 14px;
+  }
+
+  /* Dashboard two-col grid → single col */
+  [style*="grid-template-columns: 1.2fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Stats row for admin */
+  .stats-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* =============================================
+   MOBILE RESPONSIVE — 480px (small phones)
+   ============================================= */
+@media (max-width: 480px) {
+  .tnav {
+    padding: 0 10px;
+  }
+
+  .logo-name {
+    font-size: 15px;
+  }
+
+  .sg4, .sg3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .pgrid {
+    grid-template-columns: 1fr;
+  }
+
+  .sev-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cb {
+    padding: 12px 10px;
+  }
+
+  .ph {
+    padding: 14px 12px;
+  }
+
+  .ph-title {
+    font-size: 16px;
+  }
+
+  .stat-val {
+    font-size: 20px;
+  }
+
+  .btn-lg {
+    padding: 9px 18px;
+    font-size: 13px;
+  }
+
+  /* Booking request cards */
+  .breq {
+    flex-wrap: wrap;
+  }
+}
+
+/* =============================================
+   TABLET — 1024px
+   ============================================= */
+@media (max-width: 1024px) {
+  .pgrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sg4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .sev-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .cb {
+    padding: 20px 18px;
+  }
+}
+

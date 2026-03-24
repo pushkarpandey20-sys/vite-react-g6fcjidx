@@ -17,7 +17,7 @@ export default function PanditLayout() {
   else if (path.includes('history')) { title = "Booking History"; sub = "Log of all successfully performed rituals"; }
 
   return (
-    <MainLayout sidebar={<PanditSidebar />}>
+    <MainLayout sidebar={<PanditSidebar />} portalLabel="🪔 Pandit Portal" portalColor="#D4A017">
       <header className="ph" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1 className="ph-title">{title}</h1>
@@ -31,5 +31,3 @@ export default function PanditLayout() {
     </MainLayout>
   );
 }
-
-

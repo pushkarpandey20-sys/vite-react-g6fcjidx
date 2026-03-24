@@ -6,7 +6,7 @@ import { Spinner, Toggle } from '../../../components/common/UIElements';
 import { notificationService } from '../../../services/notificationService';
 
 export default function Dashboard() {
-  const { panditId, panditName, panditOnline, setPanditOnline, toast } = useApp();
+  const { panditId, panditName, panditOnline, setPanditOnline, toast, setShowPanditOnboarding } = useApp();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -15,7 +15,6 @@ export default function Dashboard() {
       setLoading(false);
       return;
     }
-
     (async () => {
       const { data } = await db.bookings()
         .select("*")
@@ -71,13 +70,11 @@ export default function Dashboard() {
 
   if (!panditId) {
     return (
-      <div className="pandit-dashboard ac" style={{ padding: '80px 20px' }}>
-        <div className="card" style={{ maxWidth: '600px', margin: '0 auto', padding: '40px' }}>
-          <div style={{ fontSize: '60px', marginBottom: '20px' }}>📿</div>
-          <h2 className="ph-title">Sacred Scholar Gateway</h2>
-          <p className="ph-sub">Please onboard as a Vedic scholar to manage your sacred schedule and earnings.</p>
-          <button className="btn btn-primary btn-sm" style={{ marginTop: '30px' }}>Join as a Scholar</button>
-        </div>
+      <div style={{display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',height:'70vh',gap:20}}>
+        <div style={{fontSize:64}}>🙏</div>
+        <h2 style={{fontFamily:"'Cinzel',serif",color:'#D4A017'}}>Sacred Scholar Gateway</h2>
+        <p style={{color:'#888'}}>Please log in as a Pandit to manage your bookings</p>
+        <button onClick={()=>setShowPanditOnboarding(true)} style={{background:'linear-gradient(135deg,#D4A017,#F0C040)',color:'#1a0f07',border:'none',borderRadius:28,padding:'12px 36px',fontWeight:800,cursor:'pointer'}}>🪔 Login as Pandit</button>
       </div>
     );
   }

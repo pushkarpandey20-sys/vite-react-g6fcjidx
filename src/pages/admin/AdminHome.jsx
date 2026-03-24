@@ -1,3 +1,6 @@
+import React, { useState, useEffect } from 'react';
+import { useApp } from '../../store/AppCtx';
+import { Spinner, StatusBadge } from '../../components/common/UIElements';
 import BookingRiskMonitor from '../../features/admin-panel/components/BookingRiskMonitor';
 
 export default function AdminHome() {
