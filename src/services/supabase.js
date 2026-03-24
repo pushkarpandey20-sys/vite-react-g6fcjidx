@@ -1,7 +1,10 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://lnhlnogpmpjajwtmmrmq.supabase.co";
-export const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_hkLodTGQEUBQ5QcLTIey1Q_snE7L9j1";
+const _rawUrl = import.meta.env.VITE_SUPABASE_URL;
+const _rawKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Reject placeholder values that don't start with http
+export const SUPABASE_URL = (_rawUrl && _rawUrl.startsWith('http')) ? _rawUrl : "https://lnhlnogpmpjajwtmmrmq.supabase.co";
+export const SUPABASE_KEY = (_rawKey && !_rawKey.startsWith('your_')) ? _rawKey : "sb_publishable_hkLodTGQEUBQ5QcLTIey1Q_snE7L9j1";
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export const db = {
