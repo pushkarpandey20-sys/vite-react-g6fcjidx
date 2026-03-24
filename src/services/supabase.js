@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
-export const SUPABASE_URL = "https://lnhlnogpmpjajwtmmrmq.supabase.co";
-export const SUPABASE_KEY = "sb_publishable_hkLodTGQEUBQ5QcLTIey1Q_snE7L9j1";
+export const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://lnhlnogpmpjajwtmmrmq.supabase.co";
+export const SUPABASE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "sb_publishable_hkLodTGQEUBQ5QcLTIey1Q_snE7L9j1";
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export const db = {
@@ -16,7 +16,18 @@ export const db = {
   devotees: () => supabase.from("devotees"),
   referral_rewards: () => supabase.from("referral_rewards"),
   notifications: () => supabase.from("notifications"),
+  admin_users: () => supabase.from("admin_users"),
+  analytics: () => supabase.from("analytics_events"),
+};
 
+// Auth helpers
+export const auth = {
+  sendOTP: (phone) => supabase.auth.signInWithOtp({ phone }),
+  verifyOTP: (phone, token) => supabase.auth.verifyOtp({ phone, token, type: 'sms' }),
+  signInAdmin: (email, password) => supabase.auth.signInWithPassword({ email, password }),
+  getSession: () => supabase.auth.getSession(),
+  signOut: () => supabase.auth.signOut(),
+  onAuthChange: (cb) => supabase.auth.onAuthStateChange(cb),
 };
 
 export function genId(prefix) {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MuhuratResultCard from './MuhuratResultCard';
 import { useApp } from '../../../../store/AppCtx';
 import { useNavigate } from 'react-router-dom';
@@ -6,7 +6,28 @@ import { useNavigate } from 'react-router-dom';
 export default function MuhuratFinder() {
   const { MUHURTAS } = useApp();
   const navigate = useNavigate();
-  const [query, setQuery] = useState({ occasion: '', city: 'Kashi', dateFrom: '', dateTo: '' });
+  const [query, setQuery] = useState({ occasion: '', city: 'Delhi', dateFrom: '', dateTo: '' });
+
+  // Auto-detect city from geolocation
+  useEffect(() => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?lat=${coords.latitude}&lon=${coords.longitude}&format=json`,
+            { headers: { 'Accept-Language': 'en' } }
+          );
+          const data = await res.json();
+          const city = data.address?.city || data.address?.town || data.address?.state_district || 'Delhi';
+          setQuery(q => ({ ...q, city }));
+        } catch {
+          // keep default Delhi
+        }
+      },
+      () => { /* permission denied — keep default Delhi */ }
+    );
+  }, []);
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
 

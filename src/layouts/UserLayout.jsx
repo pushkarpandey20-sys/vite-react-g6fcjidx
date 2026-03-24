@@ -2,6 +2,7 @@ import { useLocation, Outlet } from 'react-router-dom';
 import MainLayout from './MainLayout';
 import { UserSidebar } from '../components/Sidebar';
 import NotificationOverlay from '../components/NotificationOverlay';
+import MobileNav from '../components/MobileNav';
 
 export default function UserLayout() {
   const location = useLocation();
@@ -31,9 +32,10 @@ export default function UserLayout() {
         </div>
         <NotificationOverlay />
       </header>
-      <main className="cb">
+      <main className="cb" style={{ paddingBottom: 80 }}>
         <Outlet />
       </main>
+      <MobileNav />
     </MainLayout>
   );
 }

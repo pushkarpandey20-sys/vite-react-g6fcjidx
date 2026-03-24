@@ -20,6 +20,7 @@ import PanditReqPage from '../../pages/pandit/PanditReqPage';
 import PanditProfilePage from '../../pages/pandit/PanditProfilePage';
 import PanditEarningsPage from '../../pages/pandit/PanditEarningsPage';
 import PanditAvailPage from '../../pages/pandit/PanditAvailPage';
+import PanditOnboardingPage from '../../pages/pandit/PanditOnboardingPage';
 
 // Admin Pages
 import AdminHome from '../../pages/admin/AdminHome';
@@ -69,6 +70,9 @@ export default function AppRoutes() {
 
 
 
+
+      {/* Pandit Onboarding (standalone, no sidebar layout) */}
+      <Route path="/pandit/onboard" element={<PanditOnboardingPage />} />
 
       {/* Pandit Routes */}
       <Route path="/pandit" element={<PanditLayout />}>

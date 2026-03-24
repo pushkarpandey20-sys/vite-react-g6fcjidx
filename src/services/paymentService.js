@@ -1,41 +1,36 @@
+import { supabase } from './supabase';
+
 export const paymentService = {
-  processPayment: ({ amount, name, email, contact, description }) => {
+  processPayment: ({ amount, bookingId, name, contact, description }) => {
     return new Promise((resolve, reject) => {
+      if (!window.Razorpay) {
+        return reject({ success: false, message: "Razorpay SDK not loaded. Check internet connection." });
+      }
       const options = {
-        key: "rzp_test_YOUR_KEY", // Should be in env in prod
-        amount: amount * 100, // amount in the smallest currency unit
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_YOUR_KEY",
+        amount: amount * 100, // paise
         currency: "INR",
-        name: "DevSetu Spiritual Services",
-        description: description || "Sacred Offering",
-        image: "/logo.png",
-        handler: function (response) {
-          // Success!
-          resolve({
-            success: true,
-            payment_id: response.razorpay_payment_id,
-            order_id: response.razorpay_order_id,
-            signature: response.razorpay_signature,
-          });
-        },
-        prefill: {
-          name: name || "",
-          email: email || "",
-          contact: contact || "",
-        },
-        notes: {
-          address: "Virtual Mandap",
-        },
-        theme: {
-          color: "#FF6B00", // DevSetu Saffron
-        },
+        name: "DevSetu",
+        description: description || "Sacred Ritual Dakshina",
+        image: "/favicon.svg",
+        order_id: bookingId, // Supabase booking ID as reference
+        prefill: { name: name || "", contact: contact || "" },
+        notes: { booking_id: bookingId },
+        theme: { color: "#FF6B00" },
+        handler: (response) => resolve({
+          success: true,
+          payment_id: response.razorpay_payment_id,
+          order_id: response.razorpay_order_id,
+          signature: response.razorpay_signature,
+        }),
         modal: {
-          ondismiss: function() {
-            reject({ success: false, message: "Payment cancelled by devotee." });
-          }
+          ondismiss: () => reject({ success: false, message: "Payment cancelled." })
         }
       };
-
       const rzp = new window.Razorpay(options);
+      rzp.on('payment.failed', (response) => {
+        reject({ success: false, message: response.error?.description || "Payment failed." });
+      });
       rzp.open();
     });
   }

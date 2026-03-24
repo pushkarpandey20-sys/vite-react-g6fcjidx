@@ -2363,6 +2363,56 @@ body {
 }
 
 /* =============================================
+   MOBILE BOTTOM NAV
+   ============================================= */
+.mobile-bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: linear-gradient(180deg, #1a0f07 0%, #2c1a0e 100%);
+  border-top: 1px solid rgba(212,160,23,.2);
+  z-index: 500;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.35);
+}
+
+.mbn-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-decoration: none;
+  color: rgba(240,192,64,0.45);
+  gap: 2px;
+  transition: color .2s;
+  padding: 8px 0;
+}
+
+.mbn-tab.mbn-active {
+  color: #FF6B00;
+}
+
+.mbn-icon {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.mbn-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 768px) {
+  .mobile-bottom-nav {
+    display: flex;
+  }
+}
+
+/* =============================================
    TABLET — 1024px
    ============================================= */
 @media (max-width: 1024px) {

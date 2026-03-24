@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../../../store/AppCtx';
+import { supabase } from '../../../services/supabase';
 import { bookingApi } from '../../../api/bookingApi';
 import { Spinner } from '../../../components/common/UIElements';
 import RitualFilters from '../components/RitualFilters';
@@ -10,7 +11,7 @@ import { paymentService } from '../../../services/paymentService';
 import { notificationService } from '../../../services/notificationService';
 
 export default function BookingWizard() {
-  const { devoteeId, devoteeName, toast } = useApp();
+  const { devoteeId, devoteeName, userPhone, toast } = useApp();
   const navigate = useNavigate();
   const location = useLocation();
   const [step, setStep] = useState(1);
@@ -22,99 +23,45 @@ export default function BookingWizard() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
-  // Draft State
   const [draft, setDraft] = useState({
-    ritualId: null,
-    ritual: '',
-    ritualIcon: '🕉️',
-    amount: 0,
-    samagriId: null,
-    samagriAmount: 0,
-    deliveryRequired: false,
-    date: '',
-    time: '',
-    location: '',
-    address: '',
-    notes: '',
-    panditId: null,
-    panditName: '',
-    devoteeId: devoteeId,
-    devoteeName: devoteeName
+    ritualId: null, ritual: '', ritualIcon: '🕉️', amount: 0,
+    samagriId: null, samagriAmount: 0, deliveryRequired: false,
+    date: '', time: '', location: '', address: '', notes: '',
+    panditId: null, panditName: ''
   });
 
   useEffect(() => {
     (async () => {
       const { data } = await bookingApi.getRituals();
-      setRituals(data || []);
-      setFilteredRituals(data || []);
-      setLoading(false);
+      setRituals(data || []); setFilteredRituals(data || []); setLoading(false);
     })();
   }, []);
 
   useEffect(() => {
     if (location.state?.selectedRitual) {
       const r = location.state.selectedRitual;
-      setDraft(prev => ({
-        ...prev,
-        ritualId: r.id,
-        ritual: r.name,
-        ritualIcon: r.icon,
-        amount: r.price
-      }));
+      setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
       setStep(2);
     }
   }, [location.state]);
 
   useEffect(() => {
     let list = [...rituals];
-    if (ritualFilters.category !== 'All') {
-      list = list.filter(r => 
-        r.name.toLowerCase().includes(ritualFilters.category.toLowerCase()) || 
-        r.description?.toLowerCase().includes(ritualFilters.category.toLowerCase())
-      );
-    }
+    if (ritualFilters.category !== 'All') list = list.filter(r => r.name.toLowerCase().includes(ritualFilters.category.toLowerCase()));
     list = list.filter(r => r.price <= ritualFilters.maxPrice);
-    if (ritualFilters.samagriOnly) {
-      list = list.filter(r => r.samagriRequired);
-    }
+    if (ritualFilters.samagriOnly) list = list.filter(r => r.samagriRequired);
     setFilteredRituals(list);
   }, [ritualFilters, rituals]);
 
   const nextStep = () => setStep(s => Math.min(s + 1, 6));
   const prevStep = () => setStep(s => Math.max(s - 1, 1));
 
-  const handleRitualFilter = (key, val) => {
-    setRitualFilters(prev => ({ ...prev, [key]: val }));
-  };
-
   const selectRitual = async (r) => {
     setLoading(true);
     const { data } = await bookingApi.getSamagriKits(r.id);
     setSamagriKits(data || []);
     setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
-    setLoading(false);
-    nextStep();
-  };
-
-  const handleSamagriSelect = (kit) => {
-    setDraft(prev => ({ 
-      ...prev, 
-      samagriId: kit.id, 
-      samagriAmount: kit.price, 
-      deliveryRequired: true 
-    }));
-    nextStep();
-  };
-
-  const skipSamagri = () => {
-    setDraft(prev => ({ ...prev, samagriId: null, samagriAmount: 0, deliveryRequired: false }));
-    nextStep();
-  };
-
-  const handleStep3Submit = (e) => {
-    e.preventDefault();
-    if (!draft.date || !draft.time) return toast("Date and time are required!", "⚠️");
-    nextStep();
+    setLoading(false); nextStep();
   };
 
   const handleStep4Submit = (e) => {
@@ -123,15 +70,8 @@ export default function BookingWizard() {
     (async () => {
       setLoading(true);
       const { data } = await bookingApi.getAvailablePandits(draft.ritual, draft.location, draft.date);
-      setPandits(data || []);
-      setLoading(false);
-      nextStep();
+      setPandits(data || []); setLoading(false); nextStep();
     })();
-  };
-
-  const selectPandit = (p) => {
-    setDraft(prev => ({ ...prev, panditId: p.id, panditName: p.name }));
-    nextStep();
   };
 
   const confirmBooking = async () => {
@@ -139,41 +79,68 @@ export default function BookingWizard() {
     const totalRaw = draft.amount + draft.samagriAmount;
     const discount = draft.samagriId ? Math.round(totalRaw * 0.1) : 0;
     const totalAmount = totalRaw - discount;
-    
+
+    let bookingId = null;
     try {
+      // Step 1: Create booking with pending_payment status
+      const { data: booking, error: bookingError } = await supabase.from('bookings').insert({
+        devotee_id: devoteeId,
+        devotee_name: devoteeName,
+        pandit_id: draft.panditId,
+        pandit_name: draft.panditName,
+        ritual: draft.ritual,
+        ritual_icon: draft.ritualIcon,
+        booking_date: draft.date,
+        start_time: draft.time,
+        booking_time: draft.time,
+        address: draft.address,
+        location: draft.location,
+        notes: draft.notes,
+        total_amount: totalAmount,
+        amount: totalAmount,
+        status: 'pending_payment',
+        created_at: new Date().toISOString()
+      }).select().single();
+
+      if (bookingError) throw bookingError;
+      bookingId = booking.id;
+
+      // Step 2: Open Razorpay
       const payment = await paymentService.processPayment({
         amount: totalAmount,
+        bookingId,
         name: devoteeName,
-        description: `Sacred Ritual: ${draft.ritual} ${draft.samagriId ? '+ Samagri Bundle' : ''}`
+        contact: userPhone,
+        description: `${draft.ritual}${draft.samagriId ? ' + Samagri' : ''}`
       });
 
-      if (payment.success) {
-        const { error } = await bookingApi.createBooking({
-          ...draft,
-          total_amount: totalAmount,
-          discount_amount: discount,
-          payment_id: payment.payment_id,
-          payment_status: 'paid'
-        });
-        if (error) throw error;
-        
-        // Notify Pandit
-        if (draft.panditId) {
-          notificationService.notifyPanditOfNewBooking(draft.panditId, draft.ritual);
-        }
+      // Step 3: Update booking to confirmed
+      await supabase.from('bookings').update({
+        status: 'confirmed',
+        razorpay_payment_id: payment.payment_id,
+        razorpay_order_id: payment.order_id
+      }).eq('id', bookingId);
 
-        toast("Sacred Bundle Confirmed (+10% Savings)! 🙏", "🕉️");
-        navigate('/user/history');
-      }
+      // Notify pandit
+      if (draft.panditId) notificationService.notifyPanditOfNewBooking(draft.panditId, draft.ritual);
+
+      toast(draft.samagriId ? "Sacred Bundle Confirmed (+10% Savings)! 🙏" : "Booking Confirmed! 🙏", "🕉️");
+      navigate('/user/history');
+
     } catch (err) {
-      toast(err.message || "Payment Process Interrupted", "⚠️");
+      // Mark payment as failed if booking was created
+      if (bookingId) {
+        await supabase.from('bookings').update({ status: 'payment_failed' }).eq('id', bookingId).catch(() => {});
+      }
+      toast(err.message || "Payment failed. Please try again.", "⚠️");
     } finally {
       setSubmitting(false);
     }
   };
 
-
   if (loading && step === 1) return <Spinner />;
+
+  const totalAmount = (draft.amount + draft.samagriAmount) - (draft.samagriId ? Math.round((draft.amount + draft.samagriAmount) * 0.1) : 0);
 
   return (
     <div className="wizard-container">
@@ -188,66 +155,39 @@ export default function BookingWizard() {
 
       <div className="wizard-card card" style={{ padding: '30px', borderRadius: '20px' }}>
         {step === 1 && (
-          <div className="wizard-step step-1">
+          <div className="wizard-step">
             <h2 className="ph-title" style={{ color: '#F0C040' }}>Choose Your Sacred Ritual</h2>
             <p className="ph-sub">Explore our catalog and find the ceremony you wish to perform.</p>
-            
-            <div className="marketplace-content" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '30px', marginTop: '20px' }}>
-              <aside className="filters-sidebar">
-                <RitualFilters 
-                  onFilterChange={handleRitualFilter} 
-                  activeFilters={ritualFilters} 
-                />
-              </aside>
-              <section className="wizard-main">
-                {loading ? <Spinner /> : (
-                  <RitualGrid 
-                    rituals={filteredRituals} 
-                    onSelect={selectRitual} 
-                    activeId={draft.ritualId} 
-                  />
-                )}
-              </section>
+            <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '30px', marginTop: '20px' }}>
+              <aside><RitualFilters onFilterChange={(k, v) => setRitualFilters(p => ({ ...p, [k]: v }))} activeFilters={ritualFilters} /></aside>
+              <section>{loading ? <Spinner /> : <RitualGrid rituals={filteredRituals} onSelect={selectRitual} activeId={draft.ritualId} />}</section>
             </div>
           </div>
         )}
 
         {step === 2 && (
-          <div className="wizard-step step-2">
+          <div className="wizard-step">
             <h2 className="ph-title" style={{ color: '#F0C040' }}>Sacred Samagri Options</h2>
             <div style={{ background: '#FFF3E6', border: '1px dashed #FF6B00', padding: '10px 20px', borderRadius: '12px', color: '#B04B00', fontWeight: 800, fontSize: '12px', display: 'inline-block', marginBottom: '15px' }}>
               🎁 BUNDLE OFFER: Save 10% when booking ritual with a samagri kit!
             </div>
-            <p className="ph-sub">Would you like us to deliver a doorstep ritual kit for {draft.ritual}?</p>
-            <div style={{ marginTop: '30px' }}>
-              <SamagriSelector 
-                kits={samagriKits} 
-                selectedId={draft.samagriId} 
-                onSelect={handleSamagriSelect} 
-                onSkip={skipSamagri} 
-              />
-            </div>
-            <div className="wizard-btns" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
+            <SamagriSelector kits={samagriKits} selectedId={draft.samagriId}
+              onSelect={(kit) => { setDraft(p => ({ ...p, samagriId: kit.id, samagriAmount: kit.price, deliveryRequired: true })); nextStep(); }}
+              onSkip={() => { setDraft(p => ({ ...p, samagriId: null, samagriAmount: 0, deliveryRequired: false })); nextStep(); }} />
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
               <button className="btn btn-outline" onClick={prevStep}>← Back</button>
             </div>
           </div>
         )}
 
         {step === 3 && (
-          <form className="wizard-step step-3" onSubmit={handleStep3Submit}>
+          <form className="wizard-step" onSubmit={(e) => { e.preventDefault(); if (!draft.date || !draft.time) return toast("Date and time required!", "⚠️"); nextStep(); }}>
             <h2 className="ph-title" style={{ color: '#F0C040' }}>Pick Auspicious Timing</h2>
-            <p className="ph-sub">Consult the Panchang for a Shubh Muhurta.</p>
-            <div className="fgrid" style={{ marginBottom: 30, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '30px' }}>
-              <div className="fg">
-                <label className="fl">Preferred Date</label>
-                <input type="date" className="fi" required value={draft.date} onChange={e => setDraft(d => ({ ...d, date: e.target.value }))} />
-              </div>
-              <div className="fg">
-                <label className="fl">Start Time</label>
-                <input type="time" className="fi" required value={draft.time} onChange={e => setDraft(d => ({ ...d, time: e.target.value }))} />
-              </div>
+            <div className="fgrid" style={{ gap: '20px', marginTop: '30px' }}>
+              <div className="fg"><label className="fl">Preferred Date</label><input type="date" className="fi" required value={draft.date} onChange={e => setDraft(d => ({ ...d, date: e.target.value }))} /></div>
+              <div className="fg"><label className="fl">Start Time</label><input type="time" className="fi" required value={draft.time} onChange={e => setDraft(d => ({ ...d, time: e.target.value }))} /></div>
             </div>
-            <div className="wizard-btns" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
               <button type="button" className="btn btn-outline" onClick={prevStep}>← Back</button>
               <button type="submit" className="btn btn-primary">Choose Address →</button>
             </div>
@@ -255,29 +195,22 @@ export default function BookingWizard() {
         )}
 
         {step === 4 && (
-          <form className="wizard-step step-4" onSubmit={handleStep4Submit}>
+          <form className="wizard-step" onSubmit={handleStep4Submit}>
             <h2 className="ph-title" style={{ color: '#F0C040' }}>Where should Pt. Ji arrive?</h2>
-            <p className="ph-sub">Complete this for your home, office, or temple venue.</p>
-            <div className="fgrid" style={{ display: 'grid', gap: '20px', marginTop: '30px' }}>
+            <div className="fgrid" style={{ gap: '20px', marginTop: '30px' }}>
               <div className="fg">
                 <label className="fl">City</label>
                 <select className="fs" required value={draft.location} onChange={e => setDraft(d => ({ ...d, location: e.target.value }))}>
                   <option value="">Select City</option>
-                  {["Kashi", "Delhi", "Mumbai", "Bangalore", "Ayodhya", "Agra", "Ujjain", "Haridwar", "Pune"].map(c => (
+                  {["Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Mumbai", "Bengaluru", "Kashi", "Ayodhya", "Haridwar", "Ujjain", "Pune"].map(c => (
                     <option key={c} value={c}>{c}</option>
                   ))}
                 </select>
               </div>
-              <div className="fg">
-                <label className="fl">Full Address</label>
-                <textarea className="fta" required value={draft.address} onChange={e => setDraft(d => ({ ...d, address: e.target.value }))} placeholder="House no, Street name, LandMark..." />
-              </div>
-              <div className="fg">
-                <label className="fl">Additional Instructions (Optional)</label>
-                <input className="fi" value={draft.notes} onChange={e => setDraft(d => ({ ...d, notes: e.target.value }))} placeholder="Ask for specific preparation or entry info..." />
-              </div>
+              <div className="fg"><label className="fl">Full Address</label><textarea className="fta" required value={draft.address} onChange={e => setDraft(d => ({ ...d, address: e.target.value }))} placeholder="House no, Street, Landmark..." /></div>
+              <div className="fg"><label className="fl">Additional Instructions (Optional)</label><input className="fi" value={draft.notes} onChange={e => setDraft(d => ({ ...d, notes: e.target.value }))} placeholder="Entry info, special requests..." /></div>
             </div>
-            <div className="wizard-btns" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
               <button type="button" className="btn btn-outline" onClick={prevStep}>← Back</button>
               <button type="submit" className="btn btn-primary">Find Available Pandits →</button>
             </div>
@@ -285,59 +218,55 @@ export default function BookingWizard() {
         )}
 
         {step === 5 && (
-          <div className="wizard-step step-5">
+          <div className="wizard-step">
             <h2 className="ph-title" style={{ color: '#F0C040' }}>Choose Your Vedic Scholar</h2>
-            <p className="ph-sub">Based on your ritual and location, we've found these experts.</p>
-            <div className="pandit-picker-grid" style={{ display: 'grid', gap: '15px', marginTop: '30px' }}>
+            <div style={{ display: 'grid', gap: '15px', marginTop: '30px' }}>
               {loading ? <Spinner /> : (
-                pandits.length === 0 ? <div style={{ textAlign: 'center', padding: '40px' }}><p>No experts available for this city/ritual. Try another city.</p></div> : (
-                  pandits.map(p => (
-                    <div key={p.id} className={`pandit-pick-card ${draft.panditId === p.id ? 'active' : ''}`} 
-                      onClick={() => selectPandit(p)}
-                      style={{ padding: '15px', border: '1px solid #ddd', borderRadius: '12px', cursor: 'pointer' }}>
-                      <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                        <div style={{ fontSize: '30px' }}>{p.emoji}</div>
-                        <div>
-                          <div style={{ fontWeight: 'bold' }}>{p.name} {p.verified && "✓"}</div>
-                          <div style={{ fontSize: '12px', color: '#666' }}>{p.experience_years}y exp · {p.rating}★</div>
-                        </div>
+                pandits.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '40px' }}>
+                    <div style={{ fontSize: 36, marginBottom: 10 }}>🕉️</div>
+                    <p>No pandits available for this city/ritual. Try another city.</p>
+                  </div>
+                ) : pandits.map(p => (
+                  <div key={p.id}
+                    className={`card card-p ${draft.panditId === p.id ? 'selected' : ''}`}
+                    onClick={() => { setDraft(prev => ({ ...prev, panditId: p.id, panditName: p.name })); nextStep(); }}
+                    style={{ cursor: 'pointer', border: draft.panditId === p.id ? '2px solid #FF6B00' : undefined }}>
+                    <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
+                      <div style={{ fontSize: '30px' }}>{p.emoji || '🕉️'}</div>
+                      <div>
+                        <div style={{ fontWeight: 'bold' }}>{p.name} {p.verified && "✓"}</div>
+                        <div style={{ fontSize: '12px', color: '#666' }}>{p.years_of_experience || p.experience}y exp · {p.rating}★ · ₹{p.min_fee?.toLocaleString()}</div>
                       </div>
                     </div>
-                  ))
-                )
+                  </div>
+                ))
               )}
             </div>
-            <div className="wizard-btns" style={{ marginTop: '40px' }}>
+            <div style={{ marginTop: '40px' }}>
               <button className="btn btn-outline" onClick={prevStep}>← Back</button>
             </div>
           </div>
         )}
 
         {step === 6 && (
-          <div className="wizard-step step-6">
-            <h2 className="ph-title" style={{ color: '#F0C040' }}>Reconfirm Your Sacred Activity</h2>
-            <p className="ph-sub">Check all details before Pt. Ji accepts your request.</p>
-            <div className="confirm-box" style={{ background: '#f9f9f9', padding: '20px', borderRadius: '15px', marginTop: '30px' }}>
-              <div className="conf-summary" style={{ display: 'grid', gap: '10px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Ritual</strong> <span>{draft.ritualIcon} {draft.ritual}</span></div>
-                {draft.samagriId && <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Samagri Kit</strong> <span style={{ color: '#FF6B00' }}>📦 Doorstep Kit (+₹{draft.samagriAmount})</span></div>}
-                {draft.samagriId && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', color: '#12B76A', fontWeight: 800, fontSize: '13px' }}>
-                    <span>✨ Bundle Savings (10% Off)</span>
-                    <span>-₹{Math.round((draft.amount + draft.samagriAmount) * 0.1)}</span>
-                  </div>
-                )}
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Timing</strong> <span>📅 {draft.date} at 🕐 {draft.time}</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Location</strong> <span>📍 {draft.address}, {draft.location}</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Pandit Ji</strong> <span>🕉️ {draft.panditName || "Selecting Expert..."}</span></div>
+          <div className="wizard-step">
+            <h2 className="ph-title" style={{ color: '#F0C040' }}>Confirm Your Sacred Booking</h2>
+            <div style={{ background: '#f9f9f9', padding: '20px', borderRadius: '15px', marginTop: '30px' }}>
+              <div style={{ display: 'grid', gap: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Ritual</strong><span>{draft.ritualIcon} {draft.ritual}</span></div>
+                {draft.samagriId && <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Samagri Kit</strong><span style={{ color: '#FF6B00' }}>📦 Doorstep Kit (+₹{draft.samagriAmount})</span></div>}
+                {draft.samagriId && <div style={{ display: 'flex', justifyContent: 'space-between', color: '#12B76A', fontWeight: 800, fontSize: '13px' }}><span>✨ Bundle Savings (10%)</span><span>-₹{Math.round((draft.amount + draft.samagriAmount) * 0.1)}</span></div>}
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Timing</strong><span>📅 {draft.date} at 🕐 {draft.time}</span></div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Location</strong><span>📍 {draft.address}, {draft.location}</span></div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Pandit Ji</strong><span>🕉️ {draft.panditName || "Selecting Expert..."}</span></div>
                 <hr style={{ margin: '15px 0', opacity: 0.1 }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.2rem', color: '#FF6B00' }}>
-                  <strong>Final Amount</strong> 
-                  <strong>₹{(draft.amount + draft.samagriAmount) - (draft.samagriId ? Math.round((draft.amount + draft.samagriAmount) * 0.1) : 0)}</strong>
+                  <strong>Final Amount</strong><strong>₹{totalAmount.toLocaleString()}</strong>
                 </div>
               </div>
             </div>
-            <div className="wizard-btns" style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
               <button className="btn btn-outline" onClick={prevStep}>← Back</button>
               <button className="btn btn-primary btn-lg" onClick={confirmBooking} disabled={submitting}>
                 {submitting ? "Processing..." : "📿 Confirm & Pay Dakshina"}

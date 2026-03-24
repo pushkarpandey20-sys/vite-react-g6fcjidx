@@ -1,0 +1,40 @@
+{
+  "name": "DevSetu – Connecting the Divine",
+  "short_name": "DevSetu",
+  "description": "Book verified Pandits, find Muhurtas, shop Pooja Samagri — your complete spiritual companion.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "theme_color": "#FF6B00",
+  "background_color": "#1a0f07",
+  "lang": "en",
+  "categories": ["lifestyle", "religion", "spirituality"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Book a Pandit",
+      "url": "/user/booking",
+      "description": "Book a certified Vedic scholar"
+    },
+    {
+      "name": "Find Muhurta",
+      "url": "/user/muhurta",
+      "description": "Find auspicious timings"
+    }
+  ]
+}
