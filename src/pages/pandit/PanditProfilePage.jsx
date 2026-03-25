@@ -33,7 +33,7 @@ export default function PanditProfilePage() {
       <div className="prog-bar"><div className="prog-fill" style={{ width: `${(completeness / 6) * 100}% ` }} /></div>
     </div>
     <div className="card card-p" style={{ marginBottom: 20 }}>
-      <div style={{ display: "grid", gridTemplateColumns: "100px 1fr", gap: 22, marginBottom: 22 }}>
+      <div className="profile-header-grid" style={{ marginBottom: 22 }}>
         <div style={{ width: 100, height: 100, borderRadius: "50%", background: "linear-gradient(135deg,var(--s),var(--g))", display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "center", fontSize: 44, border: "4px solid var(--cream)" }}>🕉️</div>
         <div>
           <div className="fgrid">

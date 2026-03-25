@@ -69,7 +69,7 @@ export default function SevaPage() {
     </div>
     {donations.length > 0 && <>
       <div className="sh"><div className="sh-title">Your Donation History</div></div>
-      <div className="dtable">
+      <div className="dtable-scroll"><div className="dtable" style={{ minWidth: 340 }}>
         <div className="thead" style={{ gridTemplateColumns: "1fr 2fr 1fr 1fr" }}>
           {["", "Seva", "Amount", "Date"].map(h => <div key={h} className="th">{h}</div>)}
         </div>
@@ -81,7 +81,7 @@ export default function SevaPage() {
             <div className="td" style={{ fontSize: 12, color: "#8B6347" }}>{new Date(d.created_at).toLocaleDateString("en-IN")}</div>
           </div>
         ))}
-      </div>
+      </div></div>
     </>}
   </>);
 }

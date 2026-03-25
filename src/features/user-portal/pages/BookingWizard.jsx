@@ -158,8 +158,8 @@ export default function BookingWizard() {
           <div className="wizard-step">
             <h2 className="ph-title" style={{ color: '#F0C040' }}>Choose Your Sacred Ritual</h2>
             <p className="ph-sub">Explore our catalog and find the ceremony you wish to perform.</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', gap: '30px', marginTop: '20px' }}>
-              <aside><RitualFilters onFilterChange={(k, v) => setRitualFilters(p => ({ ...p, [k]: v }))} activeFilters={ritualFilters} /></aside>
+            <div className="marketplace-content" style={{ marginTop: '20px' }}>
+              <aside className="filters-sidebar"><RitualFilters onFilterChange={(k, v) => setRitualFilters(p => ({ ...p, [k]: v }))} activeFilters={ritualFilters} /></aside>
               <section>{loading ? <Spinner /> : <RitualGrid rituals={filteredRituals} onSelect={selectRitual} activeId={draft.ritualId} />}</section>
             </div>
           </div>

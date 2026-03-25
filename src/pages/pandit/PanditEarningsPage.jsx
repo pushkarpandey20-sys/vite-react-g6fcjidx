@@ -11,7 +11,7 @@ export default function PanditEarningsPage() {
   const earned = requests.reduce((s, r) => s + (r.amount * 0.75 || 0), 0);
   const chartData = [40, 55, 48, 65, 72, 68, 80, 75, 88, 92, 85, 95];
   return (<>
-    <div style={{ background: "linear-gradient(135deg,#1a0f07,#3d2211,#5c3317)", borderRadius: 16, padding: "22px", color: "#fff", display: "grid", gridTemplateColumns: "1fr 1px 1fr 1px 1fr 1px 1fr", marginBottom: 22 }}>
+    <div className="earnings-stats-bar" style={{ background: "linear-gradient(135deg,#1a0f07,#3d2211,#5c3317)", borderRadius: 16, padding: "22px", color: "#fff", marginBottom: 22 }}>
       {[[`₹${(earned + 42500).toLocaleString()} `, "This Month"], ["₹3,87,200", "This Year"], [requests.length + 23, "Poojas Done"], ["4.9 ★", "Rating"]].map(([v, l], i) => (
         <React.Fragment key={i}>
           <div style={{ textAlign: "center", padding: "0 6px" }}>
@@ -28,7 +28,8 @@ export default function PanditEarningsPage() {
     </div>
     {requests.length > 0 && <>
       <div className="sh"><div className="sh-title">Accepted Bookings</div></div>
-      <div className="dtable">
+      <div className="dtable-scroll">
+      <div className="dtable" style={{ minWidth: 480 }}>
         <div className="thead" style={{ gridTemplateColumns: "1fr 1.5fr 1fr 1fr 1fr" }}>
           {["Req ID", "Devotee", "Ritual", "Gross", "Net (75%)"].map(h => <div key={h} className="th">{h}</div>)}
         </div>
@@ -41,6 +42,7 @@ export default function PanditEarningsPage() {
             <div className="td" style={{ fontFamily: "'Cinzel',serif", fontWeight: 700, color: "#27AE60" }}>₹{Math.round(r.amount * .75).toLocaleString()}</div>
           </div>
         ))}
+      </div>
       </div>
     </>}
   </>);

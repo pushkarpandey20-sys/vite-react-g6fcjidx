@@ -2433,3 +2433,145 @@ body {
   }
 }
 
+/* =============================================
+   ADMIN CHARTS GRID
+   ============================================= */
+.admin-charts-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 768px) {
+  .admin-charts-grid { grid-template-columns: 1fr; }
+}
+
+/* =============================================
+   EARNINGS STATS BAR (Pandit)
+   ============================================= */
+.earnings-stats-bar {
+  display: grid;
+  grid-template-columns: 1fr 1px 1fr 1px 1fr 1px 1fr;
+}
+@media (max-width: 600px) {
+  .earnings-stats-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .earnings-stats-bar > div[style*="background"] { display: none; } /* hide separators */
+}
+
+/* =============================================
+   SCROLLABLE DATA TABLES
+   ============================================= */
+.dtable-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+/* =============================================
+   PANDIT PROFILE HEADER GRID
+   ============================================= */
+.profile-header-grid {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 22px;
+}
+@media (max-width: 480px) {
+  .profile-header-grid {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    text-align: center;
+  }
+}
+
+/* =============================================
+   FINAL MOBILE OVERRIDES (must come last)
+   Fixes media-query ordering bug where 1024px
+   block was placed after 480px block.
+   ============================================= */
+@media (max-width: 480px) {
+  /* Grids → single column */
+  .sev-grid    { grid-template-columns: 1fr !important; }
+  .sgrid       { grid-template-columns: repeat(2, 1fr) !important; }
+  .pgrid       { grid-template-columns: 1fr !important; }
+  .sg4, .sg3   { grid-template-columns: repeat(2, 1fr) !important; }
+  .stats-row   { grid-template-columns: 1fr 1fr !important; }
+
+  /* Nav */
+  .tnav        { padding: 0 10px; }
+  .logo-tagline { display: none; }
+  .logo-name   { font-size: 15px; }
+  .nav-portal-badge { display: none; }
+
+  /* Content padding */
+  .cb          { padding: 12px 10px !important; }
+  .ph          { padding: 14px 12px 10px !important; }
+  .ph-title    { font-size: 16px !important; }
+  .ph-sub      { font-size: 11px !important; }
+
+  /* Cards */
+  .card-p      { padding: 14px 12px; }
+  .wizard-card { padding: 16px 14px !important; }
+  .stat-card   { padding: 14px 10px; }
+  .stat-val    { font-size: 20px; }
+
+  /* Booking wizard stepper → icon-only */
+  .stepper     { gap: 4px; margin-bottom: 20px; }
+  .step        { width: auto; flex: 1; }
+  .step-lbl    { font-size: 8px; }
+
+  /* Buttons full-width in action areas */
+  .wizard-btns { flex-direction: column; gap: 10px; padding-top: 20px; }
+  .wizard-btns .btn { width: 100%; justify-content: center; }
+
+  /* Ritual picker min size */
+  .ritual-picker-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 10px; }
+  .ritual-select-card { padding: 14px 8px; }
+
+  /* Pandit card */
+  .pandit-card { min-width: 0; }
+  .pc-footer   { flex-direction: column; gap: 8px; }
+  .pc-footer .btn { width: 100%; justify-content: center; text-align: center; }
+
+  /* Booking action cards */
+  .booking-action-card { padding: 12px; }
+  .bac-header  { flex-wrap: wrap; gap: 8px; }
+
+  /* Modals */
+  .modal-box   { width: 95vw !important; max-width: 95vw !important; padding: 20px 16px !important; border-radius: 16px !important; }
+  .modal-overlay { padding: 16px 8px; align-items: flex-end; }
+
+  /* Dashboard grid */
+  .dashboard-grid { grid-template-columns: 1fr !important; }
+  .display-2col   { grid-template-columns: 1fr !important; }
+
+  /* Section header wrap */
+  .sh          { flex-wrap: wrap; gap: 8px; }
+
+  /* Page header overflow */
+  .ph::after   { display: none; }
+
+  /* Notification dropdown */
+  .notification-dropdown { width: calc(100vw - 20px); right: -50px; }
+
+  /* Mini chart bars */
+  .mini-chart  { overflow-x: auto; }
+
+  /* Hide separators in earnings bar */
+  .earnings-stats-bar { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* =============================================
+   VERY SMALL PHONES — 360px
+   ============================================= */
+@media (max-width: 360px) {
+  .ph-title    { font-size: 14px !important; }
+  .logo-name   { font-size: 13px !important; }
+  .btn         { font-size: 12px; padding: 8px 14px; }
+  .sgrid       { grid-template-columns: 1fr !important; }
+  .stat-val    { font-size: 18px; }
+  .cb          { padding: 10px 8px !important; }
+}
+

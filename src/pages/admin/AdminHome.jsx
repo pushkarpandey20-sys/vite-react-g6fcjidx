@@ -49,7 +49,7 @@ export default function AdminHome() {
       <BookingRiskMonitor />
     </div>
 
-    <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 18, marginBottom: 22 }}>
+    <div className="admin-charts-grid" style={{ marginBottom: 22 }}>
       <div className="ac">
         <div className="sh"><div className="sh-title">Platform Revenue Growth</div></div>
         <div style={{ display: "flex", alignItems: "flex-end", gap: 5, height: 160, padding: "20px 0" }}>
@@ -70,7 +70,7 @@ export default function AdminHome() {
 
 
     <div className="sh"><div className="sh-title">Recent Platform Activity</div></div>
-    <div className="dtable">
+    <div className="dtable-scroll"><div className="dtable" style={{ minWidth: 480 }}>
       <div className="thead" style={{ gridTemplateColumns: "1fr 1.5fr 1fr 1.2fr 1fr" }}>
         {["Booking ID", "Devotee", "Pandit", "Ritual", "Status"].map(h => <div key={h} className="th">{h}</div>)}
       </div>
@@ -83,6 +83,6 @@ export default function AdminHome() {
           <div className="td"><StatusBadge status={b.status} /></div>
         </div>
       ))}
-    </div>
+    </div></div>
   </>);
 }

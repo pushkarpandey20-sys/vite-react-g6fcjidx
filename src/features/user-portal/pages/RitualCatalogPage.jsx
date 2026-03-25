@@ -50,7 +50,7 @@ export default function RitualCatalogPage() {
 
   return (
     <div className="ritual-catalog-page">
-      <div className="marketplace-content" style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: '30px' }}>
+      <div className="marketplace-content">
         <aside className="filters-sidebar">
           <RitualFilters onFilterChange={handleFilter} activeFilters={filters} />
         </aside>
