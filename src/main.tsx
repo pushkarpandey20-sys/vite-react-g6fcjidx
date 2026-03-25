@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { AppProvider } from './store/AppProvider';
 import AppRoutes from './app/routes/AppRoutes';
 import './assets/styles/globals.css';
+import { initNotifications } from './services/notificationService';
 
 // Sentry error monitoring (no-op if DSN is not set)
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
@@ -17,6 +18,8 @@ if (SENTRY_DSN) {
     });
   });
 }
+
+initNotifications();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>

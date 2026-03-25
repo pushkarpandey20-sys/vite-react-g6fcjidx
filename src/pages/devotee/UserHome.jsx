@@ -1,116 +1,213 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../store/AppCtx';
-import { PanditCard } from '../../components/Cards';
-import { StatusBadge } from '../../components/common/UIElements';
-import SpiritualCalendarWidget from '../../features/user-portal/sankalp-engine/SpiritualCalendarWidget';
+import SmartRecommendations from '../../components/SmartRecommendations';
+import MuhuratWidget from '../../components/MuhuratWidget';
+import notificationStore from '../../services/notificationService';
+import { supabase } from '../../services/supabase';
+
+const SERVICES = [
+  { icon:'📿', label:'Book Pandit',  path:'/user/booking' },
+  { icon:'🛍️', label:'Buy Samagri', path:'/user/samagri' },
+  { icon:'📱', label:'Virtual Puja', path:'/user/virtual-pooja' },
+  { icon:'🏛️', label:'Temples',      path:'/user/temples' },
+  { icon:'❤️', label:'Donate/Seva',  path:'/user/donations' },
+  { icon:'📅', label:'Muhurta',      path:'/user/muhurta' },
+];
+
+const RITUALS = [
+  { name:'Griha Pravesh', icon:'🏠', price:'₹2,100' },
+  { name:'Satyanarayan',  icon:'🌟', price:'₹1,500' },
+  { name:'Rudrabhishek',  icon:'🔱', price:'₹2,500' },
+  { name:'Navgrah Puja',  icon:'⭐', price:'₹1,800' },
+  { name:'Vivah',         icon:'💍', price:'₹8,000' },
+  { name:'Custom Pooja',  icon:'✨', price:'Custom'  },
+];
+
+const SAMPLE_PANDITS = [
+  { id:'1', name:'Pt. Ram Sharma',    city:'Delhi',   specializations:['Satyanarayan','Griha Pravesh'], years_of_experience:15, min_fee:1800, rating:4.9 },
+  { id:'2', name:'Pt. Anil Mishra',   city:'Noida',   specializations:['Rudrabhishek','Navgrah'],       years_of_experience:12, min_fee:1500, rating:4.8 },
+  { id:'3', name:'Pt. Suresh Tiwari', city:'Gurgaon', specializations:['Vivah','Mundan'],               years_of_experience:20, min_fee:2500, rating:4.7 },
+];
 
 export default function UserHome() {
-  const { db, devoteeId, devoteeName, setShowLogin, navigate: _nav } = useApp();
   const navigate = useNavigate();
+  const { devoteeName, devoteeId } = useApp();
+  const [pandits, setPandits]   = useState(SAMPLE_PANDITS);
   const [bookings, setBookings] = useState([]);
-  const [pandits, setPandits] = useState([]);
-  const [stats, setStats] = useState({ saved: 0, rituals: 0, temples: 0 });
 
   useEffect(() => {
-    // Fetch top pandits (verified, highest rated)
-    db.pandits().select("*").eq('status', 'verified').order('rating', { ascending: false }).limit(3)
-      .then(({ data }) => setPandits(data || []));
-
-    if (devoteeId) {
-      db.bookings().select("*").eq("devotee_id", devoteeId).order("created_at", { ascending: false }).limit(10)
-        .then(({ data }) => {
-          const bks = data || [];
-          setBookings(bks);
-          const saved = bks.reduce((s, b) => s + Math.round((b.amount || 0) * 0.1), 0);
-          const rituals = bks.filter(b => b.status === 'confirmed' || b.status === 'completed').length;
-          const temples = new Set(bks.filter(b => b.temple_id).map(b => b.temple_id)).size;
-          setStats({ saved, rituals, temples });
-        });
+    supabase.from('pandits').select('id,name,city,years_of_experience,rating,specializations,min_fee')
+      .eq('status','verified').order('rating',{ascending:false}).limit(3)
+      .then(({data})=>{ if(data?.length) setPandits(data); });
+    if(devoteeId) {
+      supabase.from('bookings').select('*').eq('devotee_id',devoteeId)
+        .order('created_at',{ascending:false}).limit(3)
+        .then(({data})=>setBookings(data||[]));
     }
   }, [devoteeId]);
 
-  const goBook = () => { if (!devoteeId) setShowLogin(true); else navigate('/user/booking'); };
-  const goInstant = () => { if (!devoteeId) setShowLogin(true); else navigate('/user/instant-booking'); };
+  const handleRitualClick = (ritualName) => {
+    notificationStore.recordSearch(ritualName);
+    navigate('/user/booking');
+  };
 
-  const upcoming = bookings.filter(b => b.status === "confirmed" || b.status === "pending");
+  const card = { background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.12)', borderRadius:14, padding:'20px' };
+  const btn  = (bg='#FF6B00') => ({ background:bg, color:'#fff', border:'none', borderRadius:20, padding:'8px 18px', fontWeight:700, cursor:'pointer', fontSize:13 });
 
   return (
-    <>
-      {/* Instant booking banner */}
-      <div className="express-banner card" style={{ background: 'linear-gradient(90deg, #FF6B00, #FF9E00)', padding: '20px 30px', borderRadius: '20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '25px', color: '#fff' }}>
+    <div>
+      {/* Hero Banner */}
+      <div style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', borderRadius:16, padding:'24px 28px', marginBottom:24, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
         <div>
-          <h2 style={{ margin: 0, fontSize: '1.6rem', fontFamily: "'Cinzel', serif" }}>Need a Pandit Instantly?</h2>
-          <p style={{ margin: '5px 0 0', opacity: 0.9 }}>Book a certified scholar in under 60 seconds.</p>
+          <h1 style={{ fontFamily:'Cinzel,serif', color:'#fff', fontSize:22, margin:0, marginBottom:6 }}>
+            {devoteeName ? `Namaste, ${devoteeName.split(' ')[0]} 🙏` : 'Namaste, Devotee 🙏'}
+          </h1>
+          <p style={{ color:'rgba(255,255,255,0.85)', margin:0, fontSize:14 }}>Book a certified pandit in under 60 seconds</p>
         </div>
-        <button className="btn btn-white btn-lg" onClick={goInstant} style={{ fontWeight: 800, background: '#fff', color: '#FF6B00' }}>⚡ Book Now</button>
+        <button style={{ background:'rgba(255,255,255,0.2)', color:'#fff', border:'1px solid rgba(255,255,255,0.4)', borderRadius:20, padding:'10px 24px', fontWeight:700, cursor:'pointer', fontSize:14 }}
+          onClick={()=>navigate('/user/booking')}>⚡ Book Now</button>
       </div>
 
-      {/* Real stats */}
-      <div className="sg4 stat-grid">
-        {[
-          [devoteeId ? `₹${stats.saved > 0 ? stats.saved.toLocaleString() : '0'}` : '–', "Saved"],
-          [devoteeId ? stats.rituals : '–', "Rituals"],
-          [devoteeId ? stats.temples : '–', "Temples"],
-          [devoteeId ? '🙏' : '–', "Blessings"]
-        ].map(([v, l], i) => (
-          <div key={i} className="stat-card"><div className="stat-val">{v}</div><div className="stat-lbl">{l}</div></div>
+      {/* 6 Service Icons */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(6,1fr)', gap:10, marginBottom:24 }}>
+        {SERVICES.map(({icon,label,path})=>(
+          <div key={label} onClick={()=>navigate(path)}
+            style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.12)', borderRadius:12, padding:'16px 8px', textAlign:'center', cursor:'pointer', transition:'all 0.2s' }}
+            onMouseEnter={e=>{ e.currentTarget.style.borderColor='rgba(255,107,0,0.5)'; e.currentTarget.style.background='rgba(255,107,0,0.08)'; }}
+            onMouseLeave={e=>{ e.currentTarget.style.borderColor='rgba(212,160,23,0.12)'; e.currentTarget.style.background='rgba(255,255,255,0.04)'; }}>
+            <div style={{ fontSize:28, marginBottom:8 }}>{icon}</div>
+            <div style={{ color:'rgba(255,248,240,0.8)', fontSize:12, fontWeight:600 }}>{label}</div>
+          </div>
         ))}
       </div>
 
-      {/* Rituals grid + calendar */}
-      <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 18, marginBottom: 22 }}>
-        <div className="card card-p">
-          <div className="sh">
-            <div className="sh-title">Browse Most Booked Rituals</div>
-            <button className="btn btn-ghost btn-sm" onClick={goBook}>View All</button>
-          </div>
-          <div className="rgrid" style={{ gridTemplateColumns: "1fr 1fr 1fr" }}>
-            {[["Griha Pravesh", "🏠"], ["Satyanarayan", "🐚"], ["Sundarkand", "🚩"], ["Navgrah", "⭐"], ["Rudrabhishek", "🕉️"], ["Custom Pooja", "🔱"]].map(([n, i]) => (
-              <div key={n} className="rc" onClick={goBook} style={{ cursor: 'pointer' }}>
-                <div className="rc-icon" style={{ fontSize: 24, padding: 10 }}>{i}</div>
-                <div className="rc-body"><div className="rc-name" style={{ fontSize: 11 }}>{n}</div></div>
-              </div>
-            ))}
-          </div>
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          <SpiritualCalendarWidget />
-        </div>
-      </div>
+      {/* Smart Recommendations */}
+      <SmartRecommendations bookingHistory={bookings} />
 
-      {/* Pandits */}
-      <div className="sh">
-        <div className="sh-title">Highly Rated Scholars</div>
-        <button className="btn btn-ghost btn-sm" onClick={() => navigate('/user/marketplace')}>All Pandits</button>
-      </div>
-      {pandits.length > 0 ? (
-        <div className="pgrid">{pandits.map(p => <PanditCard key={p.id} p={p} onBook={goBook} />)}</div>
-      ) : (
-        <div className="card card-p" style={{ textAlign: 'center', padding: 30, color: '#8B6347' }}>
-          <div style={{ fontSize: 32, marginBottom: 8 }}>🕉️</div>
-          <p>Pandits loading... Check your connection or add verified pandits to the database.</p>
-        </div>
-      )}
-
-      {/* Upcoming bookings */}
-      {devoteeId && upcoming.length > 0 && (
-        <>
-          <div className="sh" style={{ marginTop: 22 }}><div className="sh-title">Your Upcoming Appointments</div></div>
-          <div className="card card-p">
-            {upcoming.slice(0, 3).map(b => (
-              <div key={b.id} style={{ display: "flex", alignItems: "center", gap: 14, padding: "10px 0", borderBottom: "1px solid rgba(212,160,23,.09)" }}>
-                <div style={{ fontSize: 26 }}>{b.ritual_icon || '🕉️'}</div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 13.5 }}>{b.ritual}</div>
-                  <div style={{ fontSize: 12, color: "#8B6347" }}>{b.pandit_name} · {b.booking_date} at {b.booking_time}</div>
+      <div style={{ display:'grid', gridTemplateColumns:'1fr 320px', gap:20 }}>
+        <div>
+          {/* Rituals Grid */}
+          <div style={{ ...card, marginBottom:20 }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:0, fontSize:16 }}>🕉️ Most Booked Rituals</h3>
+              <button style={btn()} onClick={()=>navigate('/user/rituals')}>View All</button>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+              {RITUALS.map(r=>(
+                <div key={r.name} onClick={()=>handleRitualClick(r.name)}
+                  style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.1)', borderRadius:10, padding:'14px', textAlign:'center', cursor:'pointer' }}
+                  onMouseEnter={e=>e.currentTarget.style.borderColor='rgba(255,107,0,0.4)'}
+                  onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(212,160,23,0.1)'}>
+                  <div style={{ fontSize:28, marginBottom:6 }}>{r.icon}</div>
+                  <div style={{ color:'rgba(255,248,240,0.85)', fontSize:13, fontWeight:600, marginBottom:4 }}>{r.name}</div>
+                  <div style={{ color:'#FF6B00', fontSize:12, fontWeight:700 }}>from {r.price}</div>
                 </div>
-                <StatusBadge status={b.status} />
+              ))}
+            </div>
+          </div>
+
+          {/* Samagri Store */}
+          <div style={{ ...card, marginBottom:20 }}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:0, fontSize:16 }}>🛍️ Pooja Samagri Store</h3>
+              <button style={btn()} onClick={()=>navigate('/user/samagri')}>Shop All</button>
+            </div>
+            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+              {[{name:'Diwali Kit',icon:'🪔',price:'₹899',items:'61 items'},{name:'Ganesh Kit',icon:'🐘',price:'₹349',items:'29 items'},{name:'Griha Kit',icon:'🏡',price:'₹599',items:'52 items'}].map(s=>(
+                <div key={s.name} onClick={()=>navigate('/user/samagri')}
+                  style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.1)', borderRadius:10, padding:'14px', textAlign:'center', cursor:'pointer' }}
+                  onMouseEnter={e=>e.currentTarget.style.borderColor='rgba(255,107,0,0.4)'}
+                  onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(212,160,23,0.1)'}>
+                  <div style={{ fontSize:28, marginBottom:6 }}>{s.icon}</div>
+                  <div style={{ color:'rgba(255,248,240,0.85)', fontSize:13, fontWeight:600, marginBottom:2 }}>{s.name}</div>
+                  <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, marginBottom:4 }}>{s.items}</div>
+                  <div style={{ color:'#FF6B00', fontSize:13, fontWeight:700 }}>{s.price}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Virtual Pooja Banner */}
+          <div style={{ background:'linear-gradient(135deg,rgba(138,43,226,0.3),rgba(75,0,130,0.4))', border:'1px solid rgba(138,43,226,0.4)', borderRadius:14, padding:'20px 24px', marginBottom:20, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+            <div>
+              <div style={{ color:'#c084fc', fontWeight:700, fontSize:11, letterSpacing:2, marginBottom:6 }}>NEW FEATURE</div>
+              <h3 style={{ color:'#fff', fontFamily:'Cinzel,serif', margin:0, fontSize:18 }}>📱 Virtual Pooja</h3>
+              <p style={{ color:'rgba(255,255,255,0.7)', fontSize:13, margin:'6px 0 0' }}>Attend sacred rituals live from anywhere. Prasad delivered home.</p>
+            </div>
+            <button style={{ background:'rgba(138,43,226,0.8)', color:'#fff', border:'none', borderRadius:20, padding:'10px 20px', fontWeight:700, cursor:'pointer', fontSize:14, flexShrink:0 }}
+              onClick={()=>navigate('/user/virtual-pooja')}>Book Virtual →</button>
+          </div>
+
+          {/* Pandits */}
+          <div style={card}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
+              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:0, fontSize:16 }}>🙏 Highly Rated Scholars</h3>
+              <button style={btn()} onClick={()=>navigate('/user/marketplace')}>All Pandits</button>
+            </div>
+            <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+              {pandits.map(p=>(
+                <div key={p.id} onClick={()=>navigate('/user/marketplace')}
+                  style={{ display:'flex', justifyContent:'space-between', alignItems:'center', background:'rgba(255,255,255,0.03)', borderRadius:10, padding:'12px 16px', cursor:'pointer', border:'1px solid rgba(212,160,23,0.08)' }}
+                  onMouseEnter={e=>e.currentTarget.style.borderColor='rgba(255,107,0,0.3)'}
+                  onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(212,160,23,0.08)'}>
+                  <div style={{ display:'flex', gap:12, alignItems:'center' }}>
+                    <div style={{ width:44, height:44, borderRadius:'50%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>🙏</div>
+                    <div>
+                      <div style={{ color:'#F0C040', fontWeight:700, fontSize:14 }}>{p.name}</div>
+                      <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12 }}>{(p.specializations||[]).slice(0,2).join(' · ')} · {p.city}</div>
+                      <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, marginTop:2 }}>{p.years_of_experience} yrs · ⭐ {p.rating||'New'}</div>
+                    </div>
+                  </div>
+                  <div style={{ textAlign:'right' }}>
+                    <div style={{ color:'#FF6B00', fontWeight:800 }}>₹{(p.min_fee||1500).toLocaleString()}</div>
+                    <button style={{ ...btn(), marginTop:6, fontSize:11, padding:'4px 12px' }} onClick={e=>{e.stopPropagation();navigate('/user/booking');}}>Book</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column */}
+        <div>
+          <div style={{ marginBottom:16 }}>
+            <MuhuratWidget />
+          </div>
+          <div style={card}>
+            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
+              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:0, fontSize:14 }}>My Bookings</h3>
+              <button style={btn()} onClick={()=>navigate('/user/history')}>All</button>
+            </div>
+            {!devoteeId ? (
+              <div style={{ textAlign:'center', padding:'16px 0' }}>
+                <div style={{ color:'rgba(255,248,240,0.4)', fontSize:13, marginBottom:10 }}>Login to see your bookings</div>
+                <button style={btn()} onClick={()=>navigate('/user/booking')}>Book Now</button>
+              </div>
+            ) : bookings.length===0 ? (
+              <div style={{ textAlign:'center', padding:'16px 0' }}>
+                <div style={{ fontSize:28, marginBottom:8 }}>🙏</div>
+                <div style={{ color:'rgba(255,248,240,0.4)', fontSize:13, marginBottom:10 }}>No rituals scheduled yet</div>
+                <button style={btn()} onClick={()=>navigate('/user/booking')}>Book First Ritual</button>
+              </div>
+            ) : bookings.map(b=>(
+              <div key={b.id} style={{ background:'rgba(255,255,255,0.03)', borderRadius:8, padding:'10px 12px', marginBottom:8 }}>
+                <div style={{ color:'#F0C040', fontWeight:600, fontSize:13 }}>{b.ritual_name||'Pooja'}</div>
+                <div style={{ color:'rgba(255,248,240,0.5)', fontSize:11, marginTop:2 }}>
+                  {b.booking_date?new Date(b.booking_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'TBD'} · ₹{(b.total_amount||0).toLocaleString()}
+                </div>
+                <div style={{ fontSize:11, color:b.status==='confirmed'?'#22c55e':'#FF6B00', marginTop:2 }}>{b.status||'pending'}</div>
               </div>
             ))}
           </div>
-        </>
-      )}
-    </>
+          <div style={{ ...card, marginTop:16, textAlign:'center', background:'rgba(255,107,0,0.08)', borderColor:'rgba(255,107,0,0.2)' }}>
+            <div style={{ fontSize:28, marginBottom:8 }}>❤️</div>
+            <div style={{ color:'#F0C040', fontWeight:700, fontSize:14, marginBottom:6 }}>Seva & Donations</div>
+            <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12, marginBottom:12 }}>Support temples, pandits & sacred traditions</div>
+            <button style={btn()} onClick={()=>navigate('/user/donations')}>Donate Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

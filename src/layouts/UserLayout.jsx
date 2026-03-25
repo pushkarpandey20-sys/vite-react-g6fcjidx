@@ -1,7 +1,7 @@
 import { useLocation, Outlet } from 'react-router-dom';
 import MainLayout from './MainLayout';
 import { UserSidebar } from '../components/Sidebar';
-import NotificationOverlay from '../components/NotificationOverlay';
+import NotificationBell from '../components/NotificationBell';
 import MobileNav from '../components/MobileNav';
 
 export default function UserLayout() {
@@ -22,6 +22,7 @@ export default function UserLayout() {
   else if (path.includes('rituals')) { title = "Ritual Catalog"; sub = "Explore hundreds of sacred rituals and poojas"; }
   else if (path.includes('sankalp')) { title = "Sankalp Profile"; sub = "Set your spiritual intentions and goals"; }
   else if (path.includes('referral')) { title = "Referral Program"; sub = "Invite friends and earn divine rewards"; }
+  else if (path.includes('virtual-pooja')) { title = "Virtual Pooja"; sub = "Participate in sacred rituals from anywhere"; }
 
   return (
     <MainLayout sidebar={<UserSidebar />} portalLabel="🙏 Devotee Portal" portalColor="#FF6B00">
@@ -30,7 +31,7 @@ export default function UserLayout() {
           <h1 className="ph-title">{title}</h1>
           <p className="ph-sub">{sub}</p>
         </div>
-        <NotificationOverlay />
+        <NotificationBell />
       </header>
       <main className="cb" style={{ paddingBottom: 80 }}>
         <Outlet />

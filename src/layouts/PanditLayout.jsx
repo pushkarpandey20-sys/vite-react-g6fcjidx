@@ -1,7 +1,7 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import MainLayout from './MainLayout';
 import { PanditSidebar } from '../components/Sidebar';
-import NotificationOverlay from '../components/NotificationOverlay';
+import NotificationBell from '../components/NotificationBell';
 
 export default function PanditLayout() {
   const location = useLocation();
@@ -23,9 +23,9 @@ export default function PanditLayout() {
           <h1 className="ph-title">{title}</h1>
           <p className="ph-sub">{sub}</p>
         </div>
-        <NotificationOverlay />
+        <NotificationBell />
       </header>
-      <main className="cb">
+      <main className="cb" id="main-content">
         <Outlet />
       </main>
     </MainLayout>
