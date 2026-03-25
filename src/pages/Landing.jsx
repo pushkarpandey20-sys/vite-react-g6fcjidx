@@ -67,11 +67,11 @@ export default function Landing() {
           <span style={{ fontSize:26 }}>🕉️</span>
           <div>
             <div style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontWeight:900, fontSize:16, lineHeight:1 }}>DevSetu</div>
-            <div style={{ color:'rgba(255,248,240,0.4)', fontSize:9, letterSpacing:1 }}>VEDIC ECOSYSTEM</div>
+            <div style={{ color:'rgba(255,248,240,0.4)', fontSize:9, letterSpacing:1 }}>BRIDGING YOU TO DIVINE SERVICES</div>
           </div>
         </div>
         <div style={{ display:'flex', gap:20, marginLeft:20, flex:1 }}>
-          {[['Find Pandits','/user/marketplace'],['Samagri Store','/user/samagri'],['Temples','/user/temples'],['Muhurta','/user/muhurta']].map(([l,p])=>(
+          {[['Find Pandits','/user/marketplace'],['Samagri Store','/user/samagri'],['Temples','/user/temples'],['Muhurta','/user/muhurta'],['Roadmap','/user/roadmap']].map(([l,p])=>(
             <span key={l} onClick={()=>navigate(p)} style={{ color:'rgba(255,248,240,0.6)', fontSize:13, cursor:'pointer', fontWeight:600, transition:'color 0.2s' }}
               onMouseEnter={e=>e.currentTarget.style.color='#F0C040'}
               onMouseLeave={e=>e.currentTarget.style.color='rgba(255,248,240,0.6)'}>{l}</span>
@@ -315,6 +315,7 @@ export default function Landing() {
           {['Privacy','Terms','Contact'].map(l=>(
             <span key={l} style={{ color:'rgba(255,248,240,0.4)', fontSize:12, cursor:'pointer' }}>{l}</span>
           ))}
+          <span onClick={()=>navigate('/user/roadmap')} style={{ color:'rgba(255,248,240,0.4)', fontSize:12, cursor:'pointer' }}>Roadmap</span>
         </div>
       </footer>
 

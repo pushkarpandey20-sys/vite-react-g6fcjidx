@@ -2,12 +2,27 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../store/AppCtx';
 import { Spinner, StatusBadge } from '../../components/common/UIElements';
 import BookingRiskMonitor from '../../features/admin-panel/components/BookingRiskMonitor';
+import { seedDatabase } from '../../services/seedService';
 
 export default function AdminHome() {
   const { db } = useApp();
   const [stats, setStats] = useState({ pandits: 0, bookings: 0, pending: 0, revenue: 0, devotees: 0 });
   const [recent, setRecent] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [seeding, setSeeding] = useState(false);
+  const [seedMsg, setSeedMsg] = useState('');
+
+  const handleSeed = async () => {
+    setSeeding(true);
+    setSeedMsg('');
+    const res = await seedDatabase();
+    const ok = res.errors.length === 0;
+    setSeedMsg(ok
+      ? `✅ Seeded: ${res.pandits} pandits, ${res.temples} temples, ${res.devotees} devotees, ${res.bookings} bookings`
+      : `⚠️ Partial: ${res.errors.join(' | ')}`
+    );
+    setSeeding(false);
+  };
   const chartData = [40, 55, 48, 65, 72, 68, 80, 75, 88, 92, 85, 95];
 
   useEffect(() => {
@@ -28,6 +43,16 @@ export default function AdminHome() {
 
   if (loading) return <Spinner />;
   return (<>
+    {/* Dev Seed Button */}
+    <div style={{ display:'flex', alignItems:'center', gap:12, background:'rgba(255,255,255,0.03)', border:'1px solid rgba(212,160,23,0.1)', borderRadius:12, padding:'12px 16px', marginBottom:20 }}>
+      <button onClick={handleSeed} disabled={seeding}
+        style={{ background:'linear-gradient(135deg,#D4A017,#F0C040)', color:'#1a0f07', border:'none', borderRadius:20, padding:'8px 20px', fontWeight:800, cursor:'pointer', fontSize:13, opacity: seeding ? 0.6 : 1 }}>
+        {seeding ? '⏳ Seeding...' : '🌱 Seed Test Data'}
+      </button>
+      <span style={{ color:'rgba(255,248,240,0.4)', fontSize:12 }}>
+        {seedMsg || 'Populate DB with 10 pandits, 5 temples, 5 devotees & 5 bookings'}
+      </span>
+    </div>
     <div className="stat-grid sg4">
       {[
         { icon: "🙏", val: stats.devotees + 1200, lbl: "Total Devotees", trend: "+89 this week" },

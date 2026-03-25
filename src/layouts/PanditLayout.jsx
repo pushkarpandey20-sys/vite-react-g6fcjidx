@@ -1,7 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom';
 import MainLayout from './MainLayout';
 import { PanditSidebar } from '../components/Sidebar';
-import NotificationBell from '../components/NotificationBell';
 
 export default function PanditLayout() {
   const location = useLocation();
@@ -18,14 +17,11 @@ export default function PanditLayout() {
 
   return (
     <MainLayout sidebar={<PanditSidebar />} portalLabel="🪔 Pandit Portal" portalColor="#D4A017">
-      <header className="ph" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <div>
-          <h1 className="ph-title">{title}</h1>
-          <p className="ph-sub">{sub}</p>
-        </div>
-        <NotificationBell />
+      <header className="ph">
+        <h1 className="ph-title">{title}</h1>
+        <p className="ph-sub">{sub}</p>
       </header>
-      <main className="cb" id="main-content">
+      <main className="cb">
         <Outlet />
       </main>
     </MainLayout>

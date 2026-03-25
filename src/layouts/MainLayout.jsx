@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppCtx';
 import { Toast } from '../components/common/UIElements';
 import { CartModal, ConfirmModal, LoginModal, AdminLoginModal, UserOnboardingModal, PanditOnboardingModal, PanditModal } from '../components/modals/AllModals';
+import NotificationBell from '../components/NotificationBell';
 
 export default function MainLayout({ children, sidebar, portalLabel, portalColor }) {
   const {
@@ -34,7 +35,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
           <div className="logo-icon">🕉️</div>
           <div>
             <div className="logo-name">DevSetu</div>
-            <div className="logo-tagline">Vedic Ecosystem</div>
+            <div className="logo-tagline">Bridging You to Divine Services</div>
           </div>
         </div>
         {portalLabel && (
@@ -48,7 +49,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
               🛒{cartCount > 0 && <span className="badge">{cartCount}</span>}
             </div>
           )}
-          <div className="icon-btn">🔔</div>
+          <NotificationBell />
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: 6, background: "rgba(255,255,255,.07)", padding: "4px 12px", borderRadius: 20, cursor: "pointer", border: "1px solid rgba(212,160,23,.3)" }}
             onClick={() => isUser && !devoteeId && setShowLogin(true)}>
             <div style={{ fontSize: 13, fontWeight: 800, color: "#F0C040" }}>
@@ -67,7 +68,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
         <div className={`sidebar-wrap ${sidebarOpen ? 'sidebar-open' : ''}`}>
           {React.cloneElement(sidebar, { onNavClick: () => setSidebarOpen(false) })}
         </div>
-        <div className="content" style={{ flex: 1, overflowY: 'auto', height: '100%' }}>
+        <div className="content" id="main-content" style={{ flex: 1, overflowY: 'auto', height: '100%' }}>
           {children}
         </div>
       </div>

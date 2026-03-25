@@ -43,7 +43,7 @@ export default function VirtualPoojaPage() {
   if (sel) return (
     <div>
       <button style={{ ...btn('rgba(255,255,255,0.1)'), marginBottom:20 }} onClick={()=>setSel(null)}>← Back</button>
-      <div style={{ maxWidth:520, margin:'0 auto', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.2)', borderRadius:16, padding:'28px' }}>
+      <div className="dark-input" style={{ maxWidth:520, margin:'0 auto', background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.2)', borderRadius:16, padding:'28px' }}>
         <div style={{ textAlign:'center', marginBottom:24 }}>
           <div style={{ fontSize:48 }}>{sel.icon}</div>
           <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017', fontSize:20, margin:'8px 0' }}>{sel.name}</h2>

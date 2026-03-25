@@ -42,6 +42,7 @@ import TempleListPage from '../../features/user-portal/pages/TempleListPage';
 import TemplePoojaBookingPage from '../../features/user-portal/pages/TemplePoojaBookingPage';
 import ReferralPage from '../../features/user-portal/pages/ReferralPage';
 import SankalpProfile from '../../features/user-portal/sankalp-engine/SankalpProfile';
+import Roadmap from '../../pages/Roadmap';
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -77,6 +78,7 @@ export default function AppRoutes() {
           <Route path="samagri" element={<SamagriStorePage />} />
           <Route path="donations" element={<SevaPage />} />
           <Route path="virtual-pooja" element={<VirtualPoojaPage />} />
+          <Route path="roadmap" element={<Roadmap />} />
         </Route>
 
         {/* Pandit Onboarding (standalone, no sidebar layout) */}

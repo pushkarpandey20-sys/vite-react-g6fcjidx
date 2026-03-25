@@ -52,7 +52,7 @@ function PanditOnboardingForm({ onComplete }) {
   };
 
   return (
-    <div style={{ maxWidth:600, margin:'0 auto' }}>
+    <div className="dark-input" style={{ maxWidth:600, margin:'0 auto' }}>
       {/* Stepper */}
       <div style={{ display:'flex', alignItems:'center', marginBottom:32 }}>
         {['Basic Info','Specializations','Verification'].map((s,i)=>(
