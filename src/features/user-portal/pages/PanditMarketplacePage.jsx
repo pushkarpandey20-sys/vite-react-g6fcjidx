@@ -5,7 +5,10 @@ import { supabase } from '../../../services/supabase';
 import { Spinner } from '../../../components/common/UIElements';
 import { SEED_PANDITS } from '../../../data/seedData';
 
-const QUICK_RITUALS = ['Griha Pravesh','Satyanarayan Katha','Rudrabhishek','Navgrah Shanti','Vivah','Mundan','Namkaran','Lakshmi Puja','Kaal Sarp Dosh','Custom Pooja'];
+const QUICK_RITUALS = [
+  'Griha Pravesh','Satyanarayan Katha','Rudrabhishek','Navgrah Shanti',
+  'Vivah','Mundan','Namkaran','Lakshmi Puja','Kaal Sarp Dosh','Custom Pooja'
+];
 
 const CITY_COORDS = {
   'Delhi':     { lat: 28.6139, lng: 77.2090 },
@@ -32,26 +35,26 @@ function getDistanceKm(lat1, lon1, lat2, lon2) {
 
 function PanditVideoModal({ pandit, onClose }) {
   return (
-    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.7)', zIndex:2000, display:'flex', alignItems:'center', justifyContent:'center', padding:20 }} onClick={onClose}>
-      <div style={{ background:'#fff', borderRadius:16, padding:24, maxWidth:540, width:'100%', boxShadow:'0 20px 60px rgba(0,0,0,0.3)' }} onClick={e=>e.stopPropagation()}>
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-          <div style={{ fontFamily:'Cinzel,serif', color:'#1a0f07', fontWeight:700, fontSize:16 }}>{pandit.name} — 60s Intro</div>
-          <button onClick={onClose} style={{ background:'#f5f5f5', border:'none', color:'#666', borderRadius:'50%', width:32, height:32, cursor:'pointer', fontSize:16 }}>✕</button>
+    <div className="pm-modal-overlay" onClick={onClose}>
+      <div className="pm-modal-box" onClick={e => e.stopPropagation()}>
+        <div className="pm-modal-header">
+          <span>{pandit.name} — 60s Intro</span>
+          <button className="pm-modal-close" onClick={onClose}>✕</button>
         </div>
         {pandit.intro_video_url ? (
           <video src={pandit.intro_video_url} controls autoPlay style={{ width:'100%', borderRadius:10 }} />
         ) : (
-          <div style={{ background:'#fff8f0', border:'1px solid rgba(212,160,23,0.2)', borderRadius:12, padding:24, textAlign:'center' }}>
-            <div style={{ fontSize:52, marginBottom:12 }}>🙏</div>
-            <div style={{ color:'#1a0f07', fontWeight:700, fontSize:16, marginBottom:8 }}>{pandit.name}</div>
-            <div style={{ color:'#4a3728', fontSize:13, lineHeight:1.7 }}>
+          <div className="pm-modal-bio">
+            <div className="pm-modal-avatar">🙏</div>
+            <div className="pm-modal-bio-name">{pandit.name}</div>
+            <div className="pm-modal-bio-text">
               {pandit.bio || `${pandit.name} is a verified Vedic scholar with ${pandit.years_of_experience || 5}+ years of experience. Specializes in ${(pandit.specializations||['Pooja']).join(', ')}.`}
             </div>
-            <div style={{ display:'flex', justifyContent:'center', gap:24, marginTop:16 }}>
-              {[['⭐', `${pandit.rating || 4.8} Rating`], ['📍', pandit.city || 'India'], ['🗓️', `${pandit.years_of_experience || 5}+ yrs`]].map(([i,l]) => (
-                <div key={l} style={{ textAlign:'center' }}>
-                  <div style={{ fontSize:20 }}>{i}</div>
-                  <div style={{ color:'#9a8070', fontSize:11, marginTop:4 }}>{l}</div>
+            <div className="pm-modal-stats">
+              {[['⭐', `${pandit.rating || 4.8} Rating`], ['📍', pandit.city || 'India'], ['🗓️', `${pandit.years_of_experience || 5}+ yrs`]].map(([ic, lb]) => (
+                <div key={lb} className="pm-modal-stat">
+                  <div style={{ fontSize: 22 }}>{ic}</div>
+                  <div style={{ color:'#9a8070', fontSize:11, marginTop:4 }}>{lb}</div>
                 </div>
               ))}
             </div>
@@ -66,54 +69,57 @@ function PanditCard({ p, isNearby, onView, onVideoClick }) {
   const specs = Array.isArray(p.specializations) ? p.specializations :
     (typeof p.specializations === 'string' ? p.specializations.split(',').map(s=>s.trim()) : []);
 
-  return (
-    <div style={{ background:'#ffffff', border:`1px solid ${isNearby?'rgba(34,197,94,0.4)':'rgba(212,160,23,0.2)'}`, borderRadius:14, padding:18, position:'relative', boxShadow:'0 2px 8px rgba(0,0,0,0.06)', transition:'all 0.2s' }}
-      onMouseEnter={e=>{ e.currentTarget.style.transform='translateY(-2px)'; e.currentTarget.style.boxShadow='0 6px 20px rgba(0,0,0,0.1)'; }}
-      onMouseLeave={e=>{ e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 2px 8px rgba(0,0,0,0.06)'; }}>
+  const ratingStars = Math.round((p.rating || 4.8) * 2) / 2;
+  const fullStars = Math.floor(ratingStars);
 
+  return (
+    <div className={`pm-card ${isNearby ? 'pm-card--nearby' : ''}`}>
       {isNearby && (
-        <div style={{ position:'absolute', top:-1, left:16, background:'rgba(34,197,94,0.15)', color:'#166534', fontSize:10, fontWeight:800, padding:'4px 12px', borderRadius:'0 0 8px 8px', border:'1px solid rgba(34,197,94,0.3)', borderTop:'none' }}>
-          📍 Near You
-        </div>
+        <div className="pm-nearby-tag">📍 Near You</div>
       )}
 
-      <div style={{ display:'flex', alignItems:'flex-start', gap:12, marginBottom:12, marginTop: isNearby ? 12 : 0 }}>
-        <div style={{ width:48, height:48, borderRadius:'50%', background:'linear-gradient(135deg,rgba(255,107,0,0.15),rgba(212,160,23,0.2))', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, flexShrink:0 }}>
-          🙏
+      {/* Header area */}
+      <div className="pm-card-head">
+        <div className="pm-avatar">🙏</div>
+        <div className="pm-card-info">
+          <div className="pm-name">{p.name}</div>
+          <div className="pm-location">📍 {p.city || 'India'} · {p.years_of_experience || 5}+ yrs</div>
+          {p.is_online && (
+            <span className="pm-online-badge">🟢 Available Now</span>
+          )}
         </div>
-        <div style={{ flex:1, minWidth:0 }}>
-          <div style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:15, marginBottom:2 }}>{p.name}</div>
-          <div style={{ color:'#9a8070', fontSize:12 }}>📍 {p.city || 'India'} · {p.years_of_experience || 5}+ yrs</div>
-          {p.is_online && <span style={{ background:'rgba(34,197,94,0.12)', color:'#15803d', fontSize:10, padding:'2px 8px', borderRadius:10, fontWeight:700, marginTop:3, display:'inline-block' }}>🟢 Online</span>}
-        </div>
-        <div style={{ textAlign:'right', flexShrink:0 }}>
-          <div style={{ color:'#FF6B00', fontWeight:800, fontSize:15 }}>⭐ {p.rating || 4.8}</div>
-          <div style={{ color:'#9a8070', fontSize:10 }}>{p.review_count || 0} reviews</div>
+        <div className="pm-rating-box">
+          <div className="pm-rating-val">⭐ {p.rating || 4.8}</div>
+          <div className="pm-review-count">{p.review_count || 0} reviews</div>
         </div>
       </div>
 
-      <div style={{ display:'flex', flexWrap:'wrap', gap:5, marginBottom:12 }}>
-        {specs.slice(0,3).map(s=>(
-          <span key={s} style={{ background:'#fff8f0', color:'#D4A017', fontSize:11, padding:'3px 10px', borderRadius:20, fontWeight:600, border:'1px solid rgba(212,160,23,0.2)' }}>{s}</span>
+      {/* Specializations */}
+      <div className="pm-specs">
+        {specs.slice(0, 3).map(s => (
+          <span key={s} className="pm-spec-chip">{s}</span>
         ))}
-        {specs.length > 3 && <span style={{ color:'#9a8070', fontSize:11, padding:'3px 6px' }}>+{specs.length-3} more</span>}
+        {specs.length > 3 && (
+          <span className="pm-spec-more">+{specs.length - 3}</span>
+        )}
       </div>
 
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
-        <div style={{ color:'#FF6B00', fontWeight:800, fontSize:16 }}>
-          ₹{p.min_fee || 500} – ₹{p.max_fee || 2000}
+      {/* Fee row */}
+      <div className="pm-fee-row">
+        <div className="pm-fee">
+          <span className="pm-fee-label">Fee Range</span>
+          <span className="pm-fee-val">₹{(p.min_fee || 500).toLocaleString('en-IN')} – ₹{(p.max_fee || 2000).toLocaleString('en-IN')}</span>
         </div>
-        <div style={{ color:'#9a8070', fontSize:11 }}>per ritual</div>
+        <div className="pm-fee-unit">per ritual</div>
       </div>
 
-      <div style={{ display:'flex', gap:8 }}>
-        <button onClick={()=>onVideoClick(p)}
-          style={{ background:'rgba(109,40,217,0.08)', color:'#6d28d9', border:'1px solid rgba(109,40,217,0.25)', borderRadius:20, padding:'7px 12px', cursor:'pointer', fontSize:12, fontWeight:700, flexShrink:0 }}>
+      {/* Actions */}
+      <div className="pm-actions">
+        <button className="pm-btn-intro" onClick={() => onVideoClick(p)}>
           ▶ 60s Intro
         </button>
-        <button onClick={()=>onView(p)}
-          style={{ flex:1, background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:20, padding:'7px 14px', cursor:'pointer', fontSize:13, fontWeight:700 }}>
-          View & Book
+        <button className="pm-btn-book" onClick={() => onView(p)}>
+          View & Book →
         </button>
       </div>
     </div>
@@ -130,7 +136,6 @@ export default function PanditMarketplacePage() {
   const [quickRitual, setQuickRitual] = useState('');
   const [quickDate, setQuickDate] = useState(new Date().toISOString().split('T')[0]);
 
-  // Filter state
   const [search, setSearch] = useState('');
   const [cityFilter, setCityFilter] = useState('All');
   const [specFilter, setSpecFilter] = useState('All');
@@ -138,7 +143,6 @@ export default function PanditMarketplacePage() {
   const [onlineOnly, setOnlineOnly] = useState(false);
   const [sortBy, setSortBy] = useState('nearby');
 
-  // Detect nearest city
   useEffect(() => {
     if (!navigator.geolocation) return;
     navigator.geolocation.getCurrentPosition(pos => {
@@ -152,7 +156,6 @@ export default function PanditMarketplacePage() {
     }, () => {});
   }, []);
 
-  // Fetch pandits
   useEffect(() => {
     setLoading(true);
     (async () => {
@@ -163,7 +166,6 @@ export default function PanditMarketplacePage() {
     })();
   }, []);
 
-  // Client-side filter + sort
   const filtered = pandits
     .filter(p => !search || (p.name||'').toLowerCase().includes(search.toLowerCase()))
     .filter(p => cityFilter === 'All' || p.city === cityFilter)
@@ -182,70 +184,104 @@ export default function PanditMarketplacePage() {
       return 0;
     });
 
-  const selStyle = { padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.3)', background:'#fff', color:'#1a0f07', fontSize:12, cursor:'pointer', outline:'none' };
   const hasFilters = search || cityFilter !== 'All' || specFilter !== 'All' || expFilter !== '0' || onlineOnly;
+  const resetFilters = () => { setSearch(''); setCityFilter('All'); setSpecFilter('All'); setExpFilter('0'); setOnlineOnly(false); setSortBy('nearby'); };
+
+  const selStyle = {
+    padding:'8px 12px', borderRadius:10,
+    border:'1.5px solid rgba(212,160,23,0.25)',
+    background:'rgba(26,15,7,0.6)', backdropFilter:'blur(10px)',
+    color:'rgba(255,248,240,0.85)', fontSize:12, cursor:'pointer',
+    outline:'none', fontWeight:600,
+  };
 
   return (
-    <div style={{ background:'#fff8f0', minHeight:'100vh' }}>
-      {/* Page Header */}
-      <div style={{ padding:'20px 0 0' }}>
-        <h1 style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', margin:'0 0 4px', fontSize:22 }}>🙏 Find Your Pandit</h1>
-        <p style={{ color:'#9a8070', margin:'0 0 12px', fontSize:13 }}>Verified Vedic scholars · DevSetu certified</p>
+    <div className="pm-page">
+      {/* ── Hero ── */}
+      <div className="pm-hero">
+        <div className="pm-hero-glow" />
+        <div className="pm-hero-badge">🙏 DevSetu Verified Pandits</div>
+        <h1 className="pm-hero-title">Find Your Pandit</h1>
+        <p className="pm-hero-sub">
+          Connect with learned Vedic scholars — verified, rated, and ready for any ceremony.
+        </p>
 
-        {/* On-Demand Quick Booking */}
-        <div style={{ background:'linear-gradient(135deg,rgba(255,107,0,0.08),rgba(212,160,23,0.06))', border:'1px solid rgba(255,107,0,0.2)', borderRadius:12, padding:'14px 16px', marginBottom:16 }}>
-          <div style={{ color:'#FF6B00', fontWeight:800, fontSize:13, marginBottom:10 }}>⚡ Book Any Available Pandit Instantly</div>
-          <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'flex-end' }}>
-            <select value={quickRitual} onChange={e=>setQuickRitual(e.target.value)}
-              style={{ flex:'1 1 160px', padding:'8px 12px', borderRadius:8, border:'1.5px solid rgba(255,107,0,0.3)', background:'#fff', color:'#1a0f07', fontSize:13, outline:'none' }}>
-              <option value="">🕉️ Select Ritual / Package</option>
-              {QUICK_RITUALS.map(r=><option key={r} value={r}>{r}</option>)}
+        {/* Quick booking strip */}
+        <div className="pm-quick-book">
+          <div className="pm-qb-label">⚡ Book Any Available Pandit Instantly</div>
+          <div className="pm-qb-row">
+            <select
+              value={quickRitual}
+              onChange={e => setQuickRitual(e.target.value)}
+              className="pm-qb-select"
+            >
+              <option value="">🕉️ Choose a Ritual / Package</option>
+              {QUICK_RITUALS.map(r => <option key={r} value={r}>{r}</option>)}
             </select>
-            <input type="date" value={quickDate} onChange={e=>setQuickDate(e.target.value)} min={new Date().toISOString().split('T')[0]}
-              style={{ flex:'1 1 130px', padding:'8px 12px', borderRadius:8, border:'1.5px solid rgba(255,107,0,0.3)', background:'#fff', color:'#1a0f07', fontSize:13, outline:'none' }} />
-            <button onClick={() => { if (!quickRitual) return; navigate('/user/booking', { state: { prefilledRitual: quickRitual, prefilledDate: quickDate } }); }}
-              style={{ flex:'0 0 auto', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:8, padding:'9px 20px', fontWeight:800, cursor:'pointer', fontSize:13, whiteSpace:'nowrap' }}>
+            <input
+              type="date"
+              value={quickDate}
+              min={new Date().toISOString().split('T')[0]}
+              onChange={e => setQuickDate(e.target.value)}
+              className="pm-qb-date"
+            />
+            <button
+              className="pm-qb-btn"
+              onClick={() => {
+                if (!quickRitual) return;
+                navigate('/user/booking', { state: { prefilledRitual: quickRitual, prefilledDate: quickDate } });
+              }}
+            >
               Book Now →
             </button>
           </div>
         </div>
 
         {nearbyCity && (
-          <div style={{ background:'rgba(34,197,94,0.1)', border:'1px solid rgba(34,197,94,0.3)', borderRadius:10, padding:'8px 14px', marginBottom:12, display:'inline-flex', alignItems:'center', gap:8 }}>
-            <span>📍</span>
-            <span style={{ fontSize:13, color:'#166534', fontWeight:600 }}>Showing pandits near {nearbyCity} first</span>
+          <div className="pm-nearby-notice">
+            📍 Showing pandits near <strong>{nearbyCity}</strong> first
           </div>
         )}
+      </div>
 
-        {/* Compact Filter Bar */}
-        <div className="compact-filter" style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'center', padding:'12px 16px', background:'#ffffff', borderRadius:12, border:'1px solid rgba(212,160,23,0.2)', boxShadow:'0 2px 8px rgba(0,0,0,0.04)', marginBottom:20 }}>
-          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search by name..."
-            style={{ ...selStyle, width:140 }} />
+      {/* ── Filter Bar ── */}
+      <div className="pm-filter-bar">
+        <div className="pm-filter-inner">
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="🔍 Search pandit name..."
+            style={{ ...selStyle, minWidth: 160 }}
+          />
 
-          <select value={cityFilter} onChange={e=>setCityFilter(e.target.value)} style={selStyle}>
+          <select value={cityFilter} onChange={e => setCityFilter(e.target.value)} style={selStyle}>
             <option value="All">📍 All Cities</option>
-            {['Delhi','Noida','Gurgaon','Mumbai','Bengaluru','Ayodhya','Varanasi','Ujjain','Faridabad','Ghaziabad'].map(c=><option key={c}>{c}</option>)}
+            {['Delhi','Noida','Gurgaon','Mumbai','Bengaluru','Ayodhya','Varanasi','Ujjain','Faridabad','Ghaziabad'].map(c=>
+              <option key={c}>{c}</option>
+            )}
           </select>
 
-          <select value={specFilter} onChange={e=>setSpecFilter(e.target.value)} style={selStyle}>
+          <select value={specFilter} onChange={e => setSpecFilter(e.target.value)} style={selStyle}>
             <option value="All">🕉️ All Rituals</option>
-            {['Griha Pravesh','Satyanarayan','Vivah','Rudrabhishek','Navgrah','Kaal Sarp','Mundan','Namkaran','Vastu Shastra','Astrology'].map(s=><option key={s}>{s}</option>)}
+            {['Griha Pravesh','Satyanarayan','Vivah','Rudrabhishek','Navgrah','Kaal Sarp','Mundan','Namkaran','Vastu Shastra','Astrology'].map(s=>
+              <option key={s}>{s}</option>
+            )}
           </select>
 
-          <select value={expFilter} onChange={e=>setExpFilter(e.target.value)} style={selStyle}>
-            <option value="0">⏳ Any Exp</option>
-            <option value="5">5+ yrs</option>
-            <option value="10">10+ yrs</option>
-            <option value="15">15+ yrs</option>
-            <option value="20">20+ yrs</option>
+          <select value={expFilter} onChange={e => setExpFilter(e.target.value)} style={selStyle}>
+            <option value="0">⏳ Any Experience</option>
+            <option value="5">5+ years</option>
+            <option value="10">10+ years</option>
+            <option value="15">15+ years</option>
+            <option value="20">20+ years</option>
           </select>
 
-          <label style={{ display:'flex', alignItems:'center', gap:5, cursor:'pointer', fontSize:12, color:'#4a3728', fontWeight:600, whiteSpace:'nowrap' }}>
-            <input type="checkbox" checked={onlineOnly} onChange={e=>setOnlineOnly(e.target.checked)} style={{ width:'auto', accentColor:'#22c55e' }} />
-            🟢 Online Now
+          <label className="pm-online-toggle">
+            <input type="checkbox" checked={onlineOnly} onChange={e => setOnlineOnly(e.target.checked)} style={{ accentColor:'#22c55e' }} />
+            <span>🟢 Online Now</span>
           </label>
 
-          <select value={sortBy} onChange={e=>setSortBy(e.target.value)} style={{ ...selStyle, marginLeft:'auto' }}>
+          <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ ...selStyle, marginLeft:'auto' }}>
             <option value="nearby">📍 Nearest First</option>
             <option value="rating">⭐ Top Rated</option>
             <option value="fee_low">₹ Low → High</option>
@@ -253,31 +289,29 @@ export default function PanditMarketplacePage() {
           </select>
 
           {hasFilters && (
-            <button onClick={()=>{setSearch('');setCityFilter('All');setSpecFilter('All');setExpFilter('0');setOnlineOnly(false);setSortBy('nearby');}}
-              style={{ padding:'7px 12px', borderRadius:8, border:'1px solid #ddd', background:'#f5f5f5', color:'#666', fontSize:12, cursor:'pointer', whiteSpace:'nowrap' }}>
-              Reset ✕
-            </button>
+            <button onClick={resetFilters} className="pm-filter-reset">Reset ✕</button>
           )}
 
-          <div style={{ color:'#9a8070', fontSize:12, whiteSpace:'nowrap' }}>
+          <div className="pm-filter-count">
             {loading ? 'Loading...' : `${filtered.length} pandits`}
           </div>
         </div>
       </div>
 
-      {/* Grid */}
-      {loading ? <Spinner /> : (
-        filtered.length === 0 ? (
-          <div style={{ textAlign:'center', padding:'60px 20px', background:'#ffffff', borderRadius:14, border:'1px solid rgba(212,160,23,0.2)' }}>
-            <div style={{ fontSize:48, marginBottom:16 }}>🕉️</div>
-            <h3 style={{ fontFamily:'Cinzel,serif', color:'#D4A017', marginBottom:8 }}>No Pandits Found</h3>
-            <p style={{ color:'#9a8070' }}>Try resetting your filters.</p>
-            <button style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:20, padding:'10px 24px', fontWeight:700, cursor:'pointer', marginTop:16 }}
-              onClick={()=>{setSearch('');setCityFilter('All');setSpecFilter('All');setExpFilter('0');setOnlineOnly(false);}}>Reset Filters</button>
+      {/* ── Grid ── */}
+      <div className="pm-grid-wrap">
+        {loading ? (
+          <div style={{ textAlign:'center', padding:'80px 0' }}><Spinner /></div>
+        ) : filtered.length === 0 ? (
+          <div className="pm-empty">
+            <div style={{ fontSize:52, marginBottom:16 }}>🕉️</div>
+            <h3 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', marginBottom:8 }}>No Pandits Found</h3>
+            <p style={{ color:'rgba(255,248,240,0.55)' }}>Try resetting your filters to explore all verified pandits.</p>
+            <button className="pm-empty-reset" onClick={resetFilters}>Reset Filters</button>
           </div>
         ) : (
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:16 }}>
-            {filtered.map(p=>(
+          <div className="pm-grid">
+            {filtered.map(p => (
               <PanditCard
                 key={p.id}
                 p={p}
@@ -287,10 +321,10 @@ export default function PanditMarketplacePage() {
               />
             ))}
           </div>
-        )
-      )}
+        )}
+      </div>
 
-      {videoModal && <PanditVideoModal pandit={videoModal} onClose={()=>setVideoModal(null)} />}
+      {videoModal && <PanditVideoModal pandit={videoModal} onClose={() => setVideoModal(null)} />}
     </div>
   );
 }
