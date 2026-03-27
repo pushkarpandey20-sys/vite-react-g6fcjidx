@@ -218,7 +218,7 @@ export default function PanditMarketplacePage() {
         )}
 
         {/* Compact Filter Bar */}
-        <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'center', padding:'12px 16px', background:'#ffffff', borderRadius:12, border:'1px solid rgba(212,160,23,0.2)', boxShadow:'0 2px 8px rgba(0,0,0,0.04)', marginBottom:20 }}>
+        <div className="compact-filter" style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'center', padding:'12px 16px', background:'#ffffff', borderRadius:12, border:'1px solid rgba(212,160,23,0.2)', boxShadow:'0 2px 8px rgba(0,0,0,0.04)', marginBottom:20 }}>
           <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search by name..."
             style={{ ...selStyle, width:140 }} />
 

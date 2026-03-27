@@ -66,7 +66,7 @@ export default function MuhuratFinder() {
           <span style={{ fontSize:18 }}>🔮</span>
           <h3 style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', margin:0, fontSize:16, fontWeight:700 }}>Find Your Shubh Muhurta</h3>
         </div>
-        <form onSubmit={handleSearch}>
+        <form onSubmit={handleSearch} className="compact-filter">
           <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'flex-end' }}>
             <div style={{ flex:'1 1 140px' }}>
               <div style={{ color:'#9a8070', fontSize:10, fontWeight:700, marginBottom:3, letterSpacing:0.5 }}>OCCASION</div>
