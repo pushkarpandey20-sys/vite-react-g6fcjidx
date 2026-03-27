@@ -1955,20 +1955,22 @@ body {
 }
 
 /* BOOKING WIZARD STYLES */
-.wizard-container { max-width: 800px; margin: 0 auto; position: relative; }
-.stepper { display: flex; justify-content: space-between; margin-bottom: 40px; position: relative; z-index: 1; overflow: hidden; }
-.stepper::before { content: ''; position: absolute; top: 18px; left: 10%; right: 10%; height: 2px; background: rgba(212,160,23,0.1); z-index: -1; }
+.wizard-container { max-width: 1200px; margin: 0 auto; min-height: 80vh; padding: 40px 20px; position: relative; }
+.stepper { display: none !important; }
 
-.step { text-align: center; width: 100px; opacity: 0.4; transition: all 0.4s; }
-.step.active { opacity: 1; transform: scale(1.1); }
-.step.done { opacity: 0.8; }
-.step-num { width: 36px; height: 36px; border-radius: 50%; background: #fff; border: 2px solid #D4A017; color: #D4A017; display: flex; align-items: center; justify-content: center; margin: 0 auto 8px; font-weight: 800; font-family: 'Cinzel', serif; position: relative; z-index: 1; transition: all 0.3s; }
-.step.active .step-num { background: var(--s); color: #fff; border-color: var(--s); box-shadow: 0 4px 12px rgba(255,107,0,0.3); }
-.step.done .step-num { background: #27AE60; color: #fff; border-color: #27AE60; }
-.step-lbl { font-size: 10px; text-transform: uppercase; font-weight: 800; color: #5C3317; letter-spacing: 0.5px; }
+.fade-in { animation: fadeInside 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; }
+@keyframes fadeInside {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-.wizard-card { padding: 40px; border-radius: 24px; box-shadow: 0 20px 60px rgba(92,51,23,0.08); background: #fff; min-height: 480px; display: flex; flex-direction: column; }
-.wizard-step { animation: fadeUp 0.4s ease; flex: 1; display: flex; flex-direction: column; }
+.glass-card.active { border-color: #FF6B00; background: rgba(255, 107, 0, 0.08) !important; box-shadow: 0 0 40px rgba(255, 107, 0, 0.2); }
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.02); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
 .ritual-picker-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 16px; margin-top: 24px; }
 .ritual-select-card { background: #FDF5EC; border: 1px solid rgba(212,160,23,0.1); padding: 24px 16px; border-radius: 16px; text-align: center; cursor: pointer; transition: all 0.2s; }
 .ritual-select-card:hover { transform: translateY(-4px); background: #FFF; border-color: var(--s); box-shadow: 0 8px 24px rgba(255,107,0,0.1); }
@@ -2004,22 +2006,61 @@ body {
 }
 
 /* RITUAL CATALOG & GRID STYLES */
-.ritual-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 24px; padding-top: 20px; }
-.ritual-card { cursor: pointer; border: 1px solid rgba(212,160,23,0.12); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; overflow: hidden; background: #fff; }
-.ritual-card:hover { transform: translateY(-8px); box-shadow: 0 16px 32px rgba(92,51,23,0.08); border-color: rgba(212,160,23,0.4); }
-.ritual-card.active { border-color: var(--s); box-shadow: 0 0 0 2px var(--s), 0 16px 32px rgba(255,107,0,0.12); background: #FFFAF5; }
+.ritual-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; padding: 20px 0; }
 
-.ritual-card-head { display: flex; justify-content: space-between; align-items: center; padding: 24px 20px 10px; }
-.ritual-icon { font-size: 44px; animation: glow 4s infinite; }
-.ritual-price { font-family: 'Cinzel', serif; color: var(--s); font-weight: 800; font-size: 20px; }
+.ritual-card { 
+  cursor: pointer; 
+  border: 1px solid rgba(240, 192, 64, 0.15); 
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); 
+  display: flex; 
+  flex-direction: column; 
+  overflow: hidden; 
+  background: rgba(26, 15, 7, 0.6); 
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  position: relative;
+}
 
-.ritual-card-body { padding: 0 20px 20px; flex: 1; }
-.ritual-name { font-family: 'Cinzel', serif; font-size: 17px; color: #2C1A0E; margin-bottom: 6px; font-weight: 700; letter-spacing: 0.5px; }
-.ritual-meta { display: flex; gap: 12px; margin-bottom: 12px; font-size: 11px; font-weight: 700; color: #8B6347; }
-.samagri-tag { background: rgba(39,174,96,0.1); color: #27AE60; padding: 2px 8px; border-radius: 4px; font-size: 9px; text-transform: uppercase; }
-.ritual-desc { font-family: 'Crimson Pro', serif; font-size: 13.5px; line-height: 1.5; color: #5C3317; opacity: 0.8; font-style: italic; }
+.ritual-card:hover { 
+  transform: translateY(-10px); 
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(240, 192, 64, 0.3); 
+  border-color: #F0C040;
+}
 
-.ritual-card-footer { padding: 16px 20px; background: rgba(0,0,0,0.02); border-top: 1px solid rgba(0,0,0,0.03); }
+.ritual-card.active { 
+  border-color: #FF6B00; 
+  background: rgba(255, 107, 0, 0.08); 
+  box-shadow: 0 0 40px rgba(255, 107, 0, 0.2);
+}
+
+.ritual-card-head { 
+  display: flex; 
+  justify-content: space-between; 
+  align-items: center; 
+  padding: 30px 24px 15px; 
+}
+
+.ritual-icon { font-size: 42px; filter: drop-shadow(0 0 10px rgba(255, 107, 0, 0.4)); }
+.ritual-price { font-family: 'Cinzel', serif; font-weight: 900; font-size: 22px; color: #F0A040; }
+
+.ritual-card-body { padding: 0 24px 24px; flex: 1; }
+.ritual-name { font-family: 'Cinzel', serif; font-size: 20px; font-weight: 800; color: #F0C040; margin-bottom: 12px; }
+.ritual-desc { color: rgba(255, 248, 240, 0.5); font-size: 13.5px; line-height: 1.6; font-family: 'Nunito', sans-serif; }
+
+.ritual-meta { display: flex; gap: 15px; margin-bottom: 15px; font-size: 12px; font-weight: 700; color: rgba(240, 192, 64, 0.8); }
+.samagri-tag { background: rgba(255, 107, 0, 0.15); padding: 4px 12px; border-radius: 20px; color: #FF6B00; border: 1px solid rgba(255, 107, 0, 0.2); font-size: 10px; text-transform: uppercase; }
+
+.ritual-card-footer { padding: 0 24px 30px; }
+.ritual-card-footer .btn { 
+  background: rgba(255, 255, 255, 0.05); 
+  border: 1px solid rgba(240, 192, 64, 0.3); 
+  color: #F0A040; 
+  font-weight: 800; 
+  width: 100%;
+  border-radius: 12px;
+  padding: 12px;
+}
+.ritual-card.active .ritual-card-footer .btn { background: linear-gradient(135deg, #FF6B00, #F0C040); border: none; color: #fff; }
 
 .ritual-filters-card { padding: 20px; background: #fff; border-radius: 16px; border: 1px solid rgba(212,160,23,.1); }
 .filter-group { margin-bottom: 24px; }
@@ -2078,9 +2119,26 @@ body {
 .sc-category-tag { font-size: 10px; text-transform: uppercase; font-weight: 800; color: #8B6347; letter-spacing: 1px; }
 .sc-price-tag { font-family: 'Cinzel', serif; font-size: 18px; font-weight: 800; color: var(--s); }
 
-.sc-body { padding: 10px 20px 20px; flex: 1; }
-.sc-name { font-family: 'Cinzel', serif; font-size: 16px; margin-bottom: 8px; color: #2C1A0E; cursor: pointer; }
-.sc-desc { font-family: 'Crimson Pro', serif; font-size: 13.5px; line-height: 1.4; color: #5C3317; opacity: 0.85; margin-bottom: 15px; min-height: 38px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ritual-card.special-card {
+  border-color: rgba(255, 215, 0, 0.4);
+  background: rgba(44, 26, 14, 0.8);
+  box-shadow: 0 0 50px rgba(255, 215, 0, 0.1);
+}
+
+.sc-desc { 
+  font-family: 'Crimson Pro', serif; 
+  font-size: 13.5px; 
+  line-height: 1.4; 
+  color: #5C3317; 
+  opacity: 0.85; 
+  margin-bottom: 15px; 
+  min-height: 38px; 
+  display: -webkit-box; 
+  -webkit-line-clamp: 2; 
+  line-clamp: 2;
+  -webkit-box-orient: vertical; 
+  overflow: hidden; 
+}
 .sc-items-tag { display: inline-block; font-size: 10.5px; font-weight: 700; color: #27AE60; background: rgba(39,174,96,0.08); padding: 4px 10px; border-radius: 6px; }
 
 .sc-actions { padding: 0 20px 20px; }

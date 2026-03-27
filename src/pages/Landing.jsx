@@ -83,7 +83,8 @@ export default function Landing() {
             <span key={l} onClick={() => { navigate(p); setMenuOpen(false); }} className="nav-link">{l}</span>
           ))}
           <span onClick={() => { navigate('/pandit/dashboard'); setMenuOpen(false); }} style={{ color: '#D4A017', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>Pandit Portal ↗</span>
-          <button style={btn('linear-gradient(135deg,#FF6B00,#D4A017)', { padding: '8px 22px', fontSize: 13 })} onClick={() => { navigate('/user/home'); setMenuOpen(false); }}>Enter App →</button>
+          <span onClick={() => { navigate('/admin/overview'); setMenuOpen(false); }} style={{ color: '#F0C040', fontSize: 13, fontWeight: 700, cursor: 'pointer', marginLeft: '10px' }}>Admin Panel ⚙️</span>
+          <button style={btn('linear-gradient(135deg,#FF6B00,#D4A017)', { padding: '8px 22px', fontSize: 13, marginLeft: '10px' })} onClick={() => { navigate('/user/home'); setMenuOpen(false); }}>Enter App →</button>
         </div>
       </nav>
 

@@ -34,7 +34,11 @@ export default function BookingWizard() {
   useEffect(() => {
     (async () => {
       const { data } = await bookingApi.getRituals();
-      setRituals(data || []); setFilteredRituals(data || []); setLoading(false);
+      const onDemand = { id: 'on-demand', name: 'On-Demand Pandit', icon: '⚡', price: 1500, description: 'Book a certified scholar for a general consultation or custom rituals.', samagriRequired: false, category: 'General' };
+      const allRituals = [onDemand, ...(data || [])];
+      setRituals(allRituals); 
+      setFilteredRituals(allRituals); 
+      setLoading(false);
     })();
   }, []);
 
@@ -48,9 +52,11 @@ export default function BookingWizard() {
 
   useEffect(() => {
     let list = [...rituals];
-    if (ritualFilters.category !== 'All') list = list.filter(r => r.name.toLowerCase().includes(ritualFilters.category.toLowerCase()));
-    list = list.filter(r => r.price <= ritualFilters.maxPrice);
-    if (ritualFilters.samagriOnly) list = list.filter(r => r.samagriRequired);
+    if (ritualFilters.category !== 'All') {
+      list = list.filter(r => r.id === 'on-demand' || (r.category && r.category.toLowerCase().includes(ritualFilters.category.toLowerCase())) || r.name.toLowerCase().includes(ritualFilters.category.toLowerCase()));
+    }
+    list = list.filter(r => r.id === 'on-demand' || r.price <= ritualFilters.maxPrice);
+    if (ritualFilters.samagriOnly) list = list.filter(r => r.id === 'on-demand' || r.samagriRequired);
     setFilteredRituals(list);
   }, [ritualFilters, rituals]);
 
@@ -59,10 +65,16 @@ export default function BookingWizard() {
 
   const selectRitual = async (r) => {
     setLoading(true);
-    const { data } = await bookingApi.getSamagriKits(r.id);
-    setSamagriKits(data || []);
-    setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
-    setLoading(false); nextStep();
+    if (r.id === 'on-demand') {
+      setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price, samagriId: null, samagriAmount: 0 }));
+      setStep(3); // Skip Samagri for on-demand
+    } else {
+      const { data } = await bookingApi.getSamagriKits(r.id);
+      setSamagriKits(data || []);
+      setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
+      nextStep();
+    }
+    setLoading(false);
   };
 
   const handleStep4Submit = (e) => {
@@ -162,30 +174,60 @@ export default function BookingWizard() {
         ))}
       </div>
 
-      <div className="wizard-card card" style={{ padding: '30px', borderRadius: '20px' }}>
+      {/* Progress Header */}
+      <div style={{ maxWidth: 800, margin: '0 auto 40px', padding: '0 20px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', marginBottom: 10 }}>
+          <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 2, background: 'rgba(240,192,64,0.1)', zIndex: 1 }} />
+          <div style={{ position: 'absolute', top: '50%', left: 0, width: `${(step-1)*20}%`, height: 2, background: 'linear-gradient(to right, #FF6B00, #F0C040)', transition: 'width 0.5s', zIndex: 2 }} />
+          {[1, 2, 3, 4, 5, 6].map(s => (
+            <div key={s} style={{ 
+              width: 32, height: 32, borderRadius: '50%', 
+              background: step >= s ? 'linear-gradient(135deg, #FF6B00, #F0C040)' : '#2c1a0e',
+              border: `2px solid ${step >= s ? '#F0C040' : 'rgba(240,192,64,0.2)'}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 14, fontWeight: 900, color: step >= s ? '#fff' : 'rgba(240,192,64,0.4)',
+              zIndex: 3, position: 'relative', transition: 'all 0.3s'
+            }}>
+              {step > s ? '✓' : s}
+              <div style={{ position: 'absolute', top: 38, fontSize: 10, fontWeight: 700, color: step >= s ? '#F0C040' : 'rgba(240,192,64,0.3)', width: 'max-content' }}>
+                {['Ritual', 'Samagri', 'Timing', 'Location', 'Pandit', 'Pay'][s-1]}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="glass-card" style={{ maxWidth: 900, margin: '0 auto', padding: '40px', borderRadius: 30, background: 'rgba(44,26,14,0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(240,192,64,0.15)', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
         {step === 1 && (
-          <div className="wizard-step">
-            <h2 className="ph-title" style={{ color: '#F0C040' }}>Choose Your Sacred Ritual</h2>
-            <p className="ph-sub">Explore our catalog and find the ceremony you wish to perform.</p>
-            <div className="marketplace-content" style={{ marginTop: '20px' }}>
-              <aside className="filters-sidebar"><RitualFilters onFilterChange={(k, v) => setRitualFilters(p => ({ ...p, [k]: v }))} activeFilters={ritualFilters} /></aside>
-              <section>{loading ? <Spinner /> : <RitualGrid rituals={filteredRituals} onSelect={selectRitual} activeId={draft.ritualId} />}</section>
+          <div className="fade-in">
+            <h1 style={{ fontFamily: 'Cinzel,serif', fontSize: 32, fontWeight: 900, textAlign: 'center', color: '#F0C040', marginBottom: 10 }}>Select Sacred Ritual</h1>
+            <p style={{ textAlign: 'center', color: 'rgba(255,248,240,0.6)', marginBottom: 30 }}>Choose from our certified Vedic services or book a custom session.</p>
+            <RitualFilters onFilterChange={(k, v) => setRitualFilters(p => ({ ...p, [k]: v }))} activeFilters={ritualFilters} />
+            <div style={{ marginTop: '20px' }}>
+              {loading ? <Spinner /> : <RitualGrid rituals={filteredRituals} onSelect={selectRitual} activeId={draft.ritualId} />}
             </div>
           </div>
         )}
 
         {step === 2 && (
-          <div className="wizard-step">
-            <h2 className="ph-title" style={{ color: '#F0C040' }}>Sacred Samagri Options</h2>
-            <div style={{ background: '#FFF3E6', border: '1px dashed #FF6B00', padding: '10px 20px', borderRadius: '12px', color: '#B04B00', fontWeight: 800, fontSize: '12px', display: 'inline-block', marginBottom: '15px' }}>
+          <div className="fade-in">
+            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 10 }}>Sacred Samagri</h2>
+            <p style={{ textAlign: 'center', color: 'rgba(255,248,240,0.5)', marginBottom: 20 }}>Choose a curated kit for {draft.ritual} or arrange it yourself.</p>
+            <div style={{ background: 'rgba(255, 107, 0, 0.1)', border: '1px dashed rgba(255, 107, 0, 0.3)', padding: '12px 20px', borderRadius: '15px', color: '#FF6B00', fontWeight: 800, fontSize: '13px', textAlign: 'center', marginBottom: '30px', animation: 'pulse 3s infinite' }}>
               🎁 BUNDLE OFFER: Save 10% when booking ritual with a samagri kit!
             </div>
             <SamagriSelector kits={samagriKits} selectedId={draft.samagriId}
               onSelect={(kit) => { setDraft(p => ({ ...p, samagriId: kit.id, samagriAmount: kit.price, deliveryRequired: true })); }}
               onSkip={() => { setDraft(p => ({ ...p, samagriId: null, samagriAmount: 0, deliveryRequired: false })); }} />
+            
+            <div style={{ textAlign: 'center', margin: '20px 0' }}>
+              <button className="btn btn-ghost" style={{ fontSize: '12px', color: 'rgba(240,192,64,0.6)' }} onClick={() => toast("Item-level customization available inside the kit selector!", "📦")}>
+                ⚙️ Need more customization? Click items above to toggle
+              </button>
+            </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
               <button className="btn btn-outline" onClick={prevStep}>← Back</button>
-              <button className="btn btn-primary" onClick={nextStep}>
+              <button className="btn btn-primary" onClick={nextStep} style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 30px' }}>
                 {draft.samagriId ? "Proceed with Samagri →" : "Proceed without Samagri →"}
               </button>
             </div>
@@ -193,7 +235,7 @@ export default function BookingWizard() {
         )}
 
         {step === 3 && (
-          <form className="wizard-step" onSubmit={(e) => { 
+          <form className="fade-in" onSubmit={(e) => { 
             e.preventDefault(); 
             if (!draft.date || !draft.time) return toast("Date and time required!", "⚠️");
             const selectedDate = new Date(draft.date);
@@ -202,95 +244,124 @@ export default function BookingWizard() {
             if (selectedDate < today) return toast("Cannot select a past date!", "⚠️");
             nextStep(); 
           }}>
-            <h2 className="ph-title" style={{ color: '#F0C040' }}>Pick Auspicious Timing</h2>
-            <div className="fgrid" style={{ gap: '20px', marginTop: '30px' }}>
-              <div className="fg"><label className="fl">Preferred Date</label><input type="date" className="fi" required value={draft.date} onChange={e => setDraft(d => ({ ...d, date: e.target.value }))} /></div>
-              <div className="fg"><label className="fl">Start Time</label><input type="time" className="fi" required value={draft.time} onChange={e => setDraft(d => ({ ...d, time: e.target.value }))} /></div>
+            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 30 }}>Pick Auspicious Timing</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 30, marginBottom: 40 }}>
+              <div>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(240,192,64,0.6)', marginBottom: 8, letterSpacing: 1 }}>Preferred Date</label>
+                <input type="date" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(240,192,64,0.2)', color: '#fff', padding: 15, borderRadius: 12, outline: 'none' }} required value={draft.date} onChange={e => setDraft(d => ({ ...d, date: e.target.value }))} />
+              </div>
+              <div>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(240,192,64,0.6)', marginBottom: 8, letterSpacing: 1 }}>Start Time</label>
+                <input type="time" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(240,192,64,0.2)', color: '#fff', padding: 15, borderRadius: 12, outline: 'none' }} required value={draft.time} onChange={e => setDraft(d => ({ ...d, time: e.target.value }))} />
+              </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <button type="button" className="btn btn-outline" onClick={prevStep}>← Back</button>
-              <button type="submit" className="btn btn-primary">Choose Address →</button>
+              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 30px' }}>Choose Address →</button>
             </div>
           </form>
         )}
 
         {step === 4 && (
-          <form className="wizard-step" onSubmit={handleStep4Submit}>
-            <h2 className="ph-title" style={{ color: '#F0C040' }}>Where should Pt. Ji arrive?</h2>
-            <div className="fgrid" style={{ gap: '20px', marginTop: '30px' }}>
-              <div className="fg">
-                <label className="fl">City</label>
-                <select className="fs" required value={draft.location} onChange={e => setDraft(d => ({ ...d, location: e.target.value }))}>
+          <form className="fade-in" onSubmit={handleStep4Submit}>
+            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 30 }}>Service Location</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 20, marginBottom: 40 }}>
+              <div>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(240,192,64,0.6)', marginBottom: 8, letterSpacing: 1 }}>City / Region</label>
+                <select style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(240,192,64,0.2)', color: '#fff', padding: 15, borderRadius: 12, outline: 'none' }} required value={draft.location} onChange={e => setDraft(d => ({ ...d, location: e.target.value }))}>
                   <option value="">Select City</option>
-                  {["Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Mumbai", "Bengaluru", "Kashi", "Ayodhya", "Haridwar", "Ujjain", "Pune"].map(c => (
-                    <option key={c} value={c}>{c}</option>
-                  ))}
+                  {["Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Mumbai", "Bengaluru", "Kashi", "Ayodhya", "Haridwar", "Ujjain", "Pune"].map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
-              <div className="fg"><label className="fl">Full Address</label><textarea className="fta" required value={draft.address} onChange={e => setDraft(d => ({ ...d, address: e.target.value }))} placeholder="House no, Street, Landmark..." /></div>
-              <div className="fg"><label className="fl">Additional Instructions (Optional)</label><input className="fi" value={draft.notes} onChange={e => setDraft(d => ({ ...d, notes: e.target.value }))} placeholder="Entry info, special requests..." /></div>
+              <div>
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(240,192,64,0.6)', marginBottom: 8, letterSpacing: 1 }}>Detailed Address</label>
+                <textarea style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(240,192,64,0.2)', color: '#fff', padding: 15, borderRadius: 12, outline: 'none', minHeight: 100 }} required value={draft.address} onChange={e => setDraft(d => ({ ...d, address: e.target.value }))} placeholder="House no, Building, Street name..." />
+              </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <button type="button" className="btn btn-outline" onClick={prevStep}>← Back</button>
-              <button type="submit" className="btn btn-primary">Find Available Pandits →</button>
+              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 30px' }}>Find Available Pandits →</button>
             </div>
           </form>
         )}
 
         {step === 5 && (
-          <div className="wizard-step">
-            <h2 className="ph-title" style={{ color: '#F0C040' }}>Choose Your Vedic Scholar</h2>
-            <div style={{ display: 'grid', gap: '15px', marginTop: '30px' }}>
+          <div className="fade-in">
+            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 10 }}>Choose Your Scholar</h2>
+            <p style={{ textAlign: 'center', color: 'rgba(255,248,240,0.5)', marginBottom: 30 }}>Available certified experts for {draft.ritual} in {draft.location}</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, marginBottom: 40 }}>
               {loading ? <Spinner /> : (
                 pandits.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '40px', background: '#fff8f0', borderRadius: 12 }}>
-                    <div style={{ fontSize: 48, marginBottom: 12 }}>🙏</div>
-                    <div style={{ color: '#1a0f07', fontWeight: 700, fontSize: 16, marginBottom: 8 }}>Finding Pandits...</div>
-                    <div style={{ color: '#9a8070', fontSize: 13 }}>Verified scholars are being matched for you</div>
+                  <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '60px', background: 'rgba(255,255,255,0.02)', borderRadius: 24, border: '1px solid rgba(240,192,64,0.1)' }}>
+                    <div style={{ fontSize: 48, marginBottom: 15 }}>🙏</div>
+                    <div style={{ color: '#F0C040', fontWeight: 800, fontSize: 18, marginBottom: 8 }}>Finding Best Match...</div>
+                    <div style={{ color: 'rgba(255,248,240,0.4)', fontSize: 13 }}>We are matching certified scholars in {draft.location}</div>
                   </div>
                 ) : pandits.map(p => (
                   <div key={p.id}
-                    className={`card card-p ${draft.panditId === p.id ? 'selected' : ''}`}
+                    className={`glass-card ${draft.panditId === p.id ? 'active' : ''}`}
                     onClick={() => { setDraft(prev => ({ ...prev, panditId: p.id, panditName: p.name })); nextStep(); }}
-                    style={{ cursor: 'pointer', border: draft.panditId === p.id ? '2px solid #FF6B00' : undefined }}>
-                    <div style={{ display: 'flex', gap: '15px', alignItems: 'center' }}>
-                      <div style={{ fontSize: '30px' }}>{p.emoji || '🕉️'}</div>
-                      <div>
-                        <div style={{ fontWeight: 'bold' }}>{p.name} {p.verified && "✓"}</div>
-                        <div style={{ fontSize: '12px', color: '#666' }}>{p.years_of_experience || p.experience}y exp · {p.rating}★ · ₹{p.min_fee?.toLocaleString()}</div>
+                    style={{ 
+                      padding: 24, borderRadius: 20, cursor: 'pointer',
+                      background: draft.panditId === p.id ? 'rgba(255,107,0,0.1)' : 'rgba(255,255,255,0.03)',
+                      border: `1px solid ${draft.panditId === p.id ? '#FF6B00' : 'rgba(240,192,64,0.1)'}`,
+                      transition: 'all 0.3s'
+                    }}>
+                    <div style={{ display: 'flex', gap: 15, alignItems: 'center' }}>
+                      <div style={{ width: 44, height: 44, borderRadius: '50%', background: 'linear-gradient(135deg, #FF6B00, #F0C040)', color: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 18, fontWeight: 900 }}>
+                        {p.name[0]}
                       </div>
+                      <div style={{ flex: 1 }}>
+                        <div style={{ fontWeight: 800, color: '#fff' }}>{p.name} {p.verified && "✓"}</div>
+                        <div style={{ fontSize: 11, color: 'rgba(255,248,240,0.4)' }}>
+                          {p.years_of_experience || p.experience_years}+ Yrs • ⭐ {p.rating} • ₹{p.min_fee?.toLocaleString()}
+                        </div>
+                      </div>
+                      {draft.panditId === p.id && <span style={{ color: '#FF6B00', fontSize: 20 }}>✓</span>}
                     </div>
                   </div>
                 ))
               )}
             </div>
-            <div style={{ marginTop: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <button className="btn btn-outline" onClick={prevStep}>← Back</button>
             </div>
           </div>
         )}
 
         {step === 6 && (
-          <div className="wizard-step">
-            <h2 className="ph-title" style={{ color: '#F0C040' }}>Confirm Your Sacred Booking</h2>
-            <div style={{ background: '#f9f9f9', padding: '20px', borderRadius: '15px', marginTop: '30px' }}>
-              <div style={{ display: 'grid', gap: '10px' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Ritual</strong><span>{draft.ritualIcon} {draft.ritual}</span></div>
-                {draft.samagriId && <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Samagri Kit</strong><span style={{ color: '#FF6B00' }}>📦 Doorstep Kit (+₹{draft.samagriAmount})</span></div>}
-                {draft.samagriId && <div style={{ display: 'flex', justifyContent: 'space-between', color: '#12B76A', fontWeight: 800, fontSize: '13px' }}><span>✨ Bundle Savings (10%)</span><span>-₹{Math.round((draft.amount + draft.samagriAmount) * 0.1)}</span></div>}
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Timing</strong><span>📅 {draft.date} at 🕐 {draft.time}</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Location</strong><span>📍 {draft.address}, {draft.location}</span></div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}><strong>Pandit Ji</strong><span>🕉️ {draft.panditName || "Selecting Expert..."}</span></div>
-                <hr style={{ margin: '15px 0', opacity: 0.1 }} />
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.2rem', color: '#FF6B00' }}>
-                  <strong>Final Amount</strong><strong>₹{totalAmount.toLocaleString()}</strong>
+          <div className="fade-in">
+            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 30 }}>Final Review</h2>
+            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 24, padding: 30, marginBottom: 40, border: '1px solid rgba(240,192,64,0.1)' }}>
+              <div style={{ display: 'grid', gap: 20 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span style={{ color: 'rgba(255,248,240,0.5)', fontSize: 14 }}>Ritual Service</span>
+                  <span style={{ fontWeight: 800, color: '#fff', textAlign: 'right' }}>{draft.ritualIcon} {draft.ritual}</span>
+                </div>
+                {draft.samagriId && (
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <span style={{ color: 'rgba(255,248,240,0.5)', fontSize: 14 }}>Sacred Samagri Bundle</span>
+                    <span style={{ fontWeight: 800, color: '#FF6B00', textAlign: 'right' }}>📦 Doorstep Delivery (+₹{draft.samagriAmount})</span>
+                  </div>
+                )}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span style={{ color: 'rgba(255,248,240,0.5)', fontSize: 14 }}>Date & Time</span>
+                  <span style={{ fontWeight: 800, color: '#fff', textAlign: 'right' }}>📅 {draft.date} at 🕐 {draft.time}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span style={{ color: 'rgba(255,248,240,0.5)', fontSize: 14 }}>Vedic Scholar</span>
+                  <span style={{ fontWeight: 800, color: '#F0C040', textAlign: 'right' }}>🕉️ {draft.panditName}</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
+                  <span style={{ fontWeight: 900, color: '#F0C040', fontSize: 22, fontFamily: 'Cinzel' }}>Total Amount</span>
+                  <span style={{ fontWeight: 900, color: '#FF6B00', fontSize: 24, fontFamily: 'Cinzel' }}>₹{totalAmount.toLocaleString()}</span>
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <button className="btn btn-outline" onClick={prevStep}>← Back</button>
-              <button className="btn btn-primary btn-lg" onClick={confirmBooking} disabled={submitting}>
-                {submitting ? "Processing..." : "📿 Confirm & Pay Dakshina"}
+              <button className="btn btn-primary" disabled={submitting} onClick={confirmBooking} style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '15px 40px', fontSize: 18, borderRadius: 15 }}>
+                {submitting ? "Initiating Razorpay..." : "📿 Complete Payment"}
               </button>
             </div>
           </div>
