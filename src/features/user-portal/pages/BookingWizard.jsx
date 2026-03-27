@@ -9,6 +9,7 @@ import RitualGrid from '../components/RitualGrid';
 import { SamagriSelector } from '../components/SamagriSelector';
 import { paymentService } from '../../../services/paymentService';
 import { notificationService } from '../../../services/notificationService';
+import { SEED_PANDITS } from '../../../data/seedData';
 
 export default function BookingWizard() {
   const { devoteeId, devoteeName, userPhone, toast } = useApp();
@@ -70,7 +71,14 @@ export default function BookingWizard() {
     (async () => {
       setLoading(true);
       const { data } = await bookingApi.getAvailablePandits(draft.ritual, draft.location, draft.date);
-      setPandits(data || []); setLoading(false); nextStep();
+      // Always merge DB results with seed pandits as fallback
+      const dbIds = new Set((data || []).map(p => p.id));
+      const seedFallback = SEED_PANDITS.filter(p => !dbIds.has(p.id));
+      const allPandits = [...(data || []), ...seedFallback];
+      // Filter by city, show all if none match
+      const cityMatch = allPandits.filter(p => !draft.location || p.city === draft.location || draft.location === 'Any City');
+      setPandits(cityMatch.length > 0 ? cityMatch : allPandits);
+      setLoading(false); nextStep();
     })();
   };
 
@@ -223,9 +231,10 @@ export default function BookingWizard() {
             <div style={{ display: 'grid', gap: '15px', marginTop: '30px' }}>
               {loading ? <Spinner /> : (
                 pandits.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '40px' }}>
-                    <div style={{ fontSize: 36, marginBottom: 10 }}>🕉️</div>
-                    <p>No pandits available for this city/ritual. Try another city.</p>
+                  <div style={{ textAlign: 'center', padding: '40px', background: '#fff8f0', borderRadius: 12 }}>
+                    <div style={{ fontSize: 48, marginBottom: 12 }}>🙏</div>
+                    <div style={{ color: '#1a0f07', fontWeight: 700, fontSize: 16, marginBottom: 8 }}>Finding Pandits...</div>
+                    <div style={{ color: '#9a8070', fontSize: 13 }}>Verified scholars are being matched for you</div>
                   </div>
                 ) : pandits.map(p => (
                   <div key={p.id}

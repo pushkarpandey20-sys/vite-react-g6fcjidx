@@ -52,20 +52,26 @@ export default function UserHome() {
     navigate('/user/booking');
   };
 
-  const card = { background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.12)', borderRadius:14, padding:'20px' };
-  const btn  = (bg='#FF6B00') => ({ background:bg, color:'#fff', border:'none', borderRadius:20, padding:'8px 18px', fontWeight:700, cursor:'pointer', fontSize:13 });
+  const card = {
+    background:'#ffffff',
+    border:'1px solid rgba(212,160,23,0.2)',
+    borderRadius:14,
+    padding:'20px',
+    boxShadow:'0 2px 8px rgba(0,0,0,0.04)',
+  };
+  const btn = (bg='#FF6B00') => ({ background:bg, color:'#fff', border:'none', borderRadius:20, padding:'8px 18px', fontWeight:700, cursor:'pointer', fontSize:13 });
 
   return (
-    <div>
+    <div style={{ background:'#fff8f0', minHeight:'100vh' }}>
       {/* Hero Banner */}
       <div style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', borderRadius:16, padding:'24px 28px', marginBottom:24, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
         <div>
           <h1 style={{ fontFamily:'Cinzel,serif', color:'#fff', fontSize:22, margin:0, marginBottom:6 }}>
             {devoteeName ? `Namaste, ${devoteeName.split(' ')[0]} 🙏` : 'Namaste, Devotee 🙏'}
           </h1>
-          <p style={{ color:'rgba(255,255,255,0.85)', margin:0, fontSize:14 }}>Book a certified pandit in under 60 seconds</p>
+          <p style={{ color:'rgba(255,255,255,0.9)', margin:0, fontSize:14 }}>Book a certified pandit in under 60 seconds</p>
         </div>
-        <button style={{ background:'rgba(255,255,255,0.2)', color:'#fff', border:'1px solid rgba(255,255,255,0.4)', borderRadius:20, padding:'10px 24px', fontWeight:700, cursor:'pointer', fontSize:14 }}
+        <button style={{ background:'rgba(255,255,255,0.25)', color:'#fff', border:'1px solid rgba(255,255,255,0.5)', borderRadius:20, padding:'10px 24px', fontWeight:700, cursor:'pointer', fontSize:14 }}
           onClick={()=>navigate('/user/booking')}>⚡ Book Now</button>
       </div>
 
@@ -73,11 +79,11 @@ export default function UserHome() {
       <div style={{ display:'grid', gridTemplateColumns:'repeat(6,1fr)', gap:10, marginBottom:24 }}>
         {SERVICES.map(({icon,label,path})=>(
           <div key={label} onClick={()=>navigate(path)}
-            style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.12)', borderRadius:12, padding:'16px 8px', textAlign:'center', cursor:'pointer', transition:'all 0.2s' }}
-            onMouseEnter={e=>{ e.currentTarget.style.borderColor='rgba(255,107,0,0.5)'; e.currentTarget.style.background='rgba(255,107,0,0.08)'; }}
-            onMouseLeave={e=>{ e.currentTarget.style.borderColor='rgba(212,160,23,0.12)'; e.currentTarget.style.background='rgba(255,255,255,0.04)'; }}>
+            style={{ background:'#ffffff', border:'1px solid rgba(212,160,23,0.2)', borderRadius:12, padding:'16px 8px', textAlign:'center', cursor:'pointer', transition:'all 0.2s', boxShadow:'0 1px 4px rgba(0,0,0,0.04)' }}
+            onMouseEnter={e=>{ e.currentTarget.style.borderColor='rgba(255,107,0,0.5)'; e.currentTarget.style.background='#fff7f0'; }}
+            onMouseLeave={e=>{ e.currentTarget.style.borderColor='rgba(212,160,23,0.2)'; e.currentTarget.style.background='#ffffff'; }}>
             <div style={{ fontSize:28, marginBottom:8 }}>{icon}</div>
-            <div style={{ color:'rgba(255,248,240,0.8)', fontSize:12, fontWeight:600 }}>{label}</div>
+            <div style={{ color:'#1a0f07', fontSize:12, fontWeight:700 }}>{label}</div>
           </div>
         ))}
       </div>
@@ -90,17 +96,17 @@ export default function UserHome() {
           {/* Rituals Grid */}
           <div style={{ ...card, marginBottom:20 }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:0, fontSize:16 }}>🕉️ Most Booked Rituals</h3>
+              <h3 style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', margin:0, fontSize:16 }}>🕉️ Most Booked Rituals</h3>
               <button style={btn()} onClick={()=>navigate('/user/rituals')}>View All</button>
             </div>
             <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
               {RITUALS.map(r=>(
                 <div key={r.name} onClick={()=>handleRitualClick(r.name)}
-                  style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.1)', borderRadius:10, padding:'14px', textAlign:'center', cursor:'pointer' }}
-                  onMouseEnter={e=>e.currentTarget.style.borderColor='rgba(255,107,0,0.4)'}
-                  onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(212,160,23,0.1)'}>
+                  style={{ background:'#fff8f0', border:'1px solid rgba(212,160,23,0.15)', borderRadius:10, padding:'14px', textAlign:'center', cursor:'pointer', transition:'all 0.2s' }}
+                  onMouseEnter={e=>{ e.currentTarget.style.borderColor='rgba(255,107,0,0.4)'; e.currentTarget.style.background='#fff3e8'; }}
+                  onMouseLeave={e=>{ e.currentTarget.style.borderColor='rgba(212,160,23,0.15)'; e.currentTarget.style.background='#fff8f0'; }}>
                   <div style={{ fontSize:28, marginBottom:6 }}>{r.icon}</div>
-                  <div style={{ color:'rgba(255,248,240,0.85)', fontSize:13, fontWeight:600, marginBottom:4 }}>{r.name}</div>
+                  <div style={{ color:'#1a0f07', fontSize:13, fontWeight:600, marginBottom:4 }}>{r.name}</div>
                   <div style={{ color:'#FF6B00', fontSize:12, fontWeight:700 }}>from {r.price}</div>
                 </div>
               ))}
@@ -110,18 +116,18 @@ export default function UserHome() {
           {/* Samagri Store */}
           <div style={{ ...card, marginBottom:20 }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:0, fontSize:16 }}>🛍️ Pooja Samagri Store</h3>
+              <h3 style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', margin:0, fontSize:16 }}>🛍️ Pooja Samagri Store</h3>
               <button style={btn()} onClick={()=>navigate('/user/samagri')}>Shop All</button>
             </div>
             <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
               {[{name:'Diwali Kit',icon:'🪔',price:'₹899',items:'61 items'},{name:'Ganesh Kit',icon:'🐘',price:'₹349',items:'29 items'},{name:'Griha Kit',icon:'🏡',price:'₹599',items:'52 items'}].map(s=>(
                 <div key={s.name} onClick={()=>navigate('/user/samagri')}
-                  style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.1)', borderRadius:10, padding:'14px', textAlign:'center', cursor:'pointer' }}
-                  onMouseEnter={e=>e.currentTarget.style.borderColor='rgba(255,107,0,0.4)'}
-                  onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(212,160,23,0.1)'}>
+                  style={{ background:'#fff8f0', border:'1px solid rgba(212,160,23,0.15)', borderRadius:10, padding:'14px', textAlign:'center', cursor:'pointer', transition:'all 0.2s' }}
+                  onMouseEnter={e=>{ e.currentTarget.style.borderColor='rgba(255,107,0,0.4)'; e.currentTarget.style.background='#fff3e8'; }}
+                  onMouseLeave={e=>{ e.currentTarget.style.borderColor='rgba(212,160,23,0.15)'; e.currentTarget.style.background='#fff8f0'; }}>
                   <div style={{ fontSize:28, marginBottom:6 }}>{s.icon}</div>
-                  <div style={{ color:'rgba(255,248,240,0.85)', fontSize:13, fontWeight:600, marginBottom:2 }}>{s.name}</div>
-                  <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, marginBottom:4 }}>{s.items}</div>
+                  <div style={{ color:'#1a0f07', fontSize:13, fontWeight:600, marginBottom:2 }}>{s.name}</div>
+                  <div style={{ color:'#9a8070', fontSize:11, marginBottom:4 }}>{s.items}</div>
                   <div style={{ color:'#FF6B00', fontSize:13, fontWeight:700 }}>{s.price}</div>
                 </div>
               ))}
@@ -129,34 +135,34 @@ export default function UserHome() {
           </div>
 
           {/* Virtual Pooja Banner */}
-          <div style={{ background:'linear-gradient(135deg,rgba(138,43,226,0.3),rgba(75,0,130,0.4))', border:'1px solid rgba(138,43,226,0.4)', borderRadius:14, padding:'20px 24px', marginBottom:20, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+          <div style={{ background:'linear-gradient(135deg,rgba(109,40,217,0.85),rgba(75,0,130,0.9))', borderRadius:14, padding:'20px 24px', marginBottom:20, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
             <div>
-              <div style={{ color:'#c084fc', fontWeight:700, fontSize:11, letterSpacing:2, marginBottom:6 }}>NEW FEATURE</div>
+              <div style={{ color:'#e9d5ff', fontWeight:700, fontSize:11, letterSpacing:2, marginBottom:6 }}>NEW FEATURE</div>
               <h3 style={{ color:'#fff', fontFamily:'Cinzel,serif', margin:0, fontSize:18 }}>📱 Virtual Pooja</h3>
-              <p style={{ color:'rgba(255,255,255,0.7)', fontSize:13, margin:'6px 0 0' }}>Attend sacred rituals live from anywhere. Prasad delivered home.</p>
+              <p style={{ color:'rgba(255,255,255,0.8)', fontSize:13, margin:'6px 0 0' }}>Attend sacred rituals live from anywhere. Prasad delivered home.</p>
             </div>
-            <button style={{ background:'rgba(138,43,226,0.8)', color:'#fff', border:'none', borderRadius:20, padding:'10px 20px', fontWeight:700, cursor:'pointer', fontSize:14, flexShrink:0 }}
+            <button style={{ background:'rgba(255,255,255,0.2)', color:'#fff', border:'1px solid rgba(255,255,255,0.4)', borderRadius:20, padding:'10px 20px', fontWeight:700, cursor:'pointer', fontSize:14, flexShrink:0 }}
               onClick={()=>navigate('/user/virtual-pooja')}>Book Virtual →</button>
           </div>
 
           {/* Pandits */}
           <div style={card}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:0, fontSize:16 }}>🙏 Highly Rated Scholars</h3>
+              <h3 style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', margin:0, fontSize:16 }}>🙏 Highly Rated Scholars</h3>
               <button style={btn()} onClick={()=>navigate('/user/marketplace')}>All Pandits</button>
             </div>
-            <div style={{ display:'flex', flexDirection:'column', gap:12 }}>
+            <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
               {pandits.map(p=>(
                 <div key={p.id} onClick={()=>navigate('/user/marketplace')}
-                  style={{ display:'flex', justifyContent:'space-between', alignItems:'center', background:'rgba(255,255,255,0.03)', borderRadius:10, padding:'12px 16px', cursor:'pointer', border:'1px solid rgba(212,160,23,0.08)' }}
-                  onMouseEnter={e=>e.currentTarget.style.borderColor='rgba(255,107,0,0.3)'}
-                  onMouseLeave={e=>e.currentTarget.style.borderColor='rgba(212,160,23,0.08)'}>
+                  style={{ display:'flex', justifyContent:'space-between', alignItems:'center', background:'#fff8f0', borderRadius:10, padding:'12px 16px', cursor:'pointer', border:'1px solid rgba(212,160,23,0.12)', transition:'all 0.2s' }}
+                  onMouseEnter={e=>{ e.currentTarget.style.borderColor='rgba(255,107,0,0.3)'; e.currentTarget.style.background='#fff3e8'; }}
+                  onMouseLeave={e=>{ e.currentTarget.style.borderColor='rgba(212,160,23,0.12)'; e.currentTarget.style.background='#fff8f0'; }}>
                   <div style={{ display:'flex', gap:12, alignItems:'center' }}>
                     <div style={{ width:44, height:44, borderRadius:'50%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, flexShrink:0 }}>🙏</div>
                     <div>
-                      <div style={{ color:'#F0C040', fontWeight:700, fontSize:14 }}>{p.name}</div>
-                      <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12 }}>{(p.specializations||[]).slice(0,2).join(' · ')} · {p.city}</div>
-                      <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, marginTop:2 }}>{p.years_of_experience} yrs · ⭐ {p.rating||'New'}</div>
+                      <div style={{ color:'#1a0f07', fontWeight:700, fontSize:14 }}>{p.name}</div>
+                      <div style={{ color:'#9a8070', fontSize:12 }}>{(p.specializations||[]).slice(0,2).join(' · ')} · {p.city}</div>
+                      <div style={{ color:'#9a8070', fontSize:11, marginTop:2 }}>{p.years_of_experience} yrs · ⭐ {p.rating||'New'}</div>
                     </div>
                   </div>
                   <div style={{ textAlign:'right' }}>
@@ -176,34 +182,34 @@ export default function UserHome() {
           </div>
           <div style={card}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:12 }}>
-              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:0, fontSize:14 }}>My Bookings</h3>
+              <h3 style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', margin:0, fontSize:14 }}>My Bookings</h3>
               <button style={btn()} onClick={()=>navigate('/user/history')}>All</button>
             </div>
             {!devoteeId ? (
               <div style={{ textAlign:'center', padding:'16px 0' }}>
-                <div style={{ color:'rgba(255,248,240,0.4)', fontSize:13, marginBottom:10 }}>Login to see your bookings</div>
+                <div style={{ color:'#9a8070', fontSize:13, marginBottom:10 }}>Login to see your bookings</div>
                 <button style={btn()} onClick={()=>navigate('/user/booking')}>Book Now</button>
               </div>
             ) : bookings.length===0 ? (
               <div style={{ textAlign:'center', padding:'16px 0' }}>
                 <div style={{ fontSize:28, marginBottom:8 }}>🙏</div>
-                <div style={{ color:'rgba(255,248,240,0.4)', fontSize:13, marginBottom:10 }}>No rituals scheduled yet</div>
+                <div style={{ color:'#9a8070', fontSize:13, marginBottom:10 }}>No rituals scheduled yet</div>
                 <button style={btn()} onClick={()=>navigate('/user/booking')}>Book First Ritual</button>
               </div>
             ) : bookings.map(b=>(
-              <div key={b.id} style={{ background:'rgba(255,255,255,0.03)', borderRadius:8, padding:'10px 12px', marginBottom:8 }}>
-                <div style={{ color:'#F0C040', fontWeight:600, fontSize:13 }}>{b.ritual_name||'Pooja'}</div>
-                <div style={{ color:'rgba(255,248,240,0.5)', fontSize:11, marginTop:2 }}>
+              <div key={b.id} style={{ background:'#fff8f0', borderRadius:8, padding:'10px 12px', marginBottom:8, border:'1px solid rgba(212,160,23,0.1)' }}>
+                <div style={{ color:'#1a0f07', fontWeight:600, fontSize:13 }}>{b.ritual_name||'Pooja'}</div>
+                <div style={{ color:'#9a8070', fontSize:11, marginTop:2 }}>
                   {b.booking_date?new Date(b.booking_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'TBD'} · ₹{(b.total_amount||0).toLocaleString()}
                 </div>
-                <div style={{ fontSize:11, color:b.status==='confirmed'?'#22c55e':'#FF6B00', marginTop:2 }}>{b.status||'pending'}</div>
+                <div style={{ fontSize:11, color:b.status==='confirmed'?'#15803d':'#FF6B00', marginTop:2, fontWeight:600 }}>{b.status||'pending'}</div>
               </div>
             ))}
           </div>
-          <div style={{ ...card, marginTop:16, textAlign:'center', background:'rgba(255,107,0,0.08)', borderColor:'rgba(255,107,0,0.2)' }}>
+          <div style={{ ...card, marginTop:16, textAlign:'center', background:'linear-gradient(135deg,rgba(255,107,0,0.06),rgba(212,160,23,0.08))', borderColor:'rgba(255,107,0,0.2)' }}>
             <div style={{ fontSize:28, marginBottom:8 }}>❤️</div>
-            <div style={{ color:'#F0C040', fontWeight:700, fontSize:14, marginBottom:6 }}>Seva & Donations</div>
-            <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12, marginBottom:12 }}>Support temples, pandits & sacred traditions</div>
+            <div style={{ color:'#1a0f07', fontWeight:700, fontSize:14, marginBottom:6 }}>Seva & Donations</div>
+            <div style={{ color:'#9a8070', fontSize:12, marginBottom:12 }}>Support temples, pandits & sacred traditions</div>
             <button style={btn()} onClick={()=>navigate('/user/donations')}>Donate Now</button>
           </div>
         </div>

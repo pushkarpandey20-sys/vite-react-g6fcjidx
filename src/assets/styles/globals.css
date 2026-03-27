@@ -50,6 +50,17 @@ select option {
 .light-card { background: #ffffff; color: #1a0f07; border: 1px solid rgba(212,160,23,0.2); border-radius: 12px; }
 .light-card h2, .light-card h3 { color: #1a0f07; }
 .light-card p { color: #4a3728; }
+
+/* ── Light Page Utilities ── */
+.light-page { background: #fff8f0; min-height: 100vh; color: #1a0f07; }
+.content-card { background: #ffffff; border: 1px solid rgba(212,160,23,0.2); border-radius: 14px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.text-muted { color: #9a8070; }
+.text-dark { color: #1a0f07; }
+.text-price { color: #FF6B00; font-weight: 700; }
+.text-accent { color: #D4A017; }
+h1.section-title { font-family: 'Cinzel', serif; color: #1a0f07; font-size: 24px; margin-bottom: 8px; }
+h2.section-title { font-family: 'Cinzel', serif; color: #1a0f07; font-size: 20px; margin-bottom: 6px; }
+h3.section-title { font-family: 'Cinzel', serif; color: #1a0f07; font-size: 16px; margin-bottom: 4px; }
 label { color: #1a0f07; }
 .dark-input label { color: #D4A017 !important; }
 .step-indicator { background: #FF6B00; color: #ffffff; }

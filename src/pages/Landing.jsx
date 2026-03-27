@@ -77,7 +77,7 @@ export default function Landing() {
               onMouseLeave={e=>e.currentTarget.style.color='rgba(255,248,240,0.6)'}>{l}</span>
           ))}
         </div>
-        <a href="https://pandit.devsetu.app" target="_blank" rel="noreferrer" style={{ color:'#D4A017', fontSize:13, fontWeight:700, textDecoration:'none' }}>Pandit Portal ↗</a>
+        <span onClick={()=>navigate('/pandit/dashboard')} style={{ color:'#D4A017', fontSize:13, fontWeight:700, cursor:'pointer' }}>Pandit Portal ↗</span>
         <button style={btn('linear-gradient(135deg,#FF6B00,#D4A017)',{padding:'8px 22px',fontSize:13})} onClick={()=>navigate('/user/home')}>Enter App →</button>
       </nav>
 
@@ -297,7 +297,7 @@ export default function Landing() {
         </p>
         <div style={{ display:'flex', justifyContent:'center', gap:12, flexWrap:'wrap' }}>
           <button style={btn('linear-gradient(135deg,#D4A017,#F0C040)',{color:'#1a0f07'})} onClick={()=>navigate('/pandit/dashboard')}>Join as Pandit →</button>
-          <a href="https://pandit.devsetu.app" target="_blank" rel="noreferrer" style={{ ...btn('rgba(255,255,255,0.08)',{border:'1px solid rgba(255,255,255,0.2)',textDecoration:'none',display:'inline-block'}) }}>Visit Pandit Portal ↗</a>
+          <button style={btn('rgba(255,255,255,0.08)',{border:'1px solid rgba(255,255,255,0.2)'})} onClick={()=>navigate('/pandit/dashboard')}>Visit Pandit Portal ↗</button>
         </div>
       </div>
 
