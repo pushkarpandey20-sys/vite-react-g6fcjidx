@@ -26,6 +26,7 @@ export default function SamagriStorePage() {
   const [cart, setCart] = useState({});
   const [sortBy, setSortBy] = useState('popular');
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [checkoutDone, setCheckoutDone] = useState(false);
 
   const filtered = PRODUCTS
     .filter(p => category === 'All' || p.category === category)
@@ -195,7 +196,7 @@ export default function SamagriStorePage() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{ color: '#fff', fontFamily: 'Cinzel,serif', fontWeight: 900, fontSize: 22 }}>₹{totalPrice.toLocaleString()}</div>
-            <button style={{ background: '#fff', color: '#FF6B00', border: 'none', borderRadius: 24, padding: '10px 24px', fontWeight: 800, cursor: 'pointer', fontSize: 14 }}>Checkout →</button>
+            <button onClick={() => { setCheckoutDone(true); setTimeout(() => { setCart({}); setCheckoutDone(false); }, 3000); }} style={{ background: '#fff', color: '#FF6B00', border: 'none', borderRadius: 24, padding: '10px 24px', fontWeight: 800, cursor: 'pointer', fontSize: 14 }}>{checkoutDone ? '✅ Order Placed!' : 'Checkout →'}</button>
           </div>
         </div>
       )}

@@ -186,7 +186,7 @@ export default function Dashboard() {
 
   // Not logged in
   if (!panditId) return (
-    <div>
+    <div style={{ background:'linear-gradient(135deg,#1a0f07,#3d2211)', borderRadius:16, padding:'32px 24px', minHeight:'60vh' }}>
       {showForm ? (
         <div>
           <button onClick={()=>setShowForm(false)} style={{ background:'rgba(255,255,255,0.1)', color:'#fff', border:'none', borderRadius:20, padding:'8px 18px', cursor:'pointer', marginBottom:20, fontWeight:600 }}>← Back</button>
@@ -201,11 +201,11 @@ export default function Dashboard() {
           )}
         </div>
       ) : (
-        <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', height:'60vh', gap:20 }}>
+        <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:'50vh', gap:20 }}>
           <div style={{ fontSize:64 }}>🙏</div>
           <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017' }}>Sacred Scholar Gateway</h2>
           <p style={{ color:'rgba(255,248,240,0.5)' }}>Login as a Pandit or register to manage your bookings</p>
-          <div style={{ display:'flex', gap:12 }}>
+          <div style={{ display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center' }}>
             <button onClick={()=>setShowLogin && setShowLogin(true)} style={{ background:'linear-gradient(135deg,#D4A017,#F0C040)', color:'#1a0f07', border:'none', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>🪔 Login as Pandit</button>
             <button onClick={()=>setShowForm(true)} style={{ background:'rgba(255,107,0,0.2)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.4)', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>📝 Register as Pandit</button>
           </div>
@@ -217,7 +217,7 @@ export default function Dashboard() {
   // Incomplete profile → show form
   const profileComplete = profile && profile.name && profile.specializations?.length > 0;
   if (!profileComplete) return (
-    <div>
+    <div style={{ background:'linear-gradient(135deg,#1a0f07,#3d2211)', borderRadius:16, padding:'32px 24px' }}>
       <div style={{ background:'rgba(255,107,0,0.1)', border:'1px solid rgba(255,107,0,0.3)', borderRadius:12, padding:'16px 20px', marginBottom:24, color:'#FF6B00', fontSize:14 }}>
         Complete your profile to start receiving booking requests from devotees.
       </div>

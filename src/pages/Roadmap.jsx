@@ -83,7 +83,7 @@ export default function Roadmap() {
   const phase = PHASES[activePhase];
 
   return (
-    <div>
+    <div style={{ background:'linear-gradient(135deg,#1a0f07 0%,#2d1505 50%,#1a0f07 100%)', minHeight:'100%', margin:'-20px', padding:'20px', borderRadius:0 }}>
       {/* Hero */}
       <div style={{ background:'linear-gradient(135deg,rgba(212,160,23,0.15),rgba(255,107,0,0.1))', border:'1px solid rgba(212,160,23,0.2)', borderRadius:16, padding:'28px 32px', marginBottom:32, textAlign:'center' }}>
         <div style={{ fontSize:48, marginBottom:12 }}>🗺️</div>

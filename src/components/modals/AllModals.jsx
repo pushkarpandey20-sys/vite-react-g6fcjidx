@@ -1,5 +1,7 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../services/supabase';
+import { useApp } from '../../store/AppCtx';
 
 /* ─── CART MODAL ─────────────────────────────────────── */
 export function CartModal({ onClose, cart, updateCartQty, setShowConfirm, devoteeId, setShowLogin }) {
@@ -77,11 +79,17 @@ export function ConfirmModal({ draft, onCancel, onConfirm, loading }) {
 
 /* ─── LOGIN MODAL (OTP) ──────────────────────────────── */
 export function LoginModal({ onClose }) {
+  const { handleLogin } = useApp();
   const [phone, setPhone] = React.useState('');
   const [otp, setOtp] = React.useState('');
   const [step, setStep] = React.useState('phone');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
+
+  const handleDemoLogin = () => {
+    handleLogin(phone || '9999999999', 'DevSetu Devotee', 'Delhi');
+    onClose();
+  };
 
   const handleSendOTP = async () => {
     const clean = phone.replace(/\D/g, '');
@@ -92,6 +100,11 @@ export function LoginModal({ onClose }) {
       if (e) throw e;
       setStep('otp');
     } catch (e) {
+      // Phone OTP not configured on this Supabase project — fall back to demo login
+      if (e.message?.toLowerCase().includes('phone') || e.message?.toLowerCase().includes('unsupported')) {
+        handleDemoLogin();
+        return;
+      }
       setError(e.message || 'Failed to send OTP. Please try again.');
     } finally { setLoading(false); }
   };
@@ -134,6 +147,14 @@ export function LoginModal({ onClose }) {
               <div style={{ textAlign: 'center', marginTop: 14, fontSize: 12, color: '#8B6347' }}>
                 You'll receive a 6-digit code via SMS
               </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 16 }}>
+                <div style={{ flex: 1, height: 1, background: 'rgba(212,160,23,0.2)' }} />
+                <span style={{ color: '#9a8070', fontSize: 12 }}>or</span>
+                <div style={{ flex: 1, height: 1, background: 'rgba(212,160,23,0.2)' }} />
+              </div>
+              <button className="btn btn-outline" style={{ width: '100%', justifyContent: 'center', marginTop: 12 }} onClick={handleDemoLogin}>
+                👤 Continue as Guest (Demo)
+              </button>
             </>
           ) : (
             <>
@@ -252,26 +273,38 @@ export function PanditOnboardingModal({ onClose }) {
 }
 
 export function PanditModal({ pandit, onClose }) {
+  const navigate = useNavigate();
   if (!pandit) return null;
+  const specs = Array.isArray(pandit.specializations) ? pandit.specializations : (pandit.tags || []);
+  const handleBook = () => {
+    onClose();
+    navigate('/user/booking', { state: { prefilledPandit: pandit } });
+  };
   return (
     <div className="overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-head">
-          <div className="modal-title">{pandit.emoji} {pandit.name}</div>
-          <div className="modal-sub">{pandit.specialization || pandit.speciality} · {pandit.years_of_experience || pandit.experience_years || pandit.experience} yrs Experience</div>
+          <div className="modal-title">{pandit.emoji || '🙏'} {pandit.name}</div>
+          <div className="modal-sub">📍 {pandit.city} · {pandit.years_of_experience || pandit.experience_years || 5}+ yrs · ⭐ {pandit.rating || 4.8}</div>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
         <div className="modal-body">
-          <p style={{ fontSize: 14, color: "#8B6347", fontStyle: "italic", marginBottom: 15 }}>"Dedicated Vedic scholar performing sacred rituals with strict adherence to Shastras."</p>
+          <p style={{ fontSize: 14, color: "#8B6347", fontStyle: "italic", marginBottom: 15 }}>
+            {pandit.bio || '"Dedicated Vedic scholar performing sacred rituals with strict adherence to Shastras."'}
+          </p>
           <div className="sg3 stat-grid" style={{ marginBottom: 15 }}>
-            <div className="card card-p" style={{ textAlign: "center" }}><div style={{ fontWeight: 800 }}>{pandit.rating} ★</div><div style={{ fontSize: 10 }}>Rating</div></div>
+            <div className="card card-p" style={{ textAlign: "center" }}><div style={{ fontWeight: 800 }}>{pandit.rating || 4.8} ★</div><div style={{ fontSize: 10 }}>Rating</div></div>
             <div className="card card-p" style={{ textAlign: "center" }}><div style={{ fontWeight: 800 }}>{pandit.review_count || 0}</div><div style={{ fontSize: 10 }}>Reviews</div></div>
-            <div className="card card-p" style={{ textAlign: "center" }}><div style={{ fontWeight: 800 }}>₹{pandit.price?.toLocaleString() || '–'}</div><div style={{ fontSize: 10 }}>Per Pooja</div></div>
+            <div className="card card-p" style={{ textAlign: "center" }}><div style={{ fontWeight: 800 }}>₹{(pandit.min_fee || pandit.price || 500).toLocaleString()}</div><div style={{ fontSize: 10 }}>From</div></div>
           </div>
-          <h4 style={{ fontFamily: "'Cinzel',serif", fontSize: 13, marginBottom: 8 }}>Available Rituals</h4>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 5 }}>
-            {(pandit.tags || []).map((t, i) => <span key={i} className="ptag">{t}</span>)}
+          <h4 style={{ fontFamily: "'Cinzel',serif", fontSize: 13, marginBottom: 8 }}>Specializations</h4>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 5, marginBottom: 16 }}>
+            {specs.slice(0, 6).map((t, i) => <span key={i} className="ptag">{t}</span>)}
           </div>
+        </div>
+        <div className="modal-foot">
+          <button className="btn btn-outline" onClick={onClose}>Close</button>
+          <button className="btn btn-primary" onClick={handleBook}>⚡ Book Now</button>
         </div>
       </div>
     </div>

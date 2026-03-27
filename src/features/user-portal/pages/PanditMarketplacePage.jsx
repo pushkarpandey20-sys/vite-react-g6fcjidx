@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../../store/AppCtx';
 import { supabase } from '../../../services/supabase';
 import { Spinner } from '../../../components/common/UIElements';
 import { SEED_PANDITS } from '../../../data/seedData';
+
+const QUICK_RITUALS = ['Griha Pravesh','Satyanarayan Katha','Rudrabhishek','Navgrah Shanti','Vivah','Mundan','Namkaran','Lakshmi Puja','Kaal Sarp Dosh','Custom Pooja'];
 
 const CITY_COORDS = {
   'Delhi':     { lat: 28.6139, lng: 77.2090 },
@@ -119,10 +122,13 @@ function PanditCard({ p, isNearby, onView, onVideoClick }) {
 
 export default function PanditMarketplacePage() {
   const { setViewPandit } = useApp();
+  const navigate = useNavigate();
   const [pandits, setPandits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [nearbyCity, setNearbyCity] = useState(null);
   const [videoModal, setVideoModal] = useState(null);
+  const [quickRitual, setQuickRitual] = useState('');
+  const [quickDate, setQuickDate] = useState(new Date().toISOString().split('T')[0]);
 
   // Filter state
   const [search, setSearch] = useState('');
@@ -185,6 +191,24 @@ export default function PanditMarketplacePage() {
       <div style={{ padding:'20px 0 0' }}>
         <h1 style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', margin:'0 0 4px', fontSize:22 }}>🙏 Find Your Pandit</h1>
         <p style={{ color:'#9a8070', margin:'0 0 12px', fontSize:13 }}>Verified Vedic scholars · DevSetu certified</p>
+
+        {/* On-Demand Quick Booking */}
+        <div style={{ background:'linear-gradient(135deg,rgba(255,107,0,0.08),rgba(212,160,23,0.06))', border:'1px solid rgba(255,107,0,0.2)', borderRadius:12, padding:'14px 16px', marginBottom:16 }}>
+          <div style={{ color:'#FF6B00', fontWeight:800, fontSize:13, marginBottom:10 }}>⚡ Book Any Available Pandit Instantly</div>
+          <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'flex-end' }}>
+            <select value={quickRitual} onChange={e=>setQuickRitual(e.target.value)}
+              style={{ flex:'1 1 160px', padding:'8px 12px', borderRadius:8, border:'1.5px solid rgba(255,107,0,0.3)', background:'#fff', color:'#1a0f07', fontSize:13, outline:'none' }}>
+              <option value="">🕉️ Select Ritual / Package</option>
+              {QUICK_RITUALS.map(r=><option key={r} value={r}>{r}</option>)}
+            </select>
+            <input type="date" value={quickDate} onChange={e=>setQuickDate(e.target.value)} min={new Date().toISOString().split('T')[0]}
+              style={{ flex:'1 1 130px', padding:'8px 12px', borderRadius:8, border:'1.5px solid rgba(255,107,0,0.3)', background:'#fff', color:'#1a0f07', fontSize:13, outline:'none' }} />
+            <button onClick={() => { if (!quickRitual) return; navigate('/user/booking', { state: { prefilledRitual: quickRitual, prefilledDate: quickDate } }); }}
+              style={{ flex:'0 0 auto', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:8, padding:'9px 20px', fontWeight:800, cursor:'pointer', fontSize:13, whiteSpace:'nowrap' }}>
+              Book Now →
+            </button>
+          </div>
+        </div>
 
         {nearbyCity && (
           <div style={{ background:'rgba(34,197,94,0.1)', border:'1px solid rgba(34,197,94,0.3)', borderRadius:10, padding:'8px 14px', marginBottom:12, display:'inline-flex', alignItems:'center', gap:8 }}>

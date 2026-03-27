@@ -57,35 +57,38 @@ export default function MuhuratFinder() {
 
   const occasions = ["Mundan", "Griha Pravesh", "Wedding", "Vehicle Purchase", "Bhoomi Pujan", "Vidyarambha"];
 
+  const sel = { padding:'8px 12px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'#fff', color:'#1a0f07', fontSize:12, outline:'none', cursor:'pointer' };
+
   return (
     <div className="muhurat-finder">
-      <div className="finder-form card card-p" style={{ marginBottom: 30 }}>
-        <h3 className="ph-title" style={{ color: '#F0C040' }}>Find Your Shubh Muhurta</h3>
-        <p className="ph-sub">Our Vedic algorithm calculates the most auspicious timings based on your specific location and occasion.</p>
-        
-        <form onSubmit={handleSearch} className="fgrid" style={{ marginTop: 20 }}>
-          <div className="fg">
-            <label className="fl">Vedic Occasion</label>
-            <select className="fs" required value={query.occasion} onChange={e => setQuery({...query, occasion: e.target.value})}>
-              <option value="">Select Occasion</option>
-              {occasions.map(o => <option key={o} value={o}>{o}</option>)}
-            </select>
-          </div>
-          <div className="fg">
-            <label className="fl">City for Accurate Panchang</label>
-            <input className="fi" required value={query.city} onChange={e => setQuery({...query, city: e.target.value})} placeholder="e.g. Kashi, Delhi..." />
-          </div>
-          <div className="fg">
-            <label className="fl">From Date</label>
-            <input type="date" className="fi" required value={query.dateFrom} onChange={e => setQuery({...query, dateFrom: e.target.value})} />
-          </div>
-          <div className="fg">
-            <label className="fl">To Date</label>
-            <input type="date" className="fi" required value={query.dateTo} onChange={e => setQuery({...query, dateTo: e.target.value})} />
-          </div>
-          <div className="fg ffw ac" style={{ marginTop: 10 }}>
-            <button type="submit" className="btn btn-primary" style={{ padding: '12px 40px' }} disabled={searching}>
-              {searching ? 'Calculating Graha Dashas...' : '🔮 Find Auspicious Slots'}
+      <div style={{ background:'#ffffff', border:'1px solid rgba(212,160,23,0.2)', borderRadius:12, padding:'14px 16px', marginBottom:20, boxShadow:'0 2px 8px rgba(0,0,0,0.04)' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
+          <span style={{ fontSize:18 }}>🔮</span>
+          <h3 style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', margin:0, fontSize:16, fontWeight:700 }}>Find Your Shubh Muhurta</h3>
+        </div>
+        <form onSubmit={handleSearch}>
+          <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'flex-end' }}>
+            <div style={{ flex:'1 1 140px' }}>
+              <div style={{ color:'#9a8070', fontSize:10, fontWeight:700, marginBottom:3, letterSpacing:0.5 }}>OCCASION</div>
+              <select style={sel} required value={query.occasion} onChange={e => setQuery({...query, occasion: e.target.value})}>
+                <option value="">Select…</option>
+                {occasions.map(o => <option key={o} value={o}>{o}</option>)}
+              </select>
+            </div>
+            <div style={{ flex:'1 1 120px' }}>
+              <div style={{ color:'#9a8070', fontSize:10, fontWeight:700, marginBottom:3, letterSpacing:0.5 }}>CITY</div>
+              <input style={sel} required value={query.city} onChange={e => setQuery({...query, city: e.target.value})} placeholder="Delhi, Kashi…" />
+            </div>
+            <div style={{ flex:'1 1 120px' }}>
+              <div style={{ color:'#9a8070', fontSize:10, fontWeight:700, marginBottom:3, letterSpacing:0.5 }}>FROM DATE</div>
+              <input type="date" style={sel} required value={query.dateFrom} onChange={e => setQuery({...query, dateFrom: e.target.value})} />
+            </div>
+            <div style={{ flex:'1 1 120px' }}>
+              <div style={{ color:'#9a8070', fontSize:10, fontWeight:700, marginBottom:3, letterSpacing:0.5 }}>TO DATE</div>
+              <input type="date" style={sel} required value={query.dateTo} onChange={e => setQuery({...query, dateTo: e.target.value})} />
+            </div>
+            <button type="submit" disabled={searching} style={{ flex:'0 0 auto', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:8, padding:'8px 18px', fontWeight:700, cursor:'pointer', fontSize:13, whiteSpace:'nowrap', height:36 }}>
+              {searching ? '⏳ Calculating…' : '🔮 Find Slots'}
             </button>
           </div>
         </form>
