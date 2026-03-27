@@ -53,35 +53,42 @@ const TABS = ['Book Pandit','Buy Samagri','Virtual Pooja','Donate/Seva','Temples
 export default function Landing() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const btn = (bg='linear-gradient(135deg,#FF6B00,#FF8C35)', extra={}) => ({
-    background:bg, color:'#fff', border:'none', borderRadius:28, padding:'12px 28px',
-    fontWeight:800, cursor:'pointer', fontSize:14, ...extra,
+  const btn = (bg = 'linear-gradient(135deg,#FF6B00,#FF8C35)', extra = {}) => ({
+    background: bg, color: '#fff', border: 'none', borderRadius: 28, padding: '12px 28px',
+    fontWeight: 800, cursor: 'pointer', fontSize: 14, ...extra,
   });
 
   return (
-    <div style={{ minHeight:'100vh', background:'radial-gradient(ellipse at top,#2c1a0e 0%,#0d0700 60%)', fontFamily:'Nunito,sans-serif', color:'#fff8f0' }}>
+    <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse at top,#2c1a0e 0%,#0d0700 60%)', fontFamily: 'Nunito,sans-serif', color: '#fff8f0' }}>
       {/* Sticky Nav */}
-      <nav style={{ position:'sticky', top:0, zIndex:100, background:'rgba(13,7,0,0.92)', backdropFilter:'blur(12px)', borderBottom:'1px solid rgba(212,160,23,0.15)', padding:'0 5%', display:'flex', alignItems:'center', gap:24, height:60 }}>
-        <div style={{ display:'flex', alignItems:'center', gap:10, cursor:'pointer', flexShrink:0 }} onClick={()=>navigate('/')}>
-          <span style={{ fontSize:26 }}>🕉️</span>
+      <nav className={`landing-nav ${menuOpen ? 'menu-open' : ''}`}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', flexShrink: 0 }} onClick={() => navigate('/')}>
+          <span style={{ fontSize: 26 }}>🕉️</span>
           <div>
-            <div style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontWeight:900, fontSize:16, lineHeight:1 }}>DevSetu</div>
-            <div style={{ color:'rgba(255,248,240,0.4)', fontSize:9, letterSpacing:1 }}>BRIDGING YOU TO DIVINE SERVICES</div>
+            <div style={{ fontFamily: 'Cinzel,serif', color: '#F0C040', fontWeight: 900, fontSize: 16, lineHeight: 1 }}>DevSetu</div>
+            <div style={{ color: 'rgba(255,248,240,0.4)', fontSize: 9, letterSpacing: 1 }}>BRIDGING YOU TO DIVINE SERVICES</div>
           </div>
         </div>
-        <div style={{ display:'flex', gap:20, marginLeft:20, flex:1 }}>
-          {[['Find Pandits','/user/marketplace'],['Samagri Store','/user/samagri'],['Temples','/user/temples'],['Muhurta','/user/muhurta'],['Roadmap','/user/roadmap']].map(([l,p])=>(
-            <span key={l} onClick={()=>navigate(p)} style={{ color:'rgba(255,248,240,0.6)', fontSize:13, cursor:'pointer', fontWeight:600, transition:'color 0.2s' }}
-              onMouseEnter={e=>e.currentTarget.style.color='#F0C040'}
-              onMouseLeave={e=>e.currentTarget.style.color='rgba(255,248,240,0.6)'}>{l}</span>
+
+        <button className="landing-hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+          <span />
+          <span />
+          <span />
+        </button>
+
+        <div className="landing-nav-links">
+          {[['Find Pandits', '/user/marketplace'], ['Samagri Store', '/user/samagri'], ['Temples', '/user/temples'], ['Muhurta', '/user/muhurta'], ['Roadmap', '/user/roadmap']].map(([l, p]) => (
+            <span key={l} onClick={() => { navigate(p); setMenuOpen(false); }} className="nav-link">{l}</span>
           ))}
+          <span onClick={() => { navigate('/pandit/dashboard'); setMenuOpen(false); }} style={{ color: '#D4A017', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>Pandit Portal ↗</span>
+          <button style={btn('linear-gradient(135deg,#FF6B00,#D4A017)', { padding: '8px 22px', fontSize: 13 })} onClick={() => { navigate('/user/home'); setMenuOpen(false); }}>Enter App →</button>
         </div>
-        <span onClick={()=>navigate('/pandit/dashboard')} style={{ color:'#D4A017', fontSize:13, fontWeight:700, cursor:'pointer' }}>Pandit Portal ↗</span>
-        <button style={btn('linear-gradient(135deg,#FF6B00,#D4A017)',{padding:'8px 22px',fontSize:13})} onClick={()=>navigate('/user/home')}>Enter App →</button>
       </nav>
 
       {/* Hero */}
+
       <div style={{ textAlign:'center', padding:'80px 5% 60px', maxWidth:900, margin:'0 auto' }}>
         <div style={{ fontSize:72, marginBottom:20, display:'inline-block', animation:'float 4s ease-in-out infinite' }}>🕉️</div>
         <h1 style={{ fontFamily:'Cinzel,serif', fontSize:52, fontWeight:900, background:'linear-gradient(135deg,#FF6B00,#F0C040,#FF6B00)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text', margin:'0 0 12px', letterSpacing:2 }}>
@@ -323,7 +330,87 @@ export default function Landing() {
         @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;1,400&family=Nunito:wght@400;600;700;800&display=swap');
         @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
         @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+        .landing-nav {
+          position: sticky;
+          top: 0;
+          z-index: 100;
+          background: rgba(13,7,0,0.92);
+          backdrop-filter: blur(12px);
+          border-bottom: 1px solid rgba(212,160,23,0.15);
+          padding: 0 5%;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          height: 70px;
+          transition: all 0.3s;
+        }
+
+        .landing-nav-links {
+          display: flex;
+          align-items: center;
+          gap: 24px;
+        }
+
+        .nav-link {
+          color: rgba(255,248,240,0.6);
+          font-size: 13px;
+          cursor: pointer;
+          font-weight: 600;
+          transition: color 0.2s;
+        }
+
+        .nav-link:hover {
+          color: #F0C040;
+        }
+
+        .landing-hamburger {
+          display: none;
+          flex-direction: column;
+          gap: 5px;
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 10px;
+        }
+
+        .landing-hamburger span {
+          display: block;
+          width: 25px;
+          height: 2px;
+          background: #F0C040;
+          transition: 0.3s;
+        }
+
+        @media (max-width: 968px) {
+          .landing-hamburger {
+            display: flex;
+          }
+
+          .landing-nav-links {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: #0d0700;
+            flex-direction: column;
+            padding: 30px;
+            gap: 20px;
+            transform: translateY(-150%);
+            transition: transform 0.3s ease-in-out;
+            border-bottom: 2px solid #D4A017;
+          }
+
+          .landing-nav.menu-open .landing-nav-links {
+            transform: translateY(0);
+          }
+
+          .landing-nav.menu-open .landing-hamburger span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+          .landing-nav.menu-open .landing-hamburger span:nth-child(2) { opacity: 0; }
+          .landing-nav.menu-open .landing-hamburger span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        }
       `}</style>
+
     </div>
   );
 }

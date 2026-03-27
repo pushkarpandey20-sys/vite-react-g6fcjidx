@@ -125,6 +125,33 @@ body {
   box-shadow: 0 4px 24px rgba(0, 0, 0, .5);
 }
 
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-right: 12px;
+}
+
+.hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--gl);
+  transition: 0.3s;
+}
+
+@media (max-width: 768px) {
+  .tnav { padding: 0 12px; }
+  .hamburger { display: flex; }
+  .logo-tagline { display: none; }
+  .logo-name { font-size: 16px; }
+  .nav-tabs { display: none !important; }
+}
+
 .logo {
   display: flex;
   align-items: center;

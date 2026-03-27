@@ -136,11 +136,12 @@ export default function BookingWizard() {
       navigate('/user/history');
 
     } catch (err) {
+      console.error("Booking Error:", err);
       // Mark payment as failed if booking was created
       if (bookingId) {
         await supabase.from('bookings').update({ status: 'payment_failed' }).eq('id', bookingId).catch(() => {});
       }
-      toast(err.message || "Payment failed. Please try again.", "⚠️");
+      toast(err.details || err.message || "Payment or Booking failed. Please try again.", "⚠️");
     } finally {
       setSubmitting(false);
     }
@@ -180,16 +181,27 @@ export default function BookingWizard() {
               🎁 BUNDLE OFFER: Save 10% when booking ritual with a samagri kit!
             </div>
             <SamagriSelector kits={samagriKits} selectedId={draft.samagriId}
-              onSelect={(kit) => { setDraft(p => ({ ...p, samagriId: kit.id, samagriAmount: kit.price, deliveryRequired: true })); nextStep(); }}
-              onSkip={() => { setDraft(p => ({ ...p, samagriId: null, samagriAmount: 0, deliveryRequired: false })); nextStep(); }} />
+              onSelect={(kit) => { setDraft(p => ({ ...p, samagriId: kit.id, samagriAmount: kit.price, deliveryRequired: true })); }}
+              onSkip={() => { setDraft(p => ({ ...p, samagriId: null, samagriAmount: 0, deliveryRequired: false })); }} />
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
               <button className="btn btn-outline" onClick={prevStep}>← Back</button>
+              <button className="btn btn-primary" onClick={nextStep}>
+                {draft.samagriId ? "Proceed with Samagri →" : "Proceed without Samagri →"}
+              </button>
             </div>
           </div>
         )}
 
         {step === 3 && (
-          <form className="wizard-step" onSubmit={(e) => { e.preventDefault(); if (!draft.date || !draft.time) return toast("Date and time required!", "⚠️"); nextStep(); }}>
+          <form className="wizard-step" onSubmit={(e) => { 
+            e.preventDefault(); 
+            if (!draft.date || !draft.time) return toast("Date and time required!", "⚠️");
+            const selectedDate = new Date(draft.date);
+            const today = new Date();
+            today.setHours(0,0,0,0);
+            if (selectedDate < today) return toast("Cannot select a past date!", "⚠️");
+            nextStep(); 
+          }}>
             <h2 className="ph-title" style={{ color: '#F0C040' }}>Pick Auspicious Timing</h2>
             <div className="fgrid" style={{ gap: '20px', marginTop: '30px' }}>
               <div className="fg"><label className="fl">Preferred Date</label><input type="date" className="fi" required value={draft.date} onChange={e => setDraft(d => ({ ...d, date: e.target.value }))} /></div>

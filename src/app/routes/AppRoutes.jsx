@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { ProtectedRoute } from '../../components/auth/ProtectedRoute';
 
 // Layouts
 import UserLayout from '../../layouts/UserLayout';
@@ -62,7 +63,7 @@ export default function AppRoutes() {
         <Route path="/" element={<Landing />} />
 
         {/* Devotee Routes */}
-        <Route path="/user" element={<UserLayout />}>
+        <Route path="/user" element={<ProtectedRoute role="user"><UserLayout /></ProtectedRoute>}>
           <Route index element={<Navigate to="/user/home" replace />} />
           <Route path="home" element={<UserHome />} />
           <Route path="muhurta" element={<MuhuratPage />} />
@@ -85,7 +86,7 @@ export default function AppRoutes() {
         <Route path="/pandit/onboard" element={<PanditOnboardingPage />} />
 
         {/* Pandit Routes */}
-        <Route path="/pandit" element={<PanditLayout />}>
+        <Route path="/pandit" element={<ProtectedRoute role="pandit"><PanditLayout /></ProtectedRoute>}>
           <Route index element={<Navigate to="/pandit/dashboard" replace />} />
           <Route path="dashboard" element={<PanditDashboard />} />
           <Route path="requests" element={<PanditReqPage />} />
@@ -96,7 +97,7 @@ export default function AppRoutes() {
         </Route>
 
         {/* Admin Routes */}
-        <Route path="/admin" element={<AdminLayout />}>
+        <Route path="/admin" element={<ProtectedRoute role="admin"><AdminLayout /></ProtectedRoute>}>
           <Route index element={<Navigate to="/admin/overview" replace />} />
           <Route path="overview" element={<AdminHome />} />
           <Route path="pandits" element={<AdminPanditList />} />
@@ -112,3 +113,4 @@ export default function AppRoutes() {
     </>
   );
 }
+
