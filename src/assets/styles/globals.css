@@ -1947,12 +1947,7 @@ body {
 .empty-title { font-family: 'Cinzel', serif; font-size: 22px; color: #5C3317; margin-bottom: 8px; }
 .empty-desc { color: #8B6347; max-width: 400px; margin: 0 auto; line-height: 1.6; }
 
-@media (max-width: 1024px) {
-  .marketplace-content { grid-template-columns: 1fr; }
-  .filters-sidebar { position: static; }
-  .filter-card { position: static; display: flex; flex-wrap: wrap; gap: 20px; }
-  .filter-section { flex: 1; min-width: 200px; margin-bottom: 0; border: none; }
-}
+/* REMOVED OBSOLETE SIDEBAR STYLES */
 
 /* BOOKING WIZARD STYLES */
 .wizard-container { max-width: 1200px; margin: 0 auto; min-height: 80vh; padding: 40px 20px; position: relative; }

@@ -200,11 +200,46 @@ export default function BookingWizard() {
       <div className="glass-card" style={{ maxWidth: 900, margin: '0 auto', padding: '40px', borderRadius: 30, background: 'rgba(44,26,14,0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(240,192,64,0.15)', boxShadow: '0 20px 50px rgba(0,0,0,0.3)' }}>
         {step === 1 && (
           <div className="fade-in">
-            <h1 style={{ fontFamily: 'Cinzel,serif', fontSize: 32, fontWeight: 900, textAlign: 'center', color: '#F0C040', marginBottom: 10 }}>Select Sacred Ritual</h1>
-            <p style={{ textAlign: 'center', color: 'rgba(255,248,240,0.6)', marginBottom: 30 }}>Choose from our certified Vedic services or book a custom session.</p>
-            <RitualFilters onFilterChange={(k, v) => setRitualFilters(p => ({ ...p, [k]: v }))} activeFilters={ritualFilters} />
-            <div style={{ marginTop: '20px' }}>
-              {loading ? <Spinner /> : <RitualGrid rituals={filteredRituals} onSelect={selectRitual} activeId={draft.ritualId} />}
+            <h1 style={{ fontFamily: 'Cinzel,serif', fontSize: 32, fontWeight: 900, textAlign: 'center', color: '#F0C040', marginBottom: 10 }}>⚡ Sacred Service Selection ⚡</h1>
+            <p style={{ textAlign: 'center', color: 'rgba(255,248,240,0.6)', marginBottom: 30 }}>Choose a specialized ritual or book an expert scholar directly.</p>
+            
+            {/* Quick On-Demand CTA */}
+            <div style={{ 
+              background: 'linear-gradient(135deg, rgba(255,107,0,0.15), rgba(212,160,23,0.05))', 
+              border: '1px solid rgba(255,107,0,0.3)', 
+              borderRadius: '24px', 
+              padding: '24px', 
+              marginBottom: '40px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '20px',
+              boxShadow: '0 15px 35px rgba(255,107,0,0.1)'
+            }}>
+              <div>
+                <h3 style={{ fontFamily: 'Cinzel', color: '#FF6B00', margin: 0, fontSize: '20px' }}>⚡ On-Demand Pandit Booking</h3>
+                <p style={{ margin: '5px 0 0', color: 'rgba(255,248,240,0.5)', fontSize: '13px' }}>Book for custom rituals, consultations, or urgent Vedic guidance.</p>
+              </div>
+              <button 
+                onClick={() => selectRitual({ id: 'on-demand', name: 'On-Demand Scholar', icon: '⚡', price: 1500, description: 'Book a certified scholar for custom needs.', samagriRequired: false })}
+                style={{ background: 'linear-gradient(135deg, #FF6B00, #F0C040)', border: 'none', color: '#fff', padding: '12px 25px', borderRadius: '12px', fontWeight: 800, cursor: 'pointer', whiteSpace: 'nowrap' }}
+              >
+                Book Scholar Now →
+              </button>
+            </div>
+
+            <div style={{ position: 'relative' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginBottom: '30px' }}>
+                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }} />
+                <span style={{ fontFamily: 'Cinzel', color: 'rgba(240,192,64,0.3)', fontSize: '12px', letterSpacing: '2px' }}>OR SELECT BY RITUAL</span>
+                <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }} />
+              </div>
+
+              <RitualFilters onFilterChange={(k, v) => setRitualFilters(p => ({ ...p, [k]: v }))} activeFilters={ritualFilters} />
+              
+              <div style={{ marginTop: '20px' }}>
+                {loading ? <Spinner /> : <RitualGrid rituals={filteredRituals.filter(r => r.id !== 'on-demand')} onSelect={selectRitual} activeId={draft.ritualId} />}
+              </div>
             </div>
           </div>
         )}
