@@ -1897,8 +1897,16 @@ body {
 
 /* PANDIT MARKETPLACE & GRID */
 .marketplace-container { padding: 0; }
-.marketplace-content { display: grid; grid-template-columns: 280px 1fr; gap: 30px; margin-top: 24px; }
-.filters-sidebar { position: sticky; top: 100px; height: fit-content; }
+.marketplace-content { 
+  display: block !important; 
+  width: 100% !important; 
+  margin-top: 24px; 
+}
+.filters-sidebar { 
+  width: 100% !important; 
+  position: static !important; 
+  margin-bottom: 24px; 
+}
 
 .pandit-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px; }
 
