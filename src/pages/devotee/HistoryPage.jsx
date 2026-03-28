@@ -31,10 +31,10 @@ export default function HistoryPage() {
 
   if (!devoteeId) {
     return (
-      <div className="card card-p" style={{ textAlign: "center", padding: "60px 20px" }}>
-        <div style={{ fontSize: 60, marginBottom: 20 }}>📋</div>
-        <h3 style={{ fontFamily: "'Cinzel',serif", marginBottom: 10 }}>Login Required</h3>
-        <p style={{ color: "#8B6347", marginBottom: 24 }}>Please login to view and track your pooja booking history.</p>
+      <div style={{ textAlign:"center", padding:"60px 20px", background:'rgba(26,15,7,0.6)', borderRadius:18, border:'1px solid rgba(240,192,64,0.1)' }}>
+        <div style={{ fontSize:60, marginBottom:20 }}>📋</div>
+        <h3 style={{ fontFamily:"'Cinzel',serif", color:'#F0C040', marginBottom:10 }}>Login Required</h3>
+        <p style={{ color:"rgba(255,248,240,0.5)", marginBottom:24 }}>Please login to view and track your pooja booking history.</p>
         <button className="btn btn-primary" onClick={() => setShowLogin(true)}>Login / Register</button>
       </div>
     );
@@ -50,9 +50,9 @@ export default function HistoryPage() {
         </span>
       ))}
     </div>
-    {filtered.length === 0 ? <div className="card card-p" style={{ textAlign: "center", padding: "40px" }}>
-      <div style={{ fontSize: 48, marginBottom: 12 }}>📋</div>
-      <div style={{ fontFamily: "'Cinzel',serif", color: "#5C3317" }}>No bookings found</div>
+    {filtered.length === 0 ? <div style={{ textAlign:"center", padding:"40px", background:'rgba(26,15,7,0.6)', borderRadius:14, border:'1px solid rgba(240,192,64,0.1)' }}>
+      <div style={{ fontSize:48, marginBottom:12 }}>📋</div>
+      <div style={{ fontFamily:"'Cinzel',serif", color:"#F0C040" }}>No bookings found</div>
     </div> : <div className="dtable">
       <div className="thead" style={{ gridTemplateColumns: ".7fr 1.3fr 1.5fr 1.2fr .8fr .8fr 1fr" }}>
         {["ID", "Ritual", "Pandit", "Location", "Date", "Amount", "Status"].map(h => <div key={h} className="th">{h}</div>)}
@@ -69,13 +69,13 @@ export default function HistoryPage() {
             <div className="td"><StatusBadge status={b.status} /></div>
           </div>
           {b.prasad_required && (
-            <div style={{ gridColumn: '1 / -1', background: '#FFFAF5', padding: '10px 20px', fontSize: '11px', display: 'flex', gap: '25px', alignItems: 'center', borderBottom: '1px solid rgba(212,160,23,.09)', marginTop: '-1px' }}>
-              <div style={{ fontWeight: 800, color: '#FF6B00', display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <div className="ds-prasad-row" style={{ gridColumn: '1 / -1', padding: '10px 20px', fontSize: '11px', display: 'flex', gap: '25px', alignItems: 'center', marginTop: '-1px' }}>
+              <div style={{ fontWeight: 800, color: '#FF9F40', display: 'flex', alignItems: 'center', gap: '6px' }}>
                 <span style={{ fontSize: '14px' }}>🍬</span> PRASAD STATUS:
               </div>
-              <div>Dispatch: <span style={{ fontWeight: 700 }}>{b.dispatch_date || "Pending Ritual"}</span></div>
-              <div>Tracking: <span style={{ fontWeight: 700, fontStyle: 'italic' }}>{b.courier_tracking || "Awaiting Courier"}</span></div>
-              <div style={{ marginLeft: 'auto', opacity: 0.6 }}>📍 {b.delivery_address?.slice(0, 30)}...</div>
+              <div style={{ color:'rgba(255,248,240,0.6)' }}>Dispatch: <span style={{ fontWeight: 700, color:'rgba(255,248,240,0.85)' }}>{b.dispatch_date || "Pending Ritual"}</span></div>
+              <div style={{ color:'rgba(255,248,240,0.6)' }}>Tracking: <span style={{ fontWeight: 700, fontStyle: 'italic', color:'rgba(255,248,240,0.85)' }}>{b.courier_tracking || "Awaiting Courier"}</span></div>
+              <div style={{ marginLeft: 'auto', color:'rgba(255,248,240,0.4)' }}>📍 {b.delivery_address?.slice(0, 30)}...</div>
             </div>
           )}
         </div>

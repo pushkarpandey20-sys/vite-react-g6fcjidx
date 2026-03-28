@@ -30,7 +30,7 @@ export default function UserLayout() {
         <h1 className="ph-title">{title}</h1>
         <p className="ph-sub">{sub}</p>
       </header>
-      <main className="cb" style={{ paddingBottom: 80 }}>
+      <main className="cb ds-user-content" style={{ paddingBottom: 80 }}>
         <Outlet />
       </main>
       <MobileNav />

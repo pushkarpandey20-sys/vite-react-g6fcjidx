@@ -158,10 +158,10 @@ export default function InstantPanditBooking() {
       </div>
 
       {submitting && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(255,255,107,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
+        <div className="ds-booking-overlay">
           <div style={{ textAlign: 'center' }}>
             <Spinner />
-            <p style={{ marginTop: '15px', color: '#FF6B00', fontWeight: 800 }}>Securing Your Instant Booking...</p>
+            <p style={{ marginTop: '15px', color: '#FF9F40', fontWeight: 800, fontFamily:'Cinzel,serif' }}>Securing Your Instant Booking...</p>
           </div>
         </div>
       )}

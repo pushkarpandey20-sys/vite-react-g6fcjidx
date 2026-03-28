@@ -8,10 +8,10 @@ export default function MuhuratPage() {
     <div className="muhurat-page-container">
       <MuhuratFinder />
 
-      <div className="card card-p" style={{ marginTop: 40 }}>
+      <div className="card card-p" style={{ marginTop: 40, background:'rgba(26,15,7,0.75)', border:'1px solid rgba(240,192,64,0.14)', backdropFilter:'blur(14px)', borderRadius:16 }}>
         <div className="sh">
-          <div className="sh-title">Traditional Panchang (General)</div>
-          <div className="sh-sub">Daily auspicious and inauspicious timings at a glance.</div>
+          <div className="sh-title" style={{ color:'#F0C040' }}>Traditional Panchang (General)</div>
+          <div className="sh-sub" style={{ color:'rgba(255,248,240,0.5)' }}>Daily auspicious and inauspicious timings at a glance.</div>
         </div>
         <div className="dtable" style={{ marginBottom: 0 }}>
           <div className="thead" style={{ gridTemplateColumns: ".8fr 1.2fr 1.2fr 1fr 1.5fr" }}>
@@ -22,7 +22,7 @@ export default function MuhuratPage() {
               <div className="td"><b>{m.day} {m.month}</b></div>
               <div className="td">{m.tithi}</div>
               <div className="td" style={{ fontSize: 12 }}>{m.nakshatra}</div>
-              <div className="td"><span style={{ color: m.quality === "Excellent" ? "#27AE60" : "#D4A017", fontWeight: 700 }}>{m.quality}</span></div>
+              <div className="td"><span style={{ color: m.quality === "Excellent" ? "#4ade80" : "#F0C040", fontWeight: 700 }}>{m.quality}</span></div>
               <div className="td" style={{ fontSize: 13, fontWeight: 600 }}>{m.time}</div>
             </div>
           ))}

@@ -3738,3 +3738,347 @@ body {
   line-height: 1.6;
   font-size: 14px;
 }
+
+/* =============================================
+   GLOBAL DARK PORTAL OVERRIDE
+   Applied via .ds-user-content wrapper in UserLayout
+   Cascades dark styles to all .card, .fi, .dtable etc.
+   ============================================= */
+
+/* Content area background */
+.ds-user-content {
+  background: linear-gradient(180deg, #0f0804 0%, #1a0f07 100%);
+  min-height: 100%;
+}
+
+/* Cards go dark glass */
+.ds-user-content .card,
+.ds-user-content .stat-card,
+.ds-user-content .filter-card {
+  background: rgba(26,15,7,0.75) !important;
+  border-color: rgba(240,192,64,0.14) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+  color: rgba(255,248,240,0.88) !important;
+}
+
+/* Form inputs dark */
+.ds-user-content .fi,
+.ds-user-content .fs,
+.ds-user-content .fta {
+  background: rgba(255,248,240,0.05) !important;
+  border-color: rgba(240,192,64,0.2) !important;
+  color: rgba(255,248,240,0.88) !important;
+}
+.ds-user-content .fi::placeholder,
+.ds-user-content .fs::placeholder,
+.ds-user-content .fta::placeholder {
+  color: rgba(255,248,240,0.3) !important;
+}
+.ds-user-content .fi:focus,
+.ds-user-content .fs:focus,
+.ds-user-content .fta:focus {
+  border-color: rgba(240,192,64,0.5) !important;
+  box-shadow: 0 0 0 3px rgba(240,192,64,0.1) !important;
+}
+
+/* Labels */
+.ds-user-content .fl {
+  color: rgba(240,192,64,0.75) !important;
+}
+
+/* Section headers */
+.ds-user-content .sh-title {
+  color: #F0C040 !important;
+}
+
+/* Data table dark */
+.ds-user-content .dtable {
+  background: rgba(26,15,7,0.6) !important;
+  border: 1px solid rgba(240,192,64,0.1) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+}
+.ds-user-content .thead {
+  background: rgba(240,192,64,0.07) !important;
+  border-bottom: 1px solid rgba(240,192,64,0.12) !important;
+}
+.ds-user-content .th {
+  color: #F0C040 !important;
+}
+.ds-user-content .tr {
+  border-bottom: 1px solid rgba(240,192,64,0.06) !important;
+}
+.ds-user-content .tr:hover {
+  background: rgba(240,192,64,0.04) !important;
+}
+.ds-user-content .td {
+  color: rgba(255,248,240,0.75) !important;
+}
+
+/* Chips dark */
+.ds-user-content .chip {
+  background: rgba(255,248,240,0.05) !important;
+  border: 1px solid rgba(240,192,64,0.2) !important;
+  color: rgba(255,248,240,0.6) !important;
+}
+.ds-user-content .chip:hover,
+.ds-user-content .chip.on {
+  background: linear-gradient(135deg,rgba(255,107,0,0.2),rgba(212,160,23,0.15)) !important;
+  color: #F0C040 !important;
+  border-color: rgba(240,192,64,0.4) !important;
+}
+
+/* Generic text inside user content */
+.ds-user-content h3,
+.ds-user-content h4 {
+  color: #F0C040;
+}
+.ds-user-content p {
+  color: rgba(255,248,240,0.6);
+}
+
+/* Samagri / temple / history shared dark card style */
+.ds-card {
+  background: rgba(26,15,7,0.72);
+  border: 1px solid rgba(240,192,64,0.14);
+  border-radius: 18px;
+  backdrop-filter: blur(16px);
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  overflow: hidden;
+}
+.ds-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(240,192,64,0.22);
+  border-color: rgba(240,192,64,0.28);
+}
+
+/* Hero sections inside user content */
+.ds-hero {
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 36px 30px;
+  text-align: center;
+  margin-bottom: 24px;
+}
+.ds-hero-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(20px,4vw,34px);
+  font-weight: 900;
+  color: #F0C040;
+  margin: 0 0 8px;
+}
+.ds-hero-sub {
+  color: rgba(255,248,240,0.55);
+  font-size: 14px;
+  margin: 0 auto;
+  max-width: 460px;
+  line-height: 1.6;
+}
+.ds-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+  background: rgba(240,192,64,0.1);
+  border: 1px solid rgba(240,192,64,0.25);
+  color: #F0C040;
+}
+.ds-glow {
+  position: absolute;
+  top: -80px; left: 50%; transform: translateX(-50%);
+  width: 500px; height: 260px;
+  background: radial-gradient(ellipse, rgba(240,192,64,0.16) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Dark search bar */
+.ds-search {
+  position: relative;
+  max-width: 440px;
+  margin: 20px auto 0;
+}
+.ds-search-icon {
+  position: absolute; left:14px; top:50%; transform:translateY(-50%);
+  font-size:15px; pointer-events:none;
+}
+.ds-search-input {
+  width: 100%;
+  padding: 12px 14px 12px 40px;
+  background: rgba(255,248,240,0.06);
+  border: 1.5px solid rgba(240,192,64,0.2);
+  border-radius: 50px;
+  color: rgba(255,248,240,0.9);
+  font-size: 14px;
+  font-family: 'Nunito', sans-serif;
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
+}
+.ds-search-input::placeholder { color: rgba(255,248,240,0.3); }
+.ds-search-input:focus {
+  border-color: rgba(240,192,64,0.5);
+  box-shadow: 0 0 0 3px rgba(240,192,64,0.1);
+}
+
+/* Dark category pill strip (reusable) */
+.ds-cat-strip {
+  display: flex; gap: 8px; overflow-x: auto;
+  padding: 0 0 4px; scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.ds-cat-strip::-webkit-scrollbar { display: none; }
+.ds-cat-pill {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 7px 14px; border-radius: 40px;
+  border: 1.5px solid rgba(255,248,240,0.1);
+  background: rgba(26,15,7,0.5); color: rgba(255,248,240,0.55);
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: all 0.22s; white-space: nowrap; flex-shrink: 0;
+  font-family: 'Nunito', sans-serif;
+}
+.ds-cat-pill:hover {
+  border-color: #F0C040; color: #F0C040;
+  background: rgba(240,192,64,0.08);
+}
+.ds-cat-pill.ds-active {
+  background: linear-gradient(135deg,rgba(240,192,64,0.2),rgba(255,107,0,0.12));
+  border-color: #F0C040; color: #F0C040;
+  box-shadow: 0 0 14px rgba(240,192,64,0.15);
+}
+
+/* Upload document button */
+.ds-upload-btn {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 16px; border-radius: 12px;
+  border: 1.5px dashed rgba(240,192,64,0.3);
+  background: rgba(240,192,64,0.04);
+  color: rgba(255,248,240,0.65);
+  cursor: pointer; transition: all 0.25s;
+  font-size: 13px; font-weight: 600;
+  font-family: 'Nunito', sans-serif;
+  width: 100%; box-sizing: border-box;
+  text-align: left;
+}
+.ds-upload-btn:hover {
+  border-color: #F0C040; color: #F0C040;
+  background: rgba(240,192,64,0.07);
+}
+.ds-upload-btn.ds-uploaded {
+  border-color: rgba(34,197,94,0.5); border-style: solid;
+  background: rgba(34,197,94,0.08); color: #4ade80;
+}
+.ds-upload-icon { font-size: 20px; flex-shrink: 0; }
+.ds-upload-label { flex: 1; }
+.ds-upload-name { font-size: 11px; opacity: 0.7; margin-top: 2px; }
+
+/* =============================================
+   ADDITIONAL DARK CASCADES — Seva, VPooja, History
+   ============================================= */
+.ds-user-content .sev-card {
+  background: rgba(26,15,7,0.75) !important;
+  border-color: rgba(240,192,64,0.14) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3) !important;
+}
+.ds-user-content .sev-card:hover {
+  border-color: rgba(240,192,64,0.4) !important;
+  box-shadow: 0 12px 32px rgba(0,0,0,0.5) !important;
+}
+.ds-user-content .sev-name { color: #F0C040 !important; }
+.ds-user-content .sev-desc { color: rgba(255,248,240,0.5) !important; }
+.ds-user-content .amt-chip {
+  background: rgba(255,107,0,0.1) !important;
+  border-color: rgba(255,107,0,0.2) !important;
+  color: #FF9F40 !important;
+}
+.ds-user-content .amt-chip:hover,
+.ds-user-content .amt-chip.selected {
+  background: #FF6B00 !important;
+  color: #fff !important;
+}
+.ds-user-content .lang-chip {
+  background: rgba(26,15,7,0.7) !important;
+  border-color: rgba(240,192,64,0.15) !important;
+  color: rgba(255,248,240,0.6) !important;
+}
+.ds-user-content b, .ds-user-content strong { color: rgba(255,248,240,0.9); }
+
+/* Virtual Pooja dark components */
+.ds-vp-card {
+  background: rgba(26,15,7,0.75);
+  border-radius: 16px;
+  padding: 22px;
+  border: 1px solid rgba(240,192,64,0.14);
+  position: relative;
+  transition: all 0.25s;
+  cursor: pointer;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.ds-vp-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(240,192,64,0.35);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+}
+.ds-vp-card--popular { border-color: rgba(255,107,0,0.4) !important; }
+.ds-vp-form-wrap {
+  max-width: 520px;
+  margin: 0 auto;
+  background: rgba(26,15,7,0.85);
+  border: 1px solid rgba(240,192,64,0.2);
+  border-radius: 18px;
+  padding: 30px;
+  backdrop-filter: blur(16px);
+}
+.ds-vp-how-wrap, .ds-vp-faq-wrap {
+  background: rgba(26,15,7,0.6);
+  border: 1px solid rgba(240,192,64,0.12);
+  border-radius: 14px;
+  padding: 26px;
+  margin-bottom: 24px;
+}
+.ds-vp-faq-item {
+  border-bottom: 1px solid rgba(240,192,64,0.1);
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+}
+.ds-vp-faq-item:last-child { border-bottom: none; margin-bottom: 0; }
+.ds-vp-input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(240,192,64,0.2);
+  background: rgba(255,248,240,0.05);
+  color: rgba(255,248,240,0.88);
+  font-size: 14px;
+  margin-bottom: 14px;
+  outline: none;
+  font-family: 'Nunito', sans-serif;
+  box-sizing: border-box;
+  transition: border-color 0.2s;
+}
+.ds-vp-input:focus { border-color: rgba(240,192,64,0.5); }
+.ds-vp-input::placeholder { color: rgba(255,248,240,0.3); }
+
+/* History prasad row dark */
+.ds-prasad-row {
+  background: rgba(255,107,0,0.06) !important;
+  border-bottom: 1px solid rgba(240,192,64,0.08) !important;
+}
+
+/* InstantBooking overlay dark */
+.ds-booking-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10,5,0,0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  backdrop-filter: blur(6px);
+}
