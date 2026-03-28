@@ -136,11 +136,11 @@ export default function PanditMarketplacePage() {
   const [quickRitual, setQuickRitual] = useState('');
   const [quickDate, setQuickDate] = useState(new Date().toISOString().split('T')[0]);
 
-  const [search, setSearch] = useState('');
-  const [cityFilter, setCityFilter] = useState('All');
-  const [specFilter, setSpecFilter] = useState('All');
-  const [expFilter, setExpFilter] = useState('0');
-  const [onlineOnly, setOnlineOnly] = useState(false);
+  const [searchName,   setSearchName]   = useState('');
+  const [filterSpec,   setFilterSpec]   = useState('All');
+  const [filterCity,   setFilterCity]   = useState('All');
+  const [filterMinExp, setFilterMinExp] = useState(0);
+  const [filterOnline, setFilterOnline] = useState(false);
   const [sortBy, setSortBy] = useState('nearby');
 
   useEffect(() => {
@@ -167,33 +167,19 @@ export default function PanditMarketplacePage() {
   }, []);
 
   const filtered = pandits
-    .filter(p => !search || (p.name||'').toLowerCase().includes(search.toLowerCase()))
-    .filter(p => cityFilter === 'All' || p.city === cityFilter)
-    .filter(p => specFilter === 'All' || (Array.isArray(p.specializations) ? p.specializations : []).includes(specFilter))
-    .filter(p => (p.years_of_experience || 0) >= parseInt(expFilter))
-    .filter(p => !onlineOnly || p.is_online)
+    .filter(p => filterSpec === 'All' || (Array.isArray(p.specializations) ? p.specializations : (typeof p.specializations === 'string' ? p.specializations.split(',').map(s=>s.trim()) : [])).includes(filterSpec))
+    .filter(p => filterCity === 'All' || p.city === filterCity)
+    .filter(p => (p.years_of_experience || 0) >= filterMinExp)
+    .filter(p => !filterOnline || p.is_online)
+    .filter(p => !searchName || (p.name||'').toLowerCase().includes(searchName.toLowerCase()))
     .sort((a, b) => {
-      if (sortBy === 'nearby') {
-        const aN = a.city === nearbyCity ? 0 : 1, bN = b.city === nearbyCity ? 0 : 1;
-        if (aN !== bN) return aN - bN;
-        return (b.rating||0) - (a.rating||0);
-      }
-      if (sortBy === 'rating') return (b.rating||0) - (a.rating||0);
-      if (sortBy === 'fee_low') return (a.min_fee||0) - (b.min_fee||0);
-      if (sortBy === 'fee_high') return (b.min_fee||0) - (a.min_fee||0);
-      return 0;
+      const aN = a.city === nearbyCity ? 0 : 1;
+      const bN = b.city === nearbyCity ? 0 : 1;
+      if (aN !== bN) return aN - bN;
+      return (b.rating || 0) - (a.rating || 0);
     });
 
-  const hasFilters = search || cityFilter !== 'All' || specFilter !== 'All' || expFilter !== '0' || onlineOnly;
-  const resetFilters = () => { setSearch(''); setCityFilter('All'); setSpecFilter('All'); setExpFilter('0'); setOnlineOnly(false); setSortBy('nearby'); };
-
-  const selStyle = {
-    padding:'8px 12px', borderRadius:10,
-    border:'1.5px solid rgba(212,160,23,0.25)',
-    background:'rgba(26,15,7,0.6)', backdropFilter:'blur(10px)',
-    color:'rgba(255,248,240,0.85)', fontSize:12, cursor:'pointer',
-    outline:'none', fontWeight:600,
-  };
+  const resetFilters = () => { setSearchName(''); setFilterSpec('All'); setFilterCity('All'); setFilterMinExp(0); setFilterOnline(false); };
 
   return (
     <div className="pm-page">
@@ -237,65 +223,78 @@ export default function PanditMarketplacePage() {
           </div>
         </div>
 
-        {nearbyCity && (
-          <div className="pm-nearby-notice">
-            📍 Showing pandits near <strong>{nearbyCity}</strong> first
-          </div>
-        )}
       </div>
 
-      {/* ── Filter Bar ── */}
-      <div className="pm-filter-bar">
-        <div className="pm-filter-inner">
-          <input
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="🔍 Search pandit name..."
-            style={{ ...selStyle, minWidth: 160 }}
-          />
-
-          <select value={cityFilter} onChange={e => setCityFilter(e.target.value)} style={selStyle}>
-            <option value="All">📍 All Cities</option>
-            {['Delhi','Noida','Gurgaon','Mumbai','Bengaluru','Ayodhya','Varanasi','Ujjain','Faridabad','Ghaziabad'].map(c=>
-              <option key={c}>{c}</option>
-            )}
-          </select>
-
-          <select value={specFilter} onChange={e => setSpecFilter(e.target.value)} style={selStyle}>
-            <option value="All">🕉️ All Rituals</option>
-            {['Griha Pravesh','Satyanarayan','Vivah','Rudrabhishek','Navgrah','Kaal Sarp','Mundan','Namkaran','Vastu Shastra','Astrology'].map(s=>
-              <option key={s}>{s}</option>
-            )}
-          </select>
-
-          <select value={expFilter} onChange={e => setExpFilter(e.target.value)} style={selStyle}>
-            <option value="0">⏳ Any Experience</option>
-            <option value="5">5+ years</option>
-            <option value="10">10+ years</option>
-            <option value="15">15+ years</option>
-            <option value="20">20+ years</option>
-          </select>
-
-          <label className="pm-online-toggle">
-            <input type="checkbox" checked={onlineOnly} onChange={e => setOnlineOnly(e.target.checked)} style={{ accentColor:'#22c55e' }} />
-            <span>🟢 Online Now</span>
-          </label>
-
-          <select value={sortBy} onChange={e => setSortBy(e.target.value)} style={{ ...selStyle, marginLeft:'auto' }}>
-            <option value="nearby">📍 Nearest First</option>
-            <option value="rating">⭐ Top Rated</option>
-            <option value="fee_low">₹ Low → High</option>
-            <option value="fee_high">₹ High → Low</option>
-          </select>
-
-          {hasFilters && (
-            <button onClick={resetFilters} className="pm-filter-reset">Reset ✕</button>
-          )}
-
-          <div className="pm-filter-count">
-            {loading ? 'Loading...' : `${filtered.length} pandits`}
-          </div>
+      {/* ── Location notice ── */}
+      {nearbyCity && (
+        <div style={{
+          display:'flex', alignItems:'center', gap:8,
+          background:'rgba(34,197,94,0.08)',
+          border:'1px solid rgba(34,197,94,0.2)',
+          borderRadius:10, padding:'8px 14px', marginBottom:10,
+        }}>
+          <span>📍</span>
+          <span style={{ fontSize:13, color:'#166534', fontWeight:600 }}>
+            Showing pandits near {nearbyCity} first
+          </span>
         </div>
+      )}
+
+      {/* ── FILTER BAR — single compact row ── */}
+      <div style={{
+        background:'#fff',
+        border:'1px solid rgba(212,160,23,0.25)',
+        borderRadius:12,
+        padding:'10px 16px',
+        marginBottom:16,
+        display:'flex',
+        alignItems:'center',
+        gap:10,
+        flexWrap:'wrap',
+      }}>
+        {/* Search */}
+        <input
+          value={searchName}
+          onChange={e => setSearchName(e.target.value)}
+          placeholder="🔍 Search pandit..."
+          style={{
+            flex:'1 1 140px', minWidth:120,
+            padding:'7px 12px', borderRadius:8,
+            border:'1.5px solid rgba(212,160,23,0.35)',
+            background:'#fffbf5', color:'#3d1f00',
+            fontSize:13, fontFamily:'inherit', outline:'none',
+          }}
+        />
+        {/* Specialization */}
+        <select value={filterSpec} onChange={e => setFilterSpec(e.target.value)} style={{ flex:'1 1 140px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'#fffbf5', color:'#3d1f00', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
+          <option value="All">📿 All Rituals</option>
+          {['Vivah','Griha Pravesh','Satyanarayan','Rudrabhishek','Navgrah','Kaal Sarp','Mundan','Namkaran','Vastu Shastra','Antyesti'].map(s=><option key={s} value={s}>{s}</option>)}
+        </select>
+        {/* City */}
+        <select value={filterCity} onChange={e => setFilterCity(e.target.value)} style={{ flex:'1 1 120px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'#fffbf5', color:'#3d1f00', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
+          <option value="All">📍 All Cities</option>
+          {['Delhi','Noida','Gurgaon','Mumbai','Bengaluru','Ayodhya','Faridabad','Ghaziabad'].map(c=><option key={c} value={c}>{c}</option>)}
+        </select>
+        {/* Experience */}
+        <select value={filterMinExp} onChange={e => setFilterMinExp(Number(e.target.value))} style={{ flex:'1 1 120px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'#fffbf5', color:'#3d1f00', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
+          <option value={0}>⏳ Any Exp</option>
+          <option value={5}>5+ Years</option>
+          <option value={10}>10+ Years</option>
+          <option value={20}>20+ Years</option>
+        </select>
+        {/* Online toggle */}
+        <label style={{ display:'flex', alignItems:'center', gap:6, cursor:'pointer', whiteSpace:'nowrap', padding:'7px 0' }}>
+          <input type="checkbox" checked={filterOnline} onChange={e => setFilterOnline(e.target.checked)} style={{ width:'auto', accentColor:'#FF6B00' }} />
+          <span style={{ color:'#3d1f00', fontSize:13 }}>🟢 Online Now</span>
+        </label>
+        {/* Result count */}
+        <span style={{ color:'#9a8070', fontSize:12, whiteSpace:'nowrap', marginLeft:'auto' }}>
+          {loading ? 'Loading...' : `${filtered.length} pandit${filtered.length !== 1 ? 's' : ''}`}
+        </span>
+        {/* Reset */}
+        <button onClick={resetFilters} style={{ padding:'7px 12px', borderRadius:8, border:'1px solid rgba(212,160,23,0.35)', background:'rgba(255,107,0,0.08)', color:'#FF6B00', fontSize:12, cursor:'pointer', fontWeight:700, whiteSpace:'nowrap', fontFamily:'inherit' }}>
+          Reset
+        </button>
       </div>
 
       {/* ── Grid ── */}

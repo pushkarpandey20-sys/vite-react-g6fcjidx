@@ -49,6 +49,7 @@ ALTER TABLE pandits
 ALTER TABLE bookings
   ADD COLUMN IF NOT EXISTS ritual_icon         TEXT DEFAULT '🕉️',
   ADD COLUMN IF NOT EXISTS booking_time        TEXT,
+  ADD COLUMN IF NOT EXISTS start_time          TEXT,
   ADD COLUMN IF NOT EXISTS location            TEXT,
   ADD COLUMN IF NOT EXISTS address             TEXT,
   ADD COLUMN IF NOT EXISTS total_amount        DECIMAL(10,2),

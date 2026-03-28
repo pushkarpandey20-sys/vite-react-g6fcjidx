@@ -103,23 +103,22 @@ export default function BookingWizard() {
     let bookingId = null;
     try {
       // Step 1: Create booking with pending_payment status
+      // NOTE: only insert columns that exist in the DB schema
       const { data: booking, error: bookingError } = await supabase.from('bookings').insert({
-        devotee_id: devoteeId,
-        devotee_name: devoteeName,
-        pandit_id: draft.panditId,
-        pandit_name: draft.panditName,
-        ritual: draft.ritual,
-        ritual_icon: draft.ritualIcon,
-        booking_date: draft.date,
-        start_time: draft.time,
-        booking_time: draft.time,
-        address: draft.address,
-        location: draft.location,
-        notes: draft.notes,
-        total_amount: totalAmount,
-        amount: totalAmount,
-        status: 'pending_payment',
-        created_at: new Date().toISOString()
+        devotee_id:   devoteeId || null,
+        devotee_name: devoteeName || null,
+        pandit_id:    draft.panditId || null,
+        pandit_name:  draft.panditName || null,
+        ritual_name:  draft.ritual || 'Custom Pooja',
+        ritual_icon:  draft.ritualIcon || '🕉️',
+        booking_date: draft.date || new Date().toISOString().split('T')[0],
+        booking_time: draft.time || null,   // start_time column removed — not in DB yet
+        address:      draft.address || null,
+        location:     draft.location || null,
+        notes:        draft.notes || null,
+        total_amount: totalAmount || 0,
+        status:       'pending_payment',
+        created_at:   new Date().toISOString(),
       }).select().single();
 
       if (bookingError) throw bookingError;
