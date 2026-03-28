@@ -22,14 +22,39 @@ const PRODUCTS = [
 
 const BADGE_COLORS = { BESTSELLER:'#FF6B00', POPULAR:'#22c55e', PREMIUM:'#9B59B6', COMPLETE:'#3498DB' };
 
+const CUSTOM_ITEMS = [
+  { id:'c1', name:'Agarbatti (Incense)', icon:'🕯️', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
+  { id:'c2', name:'Camphor Tablets', icon:'🌿', price:39, unit:'10 tablets', cat:'Basic' },
+  { id:'c3', name:'Roli (Vermilion)', icon:'🔴', price:29, unit:'50g packet', cat:'Basic' },
+  { id:'c4', name:'Moli (Sacred Thread)', icon:'🧵', price:19, unit:'1 roll', cat:'Basic' },
+  { id:'c5', name:'Akshat (Rice)', icon:'🍚', price:25, unit:'250g packet', cat:'Basic' },
+  { id:'c6', name:'Supari (Betel Nut)', icon:'🥜', price:35, unit:'100g', cat:'Basic' },
+  { id:'c7', name:'Ghee (Pure Cow)', icon:'🫙', price:299, unit:'500ml', cat:'Premium' },
+  { id:'c8', name:'Panchamrit Mix', icon:'🍯', price:149, unit:'Complete set', cat:'Premium' },
+  { id:'c9', name:'Gangajal (Holy Water)', icon:'💧', price:89, unit:'500ml bottle', cat:'Premium' },
+  { id:'c10', name:'Kalash (Copper Pot)', icon:'🏺', price:199, unit:'1 piece', cat:'Premium' },
+  { id:'c11', name:'Bel Patra', icon:'🍃', price:49, unit:'Fresh pack', cat:'Flowers' },
+  { id:'c12', name:'Lotus Flowers', icon:'🪷', price:99, unit:'5 flowers', cat:'Flowers' },
+  { id:'c13', name:'Yellow Flowers', icon:'🌼', price:69, unit:'1 bunch', cat:'Flowers' },
+  { id:'c14', name:'Rose Petals', icon:'🌹', price:59, unit:'1 packet', cat:'Flowers' },
+  { id:'c15', name:'Coconut', icon:'🥥', price:45, unit:'1 piece', cat:'Fruits' },
+  { id:'c16', name:'Banana Bunch', icon:'🍌', price:79, unit:'1 bunch', cat:'Fruits' },
+  { id:'c17', name:'Havan Kund', icon:'🔥', price:599, unit:'Small size', cat:'Special' },
+  { id:'c18', name:'Rudraksha Mala', icon:'📿', price:299, unit:'108 beads', cat:'Special' },
+];
+const CUSTOM_CATS = ['All', 'Basic', 'Premium', 'Flowers', 'Fruits', 'Special'];
+
 export default function SamagriStorePage() {
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('ready');
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
   const [cart, setCart] = useState({});
   const [sortBy, setSortBy] = useState('popular');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [checkoutDone, setCheckoutDone] = useState(false);
+  const [customCart, setCustomCart] = useState({});
+  const [customCat, setCustomCat] = useState('All');
 
   const filtered = PRODUCTS
     .filter(p => category === 'All' || p.category === category)
@@ -57,6 +82,10 @@ export default function SamagriStorePage() {
   const totalItems = Object.values(cart).reduce((s,q)=>s+q,0);
   const totalPrice = Object.entries(cart).reduce((s,[id,q])=>{ const p=PRODUCTS.find(p=>p.id===parseInt(id)); return s+(p?p.price*q:0); },0);
   const totalSavings = Object.entries(cart).reduce((s,[id,q])=>{ const p=PRODUCTS.find(p=>p.id===parseInt(id)); return s+(p?(p.mrp-p.price)*q:0); },0);
+
+  const customFiltered = CUSTOM_ITEMS.filter(i => customCat === 'All' || i.cat === customCat);
+  const customTotal = Object.entries(customCart).reduce((s,[id,q]) => { const item = CUSTOM_ITEMS.find(i=>i.id===id); return s + (item ? item.price * q : 0); }, 0);
+  const customCount = Object.values(customCart).reduce((s,q)=>s+q, 0);
 
   const dkCard = { background:'rgba(26,15,7,0.72)', border:'1px solid rgba(240,192,64,0.14)', borderRadius:16, backdropFilter:'blur(16px)' };
   const selStyle = { padding:'10px 14px', borderRadius:10, border:'1.5px solid rgba(240,192,64,0.2)',
@@ -97,6 +126,81 @@ export default function SamagriStorePage() {
           ))}
         </div>
       </div>
+
+      {/* Tab Switcher */}
+      <div style={{ display:'flex', background:'rgba(240,192,64,0.1)', borderRadius:12, padding:4, marginBottom:18, width:'fit-content' }}>
+        {[['ready','📦 Ready-Made Kits'],['custom','🎨 Build Custom Kit']].map(([id,label])=>(
+          <button key={id} onClick={()=>setActiveTab(id)}
+            style={{ padding:'9px 20px', borderRadius:10, border:'none', cursor:'pointer', fontWeight:700, fontSize:14, transition:'all 0.2s',
+              background: activeTab===id ? '#FF6B00' : 'transparent',
+              color: activeTab===id ? '#fff' : 'rgba(255,248,240,0.6)', fontFamily:'Nunito,sans-serif' }}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {activeTab === 'custom' ? (
+        <div style={{ paddingBottom:20 }}>
+          <div style={{ background:'rgba(212,160,23,0.08)', border:'1px solid rgba(212,160,23,0.2)', borderRadius:12, padding:'14px 18px', marginBottom:18 }}>
+            <div style={{ color:'rgba(255,248,240,0.9)', fontWeight:700, fontSize:14, marginBottom:4 }}>🎨 Build Your Perfect Pooja Kit</div>
+            <div style={{ color:'rgba(255,248,240,0.55)', fontSize:13 }}>Select individual items for your specific ritual. Perfect for experienced devotees who know exactly what they need.</div>
+          </div>
+          <div style={{ display:'flex', gap:8, marginBottom:16, flexWrap:'wrap' }}>
+            {CUSTOM_CATS.map(c => (
+              <button key={c} onClick={()=>setCustomCat(c)}
+                style={{ padding:'6px 14px', borderRadius:20, border:'none', cursor:'pointer', fontWeight:700, fontSize:13, fontFamily:'Nunito,sans-serif',
+                  background: customCat===c ? '#FF6B00' : 'rgba(255,107,0,0.15)',
+                  color: customCat===c ? '#fff' : 'rgba(255,248,240,0.7)' }}>
+                {c}
+              </button>
+            ))}
+          </div>
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(180px,1fr))', gap:12, marginBottom:24 }}>
+            {customFiltered.map(item => {
+              const qty = customCart[item.id] || 0;
+              return (
+                <div key={item.id} style={{ background:'rgba(26,15,7,0.72)', border:`1px solid ${qty>0?'rgba(255,107,0,0.5)':'rgba(240,192,64,0.14)'}`, borderRadius:12, padding:'14px', backdropFilter:'blur(16px)',
+                  boxShadow: qty>0?'0 2px 12px rgba(255,107,0,0.15)':'none' }}>
+                  <div style={{ fontSize:30, marginBottom:8, textAlign:'center' }}>{item.icon}</div>
+                  <div style={{ color:'rgba(255,248,240,0.9)', fontWeight:600, fontSize:13, marginBottom:2, textAlign:'center' }}>{item.name}</div>
+                  <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, textAlign:'center', marginBottom:8 }}>{item.unit}</div>
+                  <div style={{ color:'#FF9F40', fontWeight:800, fontSize:18, textAlign:'center', marginBottom:10, fontFamily:'Cinzel,sans-serif' }}>₹{item.price}</div>
+                  {qty === 0 ? (
+                    <button onClick={()=>setCustomCart(c=>({...c,[item.id]:1}))}
+                      style={{ width:'100%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:8, padding:'8px', fontWeight:700, cursor:'pointer', fontSize:13 }}>
+                      + Add
+                    </button>
+                  ) : (
+                    <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                      <button onClick={()=>setCustomCart(c=>{const n={...c};if(n[item.id]<=1)delete n[item.id];else n[item.id]--;return n;})}
+                        style={{ width:32,height:32,borderRadius:'50%',background:'rgba(255,107,0,0.15)',color:'#FF9F40',border:'2px solid rgba(255,107,0,0.35)',cursor:'pointer',fontWeight:800,fontSize:18,display:'flex',alignItems:'center',justifyContent:'center' }}>−</button>
+                      <span style={{ flex:1,textAlign:'center',fontWeight:800,color:'rgba(255,248,240,0.9)',fontSize:16 }}>{qty}</span>
+                      <button onClick={()=>setCustomCart(c=>({...c,[item.id]:(c[item.id]||0)+1}))}
+                        style={{ width:32,height:32,borderRadius:'50%',background:'#FF6B00',color:'#fff',border:'none',cursor:'pointer',fontWeight:800,fontSize:18,display:'flex',alignItems:'center',justifyContent:'center' }}>+</button>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          {customCount > 0 && (
+            <div style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', borderRadius:14, padding:'18px 22px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <div>
+                <div style={{ color:'#fff', fontWeight:700, fontSize:15 }}>🎨 Your Custom Kit: {customCount} items</div>
+                <div style={{ color:'rgba(255,255,255,0.85)', fontSize:13, marginTop:2 }}>Curated just for your ritual</div>
+              </div>
+              <div style={{ display:'flex', gap:12, alignItems:'center' }}>
+                <div style={{ color:'#fff', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:22 }}>₹{customTotal.toLocaleString()}</div>
+                <button onClick={()=>{ alert('Custom kit order placed! ✅ We will contact you to confirm.'); setCustomCart({}); }}
+                  style={{ background:'#fff', color:'#FF6B00', border:'none', borderRadius:20, padding:'10px 22px', fontWeight:800, cursor:'pointer', fontSize:14 }}>
+                  Order Custom Kit →
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      ) : (
+        <>
 
       {/* Filters */}
       <div style={{ ...dkCard, padding:'14px 18px', marginBottom:18, borderRadius:16 }}>
@@ -192,6 +296,9 @@ export default function SamagriStorePage() {
           );
         })}
       </div>
+
+        </>
+      )}
 
       {/* Product Detail Modal */}
       {selectedProduct && (

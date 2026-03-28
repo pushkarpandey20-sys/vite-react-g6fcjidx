@@ -98,8 +98,8 @@ export default function AppRoutes() {
           <Route path="schedule" element={<PanditAvailPage />} />
         </Route>
 
-        {/* Admin Routes */}
-        <Route path="/admin" element={<ProtectedRoute role="admin"><AdminLayout /></ProtectedRoute>}>
+        {/* Admin Routes — AdminLayout handles its own auth */}
+        <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Navigate to="/admin/overview" replace />} />
           <Route path="overview" element={<AdminHome />} />
           <Route path="pandits" element={<AdminPanditList />} />

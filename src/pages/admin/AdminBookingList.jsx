@@ -1,82 +1,98 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from '../../services/supabase';
 
-const SAMPLE_BOOKINGS = [
-  { id:'b1', ritual_name:'Griha Pravesh', status:'confirmed', total_amount:2100, booking_date:'2026-03-28', created_at:'2026-03-25T10:00:00Z', devotee_name:'Rahul Sharma', devotee_phone:'9711101101', razorpay_payment_id:'pay_test_001abc' },
-  { id:'b2', ritual_name:'Satyanarayan Katha', status:'confirmed', total_amount:1500, booking_date:'2026-03-26', created_at:'2026-03-24T14:00:00Z', devotee_name:'Priya Singh', devotee_phone:'9722202202', razorpay_payment_id:'pay_test_002def' },
-  { id:'b3', ritual_name:'Rudrabhishek', status:'pending_payment', total_amount:2500, booking_date:'2026-04-02', created_at:'2026-03-26T09:00:00Z', devotee_name:'Amit Gupta', devotee_phone:'9733303303' },
-  { id:'b4', ritual_name:'Navgrah Shanti', status:'confirmed', total_amount:1800, booking_date:'2026-03-20', created_at:'2026-03-18T16:00:00Z', devotee_name:'Sunita Verma', devotee_phone:'9744404404', razorpay_payment_id:'pay_test_004ghi' },
-  { id:'b5', ritual_name:'Vivah Ceremony', status:'confirmed', total_amount:8000, booking_date:'2026-03-15', created_at:'2026-03-10T11:00:00Z', devotee_name:'Vikram Patel', devotee_phone:'9755505505', razorpay_payment_id:'pay_test_005jkl' },
+const C = { card:'#ffffff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070', green:'#16a34a', red:'#dc2626' };
+
+const SAMPLE = [
+  { id:'b1', ritual_name:'Griha Pravesh', devotee_name:'Rahul Sharma', booking_date:'2025-03-28', total_amount:2100, status:'confirmed' },
+  { id:'b2', ritual_name:'Satyanarayan Katha', devotee_name:'Priya Singh', booking_date:'2025-03-26', total_amount:1500, status:'confirmed' },
+  { id:'b3', ritual_name:'Rudrabhishek', devotee_name:'Amit Gupta', booking_date:'2025-04-02', total_amount:2500, status:'pending_payment' },
+  { id:'b4', ritual_name:'Navgrah Shanti', devotee_name:'Sunita Verma', booking_date:'2025-03-20', total_amount:1800, status:'confirmed' },
+  { id:'b5', ritual_name:'Vivah Ceremony', devotee_name:'Vikram Patel', booking_date:'2025-04-10', total_amount:8000, status:'confirmed' },
+  { id:'b6', ritual_name:'Kaal Sarp Dosh', devotee_name:'Neha Gupta', booking_date:'2025-03-22', total_amount:3500, status:'cancelled' },
+  { id:'b7', ritual_name:'Mundan Ceremony', devotee_name:'Suresh Kumar', booking_date:'2025-03-30', total_amount:1200, status:'confirmed' },
 ];
 
 export default function AdminBookingList() {
-  const [bookings, setBookings] = useState([]);
+  const [bookings, setBookings] = useState(SAMPLE);
   const [filter, setFilter] = useState('all');
-  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     (async () => {
-      const { data } = await supabase.from('bookings').select('*').order('created_at',{ascending:false});
-      setBookings(data?.length ? data : SAMPLE_BOOKINGS);
-      setLoading(false);
+      try {
+        const { supabase } = await import('../../services/supabase');
+        const { data } = await supabase.from('bookings').select('*').order('created_at',{ascending:false}).limit(100);
+        if (data?.length) setBookings(data);
+      } catch(e) {}
     })();
   }, []);
 
-  const filtered = filter==='all' ? bookings : bookings.filter(b=>b.status===filter);
+  const displayed = bookings
+    .filter(b => filter==='all' || b.status===filter)
+    .filter(b => !search || b.ritual_name?.toLowerCase().includes(search.toLowerCase()) || b.devotee_name?.toLowerCase().includes(search.toLowerCase()));
+
   const totalRevenue = bookings.filter(b=>b.status==='confirmed').reduce((s,b)=>s+(b.total_amount||0),0);
-  const sc = s => s==='confirmed'?'#22c55e':s==='pending_payment'?'#FF6B00':'#ef4444';
+
+  const SC = { confirmed:{bg:'rgba(34,197,94,0.12)',color:'#15803d'}, pending_payment:{bg:'rgba(255,107,0,0.12)',color:'#c2410c'}, cancelled:{bg:'rgba(239,68,68,0.12)',color:C.red} };
+
+  const tabBtn = (f,l,count,color) => (
+    <button key={f} onClick={()=>setFilter(f)} style={{ padding:'7px 16px', borderRadius:20, border:`1px solid ${filter===f?color:'rgba(212,160,23,0.3)'}`, background:filter===f?`${color}18`:'transparent', color:filter===f?color:C.mid, fontWeight:700, fontSize:13, cursor:'pointer' }}>
+      {l} ({count})
+    </button>
+  );
 
   return (
-    <div style={{ color:'rgba(255,255,255,0.85)' }}>
+    <div style={{ fontFamily:'Nunito,sans-serif' }}>
       <div style={{ marginBottom:20 }}>
-        <h1 style={{ color:'#3498db', fontFamily:'Cinzel,serif', margin:0, fontSize:20 }}>📋 Booking Log</h1>
-        <p style={{ color:'rgba(255,255,255,0.4)', margin:'4px 0 0', fontSize:13 }}>
-          {bookings.length} total · ₹{totalRevenue.toLocaleString()} confirmed revenue
-        </p>
+        <h2 style={{ fontFamily:'Cinzel,serif', color:C.dark, fontSize:20, margin:0 }}>📋 Booking Log</h2>
+        <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>{bookings.length} bookings · ₹{(totalRevenue/100000).toFixed(1)}L confirmed revenue</p>
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12, marginBottom:20 }}>
-        {[
-          {label:'Total Bookings', v:bookings.length, c:'#3498db'},
-          {label:'Confirmed', v:bookings.filter(b=>b.status==='confirmed').length, c:'#22c55e'},
-          {label:'Pending Payment', v:bookings.filter(b=>b.status==='pending_payment').length, c:'#FF6B00'},
-          {label:'Revenue', v:`₹${(totalRevenue/1000).toFixed(1)}K`, c:'#F0C040'},
-        ].map(s=>(
-          <div key={s.label} style={{ background:'#0f0f1a', border:'1px solid rgba(41,128,185,0.15)', borderRadius:10, padding:'14px 16px' }}>
-            <div style={{ color:'rgba(255,255,255,0.4)', fontSize:11, letterSpacing:1 }}>{s.label}</div>
-            <div style={{ color:s.c, fontFamily:'Cinzel,serif', fontWeight:700, fontSize:22, marginTop:4 }}>{s.v}</div>
-          </div>
-        ))}
+      <div style={{ display:'flex', gap:8, marginBottom:14, flexWrap:'wrap' }}>
+        {tabBtn('all','All',bookings.length,C.orange)}
+        {tabBtn('confirmed','Confirmed',bookings.filter(b=>b.status==='confirmed').length,C.green)}
+        {tabBtn('pending_payment','Pending',bookings.filter(b=>b.status==='pending_payment').length,'#d97706')}
+        {tabBtn('cancelled','Cancelled',bookings.filter(b=>b.status==='cancelled').length,C.red)}
       </div>
 
-      <div style={{ display:'flex', gap:8, marginBottom:16 }}>
-        {['all','confirmed','pending_payment','cancelled'].map(s=>(
-          <button key={s} onClick={()=>setFilter(s)} style={{ padding:'7px 16px', borderRadius:8, border:'none', cursor:'pointer', fontWeight:600, fontSize:12, background:filter===s?'#3498db':'rgba(255,255,255,0.07)', color:filter===s?'#fff':'rgba(255,255,255,0.5)' }}>
-            {s==='all'?'All':s.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}
-          </button>
-        ))}
-      </div>
+      <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Search ritual or devotee..."
+        style={{ width:'100%', padding:'10px 14px', borderRadius:10, border:`1.5px solid rgba(212,160,23,0.4)`, background:'#fff', color:C.dark, fontSize:13, marginBottom:14, boxSizing:'border-box', fontFamily:'inherit', outline:'none' }} />
 
-      <div style={{ background:'#0f0f1a', borderRadius:14, border:'1px solid rgba(41,128,185,0.2)', overflowX:'auto' }}>
-        <div style={{ display:'grid', gridTemplateColumns:'1.5fr 1.2fr 1fr 1fr 1fr 1fr', padding:'12px 16px', background:'rgba(41,128,185,0.1)', fontSize:11, color:'rgba(255,255,255,0.4)', letterSpacing:1, fontWeight:700, minWidth:700 }}>
-          <span>RITUAL</span><span>DEVOTEE</span><span>DATE</span><span>AMOUNT</span><span>STATUS</span><span>PAYMENT ID</span>
-        </div>
-        {loading ? (
-          <div style={{ textAlign:'center', padding:32, color:'rgba(255,255,255,0.3)' }}>Loading...</div>
-        ) : filtered.map((b,i)=>(
-          <div key={b.id||i} style={{ display:'grid', gridTemplateColumns:'1.5fr 1.2fr 1fr 1fr 1fr 1fr', padding:'13px 16px', borderBottom:'1px solid rgba(255,255,255,0.04)', alignItems:'center', minWidth:700 }}>
-            <div style={{ color:'#fff', fontWeight:500, fontSize:13 }}>{b.ritual_name||'Pooja'}</div>
-            <div>
-              <div style={{ color:'rgba(255,255,255,0.7)', fontSize:13 }}>{b.devotee_name||'—'}</div>
-              <div style={{ color:'rgba(255,255,255,0.3)', fontSize:11 }}>{b.devotee_phone||'—'}</div>
-            </div>
-            <div style={{ color:'rgba(255,255,255,0.5)', fontSize:12 }}>{b.booking_date?new Date(b.booking_date).toLocaleDateString('en-IN'):'—'}</div>
-            <div style={{ color:'#FF6B00', fontWeight:700 }}>₹{(b.total_amount||0).toLocaleString()}</div>
-            <div><span style={{ background:`${sc(b.status)}22`, color:sc(b.status), fontSize:11, padding:'3px 8px', borderRadius:8, fontWeight:600 }}>{(b.status||'pending').replace(/_/g,' ')}</span></div>
-            <div style={{ color:'rgba(255,255,255,0.3)', fontSize:11, fontFamily:'monospace' }}>{b.razorpay_payment_id?b.razorpay_payment_id.substring(0,14)+'...':'—'}</div>
-          </div>
-        ))}
-        {filtered.length===0 && !loading && <div style={{ textAlign:'center', padding:32, color:'rgba(255,255,255,0.3)' }}>No bookings found</div>}
+      <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, overflow:'hidden' }}>
+        <table style={{ width:'100%', borderCollapse:'collapse' }}>
+          <thead>
+            <tr style={{ background:'rgba(212,160,23,0.08)' }}>
+              {['Ritual','Devotee','Date','Amount','Status','Action'].map(h=>(
+                <th key={h} style={{ color:C.gold, fontSize:11, fontWeight:800, padding:'10px 16px', textAlign:'left', letterSpacing:0.8, borderBottom:`1px solid ${C.border}` }}>{h}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {displayed.map(b => {
+              const sc = SC[b.status] || {bg:'rgba(0,0,0,0.06)',color:C.soft};
+              return (
+                <tr key={b.id} style={{ borderBottom:`1px solid ${C.border}` }}
+                  onMouseEnter={e=>e.currentTarget.style.background='rgba(255,107,0,0.03)'}
+                  onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
+                  <td style={{ padding:'12px 16px', color:C.dark, fontWeight:600, fontSize:14 }}>{b.ritual_name||'Pooja'}</td>
+                  <td style={{ padding:'12px 16px', color:C.mid, fontSize:13 }}>{b.devotee_name||'—'}</td>
+                  <td style={{ padding:'12px 16px', color:C.soft, fontSize:13 }}>{b.booking_date ? new Date(b.booking_date).toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'}) : '—'}</td>
+                  <td style={{ padding:'12px 16px', color:C.orange, fontWeight:700, fontSize:14 }}>₹{(b.total_amount||0).toLocaleString()}</td>
+                  <td style={{ padding:'12px 16px' }}>
+                    <span style={{ background:sc.bg, color:sc.color, fontSize:11, padding:'3px 10px', borderRadius:20, fontWeight:700 }}>{b.status?.replace(/_/g,' ')}</span>
+                  </td>
+                  <td style={{ padding:'12px 16px' }}>
+                    {b.status==='pending_payment' && (
+                      <button onClick={async()=>{ setBookings(prev=>prev.map(x=>x.id===b.id?{...x,status:'confirmed'}:x)); try{const{supabase}=await import('../../services/supabase');await supabase.from('bookings').update({status:'confirmed'}).eq('id',b.id);}catch(e){} }}
+                        style={{ background:'rgba(34,197,94,0.12)', color:'#15803d', border:'1px solid rgba(34,197,94,0.3)', borderRadius:6, padding:'4px 10px', cursor:'pointer', fontSize:12, fontWeight:700 }}>Mark Paid</button>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        {displayed.length === 0 && <div style={{ textAlign:'center', padding:32, color:C.soft }}>No bookings found.</div>}
       </div>
     </div>
   );

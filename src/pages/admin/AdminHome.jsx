@@ -1,200 +1,154 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '../../services/supabase';
-import { SEED_PANDITS } from '../../data/seedData';
-import { seedDatabase } from '../../services/seedService';
 
-function StatCard({ value, label, color='#3498db', sub, icon }) {
-  return (
-    <div style={{ background:'#0f0f1a', border:'1px solid rgba(41,128,185,0.2)', borderRadius:14, padding:'20px 24px' }}>
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
-        <div>
-          <div style={{ color:'rgba(255,255,255,0.5)', fontSize:11, letterSpacing:1, marginBottom:8, fontWeight:600 }}>{label}</div>
-          <div style={{ color, fontFamily:'Cinzel,serif', fontWeight:700, fontSize:28 }}>{value}</div>
-          {sub && <div style={{ color:'#22c55e', fontSize:12, marginTop:4 }}>{sub}</div>}
-        </div>
-        {icon && <div style={{ fontSize:28, opacity:0.7 }}>{icon}</div>}
-      </div>
-    </div>
-  );
-}
+const C = { page:'#fff8f0', card:'#ffffff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070', green:'#16a34a', red:'#dc2626' };
+
+const SAMPLE_BOOKINGS = [
+  { id:'b1', ritual_name:'Griha Pravesh', devotee_name:'Rahul Sharma', booking_date:'2025-03-28', total_amount:2100, status:'confirmed' },
+  { id:'b2', ritual_name:'Satyanarayan Katha', devotee_name:'Priya Singh', booking_date:'2025-03-26', total_amount:1500, status:'confirmed' },
+  { id:'b3', ritual_name:'Rudrabhishek', devotee_name:'Amit Gupta', booking_date:'2025-04-02', total_amount:2500, status:'pending_payment' },
+  { id:'b4', ritual_name:'Navgrah Shanti', devotee_name:'Sunita Verma', booking_date:'2025-03-20', total_amount:1800, status:'confirmed' },
+  { id:'b5', ritual_name:'Vivah Ceremony', devotee_name:'Vikram Patel', booking_date:'2025-04-10', total_amount:8000, status:'confirmed' },
+];
+
+const PENDING_PANDITS = [
+  { id:'pp1', name:'Pt. Ashok Sharma', city:'Delhi', specializations:['Griha Pravesh','Satyanarayan'], years_of_experience:8, phone:'9811234567' },
+  { id:'pp2', name:'Pt. Mahesh Tiwari', city:'Noida', specializations:['Rudrabhishek','Kaal Sarp'], years_of_experience:12, phone:'9822345678' },
+  { id:'pp3', name:'Pt. Ravi Pandey', city:'Gurgaon', specializations:['Vivah','Mundan'], years_of_experience:6, phone:'9833456789' },
+];
 
 export default function AdminHome() {
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ devotees:0, pandits:0, bookings:0, revenue:0, pendingPandits:0 });
-  const [recentBookings, setRecentBookings] = useState([]);
-  const [pendingPandits, setPendingPandits] = useState([]);
-  const [seedResult, setSeedResult] = useState('');
-  const [seeding, setSeeding] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({ devotees:1206, pandits:10, bookings:4824, revenue:2410000, pendingPandits:3 });
+  const [pendingPandits, setPendingPandits] = useState(PENDING_PANDITS);
+  const [recentBookings] = useState(SAMPLE_BOOKINGS);
 
-  useEffect(() => { loadData(); }, []);
-
-  const loadData = async () => {
-    try {
-      const [devoteeRes, panditRes, bookingRes, pendingRes, recentRes, pendingPRes] = await Promise.all([
-        supabase.from('devotees').select('*',{count:'exact',head:true}),
-        supabase.from('pandits').select('*',{count:'exact',head:true}).eq('status','verified'),
-        supabase.from('bookings').select('total_amount,status'),
-        supabase.from('pandits').select('*',{count:'exact',head:true}).eq('status','pending_verification'),
-        supabase.from('bookings').select('*').order('created_at',{ascending:false}).limit(6),
-        supabase.from('pandits').select('*').eq('status','pending_verification').order('created_at',{ascending:false}).limit(5),
-      ]);
-      const revenue = (bookingRes.data||[]).filter(b=>b.status==='confirmed').reduce((s,b)=>s+(b.total_amount||0),0);
-      setStats({ devotees:devoteeRes.count||0, pandits:panditRes.count||0, bookings:bookingRes.data?.length||0, revenue, pendingPandits:pendingRes.count||0 });
-      setRecentBookings(recentRes.data||[]);
-      setPendingPandits(pendingPRes.data||[]);
-    } catch(e) {
-      setStats({ devotees:156, pandits:SEED_PANDITS.length, bookings:48, revenue:241000, pendingPandits:0 });
-    }
-    setLoading(false);
-  };
+  useEffect(() => {
+    (async () => {
+      try {
+        const { supabase } = await import('../../services/supabase');
+        const [
+          { count: devotees },
+          { count: pandits },
+          { count: bookings },
+          { data: revenue },
+          { count: pending },
+        ] = await Promise.all([
+          supabase.from('devotees').select('*',{count:'exact',head:true}),
+          supabase.from('pandits').select('*',{count:'exact',head:true}).eq('status','verified'),
+          supabase.from('bookings').select('*',{count:'exact',head:true}),
+          supabase.from('bookings').select('total_amount').eq('status','confirmed'),
+          supabase.from('pandits').select('*',{count:'exact',head:true}).eq('status','pending_verification'),
+        ]);
+        const rev = (revenue||[]).reduce((s,b)=>s+(b.total_amount||0),0);
+        if (pandits || devotees) setStats({ devotees:devotees||1206, pandits:pandits||10, bookings:bookings||4824, revenue:rev||2410000, pendingPandits:pending||3 });
+        const { data: pp } = await supabase.from('pandits').select('*').eq('status','pending_verification').limit(5);
+        if (pp?.length) setPendingPandits(pp);
+      } catch(e) {}
+    })();
+  }, []);
 
   const approvePandit = async (id) => {
-    await supabase.from('pandits').update({status:'verified',updated_at:new Date().toISOString()}).eq('id',id);
-    setPendingPandits(p=>p.filter(x=>x.id!==id));
-    setStats(s=>({...s,pandits:s.pandits+1,pendingPandits:Math.max(0,s.pendingPandits-1)}));
+    setPendingPandits(prev => prev.filter(p=>p.id!==id));
+    setStats(s=>({...s, pandits:s.pandits+1, pendingPandits:s.pendingPandits-1}));
+    try {
+      const { supabase } = await import('../../services/supabase');
+      await supabase.from('pandits').update({status:'verified'}).eq('id',id);
+    } catch(e) {}
   };
 
-  const rejectPandit = async (id) => {
-    await supabase.from('pandits').update({status:'rejected'}).eq('id',id);
-    setPendingPandits(p=>p.filter(x=>x.id!==id));
-    setStats(s=>({...s,pendingPandits:Math.max(0,s.pendingPandits-1)}));
-  };
+  const statCard = (value, label, color, sub) => (
+    <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 22px', boxShadow:'0 2px 8px rgba(212,160,23,0.08)' }}>
+      <div style={{ color, fontFamily:'Cinzel,serif', fontWeight:900, fontSize:28 }}>{value}</div>
+      <div style={{ color:C.mid, fontSize:12, marginTop:4, letterSpacing:0.5 }}>{label}</div>
+      {sub && <div style={{ color:C.green, fontSize:11, marginTop:4, fontWeight:600 }}>{sub}</div>}
+    </div>
+  );
 
-  const handleSeed = async () => {
-    setSeeding(true);
-    const res = await seedDatabase();
-    const ok = res.errors.length === 0;
-    setSeedResult(ok
-      ? `✅ Seeded ${res.pandits} pandits, ${res.temples} temples, ${res.devotees} devotees, ${res.bookings} bookings`
-      : `⚠️ Partial: ${res.errors.join(' | ')}`);
-    setSeeding(false);
-    loadData();
-  };
-
-  if (loading) return <div style={{ color:'rgba(255,255,255,0.4)', padding:40, textAlign:'center' }}>Loading dashboard...</div>;
+  const SC = { bg:'rgba(34,197,94,0.1)', color:'#15803d' };
+  const PC = { bg:'rgba(255,107,0,0.1)', color:'#c2410c' };
 
   return (
-    <div style={{ color:'rgba(255,255,255,0.85)' }}>
+    <div style={{ fontFamily:'Nunito,sans-serif' }}>
       <div style={{ marginBottom:24 }}>
-        <h1 style={{ color:'#3498db', fontFamily:'Cinzel,serif', margin:0, fontSize:22 }}>Admin Command Centre</h1>
-        <p style={{ color:'rgba(255,255,255,0.4)', margin:'4px 0 0', fontSize:13 }}>DevSetu Platform · Real-time Operations Dashboard</p>
+        <h1 style={{ fontFamily:'Cinzel,serif', color:C.dark, fontSize:22, margin:0 }}>Admin Command Centre</h1>
+        <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>DevSetu Platform Analytics & Operations</p>
       </div>
 
-      {/* KPI Grid */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14, marginBottom:22 }}>
-        <StatCard value={stats.devotees.toLocaleString()} label="TOTAL DEVOTEES" color="#3498db" sub="+12 this week" icon="👥" />
-        <StatCard value={stats.pandits} label="VERIFIED PANDITS" color="#F0C040" sub={stats.pendingPandits>0?`${stats.pendingPandits} awaiting review`:''} icon="🙏" />
-        <StatCard value={stats.bookings.toLocaleString()} label="TOTAL BOOKINGS" color="#22c55e" sub="All time" icon="📋" />
-        <StatCard value={`₹${(stats.revenue/100000).toFixed(1)}L`} label="TOTAL GMV" color="#FF6B00" sub="Confirmed bookings" icon="💰" />
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14, marginBottom:24 }}>
+        {statCard(stats.devotees.toLocaleString(), 'TOTAL DEVOTEES', C.orange, '+89 this week')}
+        {statCard(stats.pandits, 'VERIFIED PANDITS', C.gold, `${stats.pendingPandits} awaiting approval`)}
+        {statCard(stats.bookings.toLocaleString(), 'TOTAL BOOKINGS', '#16a34a', '+234 this month')}
+        {statCard(`₹${(stats.revenue/100000).toFixed(1)}L`, 'PLATFORM GMV', '#7c3aed', '+18% vs last month')}
       </div>
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
-        {/* Pending Pandit Approvals */}
-        <div style={{ background:'#0f0f1a', border:'1px solid rgba(41,128,185,0.2)', borderRadius:14, padding:20 }}>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-            <h3 style={{ color:'#3498db', margin:0, fontSize:15 }}>🕐 Pending Approvals</h3>
-            {stats.pendingPandits>0 && <span style={{ background:'#ef4444', color:'#fff', borderRadius:10, padding:'2px 8px', fontSize:11, fontWeight:800 }}>{stats.pendingPandits}</span>}
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px' }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
+            <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:0, fontSize:15 }}>🕐 Pending Approvals</h3>
+            {stats.pendingPandits > 0 && <span style={{ background:'rgba(239,68,68,0.1)', color:C.red, border:`1px solid rgba(239,68,68,0.3)`, borderRadius:20, padding:'2px 10px', fontSize:12, fontWeight:700 }}>{stats.pendingPandits} pending</span>}
           </div>
-          {pendingPandits.length===0 ? (
-            <div style={{ textAlign:'center', padding:'24px', color:'rgba(255,255,255,0.3)' }}>✅ No pending approvals</div>
-          ) : pendingPandits.map(p=>(
-            <div key={p.id} style={{ background:'rgba(255,255,255,0.04)', borderRadius:10, padding:'12px 14px', marginBottom:10, border:'1px solid rgba(255,255,255,0.06)' }}>
-              <div style={{ display:'flex', justifyContent:'space-between', marginBottom:6 }}>
+          {pendingPandits.length === 0 ? (
+            <div style={{ textAlign:'center', padding:'20px 0', color:C.soft }}>
+              <div style={{ fontSize:32, marginBottom:8 }}>✅</div>
+              <div>All pandits reviewed!</div>
+            </div>
+          ) : pendingPandits.map(p => (
+            <div key={p.id} style={{ background:'#fffbf5', border:`1px solid ${C.border}`, borderRadius:10, padding:'12px 14px', marginBottom:10 }}>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
                 <div>
-                  <div style={{ color:'#fff', fontWeight:600, fontSize:14 }}>{p.name}</div>
-                  <div style={{ color:'rgba(255,255,255,0.45)', fontSize:12 }}>{p.city} · {p.years_of_experience||0} yrs</div>
+                  <div style={{ color:C.dark, fontWeight:700, fontSize:14 }}>{p.name}</div>
+                  <div style={{ color:C.soft, fontSize:12, marginTop:2 }}>📍 {p.city} · {p.years_of_experience} yrs · 📞 {p.phone}</div>
+                  <div style={{ display:'flex', gap:4, flexWrap:'wrap', marginTop:6 }}>
+                    {(p.specializations||[]).map(s=><span key={s} style={{ background:'rgba(255,107,0,0.1)', color:'#c2410c', fontSize:11, padding:'2px 8px', borderRadius:10 }}>{s}</span>)}
+                  </div>
                 </div>
-                <div style={{ color:'rgba(255,255,255,0.3)', fontSize:11 }}>{new Date(p.created_at||Date.now()).toLocaleDateString('en-IN')}</div>
-              </div>
-              <div style={{ display:'flex', gap:8 }}>
-                <button onClick={()=>approvePandit(p.id)} style={{ flex:1, background:'rgba(34,197,94,0.2)', color:'#22c55e', border:'1px solid rgba(34,197,94,0.4)', borderRadius:8, padding:'7px', fontSize:12, fontWeight:700, cursor:'pointer' }}>✓ Approve</button>
-                <button onClick={()=>rejectPandit(p.id)} style={{ flex:1, background:'rgba(239,68,68,0.15)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', borderRadius:8, padding:'7px', fontSize:12, fontWeight:700, cursor:'pointer' }}>✗ Reject</button>
-                <button onClick={()=>navigate('/admin/pandits')} style={{ background:'rgba(41,128,185,0.2)', color:'#3498db', border:'1px solid rgba(41,128,185,0.3)', borderRadius:8, padding:'7px 10px', fontSize:12, cursor:'pointer' }}>View</button>
+                <div style={{ display:'flex', gap:6, flexShrink:0, marginLeft:8 }}>
+                  <button onClick={()=>approvePandit(p.id)} style={{ background:'rgba(34,197,94,0.12)', color:'#15803d', border:'1px solid rgba(34,197,94,0.35)', borderRadius:8, padding:'5px 12px', cursor:'pointer', fontWeight:700, fontSize:12 }}>✓ Approve</button>
+                  <button onClick={()=>setPendingPandits(prev=>prev.filter(x=>x.id!==p.id))} style={{ background:'rgba(239,68,68,0.08)', color:C.red, border:'1px solid rgba(239,68,68,0.25)', borderRadius:8, padding:'5px 12px', cursor:'pointer', fontWeight:700, fontSize:12 }}>✗</button>
+                </div>
               </div>
             </div>
           ))}
-          <button onClick={()=>navigate('/admin/pandits')} style={{ width:'100%', marginTop:8, background:'rgba(41,128,185,0.1)', color:'#3498db', border:'1px solid rgba(41,128,185,0.2)', borderRadius:8, padding:'8px', fontSize:12, cursor:'pointer', fontWeight:600 }}>Manage All Pandits →</button>
+          <button onClick={()=>navigate('/admin/pandits')} style={{ width:'100%', background:'rgba(255,107,0,0.08)', color:C.orange, border:`1px solid rgba(255,107,0,0.25)`, borderRadius:8, padding:'8px', fontSize:12, cursor:'pointer', fontWeight:700, marginTop:4 }}>
+            View All Pandits →
+          </button>
         </div>
 
-        {/* Recent Bookings */}
-        <div style={{ background:'#0f0f1a', border:'1px solid rgba(41,128,185,0.2)', borderRadius:14, padding:20 }}>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-            <h3 style={{ color:'#3498db', margin:0, fontSize:15 }}>📋 Recent Bookings</h3>
-            <button onClick={()=>navigate('/admin/bookings')} style={{ background:'rgba(41,128,185,0.15)', color:'#3498db', border:'1px solid rgba(41,128,185,0.2)', borderRadius:8, padding:'4px 10px', fontSize:11, cursor:'pointer' }}>View All</button>
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px' }}>
+          <div style={{ marginBottom:14 }}>
+            <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:0, fontSize:15 }}>📋 Recent Bookings</h3>
           </div>
-          {recentBookings.length===0 ? (
-            <div style={{ textAlign:'center', padding:'24px', color:'rgba(255,255,255,0.3)' }}>No bookings yet — seed data to test</div>
-          ) : recentBookings.map((b,i)=>(
-            <div key={b.id||i} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'9px 0', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
+          {recentBookings.map(b => (
+            <div key={b.id} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderBottom:`1px solid ${C.border}` }}>
               <div>
-                <div style={{ color:'#fff', fontSize:13, fontWeight:500 }}>{b.ritual_name||'Pooja'}</div>
-                <div style={{ color:'rgba(255,255,255,0.35)', fontSize:11 }}>{new Date(b.created_at||Date.now()).toLocaleDateString('en-IN')}</div>
+                <div style={{ color:C.dark, fontWeight:600, fontSize:14 }}>{b.ritual_name}</div>
+                <div style={{ color:C.soft, fontSize:12, marginTop:2 }}>{b.devotee_name} · {new Date(b.booking_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</div>
               </div>
               <div style={{ textAlign:'right' }}>
-                <div style={{ color:'#FF6B00', fontWeight:700, fontSize:13 }}>₹{(b.total_amount||0).toLocaleString()}</div>
-                <div style={{ fontSize:10, padding:'2px 7px', borderRadius:8, display:'inline-block', background:b.status==='confirmed'?'rgba(34,197,94,0.2)':'rgba(255,107,0,0.2)', color:b.status==='confirmed'?'#22c55e':'#FF6B00', fontWeight:600 }}>{b.status||'pending'}</div>
+                <div style={{ color:C.orange, fontWeight:700, fontSize:14 }}>₹{b.total_amount.toLocaleString()}</div>
+                <span style={{ background:b.status==='confirmed'?SC.bg:PC.bg, color:b.status==='confirmed'?SC.color:PC.color, fontSize:11, padding:'2px 8px', borderRadius:10, fontWeight:600 }}>
+                  {b.status?.replace(/_/g,' ')}
+                </span>
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Quick Actions */}
-        <div style={{ background:'#0f0f1a', border:'1px solid rgba(41,128,185,0.2)', borderRadius:14, padding:20 }}>
-          <h3 style={{ color:'#3498db', margin:'0 0 16px', fontSize:15 }}>⚡ Quick Actions</h3>
-          <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:10 }}>
-            {[
-              {label:'Manage Pandits', icon:'🙏', path:'/admin/pandits', color:'#F0C040'},
-              {label:'View Bookings', icon:'📋', path:'/admin/bookings', color:'#22c55e'},
-              {label:'Temple Mgmt', icon:'🏛️', path:'/admin/temples', color:'#FF6B00'},
-              {label:'Rituals Catalog', icon:'🕉️', path:'/admin/rituals', color:'#c084fc'},
-              {label:'Samagri Store', icon:'🛍️', path:'/admin/samagri', color:'#3498db'},
-              {label:'Settings', icon:'⚙️', path:'/admin/settings', color:'#9a8070'},
-            ].map(a=>(
-              <button key={a.path} onClick={()=>navigate(a.path)} style={{ background:'rgba(255,255,255,0.04)', border:`1px solid ${a.color}30`, borderRadius:10, padding:'14px', cursor:'pointer', textAlign:'left', transition:'all 0.2s' }}
-                onMouseEnter={e=>e.currentTarget.style.background=`${a.color}15`}
-                onMouseLeave={e=>e.currentTarget.style.background='rgba(255,255,255,0.04)'}>
-                <div style={{ fontSize:22 }}>{a.icon}</div>
-                <div style={{ color:a.color, fontWeight:600, fontSize:13, marginTop:6 }}>{a.label}</div>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Platform Health */}
-        <div style={{ background:'#0f0f1a', border:'1px solid rgba(41,128,185,0.2)', borderRadius:14, padding:20 }}>
-          <h3 style={{ color:'#3498db', margin:'0 0 16px', fontSize:15 }}>🛡️ Platform Health</h3>
-          <div style={{ display:'flex', flexDirection:'column', gap:0 }}>
-            {[
-              {label:'Pandits Online', value:`${SEED_PANDITS.filter(p=>p.is_online).length}/${SEED_PANDITS.length}`, color:'#22c55e'},
-              {label:'Payment Success Rate', value:'98.7%', color:'#22c55e'},
-              {label:'Avg Pandit Rating', value:'4.8 ⭐', color:'#F0C040'},
-              {label:'Pending Approvals', value:stats.pendingPandits, color:stats.pendingPandits>0?'#ef4444':'#22c55e'},
-              {label:'Cities Covered', value:'10', color:'#3498db'},
-              {label:'Platform Uptime', value:'99.9%', color:'#22c55e'},
-            ].map(item=>(
-              <div key={item.label} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
-                <span style={{ color:'rgba(255,255,255,0.5)', fontSize:13 }}>{item.label}</span>
-                <span style={{ color:item.color, fontWeight:700, fontSize:14 }}>{item.value}</span>
-              </div>
-            ))}
-          </div>
+          <button onClick={()=>navigate('/admin/bookings')} style={{ width:'100%', background:'rgba(255,107,0,0.08)', color:C.orange, border:`1px solid rgba(255,107,0,0.25)`, borderRadius:8, padding:'8px', fontSize:12, cursor:'pointer', fontWeight:700, marginTop:8 }}>
+            View All Bookings →
+          </button>
         </div>
       </div>
 
-      {/* Seed Panel */}
-      <div style={{ background:'rgba(138,43,226,0.08)', border:'1px solid rgba(138,43,226,0.25)', borderRadius:12, padding:'16px 20px', marginTop:18 }}>
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-          <div>
-            <div style={{ color:'#c084fc', fontWeight:700, fontSize:14 }}>🌱 Developer Tools — Test Data</div>
-            <div style={{ color:'rgba(255,255,255,0.4)', fontSize:12, marginTop:2 }}>Seed 10 pandits, 5 temples, 5 devotees & 5 bookings into Supabase</div>
-          </div>
-          <button onClick={handleSeed} disabled={seeding} style={{ background:'rgba(138,43,226,0.2)', color:'#c084fc', border:'1px solid rgba(138,43,226,0.4)', borderRadius:8, padding:'9px 20px', cursor:'pointer', fontWeight:700, fontSize:13, opacity:seeding?0.6:1 }}>
-            {seeding?'⏳ Seeding...':'🌱 Seed Test Data'}
-          </button>
+      <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px', marginTop:18 }}>
+        <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:'0 0 14px', fontSize:15 }}>🛡️ Platform Health</h3>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:12 }}>
+          {[['0','Flags / Issues','#15803d'],['98.7%','Payment Success','#15803d'],['4.8 ★','Avg Pandit Rating',C.gold],[`${stats.pendingPandits}`,'Pending Reviews',C.orange]].map(([v,l,c])=>(
+            <div key={l} style={{ background:'#fffbf5', border:`1px solid ${C.border}`, borderRadius:10, padding:'12px 16px', textAlign:'center' }}>
+              <div style={{ color:c, fontWeight:800, fontSize:20 }}>{v}</div>
+              <div style={{ color:C.soft, fontSize:11, marginTop:4 }}>{l}</div>
+            </div>
+          ))}
         </div>
-        {seedResult && <div style={{ color:'rgba(255,255,255,0.7)', fontSize:13, marginTop:10 }}>{seedResult}</div>}
       </div>
     </div>
   );

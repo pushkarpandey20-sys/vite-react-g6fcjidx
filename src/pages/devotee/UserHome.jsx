@@ -123,6 +123,48 @@ export default function UserHome() {
         ))}
       </div>
 
+      {/* ── OB (Onboarding) Demand Section ── */}
+      <div style={{
+        background: 'linear-gradient(135deg, #3d1f00, #5a2d00)',
+        borderRadius: 16,
+        padding: '22px 24px',
+        marginBottom: 20,
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        gap: 16,
+      }}>
+        <div style={{ flex: 1 }}>
+          <div style={{ color: '#F0C040', fontSize: 11, fontWeight: 800, letterSpacing: 2, marginBottom: 8 }}>🪔 JOIN OUR PANDIT NETWORK</div>
+          <h3 style={{ fontFamily: 'Cinzel,serif', color: '#fff', fontSize: 20, margin: '0 0 8px' }}>
+            Are You a Verified Pandit?
+          </h3>
+          <p style={{ color: 'rgba(255,248,240,0.8)', fontSize: 14, margin: '0 0 6px', lineHeight: 1.5 }}>
+            Join 500+ pandits earning <strong style={{ color: '#FF6B00' }}>₹30,000–₹80,000/month</strong> on DevSetu.
+            Manage bookings, set your own schedule, receive weekly payouts.
+          </p>
+          <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 10 }}>
+            {['✓ Verified badge on profile', '✓ Weekly payouts', '✓ Free onboarding', '✓ Dedicated support'].map(f => (
+              <span key={f} style={{ color: 'rgba(255,248,240,0.7)', fontSize: 12 }}>{f}</span>
+            ))}
+          </div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
+          <button
+            onClick={() => navigate('/pandit/dashboard')}
+            style={{ background: 'linear-gradient(135deg,#FF6B00,#e55a00)', color: '#fff', border: 'none', borderRadius: 24, padding: '12px 24px', fontWeight: 800, cursor: 'pointer', fontSize: 14, whiteSpace: 'nowrap' }}
+          >
+            ✨ Register as Pandit
+          </button>
+          <button
+            onClick={() => navigate('/pandit/dashboard')}
+            style={{ background: 'rgba(255,255,255,0.1)', color: 'rgba(255,248,240,0.8)', border: '1px solid rgba(255,255,255,0.2)', borderRadius: 24, padding: '10px 24px', fontWeight: 700, cursor: 'pointer', fontSize: 13, whiteSpace: 'nowrap' }}
+          >
+            🔐 Pandit Login
+          </button>
+        </div>
+      </div>
+
       <SmartRecommendations bookingHistory={bookings} />
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 300px', gap:20 }}>

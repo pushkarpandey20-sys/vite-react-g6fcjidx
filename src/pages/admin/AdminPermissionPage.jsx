@@ -1,128 +1,70 @@
 import React, { useState } from 'react';
 
-const TOGGLES = [
-  { key:'razorpay_live', label:'Razorpay Live Mode', desc:'Switch from test keys to production payment gateway', group:'Payments', defaultVal:false },
-  { key:'otp_verification', label:'OTP Verification', desc:'Require phone OTP for devotee sign-up/login', group:'Auth', defaultVal:true },
-  { key:'email_notifications', label:'Email Notifications', desc:'Send booking confirmations and reminders by email', group:'Notifications', defaultVal:true },
-  { key:'sms_notifications', label:'SMS Notifications', desc:'Send SMS alerts for bookings and approvals', group:'Notifications', defaultVal:false },
-  { key:'virtual_pooja', label:'Virtual Pooja Feature', desc:'Allow devotees to book online/virtual puja sessions', group:'Features', defaultVal:true },
-  { key:'live_darshan', label:'Live Darshan Streaming', desc:'Enable live video darshan from temples', group:'Features', defaultVal:true },
-  { key:'samagri_store', label:'Samagri Store', desc:'Show puja samagri e-commerce section to devotees', group:'Features', defaultVal:true },
-  { key:'auto_pandit_assign', label:'Auto Pandit Assignment', desc:'Automatically assign nearest available pandit for bookings', group:'Booking', defaultVal:false },
-  { key:'new_registrations', label:'New Pandit Registrations', desc:'Allow new pandits to sign up on the platform', group:'Auth', defaultVal:true },
-  { key:'maintenance_mode', label:'Maintenance Mode', desc:'Show maintenance banner to all users (admin unaffected)', group:'Platform', defaultVal:false },
-];
-
-const PRICING = [
-  { key:'platform_fee_pct', label:'Platform Fee (%)', value:'10', desc:'% cut taken from each confirmed booking' },
-  { key:'min_booking_amount', label:'Minimum Booking (₹)', value:'500', desc:'Minimum amount for any booking' },
-  { key:'cancellation_window_hrs', label:'Cancellation Window (hrs)', value:'24', desc:'Hours before event within which cancellation is free' },
-  { key:'pandit_payout_days', label:'Pandit Payout (days)', value:'7', desc:'Days after booking to release payment to pandit' },
-];
-
-const SYSTEM_STATUS = [
-  { label:'Supabase DB', status:'operational', icon:'🟢' },
-  { label:'Razorpay Gateway', status:'operational', icon:'🟢' },
-  { label:'SMS Provider (Twilio)', status:'degraded', icon:'🟡' },
-  { label:'Email (Resend)', status:'operational', icon:'🟢' },
-  { label:'Storage (Supabase)', status:'operational', icon:'🟢' },
-  { label:'CDN / Assets', status:'operational', icon:'🟢' },
-];
+const C = { card:'#ffffff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070', green:'#16a34a' };
 
 export default function AdminPermissionPage() {
-  const [toggles, setToggles] = useState(() => Object.fromEntries(TOGGLES.map(t => [t.key, t.defaultVal])));
-  const [pricing, setPricing] = useState(() => Object.fromEntries(PRICING.map(p => [p.key, p.value])));
-  const [saved, setSaved] = useState('');
+  const [s, setS] = useState({ autoApprove:false, emailNotifs:true, whatsapp:true, razorpayLive:false, maintenance:false, maxBookings:50, platformFee:18, freeDelivery:999 });
+  const tog = k => setS(x=>({...x,[k]:!x[k]}));
+  const upd = (k,v) => setS(x=>({...x,[k]:v}));
 
-  const toggle = (key) => setToggles(t => ({ ...t, [key]: !t[key] }));
+  const Toggle = ({k}) => (
+    <div onClick={()=>tog(k)} style={{ width:46,height:26,borderRadius:13,background:s[k]?C.green:'rgba(0,0,0,0.15)',position:'relative',cursor:'pointer',transition:'background 0.3s',flexShrink:0 }}>
+      <div style={{ width:20,height:20,borderRadius:'50%',background:'#fff',position:'absolute',top:3,left:s[k]?23:3,transition:'left 0.3s',boxShadow:'0 1px 3px rgba(0,0,0,0.2)' }}/>
+    </div>
+  );
 
-  const handleSave = () => {
-    setSaved('✅ Settings saved successfully');
-    setTimeout(() => setSaved(''), 3000);
-  };
+  const NumInput = ({k}) => (
+    <input type="number" value={s[k]} onChange={e=>upd(k,+e.target.value)}
+      style={{ width:80,padding:'6px 10px',borderRadius:8,border:`1.5px solid rgba(212,160,23,0.4)`,background:'#fff',color:C.dark,fontSize:14,textAlign:'center',fontFamily:'inherit' }} />
+  );
 
-  const groups = [...new Set(TOGGLES.map(t => t.group))];
+  const Row = ({label,desc,children}) => (
+    <div style={{ display:'flex',justifyContent:'space-between',alignItems:'center',padding:'14px 0',borderBottom:`1px solid ${C.border}` }}>
+      <div><div style={{ color:C.dark,fontWeight:600,fontSize:14 }}>{label}</div><div style={{ color:C.soft,fontSize:12,marginTop:2 }}>{desc}</div></div>
+      {children}
+    </div>
+  );
 
   return (
-    <div style={{ color:'rgba(255,255,255,0.85)' }}>
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
-        <div>
-          <h1 style={{ color:'#3498db', fontFamily:'Cinzel,serif', margin:0, fontSize:20 }}>⚙️ Platform Settings</h1>
-          <p style={{ color:'rgba(255,255,255,0.4)', margin:'4px 0 0', fontSize:13 }}>Feature toggles, pricing config & system health</p>
-        </div>
-        <button onClick={handleSave} style={{ background:'#3498db', color:'#fff', border:'none', borderRadius:10, padding:'10px 24px', fontWeight:700, cursor:'pointer', fontSize:13 }}>
-          Save Changes
-        </button>
+    <div style={{ fontFamily:'Nunito,sans-serif' }}>
+      <div style={{ marginBottom:24 }}>
+        <h2 style={{ fontFamily:'Cinzel,serif', color:C.dark, fontSize:20, margin:0 }}>⚙️ Platform Settings</h2>
+        <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>Configure DevSetu platform behavior</p>
       </div>
 
-      {saved && <div style={{ background:'rgba(34,197,94,0.15)', border:'1px solid rgba(34,197,94,0.3)', borderRadius:10, padding:'10px 16px', marginBottom:16, color:'#22c55e', fontSize:13 }}>{saved}</div>}
-
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
-        {/* Feature Toggles by Group */}
-        <div style={{ gridColumn:'1/-1' }}>
-          {groups.map(group => (
-            <div key={group} style={{ background:'#0f0f1a', border:'1px solid rgba(41,128,185,0.2)', borderRadius:14, padding:20, marginBottom:14 }}>
-              <h3 style={{ color:'#3498db', margin:'0 0 14px', fontSize:14, letterSpacing:1, textTransform:'uppercase' }}>{group}</h3>
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:12 }}>
-                {TOGGLES.filter(t => t.group === group).map(t => (
-                  <div key={t.key} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', background:'rgba(255,255,255,0.03)', borderRadius:10, padding:'12px 14px', border:'1px solid rgba(255,255,255,0.06)' }}>
-                    <div style={{ flex:1, marginRight:12 }}>
-                      <div style={{ color:'rgba(255,255,255,0.85)', fontSize:13, fontWeight:600 }}>{t.label}</div>
-                      <div style={{ color:'rgba(255,255,255,0.35)', fontSize:11, marginTop:2 }}>{t.desc}</div>
-                    </div>
-                    <button
-                      onClick={() => toggle(t.key)}
-                      style={{
-                        width:44, height:24, borderRadius:12, border:'none', cursor:'pointer',
-                        background: toggles[t.key] ? '#22c55e' : 'rgba(255,255,255,0.15)',
-                        position:'relative', flexShrink:0, transition:'background 0.2s',
-                      }}
-                    >
-                      <span style={{
-                        position:'absolute', top:3, width:18, height:18, borderRadius:'50%',
-                        background:'#fff', transition:'left 0.2s',
-                        left: toggles[t.key] ? 23 : 3,
-                      }} />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'20px 22px' }}>
+          <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:'0 0 2px', fontSize:15 }}>Operations</h3>
+          <p style={{ color:C.soft, fontSize:12, margin:'0 0 8px' }}>Booking & workflow</p>
+          <Row label="Auto-Approve Bookings" desc="Confirm bookings without manual review"><Toggle k="autoApprove"/></Row>
+          <Row label="Maintenance Mode" desc="Take platform offline temporarily"><Toggle k="maintenance"/></Row>
+          <Row label="Max Bookings/Day" desc="Platform-wide daily booking limit"><NumInput k="maxBookings"/></Row>
         </div>
 
-        {/* Pricing Config */}
-        <div style={{ background:'#0f0f1a', border:'1px solid rgba(41,128,185,0.2)', borderRadius:14, padding:20 }}>
-          <h3 style={{ color:'#3498db', margin:'0 0 16px', fontSize:14, letterSpacing:1, textTransform:'uppercase' }}>Pricing Config</h3>
-          {PRICING.map(p => (
-            <div key={p.key} style={{ marginBottom:16 }}>
-              <label style={{ color:'rgba(255,255,255,0.5)', fontSize:11, display:'block', marginBottom:4 }}>{p.label.toUpperCase()}</label>
-              <input
-                type="number"
-                value={pricing[p.key]}
-                onChange={e => setPricing(pr => ({ ...pr, [p.key]: e.target.value }))}
-                style={{ width:'100%', padding:'9px 12px', borderRadius:8, border:'1px solid rgba(41,128,185,0.3)', background:'rgba(255,255,255,0.05)', color:'#fff', fontSize:14, outline:'none', boxSizing:'border-box' }}
-              />
-              <div style={{ color:'rgba(255,255,255,0.3)', fontSize:11, marginTop:3 }}>{p.desc}</div>
-            </div>
-          ))}
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'20px 22px' }}>
+          <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:'0 0 2px', fontSize:15 }}>Notifications</h3>
+          <p style={{ color:C.soft, fontSize:12, margin:'0 0 8px' }}>Alerts & communication</p>
+          <Row label="Email Notifications" desc="Booking confirmations via email"><Toggle k="emailNotifs"/></Row>
+          <Row label="WhatsApp Alerts" desc="OTP & updates via WhatsApp"><Toggle k="whatsapp"/></Row>
         </div>
 
-        {/* System Status */}
-        <div style={{ background:'#0f0f1a', border:'1px solid rgba(41,128,185,0.2)', borderRadius:14, padding:20 }}>
-          <h3 style={{ color:'#3498db', margin:'0 0 16px', fontSize:14, letterSpacing:1, textTransform:'uppercase' }}>System Status</h3>
-          {SYSTEM_STATUS.map(s => (
-            <div key={s.label} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'10px 0', borderBottom:'1px solid rgba(255,255,255,0.05)' }}>
-              <span style={{ color:'rgba(255,255,255,0.6)', fontSize:13 }}>{s.label}</span>
-              <span style={{ fontSize:12, fontWeight:700, color: s.status === 'operational' ? '#22c55e' : '#F0C040' }}>
-                {s.icon} {s.status}
-              </span>
-            </div>
-          ))}
-          <div style={{ marginTop:14, padding:'10px 14px', background:'rgba(34,197,94,0.08)', borderRadius:8, border:'1px solid rgba(34,197,94,0.2)', textAlign:'center' }}>
-            <span style={{ color:'#22c55e', fontSize:12, fontWeight:700 }}>🟢 Platform Uptime: 99.9% (last 30 days)</span>
-          </div>
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'20px 22px' }}>
+          <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:'0 0 2px', fontSize:15 }}>Payments</h3>
+          <p style={{ color:C.soft, fontSize:12, margin:'0 0 8px' }}>Razorpay & fee config</p>
+          <Row label="Razorpay Live Mode" desc="Switch test → live gateway"><Toggle k="razorpayLive"/></Row>
+          <Row label="Platform Fee %" desc="DevSetu's cut per booking"><NumInput k="platformFee"/></Row>
         </div>
+
+        <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'20px 22px' }}>
+          <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:'0 0 2px', fontSize:15 }}>Samagri Store</h3>
+          <p style={{ color:C.soft, fontSize:12, margin:'0 0 8px' }}>Delivery settings</p>
+          <Row label="Free Delivery Above (₹)" desc="Minimum for free delivery"><NumInput k="freeDelivery"/></Row>
+        </div>
+      </div>
+
+      <div style={{ marginTop:20, display:'flex', gap:12 }}>
+        <button style={{ background:`linear-gradient(135deg,${C.green},#15803d)`, color:'#fff', border:'none', borderRadius:10, padding:'12px 28px', fontWeight:700, cursor:'pointer', fontSize:14 }}>✓ Save All Settings</button>
+        <button style={{ background:'rgba(0,0,0,0.06)', color:C.mid, border:`1px solid ${C.border}`, borderRadius:10, padding:'12px 22px', cursor:'pointer', fontSize:14 }}>Reset</button>
       </div>
     </div>
   );
