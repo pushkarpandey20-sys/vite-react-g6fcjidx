@@ -36,7 +36,8 @@ export const ProtectedRoute = ({ children, role }) => {
   else if (role === 'user') isAuthorized = !!devoteeId;
 
   if (!isAuthorized) {
-    // Redirect to landing or login
+    // Admin → dedicated login page; others → landing
+    if (role === 'admin') return <Navigate to="/admin-login" state={{ from: location }} replace />;
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 

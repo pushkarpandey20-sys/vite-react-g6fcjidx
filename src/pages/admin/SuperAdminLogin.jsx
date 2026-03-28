@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../../store/AppCtx';
 
 const DEMO_ACCOUNTS = [
@@ -10,7 +10,10 @@ const DEMO_ACCOUNTS = [
 
 export default function SuperAdminLogin() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { loginAdmin, loginAdminDemo, toast } = useApp();
+  // After login, redirect to where the user was trying to go (or admin overview)
+  const from = location.state?.from?.pathname || '/admin/overview';
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +28,7 @@ export default function SuperAdminLogin() {
     setLoading(true);
     try {
       await loginAdmin(email.trim(), password);
-      navigate('/admin/overview');
+      navigate(from, { replace: true });
     } catch (err) {
       setError(err.message || 'Authentication failed. Check your credentials.');
     } finally {
@@ -35,7 +38,7 @@ export default function SuperAdminLogin() {
 
   const handleDemo = (role) => {
     loginAdminDemo(role);
-    navigate('/admin/overview');
+    navigate(from, { replace: true });
   };
 
   return (
