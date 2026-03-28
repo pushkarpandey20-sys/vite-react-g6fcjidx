@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import MainLayout from './MainLayout';
 import { AdminSidebar } from '../components/Sidebar';
 import { useApp } from '../store/AppCtx';
@@ -7,18 +7,38 @@ import { useApp } from '../store/AppCtx';
 export default function AdminLayout() {
   const { adminRole, setAdminRole, setShowAdminLogin, logout } = useApp();
   const location = useLocation();
+  const navigate = useNavigate();
   const path = location.pathname;
 
   if (!adminRole) {
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', gap: 20, background: '#0d0700' }}>
-        <div style={{ fontSize: 64 }}>🛡️</div>
-        <h2 style={{ fontFamily: "'Cinzel',serif", color: '#3498db' }}>Admin Command Centre</h2>
-        <p style={{ color: '#888' }}>Authenticate to access the management panel</p>
-        <button
-          onClick={() => setShowAdminLogin(true)}
-          style={{ background: 'linear-gradient(135deg,#2980B9,#3498db)', color: '#fff', border: 'none', borderRadius: 28, padding: '12px 36px', fontWeight: 800, cursor: 'pointer', fontSize: 15 }}>
-          🔐 Login as Admin
+      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center',
+        height:'100vh', gap:20, background:'linear-gradient(160deg,#0a0500,#130a04,#1a0f07)',
+        fontFamily:'Nunito,sans-serif' }}>
+        <div style={{ width:80, height:80, borderRadius:22,
+          background:'linear-gradient(135deg,rgba(52,152,219,0.18),rgba(41,128,185,0.1))',
+          border:'2px solid rgba(52,152,219,0.3)',
+          display:'flex', alignItems:'center', justifyContent:'center', fontSize:38 }}>🛡️</div>
+        <h2 style={{ fontFamily:"'Cinzel',serif", color:'#3498db', margin:0 }}>Admin Command Centre</h2>
+        <p style={{ color:'rgba(255,255,255,0.35)', margin:0, fontSize:14 }}>Secure authentication required</p>
+        <div style={{ display:'flex', gap:12 }}>
+          <button
+            onClick={() => navigate('/admin-login')}
+            style={{ background:'linear-gradient(135deg,#2980B9,#3498db)', color:'#fff', border:'none',
+              borderRadius:28, padding:'12px 32px', fontWeight:800, cursor:'pointer', fontSize:15,
+              boxShadow:'0 6px 20px rgba(41,128,185,0.35)' }}>
+            🔐 Admin Login
+          </button>
+          <button
+            onClick={() => setShowAdminLogin(true)}
+            style={{ background:'rgba(52,152,219,0.1)', color:'#3498db', border:'1px solid rgba(52,152,219,0.3)',
+              borderRadius:28, padding:'12px 24px', fontWeight:700, cursor:'pointer', fontSize:14 }}>
+            Quick Access
+          </button>
+        </div>
+        <button onClick={() => navigate('/')}
+          style={{ background:'none', border:'none', color:'rgba(255,255,255,0.25)', cursor:'pointer', fontSize:13 }}>
+          ← Back to DevSetu
         </button>
       </div>
     );
@@ -35,20 +55,36 @@ export default function AdminLayout() {
 
   return (
     <div>
-      <div style={{ background: '#1a0f07', padding: '8px 20px', display: 'flex', gap: '14px', alignItems: 'center', borderBottom: '1px solid rgba(212,160,23,0.3)', flexWrap: 'wrap' }}>
-        <span style={{ color: '#F0C040', fontFamily: "'Cinzel', serif", fontWeight: 'bold', fontSize: 13 }}>⚙️ Admin Role</span>
-        <select value={adminRole} onChange={e => setAdminRole(e.target.value)}
-          style={{ padding: '5px 12px', borderRadius: '20px', background: '#3d2211', color: '#fff', border: '1px solid rgba(212,160,23,0.6)', outline: 'none', fontSize: 13 }}>
-          <option value="viewer">Viewer</option>
-          <option value="manager">Manager</option>
-          <option value="superadmin">Super Admin</option>
-        </select>
-        <span style={{ color: 'rgba(255,248,240,0.6)', fontSize: '12px', fontStyle: 'italic', fontFamily: "'Crimson Pro',serif" }}>
-          {adminRole === 'superadmin' ? 'Full Access: Payments, Approvals, Everything' : adminRole === 'manager' ? 'Manage Bookings & Verifications' : 'Read-only Analytics'}
+      <div style={{ background:'rgba(10,5,0,0.95)', padding:'7px 20px', display:'flex', gap:'14px',
+        alignItems:'center', borderBottom:'1px solid rgba(52,152,219,0.2)', flexWrap:'wrap',
+        backdropFilter:'blur(10px)' }}>
+        <span style={{ fontSize:18 }}>🛡️</span>
+        <span style={{ color:'#3498db', fontFamily:"'Cinzel',serif", fontWeight:700, fontSize:13 }}>DevSetu Admin</span>
+        <div style={{ display:'flex', alignItems:'center', gap:6,
+          background: adminRole==='superadmin' ? 'rgba(240,192,64,0.12)' : adminRole==='manager' ? 'rgba(52,152,219,0.1)' : 'rgba(34,197,94,0.08)',
+          border: `1px solid ${adminRole==='superadmin' ? 'rgba(240,192,64,0.3)' : adminRole==='manager' ? 'rgba(52,152,219,0.25)' : 'rgba(34,197,94,0.25)'}`,
+          borderRadius:20, padding:'4px 12px' }}>
+          <span style={{ fontSize:10, fontWeight:800, letterSpacing:'0.8px', textTransform:'uppercase',
+            color: adminRole==='superadmin' ? '#F0C040' : adminRole==='manager' ? '#3498db' : '#22c55e' }}>
+            {adminRole === 'superadmin' ? '👑 Super Admin' : adminRole === 'manager' ? '🛡️ Manager' : '👁 Viewer'}
+          </span>
+        </div>
+        <span style={{ color:'rgba(255,255,255,0.3)', fontSize:'11px' }}>
+          {adminRole === 'superadmin' ? 'Full access — payments, approvals, settings' : adminRole === 'manager' ? 'Manage bookings & verifications' : 'Read-only analytics'}
         </span>
-        <button onClick={logout} style={{ marginLeft: 'auto', background: 'none', border: '1px solid rgba(192,57,43,.4)', color: '#C0392B', borderRadius: 16, padding: '3px 12px', cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>
-          Logout
-        </button>
+        <div style={{ display:'flex', gap:8, marginLeft:'auto', alignItems:'center' }}>
+          <select value={adminRole} onChange={e => setAdminRole(e.target.value)}
+            style={{ padding:'4px 10px', borderRadius:'16px', background:'rgba(255,255,255,0.05)',
+              color:'rgba(255,255,255,0.7)', border:'1px solid rgba(255,255,255,0.1)', outline:'none', fontSize:12 }}>
+            <option value="viewer">Viewer</option>
+            <option value="manager">Manager</option>
+            <option value="superadmin">Super Admin</option>
+          </select>
+          <button onClick={logout} style={{ background:'rgba(239,68,68,0.1)', border:'1px solid rgba(239,68,68,0.3)',
+            color:'#ef4444', borderRadius:14, padding:'4px 12px', cursor:'pointer', fontSize:11, fontWeight:700 }}>
+            Logout
+          </button>
+        </div>
       </div>
 
       <div style={{ pointerEvents: adminRole === 'viewer' ? 'none' : 'auto' }}>

@@ -32,6 +32,7 @@ import AdminBookingList from '../../pages/admin/AdminBookingList';
 import AdminTempleList from '../../pages/admin/AdminTempleList';
 import AdminSamagriList from '../../pages/admin/AdminSamagriList';
 import AdminPermissionPage from '../../pages/admin/AdminPermissionPage';
+import SuperAdminLogin from '../../pages/admin/SuperAdminLogin';
 
 // Feature Pages
 import PanditMarketplacePage from '../../features/user-portal/pages/PanditMarketplacePage';
@@ -68,6 +69,7 @@ export default function AppRoutes() {
           <Route path="home" element={<UserHome />} />
           <Route path="muhurta" element={<MuhuratPage />} />
           <Route path="rituals" element={<RitualCatalogPage />} />
+          <Route path="rituals-correct" element={<RitualCatalogPage />} />
           <Route path="instant-booking" element={<InstantPanditBooking />} />
           <Route path="marketplace" element={<PanditMarketplacePage />} />
           <Route path="booking" element={<BookingWizard />} />
@@ -107,6 +109,9 @@ export default function AppRoutes() {
           <Route path="samagri" element={<AdminSamagriList />} />
           <Route path="settings" element={<AdminPermissionPage />} />
         </Route>
+
+        {/* Super Admin Login — public standalone page */}
+        <Route path="/admin-login" element={<SuperAdminLogin />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
