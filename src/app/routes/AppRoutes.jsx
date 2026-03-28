@@ -63,8 +63,8 @@ export default function AppRoutes() {
       <Routes>
         <Route path="/" element={<Landing />} />
 
-        {/* Devotee Routes */}
-        <Route path="/user" element={<ProtectedRoute role="user"><UserLayout /></ProtectedRoute>}>
+        {/* Devotee Routes — public, no login required to browse */}
+        <Route path="/user" element={<UserLayout />}>
           <Route index element={<Navigate to="/user/home" replace />} />
           <Route path="home" element={<UserHome />} />
           <Route path="muhurta" element={<MuhuratPage />} />
