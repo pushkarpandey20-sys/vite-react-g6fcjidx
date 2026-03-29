@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { AppProvider } from './store/AppProvider';
 import AppRoutes from './app/routes/AppRoutes';
+import ErrorBoundary from './components/ErrorBoundary';
 import './assets/styles/globals.css';
 import { initNotifications } from './services/notificationService';
 
@@ -23,10 +24,12 @@ initNotifications();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AppProvider>
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
-    </AppProvider>
+    <ErrorBoundary>
+      <AppProvider>
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </AppProvider>
+    </ErrorBoundary>
   </React.StrictMode>
 );

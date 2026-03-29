@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const RITUAL_CARDS = [
@@ -54,6 +54,15 @@ export default function Landing() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const ref = params.get('ref');
+    if (ref) {
+      localStorage.setItem('ds_referral', ref);
+      window.history.replaceState({}, '', window.location.pathname);
+    }
+  }, []);
 
   const btn = (bg = 'linear-gradient(135deg,#FF6B00,#FF8C35)', extra = {}) => ({
     background: bg, color: '#fff', border: 'none', borderRadius: 28, padding: '12px 28px',

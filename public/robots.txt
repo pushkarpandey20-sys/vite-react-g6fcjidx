@@ -1,0 +1,11 @@
+User-agent: *
+Allow: /
+Allow: /user/marketplace
+Allow: /user/samagri
+Allow: /user/temples
+Allow: /user/muhurta
+Allow: /user/virtual-pooja
+Allow: /roadmap
+Disallow: /admin
+Disallow: /pandit
+Sitemap: https://vite-react-g6fcjidx.vercel.app/sitemap.xml

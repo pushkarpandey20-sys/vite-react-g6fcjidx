@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../../store/AppCtx';
 import { supabase } from '../../../services/supabase';
 import { Spinner } from '../../../components/common/UIElements';
+import { SkeletonPanditGrid } from '../../../components/common/Skeleton';
 import { SEED_PANDITS } from '../../../data/seedData';
 
 const QUICK_RITUALS = [
@@ -300,7 +301,7 @@ export default function PanditMarketplacePage() {
       {/* ── Grid ── */}
       <div className="pm-grid-wrap">
         {loading ? (
-          <div style={{ textAlign:'center', padding:'80px 0' }}><Spinner /></div>
+          <SkeletonPanditGrid count={6} />
         ) : filtered.length === 0 ? (
           <div className="pm-empty">
             <div style={{ fontSize:52, marginBottom:16 }}>🕉️</div>

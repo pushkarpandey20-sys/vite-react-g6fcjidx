@@ -337,6 +337,16 @@ export default function UserHome() {
             <button className="btn btn-primary" style={{ width:'100%', justifyContent:'center' }}
               onClick={() => navigate('/user/donations')}>Donate Now ❤️</button>
           </div>
+
+          {/* Referral Banner */}
+          <div style={{ background:'linear-gradient(135deg,rgba(124,58,237,0.12),rgba(99,102,241,0.08))', border:'1px solid rgba(124,58,237,0.25)', borderRadius:14, padding:'16px 18px', marginTop:14, textAlign:'center' }}>
+            <div style={{ fontSize:28, marginBottom:6 }}>🎁</div>
+            <div style={{ color:'#6d28d9', fontWeight:700, fontSize:14, marginBottom:4 }}>Refer & Earn ₹50</div>
+            <div style={{ color:'#7c3aed', fontSize:12, marginBottom:12 }}>Invite friends to DevSetu. Earn ₹50 per booking!</div>
+            <button onClick={() => navigate('/user/referral')} style={{ background:'linear-gradient(135deg,#7c3aed,#6d28d9)', color:'#fff', border:'none', borderRadius:20, padding:'8px 20px', fontWeight:700, cursor:'pointer', fontSize:13 }}>
+              Share & Earn →
+            </button>
+          </div>
         </div>
       </div>
     </div>

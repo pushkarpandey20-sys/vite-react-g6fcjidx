@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../store/AppCtx';
 import { supabase } from '../../services/supabase';
 import { Spinner, StatusBadge } from '../../components/common/UIElements';
+import ReviewModal from '../../components/ReviewModal';
 
 export default function HistoryPage() {
   const { db, devoteeId, setShowLogin } = useApp();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
+  const [reviewBooking, setReviewBooking] = useState(null);
 
   useEffect(() => {
     if (!devoteeId) { setLoading(false); return; }
@@ -66,7 +68,20 @@ export default function HistoryPage() {
             <div className="td" style={{ fontSize: 12 }}>{b.location}</div>
             <div className="td" style={{ fontSize: 12 }}>{b.booking_date}</div>
             <div className="td" style={{ fontFamily: "'Cinzel',serif", fontWeight: 700 }}>₹{b.amount?.toLocaleString()}</div>
-            <div className="td"><StatusBadge status={b.status} /></div>
+            <div className="td" style={{ display:'flex', flexDirection:'column', gap:4 }}>
+              <StatusBadge status={b.status} />
+              {b.status === 'confirmed' && !b.devotee_rating && (
+                <button onClick={() => setReviewBooking(b)}
+                  style={{ background:'rgba(255,107,0,0.1)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.3)', borderRadius:20, padding:'4px 12px', fontSize:11, fontWeight:700, cursor:'pointer', whiteSpace:'nowrap' }}>
+                  ⭐ Rate
+                </button>
+              )}
+              {b.devotee_rating && (
+                <div style={{ display:'flex', gap:1 }}>
+                  {[1,2,3,4,5].map(s => <span key={s} style={{ fontSize:12, filter:s<=b.devotee_rating?'none':'grayscale(1)', opacity:s<=b.devotee_rating?1:0.3 }}>⭐</span>)}
+                </div>
+              )}
+            </div>
           </div>
           {b.prasad_required && (
             <div className="ds-prasad-row" style={{ gridColumn: '1 / -1', padding: '10px 20px', fontSize: '11px', display: 'flex', gap: '25px', alignItems: 'center', marginTop: '-1px' }}>
@@ -81,5 +96,15 @@ export default function HistoryPage() {
         </div>
       ))}
     </div>}
+    {reviewBooking && (
+      <ReviewModal
+        booking={reviewBooking}
+        onClose={() => setReviewBooking(null)}
+        onSubmit={(r) => {
+          setBookings(prev => prev.map(b => b.id === reviewBooking.id ? { ...b, devotee_rating: r } : b));
+          setReviewBooking(null);
+        }}
+      />
+    )}
   </>);
 }

@@ -10,6 +10,7 @@ import { SamagriSelector } from '../components/SamagriSelector';
 import { paymentService } from '../../../services/paymentService';
 import { notificationService } from '../../../services/notificationService';
 import { SEED_PANDITS } from '../../../data/seedData';
+import { sendBookingConfirmationWhatsApp, sendPanditNewBookingWhatsApp } from '../../../services/whatsappService';
 
 export default function BookingWizard() {
   const { devoteeId, devoteeName, userPhone, toast } = useApp();
@@ -139,6 +140,18 @@ export default function BookingWizard() {
 
       // Notify pandit
       if (draft.panditId) notificationService.notifyPanditOfNewBooking(draft.panditId, draft.ritual);
+
+      // WhatsApp notifications
+      if (userPhone) {
+        sendBookingConfirmationWhatsApp({
+          devoteeName,
+          panditName: draft.panditName,
+          ritual: draft.ritual,
+          date: draft.date,
+          amount: totalAmount,
+          phone: userPhone,
+        });
+      }
 
       toast(draft.samagriId ? "Sacred Bundle Confirmed (+10% Savings)! 🙏" : "Booking Confirmed! 🙏", "🕉️");
       navigate('/user/history');
