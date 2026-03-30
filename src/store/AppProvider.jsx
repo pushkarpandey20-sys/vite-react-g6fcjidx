@@ -24,12 +24,16 @@ export function AppProvider({ children }) {
   const [showLogin, setShowLogin] = useState(false);
   const [showAdminLogin, setShowAdminLogin] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [lastBooking, setLastBooking] = useState(null);
   const [showUserOnboarding, setShowUserOnboarding] = useState(false);
   const [showPanditOnboarding, setShowPanditOnboarding] = useState(false);
   const [bookingDraft, setBookingDraft] = useState(null);
   const [viewPandit, setViewPandit] = useState(null);
   const [toasts, setToasts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [festivals, setFestivals] = useState([]);
+  const [userReferral, setUserReferral] = useState(null);
 
   const toast = useCallback((msg, icon = "🕉️") => {
     const id = Date.now();
@@ -108,7 +112,13 @@ export function AppProvider({ children }) {
         setAuthLoading(false);
       }
     };
+    const loadFestivals = async () => {
+      const { data } = await supabase.from('festivals').select('*').gte('festival_date', new Date().toISOString().split('T')[0]);
+      setFestivals(data || []);
+    };
+
     restore();
+    loadFestivals();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN' && session?.user) await loadUserProfile(session.user);
@@ -165,23 +175,83 @@ export function AppProvider({ children }) {
     setCart(prev => prev.map(i => i.id === id ? { ...i, qty: Math.max(0, i.qty + delta) } : i).filter(i => i.qty > 0));
   };
 
-  const confirmBooking = async () => {
+  const confirmBooking = async (paymentDetails = null) => {
     if (!bookingDraft) return;
     setLoading(true);
-    const { data, error } = await db.bookings().insert({
-      devotee_id: devoteeId, devotee_name: devoteeName, devotee_emoji: "👤",
-      pandit_id: bookingDraft.panditId, pandit_name: bookingDraft.panditName,
-      ritual: bookingDraft.ritual, ritual_icon: bookingDraft.ritualIcon,
-      amount: bookingDraft.amount, booking_date: bookingDraft.date, booking_time: bookingDraft.time,
-      location: bookingDraft.location, address: bookingDraft.address, notes: bookingDraft.notes,
-      status: 'confirmed'
-    }).select().single();
-    if (!error) {
-      toast("Booking Confirmed! 🙏"); setShowConfirm(false); setBookingDraft(null); setActivePage("history");
-    } else {
+    try {
+      // 1. Create Booking Record
+      const { data: booking, error: bErr } = await db.bookings().insert({
+        devotee_id: devoteeId, 
+        devotee_name: devoteeName, 
+        devotee_emoji: "👤",
+        pandit_id: bookingDraft.panditId, 
+        pandit_name: bookingDraft.panditName,
+        ritual: bookingDraft.ritual, 
+        ritual_icon: bookingDraft.ritualIcon,
+        ritual_id: bookingDraft.ritualId,
+        amount: bookingDraft.amount, 
+        booking_date: bookingDraft.date, 
+        booking_time: bookingDraft.time,
+        location: bookingDraft.location, 
+        address: bookingDraft.address, 
+        notes: bookingDraft.notes,
+        samagri_required: bookingDraft.addSamagri || false,
+        payment_status: paymentDetails ? 'paid' : 'pending',
+        booking_status: 'booking_confirmed',
+        payment_id: paymentDetails?.razorpay_payment_id,
+        order_id: paymentDetails?.razorpay_order_id,
+        signature: paymentDetails?.razorpay_signature,
+        timeline: [{ status: 'booking_confirmed', time: new Date().toISOString(), label: 'Booking Confirmed' }]
+      }).select().single();
+
+      if (bErr) throw bErr;
+
+      // 2. Store Sankalp if exists
+      if (bookingDraft.sankalp) {
+        await supabase.from('sankalp').insert({
+          booking_id: booking.id,
+          ...bookingDraft.sankalp
+        });
+      }
+
+      // 3. Create Notification
+      await supabase.from('notifications').insert({
+        user_id: devoteeId,
+        type: 'booking_confirmed',
+        message: `Your booking for ${booking.ritual} is confirmed for ${booking.booking_date} at ${booking.booking_time}.`
+      });
+
+      // 4. Send Email/WhatsApp (Placeholders)
+      console.log(`Sending Email to user for booking ${booking.id}`);
+      console.log(`Sending WhatsApp to user for booking ${booking.id}`);
+
+      toast("Booking Confirmed! 🙏"); 
+      setLastBooking(booking);
+      setShowConfirm(false); 
+      setShowSuccess(true);
+      setBookingDraft(null); 
+    } catch (err) {
+      console.error(err);
       toast("Error recording booking", "❌");
     }
     setLoading(false);
+  };
+
+  const submitReview = async (bookingId, panditId, rating, reviewText) => {
+    try {
+      const { error } = await supabase.from('reviews').insert({
+        booking_id: bookingId,
+        user_id: devoteeId,
+        pandit_id: panditId,
+        rating,
+        review_text: reviewText
+      });
+      if (error) throw error;
+      toast("Review submitted! Thank you. 🙏", "⭐");
+    } catch (err) {
+      console.error(err);
+      toast("Error submitting review", "❌");
+    }
   };
 
   const value = {
@@ -193,11 +263,18 @@ export function AppProvider({ children }) {
     showCart, setShowCart, showLogin, setShowLogin,
     showAdminLogin, setShowAdminLogin,
     showConfirm, setShowConfirm,
+    showSuccess, setShowSuccess,
+    lastBooking, setLastBooking,
     showUserOnboarding, setShowUserOnboarding,
     showPanditOnboarding, setShowPanditOnboarding,
-    bookingDraft, setBookingDraft, viewPandit, setViewPandit,
-    toasts, toast, handleLogin, logout, confirmBooking, loading,
-    MUHURTAS, SEVA_OPTIONS
+    toasts, toast, handleLogin, logout, confirmBooking, submitReview, loading,
+    festivals, userReferral, MUHURTAS, SEVA_OPTIONS,
+    verifyPayment: async (res) => {
+      // In a real app, this should be verified via a backend/Edge Function
+      // and checking the signature using crypto.
+      console.log("Verifying payment:", res);
+      return true;
+    }
   };
 
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;

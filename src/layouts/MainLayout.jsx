@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppCtx';
 import { Toast } from '../components/common/UIElements';
-import { CartModal, ConfirmModal, LoginModal, AdminLoginModal, UserOnboardingModal, PanditOnboardingModal, PanditModal } from '../components/modals/AllModals';
+import { CartModal, ConfirmModal, LoginModal, AdminLoginModal, UserOnboardingModal, PanditOnboardingModal, PanditModal, BookingSuccessModal } from '../components/modals/AllModals';
 import NotificationBell from '../components/NotificationBell';
 
 export default function MainLayout({ children, sidebar, portalLabel, portalColor }) {
@@ -10,10 +10,11 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
     devoteeId, devoteeName, logout,
     cart, updateCartQty, cartCount, showCart, setShowCart,
     showLogin, setShowLogin, showConfirm, setShowConfirm,
+    showSuccess, setShowSuccess, lastBooking,
     showAdminLogin, setShowAdminLogin,
     showUserOnboarding, setShowUserOnboarding, showPanditOnboarding, setShowPanditOnboarding,
     bookingDraft, confirmBooking, viewPandit, setViewPandit,
-    toasts, loading, loginAdmin, loginAdminDemo
+    toasts, loading, loginAdmin, loginAdminDemo, setActivePage
   } = useApp();
 
   const navigate = useNavigate();
@@ -81,6 +82,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
       {showAdminLogin && <AdminLoginModal onClose={() => setShowAdminLogin(false)} loginAdmin={loginAdmin} loginAdminDemo={loginAdminDemo} />}
       {showUserOnboarding && <UserOnboardingModal name={devoteeName} onClose={() => setShowUserOnboarding(false)} />}
       {showPanditOnboarding && <PanditOnboardingModal onClose={() => setShowPanditOnboarding(false)} />}
+      {showSuccess && <BookingSuccessModal booking={lastBooking} onClose={() => { setShowSuccess(false); setActivePage("history"); navigate("/user/history"); }} />}
       {viewPandit && <PanditModal pandit={viewPandit} onClose={() => setViewPandit(null)} />}
     </div>
   );

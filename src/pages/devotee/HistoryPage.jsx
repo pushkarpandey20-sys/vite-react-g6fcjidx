@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../store/AppCtx';
 import { supabase } from '../../services/supabase';
 import { Spinner, StatusBadge } from '../../components/common/UIElements';
+import { RatePanditModal } from '../../components/modals/AllModals';
 
 export default function HistoryPage() {
-  const { db, devoteeId, setShowLogin } = useApp();
+  const { db, devoteeId, setShowLogin, submitReview } = useApp();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("All");
+  const [ratingBooking, setRatingBooking] = useState(null);
 
   useEffect(() => {
     if (!devoteeId) { setLoading(false); return; }
@@ -41,12 +43,13 @@ export default function HistoryPage() {
   }
 
   if (loading) return <Spinner />;
-  const filtered = filter === "All" ? bookings : bookings.filter(b => b.status === filter.toLowerCase());
+  const filtered = filter === "All" ? bookings : bookings.filter(b => (b.booking_status || b.status) === filter.toLowerCase());
+  
   return (<>
     <div style={{ marginBottom: 16 }}>
       {["All", "Confirmed", "Pending", "Completed", "Cancelled"].map(f => (
         <span key={f} className={`chip ${filter === f ? "on" : ""} `} onClick={() => setFilter(f)}>
-          {f} ({f === "All" ? bookings.length : bookings.filter(b => b.status === f.toLowerCase()).length})
+          {f} ({f === "All" ? bookings.length : bookings.filter(b => (b.booking_status || b.status) === f.toLowerCase() || (f === "Confirmed" && b.booking_status === "booking_confirmed")).length})
         </span>
       ))}
     </div>
@@ -66,7 +69,12 @@ export default function HistoryPage() {
             <div className="td" style={{ fontSize: 12 }}>{b.location}</div>
             <div className="td" style={{ fontSize: 12 }}>{b.booking_date}</div>
             <div className="td" style={{ fontFamily: "'Cinzel',serif", fontWeight: 700 }}>₹{b.amount?.toLocaleString()}</div>
-            <div className="td"><StatusBadge status={b.status} /></div>
+            <div className="td" style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
+              <StatusBadge status={b.booking_status || b.status} />
+              {(b.booking_status === 'ritual_completed' || b.status === 'completed') && (
+                <button className="btn btn-ghost btn-sm" style={{ fontSize: 9, padding: "2px 8px" }} onClick={() => setRatingBooking(b)}>⭐ Rate</button>
+              )}
+            </div>
           </div>
           {b.prasad_required && (
             <div className="ds-prasad-row" style={{ gridColumn: '1 / -1', padding: '10px 20px', fontSize: '11px', display: 'flex', gap: '25px', alignItems: 'center', marginTop: '-1px' }}>
@@ -81,5 +89,13 @@ export default function HistoryPage() {
         </div>
       ))}
     </div>}
+    
+    {ratingBooking && (
+      <RatePanditModal 
+        booking={ratingBooking} 
+        onClose={() => setRatingBooking(null)} 
+        onSubmit={submitReview} 
+      />
+    )}
   </>);
 }

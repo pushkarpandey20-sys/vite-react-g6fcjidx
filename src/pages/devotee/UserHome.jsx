@@ -5,6 +5,7 @@ import SmartRecommendations from '../../components/SmartRecommendations';
 import MuhuratWidget from '../../components/MuhuratWidget';
 import notificationStore from '../../services/notificationService';
 import { supabase } from '../../services/supabase';
+import RitualTimeline from '../../components/RitualTimeline';
 
 const SERVICES = [
   { icon:'🛕', label:'Book Pandit',   path:'/user/booking',       color:'#FF6B00' },
@@ -51,9 +52,10 @@ const dkCard = { background:'rgba(26,15,7,0.7)', border:'1px solid rgba(240,192,
 
 export default function UserHome() {
   const navigate = useNavigate();
-  const { devoteeName, devoteeId } = useApp();
+  const { devoteeName, devoteeId, festivals } = useApp();
   const [pandits, setPandits] = useState(SAMPLE_PANDITS);
   const [bookings, setBookings] = useState([]);
+  const [activeBooking, setActiveBooking] = useState(null);
 
   useEffect(() => {
     supabase.from('pandits').select('id,name,city,years_of_experience,rating,specializations,min_fee')
@@ -61,8 +63,12 @@ export default function UserHome() {
       .then(({data}) => { if(data?.length) setPandits(data); });
     if(devoteeId) {
       supabase.from('bookings').select('*').eq('devotee_id',devoteeId)
-        .order('created_at',{ascending:false}).limit(3)
-        .then(({data}) => setBookings(data||[]));
+        .order('created_at',{ascending:false}).limit(5)
+        .then(({data}) => {
+          setBookings(data||[]);
+          const active = data?.find(b => b.booking_status !== 'ritual_completed' && b.booking_status !== 'prasad_dispatched');
+          setActiveBooking(active);
+        });
     }
   }, [devoteeId]);
 
@@ -165,15 +171,16 @@ export default function UserHome() {
         </div>
       </div>
 
+      {activeBooking && <RitualTimeline booking={activeBooking} />}
+
       <SmartRecommendations bookingHistory={bookings} />
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 300px', gap:20 }}>
         <div>
-
           {/* Most Booked Rituals */}
           <div style={{ ...dkCard, marginBottom:20 }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:16 }}>
-              <div style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontWeight:700, fontSize:16 }}>🕉️ Most Booked Rituals</div>
+              <div style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontWeight:700, fontSize:16 }}>🕉️ {festivals?.length ? `${festivals[0].festival_name} Rituals` : 'Most Booked Rituals'}</div>
               <button onClick={() => navigate('/user/rituals')}
                 style={{ background:'rgba(240,192,64,0.08)', color:'#F0C040', border:'1px solid rgba(240,192,64,0.2)',
                   borderRadius:16, padding:'5px 14px', fontWeight:700, cursor:'pointer', fontSize:12, fontFamily:'Nunito,sans-serif' }}>
@@ -181,17 +188,21 @@ export default function UserHome() {
               </button>
             </div>
             <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
-              {RITUALS.map(r => (
-                <div key={r.name} onClick={() => { notificationStore.recordSearch(r.name); navigate(r.path); }}
-                  style={{ background:'rgba(255,248,240,0.03)', border:'1px solid rgba(240,192,64,0.1)',
-                    borderRadius:12, padding:'14px 8px', textAlign:'center', cursor:'pointer', transition:'all 0.22s' }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor='rgba(255,107,0,0.35)'; e.currentTarget.style.background='rgba(255,107,0,0.06)'; e.currentTarget.style.transform='translateY(-2px)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(240,192,64,0.1)'; e.currentTarget.style.background='rgba(255,248,240,0.03)'; e.currentTarget.style.transform=''; }}>
-                  <div style={{ fontSize:24, marginBottom:5 }}>{r.icon}</div>
-                  <div style={{ color:'rgba(255,248,240,0.85)', fontSize:11, fontWeight:700, marginBottom:3 }}>{r.name}</div>
-                  <div style={{ color:'#FF9F40', fontSize:12, fontWeight:800, fontFamily:'Cinzel,serif' }}>from {r.price}</div>
-                </div>
-              ))}
+              {(festivals?.length ? festivals[0].recommended_rituals : RITUALS.map(r => r.name)).slice(0, 6).map(name => {
+                const r = RITUALS.find(x => x.name === name) || { name, icon: '🕉️', price: '₹1,500', path: '/user/booking' };
+                return (
+                  <div key={r.name} onClick={() => { notificationStore.recordSearch(r.name); navigate(r.path); }}
+                    style={{ background:'rgba(255,248,240,0.03)', border:'1px solid rgba(240,192,64,0.1)',
+                      borderRadius:12, padding:'14px 8px', textAlign:'center', cursor:'pointer', transition:'all 0.22s', position: 'relative' }}
+                    onMouseEnter={e => { e.currentTarget.style.borderColor='rgba(255,107,0,0.35)'; e.currentTarget.style.background='rgba(255,107,0,0.06)'; e.currentTarget.style.transform='translateY(-2px)'; }}
+                    onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(240,192,64,0.1)'; e.currentTarget.style.background='rgba(255,248,240,0.03)'; e.currentTarget.style.transform=''; }}>
+                    {festivals?.length && <div style={{ position: 'absolute', top: -5, right: -5, background: '#FF6B00', color: '#fff', fontSize: 8, padding: '2px 6px', borderRadius: 4, fontWeight: 900 }}>FESTIVAL</div>}
+                    <div style={{ fontSize:24, marginBottom:5 }}>{r.icon}</div>
+                    <div style={{ color:'rgba(255,248,240,0.85)', fontSize:11, fontWeight:700, marginBottom:3 }}>{r.name}</div>
+                    <div style={{ color:'#FF9F40', fontSize:12, fontWeight:800, fontFamily:'Cinzel,serif' }}>from {r.price}</div>
+                  </div>
+                );
+              })}
             </div>
           </div>
 
@@ -326,6 +337,17 @@ export default function UserHome() {
                   marginTop:2, fontWeight:700, textTransform:'capitalize' }}>{b.status||'pending'}</div>
               </div>
             ))}
+          </div>
+
+          {/* Referral System */}
+          <div style={{ ...dkCard, marginBottom:16, border: '1px solid rgba(255,107,0,0.3)', background: 'linear-gradient(135deg,rgba(26,15,7,0.8),rgba(61,31,0,0.4))' }}>
+            <div style={{ fontSize:24, marginBottom:8 }}>🎁</div>
+            <div style={{ color:'#FF6B00', fontFamily:'Cinzel,serif', fontWeight:800, fontSize:14, marginBottom:4 }}>Refer & Earn Grace</div>
+            <div style={{ color:'rgba(255,248,240,0.5)', fontSize:11, marginBottom:12 }}>Invite friends and both get ₹101 Puja Credit.</div>
+            <div style={{ background:'rgba(255,255,255,0.05)', padding:'8px 12px', borderRadius:8, border:'1px dashed rgba(255,107,0,0.3)', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+              <span style={{ fontFamily:'monospace', fontWeight:800, color:'#F0C040' }}>DEVSETU{devoteeId?.slice(-4).toUpperCase()}</span>
+              <button className="btn btn-ghost btn-sm" style={{ fontSize:10, padding:'2px 8px' }} onClick={() => toast("Referral code copied!", "📋")}>Copy</button>
+            </div>
           </div>
 
           {/* Seva */}
