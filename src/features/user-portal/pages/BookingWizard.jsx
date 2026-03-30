@@ -104,11 +104,12 @@ export default function BookingWizard() {
     let bookingId = null;
     try {
       // Step 1: Create booking — only safe columns confirmed in DB schema
+      const isUUID = (v) => v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
       const { data: booking, error: bookingError } = await supabase
         .from('bookings')
         .insert({
-          devotee_id:   devoteeId || null,
-          pandit_id:    draft.panditId || null,
+          devotee_id:   isUUID(devoteeId) ? devoteeId : null,
+          pandit_id:    isUUID(draft.panditId) ? draft.panditId : null,
           ritual_name:  draft.ritual || 'Custom Pooja',
           booking_date: draft.date || new Date().toISOString().split('T')[0],
           address:      draft.address || null,

@@ -1,12 +1,15 @@
 import { supabase } from '../services/supabase';
 
+const isUUID = (v) => v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+const safeUUID = (v) => isUUID(v) ? v : null;
+
 export const bookingApi = {
   createBooking: async (bookingData) => {
     const { data, error } = await supabase
       .from('bookings')
       .insert({
-        devotee_id:   bookingData.devoteeId,
-        pandit_id:    bookingData.panditId,
+        devotee_id:   safeUUID(bookingData.devoteeId),
+        pandit_id:    safeUUID(bookingData.panditId),
         ritual_name:  bookingData.ritual || bookingData.ritualName || 'Pandit Consultation',
         booking_date: bookingData.date   || bookingData.bookingDate,
         address:      bookingData.address,
