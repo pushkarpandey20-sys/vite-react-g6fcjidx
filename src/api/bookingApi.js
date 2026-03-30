@@ -1,89 +1,115 @@
-import { db } from '../services/supabase';
-import { withRetry } from '../utils/production/errorHandler';
-import { logger } from '../utils/production/logger';
-
+import { supabase } from '../services/supabase';
 
 export const bookingApi = {
   createBooking: async (bookingData) => {
-    logger.ritual(`Recording ritual registration for devotee: ${bookingData.devoteeName}`, bookingData);
-    return await withRetry(async () => {
-      const { data, error } = await db.bookings().insert({
-        devotee_id: bookingData.devoteeId,
-        devotee_name: bookingData.devoteeName,
-        devotee_emoji: bookingData.devoteeEmoji || "👤",
-        pandit_id: bookingData.panditId,
-        pandit_name: bookingData.panditName,
-        ritual_id: bookingData.ritualId,
-        ritual: bookingData.ritual || "Pandit Consultation",
-        ritual_icon: bookingData.ritualIcon || "📿",
-        samagri_id: bookingData.samagriId,
-        delivery_required: bookingData.deliveryRequired || false,
-        amount: bookingData.amount || 0,
-        booking_date: bookingData.date,
-        booking_time: bookingData.time,
-        location: bookingData.location,
-        address: bookingData.address,
-        notes: bookingData.notes,
-        language: bookingData.language,
-        duration: bookingData.duration,
-        instant_booking: bookingData.instantBooking || false,
-        payment_id: bookingData.payment_id,
-        payment_status: bookingData.payment_status || "pending",
-        status: "pending"
-      }).select().single();
-      
-      if (error) throw error;
-      return { data, error };
-    });
+    const { data, error } = await supabase
+      .from('bookings')
+      .insert({
+        devotee_id:   bookingData.devoteeId,
+        pandit_id:    bookingData.panditId,
+        ritual_name:  bookingData.ritual || bookingData.ritualName || 'Pandit Consultation',
+        booking_date: bookingData.date   || bookingData.bookingDate,
+        address:      bookingData.address,
+        total_amount: bookingData.amount || bookingData.totalAmount || 0,
+        status:       'pending',
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return { data, error };
   },
 
-  getSamagriKits: async (ritualId) => {
-    return await db.samagri().select("*").eq("is_kit", true).eq("ritual_id", ritualId);
+  confirmBooking: async (bookingId, paymentDetails) => {
+    const { data, error } = await supabase
+      .from('bookings')
+      .update({
+        status:               'confirmed',
+        razorpay_order_id:    paymentDetails?.razorpay_order_id   || null,
+        razorpay_payment_id:  paymentDetails?.razorpay_payment_id || null,
+        updated_at:           new Date().toISOString(),
+      })
+      .eq('id', bookingId)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return { data, error };
   },
 
-  getRituals: async () => {
-    return await db.rituals().select("*").eq("active", true).order("name");
+  getBookingById: async (bookingId) => {
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('id', bookingId)
+      .single();
+    if (error) throw error;
+    return data;
+  },
+
+  getDevoteeBookings: async (devoteeId) => {
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('devotee_id', devoteeId)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
+  },
+
+  getPanditBookings: async (panditId) => {
+    const { data, error } = await supabase
+      .from('bookings')
+      .select('*')
+      .eq('pandit_id', panditId)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    return data || [];
   },
 
   getAvailablePandits: async (ritual, city, date) => {
-    let query = db.pandits().select("*").eq("verified", true);
-    if (ritual) query = query.contains("tags", [ritual]);
-    if (city && city !== "All") query = query.eq("city", city);
-    const { data } = await query.order("rating", { ascending: false });
-    
-    if (date && data) {
-      return data.filter(p => !p.availability_config?.busy_dates?.includes(date));
+    let query = supabase.from('pandits').select('*').eq('status', 'verified');
+    if (city && city !== 'All') query = query.eq('city', city);
+    const { data } = await query.order('rating', { ascending: false });
+    if (!data) return [];
+    if (date) {
+      return data.filter(p => !p.availability_slots?.busy_dates?.includes(date));
     }
     return data;
   },
 
-  getNearestPandits: async (userLat, userLon, maxKm = 10) => {
-    const { data } = await db.pandits().select("*").eq("verified", true);
+  getNearestPandits: async (userLat, userLon, maxKm = 25) => {
+    const { data } = await supabase.from('pandits').select('*').eq('status', 'verified');
     if (!data) return [];
-
     const haversine = (lat1, lon1, lat2, lon2) => {
-      const R = 6371; // Earth radius in km
+      const R = 6371;
       const dLat = (lat2 - lat1) * Math.PI / 180;
       const dLon = (lon2 - lon1) * Math.PI / 180;
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-                Math.sin(dLon/2) * Math.sin(dLon/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return R * c;
+      const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+      return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
     };
-
     return data
-      .map(p => ({
-        ...p,
-        distance: haversine(userLat, userLon, p.latitude || 0, p.longitude || 0)
-      }))
+      .map(p => ({ ...p, distance: haversine(userLat, userLon, p.latitude || 0, p.longitude || 0) }))
       .filter(p => p.distance <= maxKm)
-      .sort((a, b) => a.distance - b.distance || b.rating - a.rating || b.experience_years - a.experience_years);
+      .sort((a, b) => a.distance - b.distance);
   },
 
   checkAvailability: async (panditId, date) => {
-    const { data } = await db.pandits().select("availability_config").eq("id", panditId).single();
-    if (data?.availability_config?.busy_dates?.includes(date)) return false;
-    return true;
-  }
+    const { data } = await supabase
+      .from('pandits')
+      .select('availability_slots')
+      .eq('id', panditId)
+      .single();
+    return !data?.availability_slots?.busy_dates?.includes(date);
+  },
+
+  getRituals: async () => {
+    const { data } = await supabase.from('rituals').select('*').order('name');
+    return data || [];
+  },
+
+  getSamagriKits: async (ritualName) => {
+    const { data } = await supabase.from('samagri').select('*').eq('is_kit', true);
+    return data || [];
+  },
 };
