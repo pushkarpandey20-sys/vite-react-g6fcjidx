@@ -142,32 +142,30 @@ export default function PanditOnboardingPage() {
   const prevStep   = () => setStep(s=>Math.max(s-1,1));
 
   const handleSubmit = async () => {
-    if (!files.intro_video) { toast('Please upload your 60-second intro video.','⚠️'); return; }
     setSubmitting(true);
     try {
-      const { error } = await supabase.from('pandits').insert({
-        name:form.name, phone:form.phone, city:form.city,
-        years_of_experience:parseInt(form.years_of_experience)||0,
-        languages:form.languages,
-        specialization:form.specializations[0]||'',
-        specializations:form.specializations,
-        rituals:form.specializations,
-        min_fee:parseFloat(form.min_fee)||0,
-        max_fee:parseFloat(form.max_fee)||0,
-        about:form.about,
-        aadhar_number:form.aadhar_number, pan_number:form.pan_number,
-        bank_account:form.bank_account, ifsc_code:form.ifsc_code,
-        show_whatsapp:form.show_whatsapp,
-        status:'pending_verification',
-        rating:5.0, emoji:'🕉️', verified:false,
-        has_documents:!!(files.aadhar_front&&files.pan_card),
-        has_intro_video:!!files.intro_video,
-        created_at:new Date().toISOString(),
-      });
+      // Only insert columns that exist in the pandits table
+      const payload = {
+        name:                form.name,
+        phone:               form.phone,
+        city:                form.city,
+        years_of_experience: parseInt(form.years_of_experience) || 0,
+        bio:                 form.about || null,
+        specializations:     form.specializations,
+        languages:           form.languages,
+        min_fee:             parseFloat(form.min_fee) || 0,
+        max_fee:             parseFloat(form.max_fee) || 0,
+        status:              'pending_verification',
+        created_at:          new Date().toISOString(),
+      };
+      console.log('[onboarding] inserting pandit:', payload);
+      const { data: pandit, error } = await supabase
+        .from('pandits').insert(payload).select().single();
       if (error) throw error;
       toast('Application submitted! Our team will verify you within 48 hours. 🙏','✅');
       navigate('/pandit/dashboard');
     } catch(err) {
+      console.error('[onboarding] error:', err);
       toast(err.message||'Submission failed. Please try again.','⚠️');
     } finally { setSubmitting(false); }
   };
