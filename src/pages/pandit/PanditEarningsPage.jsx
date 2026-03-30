@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useApp } from '../../store/AppCtx';
 import { supabase } from '../../services/supabase';
+import { useIsMobile } from '../../utils/responsive';
 
 const C = { bg:'#fff8f0', card:'#fff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070', green:'#16a34a', red:'#dc2626' };
 
@@ -8,6 +9,7 @@ const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov
 
 export default function PanditEarningsPage() {
   const { panditId } = useApp();
+  const mobile = useIsMobile();
   const [bookings, setBookings] = useState([]);
   const [period, setPeriod] = useState('month');
   const [loading, setLoading] = useState(true);
@@ -88,7 +90,7 @@ export default function PanditEarningsPage() {
           <h2 style={{ fontFamily:'Cinzel,serif', color:C.dark, fontSize:20, margin:0 }}>💰 Earnings Overview</h2>
           <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>DevSetu takes 18% · payouts every Monday</p>
         </div>
-        <div style={{ display:'flex', gap:6 }}>
+        <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
           {[['month','This Month'],['quarter','This Quarter'],['year','This Year'],['all','All Time']].map(([v,l]) => (
             <button key={v} onClick={() => setPeriod(v)} style={{ padding:'7px 14px', borderRadius:20, border:'none', cursor:'pointer', fontWeight:700, fontSize:12, background: period===v ? C.orange : 'rgba(255,107,0,0.1)', color: period===v ? '#fff' : C.orange }}>
               {l}
@@ -97,7 +99,7 @@ export default function PanditEarningsPage() {
         </div>
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14, marginBottom:22 }}>
+      <div style={{ display:'grid', gridTemplateColumns: mobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:14, marginBottom:22 }}>
         {[
           [`₹${net.toLocaleString()}`,     'YOUR EARNINGS (82%)',    C.green],
           [`₹${gross.toLocaleString()}`,   'GROSS BOOKING VALUE',   C.orange],
@@ -111,7 +113,7 @@ export default function PanditEarningsPage() {
         ))}
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'1.4fr 1fr', gap:18, marginBottom:18 }}>
+      <div style={{ display:'grid', gridTemplateColumns: mobile ? '1fr' : '1.4fr 1fr', gap:18, marginBottom:18 }}>
         {card(<>
           <div style={{ color:C.dark, fontWeight:700, fontSize:15, marginBottom:16 }}>📊 Monthly Earnings (Last 6 Months)</div>
           <div style={{ display:'flex', gap:8, alignItems:'flex-end', height:140 }}>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '../../utils/responsive';
 
 const C = { page:'#fff8f0', card:'#ffffff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070', green:'#16a34a', red:'#dc2626' };
 
@@ -19,6 +20,7 @@ const PENDING_PANDITS = [
 
 export default function AdminHome() {
   const navigate = useNavigate();
+  const mobile = useIsMobile();
   const [stats, setStats] = useState({ devotees:1206, pandits:10, bookings:4824, revenue:2410000, pendingPandits:3 });
   const [pendingPandits, setPendingPandits] = useState(PENDING_PANDITS);
   const [recentBookings] = useState(SAMPLE_BOOKINGS);
@@ -75,14 +77,14 @@ export default function AdminHome() {
         <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>DevSetu Platform Analytics & Operations</p>
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14, marginBottom:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns: mobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:14, marginBottom:24 }}>
         {statCard(stats.devotees.toLocaleString(), 'TOTAL DEVOTEES', C.orange, '+89 this week')}
         {statCard(stats.pandits, 'VERIFIED PANDITS', C.gold, `${stats.pendingPandits} awaiting approval`)}
         {statCard(stats.bookings.toLocaleString(), 'TOTAL BOOKINGS', '#16a34a', '+234 this month')}
         {statCard(`₹${(stats.revenue/100000).toFixed(1)}L`, 'PLATFORM GMV', '#7c3aed', '+18% vs last month')}
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
+      <div style={{ display:'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap:18 }}>
         <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px' }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
             <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:0, fontSize:15 }}>🕐 Pending Approvals</h3>
@@ -154,7 +156,7 @@ export default function AdminHome() {
       {/* ── Analytics Charts ── */}
       <div style={{ marginTop:20 }}>
         <h3 style={{ fontFamily:'Cinzel,serif', color:C.dark, fontSize:16, margin:'0 0 14px' }}>📈 Platform Analytics</h3>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
+        <div style={{ display:'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap:18 }}>
 
           {/* Booking trend */}
           <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px' }}>

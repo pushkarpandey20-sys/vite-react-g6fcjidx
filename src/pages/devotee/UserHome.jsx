@@ -5,6 +5,7 @@ import SmartRecommendations from '../../components/SmartRecommendations';
 import MuhuratWidget from '../../components/MuhuratWidget';
 import notificationStore from '../../services/notificationService';
 import { supabase } from '../../services/supabase';
+import { useIsMobile } from '../../utils/responsive';
 
 const SERVICES = [
   { icon:'🛕', label:'Book Pandit',   path:'/user/booking',       color:'#FF6B00' },
@@ -52,6 +53,7 @@ const dkCard = { background:'rgba(26,15,7,0.7)', border:'1px solid rgba(240,192,
 export default function UserHome() {
   const navigate = useNavigate();
   const { devoteeName, devoteeId } = useApp();
+  const mobile = useIsMobile();
   const [pandits, setPandits] = useState(SAMPLE_PANDITS);
   const [bookings, setBookings] = useState([]);
 
@@ -70,10 +72,10 @@ export default function UserHome() {
     <div style={{ color:'rgba(255,248,240,0.88)' }}>
 
       {/* ── Hero Welcome ── */}
-      <div style={{ position:'relative', overflow:'hidden', ...dkCard, padding:'28px 28px 22px', marginBottom:20 }}>
+      <div style={{ position:'relative', overflow:'hidden', ...dkCard, padding: mobile ? '18px 16px 16px' : '28px 28px 22px', marginBottom:20 }}>
         <div style={{ position:'absolute', top:-60, right:-40, width:280, height:280,
           background:'radial-gradient(ellipse,rgba(255,107,0,0.12) 0%,transparent 70%)', pointerEvents:'none' }} />
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:16 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:16, flexWrap: mobile ? 'wrap' : 'nowrap' }}>
           <div style={{ flex:1 }}>
             <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:'rgba(240,192,64,0.1)',
               border:'1px solid rgba(240,192,64,0.25)', color:'#F0C040', fontSize:10, fontWeight:800,
@@ -102,7 +104,7 @@ export default function UserHome() {
           </div>
           <div style={{ fontSize:52, lineHeight:1, opacity:0.6 }}>🪔</div>
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginTop:18 }}>
+        <div style={{ display:'grid', gridTemplateColumns: mobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: mobile ? 8 : 10, marginTop:18 }}>
           <StatChip icon="🙏" label="Pandits" value="120+" color="#F0C040" />
           <StatChip icon="🕉️" label="Rituals" value="80+" color="#FF9F40" />
           <StatChip icon="📍" label="Cities" value="20+" color="#4ade80" />
@@ -111,7 +113,7 @@ export default function UserHome() {
       </div>
 
       {/* ── Service Icons Grid ── */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(6,1fr)', gap:10, marginBottom:20 }}>
+      <div style={{ display:'grid', gridTemplateColumns: mobile ? 'repeat(3,1fr)' : 'repeat(6,1fr)', gap: mobile ? 8 : 10, marginBottom:20 }}>
         {SERVICES.map(({ icon, label, path, color }) => (
           <div key={label} onClick={() => navigate(path)}
             style={{ ...dkCard, padding:'16px 8px', textAlign:'center', cursor:'pointer', transition:'all 0.22s', borderRadius:14 }}
@@ -127,11 +129,12 @@ export default function UserHome() {
       <div style={{
         background: 'linear-gradient(135deg, #3d1f00, #5a2d00)',
         borderRadius: 16,
-        padding: '22px 24px',
+        padding: mobile ? '16px' : '22px 24px',
         marginBottom: 20,
         display: 'flex',
+        flexDirection: mobile ? 'column' : 'row',
         justifyContent: 'space-between',
-        alignItems: 'center',
+        alignItems: mobile ? 'stretch' : 'center',
         gap: 16,
       }}>
         <div style={{ flex: 1 }}>
@@ -167,7 +170,7 @@ export default function UserHome() {
 
       <SmartRecommendations bookingHistory={bookings} />
 
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 300px', gap:20 }}>
+      <div style={{ display:'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 300px', gap: mobile ? 16 : 20 }}>
         <div>
 
           {/* Most Booked Rituals */}
@@ -180,7 +183,7 @@ export default function UserHome() {
                 View All →
               </button>
             </div>
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+            <div style={{ display:'grid', gridTemplateColumns: mobile ? 'repeat(2,1fr)' : 'repeat(3,1fr)', gap:10 }}>
               {RITUALS.map(r => (
                 <div key={r.name} onClick={() => { notificationStore.recordSearch(r.name); navigate(r.path); }}
                   style={{ background:'rgba(255,248,240,0.03)', border:'1px solid rgba(240,192,64,0.1)',
@@ -205,7 +208,7 @@ export default function UserHome() {
                 Shop All →
               </button>
             </div>
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+            <div style={{ display:'grid', gridTemplateColumns: mobile ? 'repeat(2,1fr)' : 'repeat(3,1fr)', gap:10 }}>
               {SAMAGRI_HIGHLIGHTS.map(s => (
                 <div key={s.name} onClick={() => navigate('/user/samagri')}
                   style={{ background:'rgba(255,248,240,0.03)', border:'1px solid rgba(240,192,64,0.1)',
@@ -227,8 +230,8 @@ export default function UserHome() {
 
           {/* Virtual Pooja Banner */}
           <div style={{ background:'linear-gradient(135deg,rgba(109,40,217,0.65),rgba(75,0,130,0.75))',
-            border:'1px solid rgba(167,139,250,0.3)', borderRadius:18, padding:'22px 26px', marginBottom:20,
-            display:'flex', justifyContent:'space-between', alignItems:'center', gap:16 }}>
+            border:'1px solid rgba(167,139,250,0.3)', borderRadius:18, padding: mobile ? '16px' : '22px 26px', marginBottom:20,
+            display:'flex', flexDirection: mobile ? 'column' : 'row', justifyContent:'space-between', alignItems: mobile ? 'flex-start' : 'center', gap:16 }}>
             <div>
               <div style={{ color:'#e9d5ff', fontWeight:800, fontSize:10, letterSpacing:2, marginBottom:5 }}>✨ NEW FEATURE</div>
               <h3 style={{ color:'#fff', fontFamily:'Cinzel,serif', margin:'0 0 5px', fontSize:17 }}>📱 Virtual Pooja</h3>

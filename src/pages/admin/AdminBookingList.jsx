@@ -59,7 +59,8 @@ export default function AdminBookingList() {
         style={{ width:'100%', padding:'10px 14px', borderRadius:10, border:`1.5px solid rgba(212,160,23,0.4)`, background:'#fff', color:C.dark, fontSize:13, marginBottom:14, boxSizing:'border-box', fontFamily:'inherit', outline:'none' }} />
 
       <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, overflow:'hidden' }}>
-        <table style={{ width:'100%', borderCollapse:'collapse' }}>
+        <div style={{ overflowX:'auto', WebkitOverflowScrolling:'touch' }}>
+        <table style={{ width:'100%', borderCollapse:'collapse', minWidth:600 }}>
           <thead>
             <tr style={{ background:'rgba(212,160,23,0.08)' }}>
               {['Ritual','Devotee','Date','Amount','Status','Action'].map(h=>(
@@ -92,6 +93,7 @@ export default function AdminBookingList() {
             })}
           </tbody>
         </table>
+        </div>
         {displayed.length === 0 && <div style={{ textAlign:'center', padding:32, color:C.soft }}>No bookings found.</div>}
       </div>
     </div>
