@@ -107,28 +107,37 @@ ALTER TABLE bookings       ENABLE ROW LEVEL SECURITY;
 ALTER TABLE reviews        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analytics_events ENABLE ROW LEVEL SECURITY;
 
--- Bookings: devotees can only see/edit their own
-CREATE POLICY IF NOT EXISTS "Devotees see own bookings"
+-- Bookings policies
+DROP POLICY IF EXISTS "Devotees see own bookings"  ON bookings;
+DROP POLICY IF EXISTS "Devotees insert own bookings" ON bookings;
+DROP POLICY IF EXISTS "Pandits see their bookings"  ON bookings;
+CREATE POLICY "Devotees see own bookings"
   ON bookings FOR SELECT USING (auth.uid() = devotee_id OR devotee_id IS NULL);
-CREATE POLICY IF NOT EXISTS "Devotees insert own bookings"
+CREATE POLICY "Devotees insert own bookings"
   ON bookings FOR INSERT WITH CHECK (true);
-CREATE POLICY IF NOT EXISTS "Pandits see their bookings"
+CREATE POLICY "Pandits see their bookings"
   ON bookings FOR SELECT USING (auth.uid() = pandit_id OR pandit_id IS NULL);
 
--- Pandits: public read, admin write
-CREATE POLICY IF NOT EXISTS "Public read pandits"
+-- Pandits policies
+DROP POLICY IF EXISTS "Public read pandits"       ON pandits;
+DROP POLICY IF EXISTS "Pandits update own profile" ON pandits;
+DROP POLICY IF EXISTS "Insert pandits"             ON pandits;
+CREATE POLICY "Public read pandits"
   ON pandits FOR SELECT USING (true);
-CREATE POLICY IF NOT EXISTS "Pandits update own profile"
+CREATE POLICY "Pandits update own profile"
   ON pandits FOR UPDATE USING (true);
-CREATE POLICY IF NOT EXISTS "Insert pandits"
+CREATE POLICY "Insert pandits"
   ON pandits FOR INSERT WITH CHECK (true);
 
--- Reviews: public read
-CREATE POLICY IF NOT EXISTS "Public read reviews"
+-- Reviews policies
+DROP POLICY IF EXISTS "Public read reviews"   ON reviews;
+DROP POLICY IF EXISTS "Devotees write reviews" ON reviews;
+CREATE POLICY "Public read reviews"
   ON reviews FOR SELECT USING (true);
-CREATE POLICY IF NOT EXISTS "Devotees write reviews"
+CREATE POLICY "Devotees write reviews"
   ON reviews FOR INSERT WITH CHECK (true);
 
--- Analytics: insert only
-CREATE POLICY IF NOT EXISTS "Insert analytics"
+-- Analytics policies
+DROP POLICY IF EXISTS "Insert analytics" ON analytics_events;
+CREATE POLICY "Insert analytics"
   ON analytics_events FOR INSERT WITH CHECK (true);
