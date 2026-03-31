@@ -1,25 +1,29 @@
-import { supabase } from './supabase';
-
 export const paymentService = {
   processPayment: ({ amount, bookingId, name, contact, description }) => {
     return new Promise((resolve, reject) => {
       const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
-      if (!window.Razorpay || !razorpayKey) {
-        // Dev/demo fallback — simulate successful payment
-        console.log('[paymentService] Razorpay not configured — simulating success');
-        return resolve({ success: true, payment_id: 'dev_' + Date.now(), order_id: null, signature: null });
+
+      // Simulate payment when no Razorpay key is configured
+      if (!razorpayKey || !window.Razorpay) {
+        console.log('[paymentService] Dev mode — simulating payment success');
+        return resolve({
+          success: true,
+          payment_id: 'dev_' + Date.now(),
+          order_id: null,
+          signature: null,
+        });
       }
+
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_placeholder",
-        amount: amount * 100, // paise
-        currency: "INR",
-        name: "DevSetu",
-        description: description || "Sacred Ritual Dakshina",
-        image: "/favicon.svg",
-        // order_id intentionally omitted — only set if using Razorpay Orders API
-        prefill: { name: name || "", contact: contact || "" },
+        key: razorpayKey,
+        amount: amount * 100,
+        currency: 'INR',
+        name: 'DevSetu',
+        description: description || 'Sacred Ritual Dakshina',
+        image: '/favicon.svg',
+        prefill: { name: name || '', contact: contact || '' },
         notes: { booking_id: bookingId },
-        theme: { color: "#FF6B00" },
+        theme: { color: '#FF6B00' },
         handler: (response) => resolve({
           success: true,
           payment_id: response.razorpay_payment_id,
@@ -27,14 +31,15 @@ export const paymentService = {
           signature: response.razorpay_signature,
         }),
         modal: {
-          ondismiss: () => reject({ success: false, message: "Payment cancelled." })
-        }
+          ondismiss: () => reject({ success: false, message: 'Payment cancelled.' }),
+        },
       };
+
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', (response) => {
-        reject({ success: false, message: response.error?.description || "Payment failed." });
+        reject({ success: false, message: response.error?.description || 'Payment failed.' });
       });
       rzp.open();
     });
-  }
+  },
 };
