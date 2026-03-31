@@ -93,12 +93,16 @@ export function AppProvider({ children }) {
           const saved = localStorage.getItem("devsetu_user");
           if (saved) {
             const u = JSON.parse(saved);
-            setDevoteeId(u.id); setDevoteeName(u.name); setDevoteeCity(u.city || "Delhi");
+            // Only restore if it's a real UUID — discard legacy genId("DEV") strings
+            const validId = u.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(u.id) ? u.id : null;
+            if (!validId) localStorage.removeItem("devsetu_user"); // clear stale entry
+            setDevoteeId(validId); setDevoteeName(u.name); setDevoteeCity(u.city || "Delhi");
           }
           const ps = localStorage.getItem("devsetu_pandit");
           if (ps) {
             const p = JSON.parse(ps);
-            setPanditId(p.id); setPanditName(p.name);
+            const validPanditId = p.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(p.id) ? p.id : null;
+            setPanditId(validPanditId); setPanditName(p.name);
           }
         }
         // Restore admin session
