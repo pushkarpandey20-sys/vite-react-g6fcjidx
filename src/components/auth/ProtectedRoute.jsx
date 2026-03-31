@@ -1,46 +1,18 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useApp } from '../../store/AppCtx';
 
 /**
- * ProtectedRoute component to guard routes that require authentication.
- * @param {Object} props - Component props
- * @param {React.ReactNode} props.children - Component to render if authenticated
- * @param {string} props.role - Required role ('user', 'pandit', 'admin')
+ * ProtectedRoute — DevSetu
+ *
+ * POLICY:
+ * - /user/*   routes: ALWAYS public. Pages handle auth state themselves.
+ * - /pandit/* routes: ALWAYS public. Dashboard shows login UI when not authed.
+ * - /admin/*  routes: Protected by AdminLayout's own login screen (not here).
+ *
+ * This component is a pass-through for all routes.
+ * Individual pages show login modals when payment/protected actions need auth.
  */
-export const ProtectedRoute = ({ children, role }) => {
-  const { devoteeId, panditId, adminRole, authLoading } = useApp();
-  const location = useLocation();
-
-  if (authLoading) {
-    return (
-      <div style={{ 
-        height: '100vh', 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center',
-        background: '#1a0f07',
-        color: '#F0C040',
-        flexDirection: 'column'
-      }}>
-        <div style={{ fontSize: '40px', marginBottom: '15px' }}>🕉️</div>
-        <p style={{ fontFamily: 'Cinzel', letterSpacing: '2px' }}>Loading Sacred Space...</p>
-      </div>
-    );
-  }
-
-  // Check based on role
-  let isAuthorized = false;
-  if (role === 'admin') isAuthorized = !!adminRole;
-  else if (role === 'pandit') isAuthorized = !!panditId;
-  else if (role === 'user') isAuthorized = !!devoteeId;
-
-  if (!isAuthorized) {
-    // Admin → dedicated login page; others → landing
-    if (role === 'admin') return <Navigate to="/admin-login" state={{ from: location }} replace />;
-    return <Navigate to="/" state={{ from: location }} replace />;
-  }
-
+export function ProtectedRoute({ children }) {
   return children;
-};
+}
 
+export default ProtectedRoute;

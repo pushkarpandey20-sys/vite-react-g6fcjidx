@@ -10,6 +10,7 @@ import { SamagriSelector } from '../components/SamagriSelector';
 import { paymentService } from '../../../services/paymentService';
 import { notificationService } from '../../../services/notificationService';
 import { SEED_PANDITS } from '../../../data/seedData';
+import { sendBookingConfirmationWhatsApp, sendPanditNewBookingWhatsApp } from '../../../services/whatsappService';
 
 export default function BookingWizard() {
   const { devoteeId, devoteeName, userPhone, toast } = useApp();
@@ -103,11 +104,12 @@ export default function BookingWizard() {
     let bookingId = null;
     try {
       // Step 1: Create booking — only safe columns confirmed in DB schema
+      const isUUID = (v) => v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
       const { data: booking, error: bookingError } = await supabase
         .from('bookings')
         .insert({
-          devotee_id:   devoteeId || null,
-          pandit_id:    draft.panditId || null,
+          devotee_id:   isUUID(devoteeId) ? devoteeId : null,
+          pandit_id:    isUUID(draft.panditId) ? draft.panditId : null,
           ritual_name:  draft.ritual || 'Custom Pooja',
           booking_date: draft.date || new Date().toISOString().split('T')[0],
           address:      draft.address || null,
@@ -139,6 +141,18 @@ export default function BookingWizard() {
 
       // Notify pandit
       if (draft.panditId) notificationService.notifyPanditOfNewBooking(draft.panditId, draft.ritual);
+
+      // WhatsApp notifications
+      if (userPhone) {
+        sendBookingConfirmationWhatsApp({
+          devoteeName,
+          panditName: draft.panditName,
+          ritual: draft.ritual,
+          date: draft.date,
+          amount: totalAmount,
+          phone: userPhone,
+        });
+      }
 
       toast(draft.samagriId ? "Sacred Bundle Confirmed (+10% Savings)! 🙏" : "Booking Confirmed! 🙏", "🕉️");
       navigate('/user/history');

@@ -4082,3 +4082,66 @@ body {
   z-index: 9999;
   backdrop-filter: blur(6px);
 }
+
+/* =============================================
+   IOS ZOOM FIX — font-size:16px on all inputs
+   prevents Safari from zooming on focus
+   ============================================= */
+@media (max-width: 768px) {
+  input, select, textarea,
+  input[type="text"], input[type="email"],
+  input[type="number"], input[type="tel"],
+  input[type="date"], input[type="password"],
+  input[type="search"] {
+    font-size: 16px !important;
+  }
+}
+
+/* =============================================
+   USERPORTAL INLINE-GRID MOBILE OVERRIDES
+   Targets inline styles via attribute selectors
+   ============================================= */
+@media (max-width: 768px) {
+  /* Two-column dashboard layout → stack */
+  .ds-user-content [style*="1fr 300px"],
+  .ds-user-content [style*="1fr 280px"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* 4-col stat grids → 2×2 */
+  .ds-user-content [style*="repeat(4,1fr)"],
+  .ds-user-content [style*="repeat(4, 1fr)"] {
+    grid-template-columns: repeat(2,1fr) !important;
+  }
+  /* 6-col service icons → 3×2 */
+  .ds-user-content [style*="repeat(6,1fr)"],
+  .ds-user-content [style*="repeat(6, 1fr)"] {
+    grid-template-columns: repeat(3,1fr) !important;
+  }
+  /* 3-col ritual/samagri grids → 1 col */
+  .ds-user-content [style*="repeat(3,1fr)"],
+  .ds-user-content [style*="repeat(3, 1fr)"] {
+    grid-template-columns: repeat(2,1fr) !important;
+  }
+  /* Pandit network banner → stack */
+  .ds-user-content [style*="justifyContent:'space-between'"] {
+    flex-wrap: wrap;
+  }
+  /* Admin KPI rows */
+  .ds-admin-content [style*="repeat(4,1fr)"],
+  .ds-admin-content [style*="repeat(4, 1fr)"] {
+    grid-template-columns: repeat(2,1fr) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .ds-user-content [style*="repeat(3,1fr)"],
+  .ds-user-content [style*="repeat(3, 1fr)"],
+  .ds-user-content [style*="repeat(2,1fr)"],
+  .ds-user-content [style*="repeat(2, 1fr)"] {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  .ds-user-content [style*="repeat(6,1fr)"],
+  .ds-user-content [style*="repeat(6, 1fr)"] {
+    grid-template-columns: repeat(3,1fr) !important;
+  }
+}

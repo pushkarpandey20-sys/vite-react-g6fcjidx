@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useIsMobile } from '../../utils/responsive';
 
 const C = { page:'#fff8f0', card:'#ffffff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070', green:'#16a34a', red:'#dc2626' };
 
@@ -19,6 +20,7 @@ const PENDING_PANDITS = [
 
 export default function AdminHome() {
   const navigate = useNavigate();
+  const mobile = useIsMobile();
   const [stats, setStats] = useState({ devotees:1206, pandits:10, bookings:4824, revenue:2410000, pendingPandits:3 });
   const [pendingPandits, setPendingPandits] = useState(PENDING_PANDITS);
   const [recentBookings] = useState(SAMPLE_BOOKINGS);
@@ -75,14 +77,14 @@ export default function AdminHome() {
         <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>DevSetu Platform Analytics & Operations</p>
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:14, marginBottom:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns: mobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap:14, marginBottom:24 }}>
         {statCard(stats.devotees.toLocaleString(), 'TOTAL DEVOTEES', C.orange, '+89 this week')}
         {statCard(stats.pandits, 'VERIFIED PANDITS', C.gold, `${stats.pendingPandits} awaiting approval`)}
         {statCard(stats.bookings.toLocaleString(), 'TOTAL BOOKINGS', '#16a34a', '+234 this month')}
         {statCard(`₹${(stats.revenue/100000).toFixed(1)}L`, 'PLATFORM GMV', '#7c3aed', '+18% vs last month')}
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
+      <div style={{ display:'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap:18 }}>
         <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px' }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
             <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:0, fontSize:15 }}>🕐 Pending Approvals</h3>
@@ -148,6 +150,99 @@ export default function AdminHome() {
               <div style={{ color:C.soft, fontSize:11, marginTop:4 }}>{l}</div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* ── Analytics Charts ── */}
+      <div style={{ marginTop:20 }}>
+        <h3 style={{ fontFamily:'Cinzel,serif', color:C.dark, fontSize:16, margin:'0 0 14px' }}>📈 Platform Analytics</h3>
+        <div style={{ display:'grid', gridTemplateColumns: mobile ? '1fr' : '1fr 1fr', gap:18 }}>
+
+          {/* Booking trend */}
+          <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px' }}>
+            <div style={{ color:C.dark, fontWeight:700, fontSize:14, marginBottom:14 }}>📅 Bookings This Month</div>
+            {(() => {
+              const days = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+              const data = [12, 8, 15, 22, 18, 35, 28];
+              const max = Math.max(...data);
+              return (
+                <div style={{ display:'flex', gap:8, alignItems:'flex-end', height:100 }}>
+                  {days.map((d,i) => (
+                    <div key={d} style={{ flex:1, display:'flex', flexDirection:'column', alignItems:'center', gap:4 }}>
+                      <div style={{ fontSize:10, color:C.soft }}>{data[i]}</div>
+                      <div style={{ width:'100%', height: Math.max(4,(data[i]/max)*80), background:'linear-gradient(180deg,#FF6B00,#e55a00)', borderRadius:'4px 4px 0 0' }}/>
+                      <div style={{ fontSize:10, color:C.soft }}>{d}</div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })()}
+          </div>
+
+          {/* Revenue by ritual */}
+          <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px' }}>
+            <div style={{ color:C.dark, fontWeight:700, fontSize:14, marginBottom:14 }}>🕉️ Top Rituals by Revenue</div>
+            {[
+              { name:'Vivah Ceremony',    pct:35, rev:'₹84,000', color:'#FF6B00' },
+              { name:'Griha Pravesh',     pct:25, rev:'₹52,500', color:'#D4A017' },
+              { name:'Satyanarayan Katha',pct:20, rev:'₹30,000', color:'#22c55e' },
+              { name:'Rudrabhishek',      pct:12, rev:'₹25,200', color:'#7c3aed' },
+              { name:'Others',            pct:8,  rev:'₹16,800', color:'#9a8070' },
+            ].map(r => (
+              <div key={r.name} style={{ marginBottom:10 }}>
+                <div style={{ display:'flex', justifyContent:'space-between', marginBottom:4 }}>
+                  <span style={{ color:C.dark, fontSize:13, fontWeight:600 }}>{r.name}</span>
+                  <span style={{ color:C.orange, fontSize:13, fontWeight:700 }}>{r.rev}</span>
+                </div>
+                <div style={{ height:8, background:'rgba(0,0,0,0.06)', borderRadius:4, overflow:'hidden' }}>
+                  <div style={{ height:'100%', width:`${r.pct}%`, background:r.color, borderRadius:4, transition:'width 0.5s' }}/>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* City demand */}
+          <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px' }}>
+            <div style={{ color:C.dark, fontWeight:700, fontSize:14, marginBottom:14 }}>📍 Demand by City</div>
+            {[
+              { city:'Delhi',     bookings:1842, pct:38 },
+              { city:'Gurgaon',   bookings:967,  pct:20 },
+              { city:'Noida',     bookings:724,  pct:15 },
+              { city:'Mumbai',    bookings:580,  pct:12 },
+              { city:'Bengaluru', bookings:435,  pct:9  },
+              { city:'Others',    bookings:276,  pct:6  },
+            ].map(c => (
+              <div key={c.city} style={{ display:'flex', alignItems:'center', gap:10, marginBottom:8 }}>
+                <span style={{ color:C.mid, fontSize:13, width:80, flexShrink:0 }}>📍 {c.city}</span>
+                <div style={{ flex:1, height:10, background:'rgba(0,0,0,0.06)', borderRadius:5, overflow:'hidden' }}>
+                  <div style={{ height:'100%', width:`${c.pct}%`, background:`linear-gradient(90deg,#FF6B00,#D4A017)`, borderRadius:5 }}/>
+                </div>
+                <span style={{ color:C.soft, fontSize:12, width:40, textAlign:'right' }}>{c.pct}%</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Growth metrics */}
+          <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'18px 20px' }}>
+            <div style={{ color:C.dark, fontWeight:700, fontSize:14, marginBottom:14 }}>🚀 Growth Metrics</div>
+            {[
+              ['New Devotees (MTD)',    '+89',    '+23%',  C.green],
+              ['New Pandits (MTD)',     '+3',     '+15%',  C.gold],
+              ['Avg Booking Value',    '₹2,340', '+8%',   C.orange],
+              ['Platform Revenue',     '₹2.4L',  '+18%',  '#7c3aed'],
+              ['Repeat Bookings',      '34%',    '+5pts', C.green],
+              ['Avg Pandit Rating',    '4.8 ★',  '+0.2',  C.gold],
+            ].map(([l,v,chg,c]) => (
+              <div key={l} style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'7px 0', borderBottom:`1px solid ${C.border}` }}>
+                <span style={{ color:C.mid, fontSize:13 }}>{l}</span>
+                <div style={{ display:'flex', gap:10, alignItems:'center' }}>
+                  <span style={{ color:C.dark, fontWeight:700, fontSize:14 }}>{v}</span>
+                  <span style={{ background:`${c}15`, color:c, fontSize:11, padding:'2px 8px', borderRadius:20, fontWeight:700 }}>{chg}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
       </div>
     </div>
