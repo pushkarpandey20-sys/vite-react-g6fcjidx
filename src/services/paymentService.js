@@ -3,18 +3,20 @@ import { supabase } from './supabase';
 export const paymentService = {
   processPayment: ({ amount, bookingId, name, contact, description }) => {
     return new Promise((resolve, reject) => {
-      if (!window.Razorpay) {
+      const razorpayKey = import.meta.env.VITE_RAZORPAY_KEY_ID;
+      if (!window.Razorpay || !razorpayKey) {
         // Dev/demo fallback — simulate successful payment
+        console.log('[paymentService] Razorpay not configured — simulating success');
         return resolve({ success: true, payment_id: 'dev_' + Date.now(), order_id: null, signature: null });
       }
       const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_YOUR_KEY",
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_placeholder",
         amount: amount * 100, // paise
         currency: "INR",
         name: "DevSetu",
         description: description || "Sacred Ritual Dakshina",
         image: "/favicon.svg",
-        order_id: bookingId, // Supabase booking ID as reference
+        // order_id intentionally omitted — only set if using Razorpay Orders API
         prefill: { name: name || "", contact: contact || "" },
         notes: { booking_id: bookingId },
         theme: { color: "#FF6B00" },
