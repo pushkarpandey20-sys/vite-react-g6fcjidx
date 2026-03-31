@@ -44,13 +44,19 @@ export function AppProvider({ children }) {
     setUserPhone(phone);
     localStorage.setItem('ds_session', JSON.stringify({ phone, userId: user.id }));
 
+    const isValidUUID = (v) => v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+
     // Check pandits first
     const { data: pandit } = await db.pandits().select('*').eq('phone', phone).maybeSingle();
     if (pandit) {
-      setPanditId(pandit.id);
+      // Only use pandit.id if it's a real UUID — skip seed/legacy rows
+      const safePanditId = isValidUUID(pandit.id) ? pandit.id : null;
+      setPanditId(safePanditId);
       setPanditName(pandit.name);
       setPanditOnline(pandit.is_online || false);
-      localStorage.setItem("devsetu_pandit", JSON.stringify({ id: pandit.id, name: pandit.name }));
+      if (safePanditId) {
+        localStorage.setItem("devsetu_pandit", JSON.stringify({ id: safePanditId, name: pandit.name }));
+      }
       return;
     }
 

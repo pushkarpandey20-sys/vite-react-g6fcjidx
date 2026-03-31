@@ -14,8 +14,10 @@ export default function PanditEarningsPage() {
   const [period, setPeriod] = useState('month');
   const [loading, setLoading] = useState(true);
 
+  const isValidUUID = (v) => v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+
   useEffect(() => {
-    if (!panditId) { setLoading(false); return; }
+    if (!isValidUUID(panditId)) { setLoading(false); return; }
     (async () => {
       try {
         const { data } = await supabase
