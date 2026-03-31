@@ -89,6 +89,23 @@ export function AppProvider({ children }) {
 
   // Session restore on mount
   useEffect(() => {
+    // One-time cleanup of bad non-UUID IDs from localStorage
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    try {
+      const stored = localStorage.getItem('devsetu_user');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.id && !uuidRegex.test(parsed.id)) localStorage.removeItem('devsetu_user');
+      }
+    } catch(e) { localStorage.removeItem('devsetu_user'); }
+    try {
+      const stored = localStorage.getItem('devsetu_pandit');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.id && !uuidRegex.test(parsed.id)) localStorage.removeItem('devsetu_pandit');
+      }
+    } catch(e) { localStorage.removeItem('devsetu_pandit'); }
+
     const restore = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
