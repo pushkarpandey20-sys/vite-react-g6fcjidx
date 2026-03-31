@@ -117,11 +117,10 @@ export function AppProvider({ children }) {
     return () => subscription.unsubscribe();
   }, [loadUserProfile, clearUserState]);
 
-  // Kept for guest/demo flow
+  // Kept for guest/demo flow — devoteeId stays null until Supabase auth creates a real UUID row
   const handleLogin = (phone, name, city) => {
-    const id = genId("DEV");
-    setDevoteeId(id); setDevoteeName(name || "New User"); setDevoteeCity(city || "Delhi");
-    localStorage.setItem("devsetu_user", JSON.stringify({ id, name, city }));
+    setDevoteeId(null); setDevoteeName(name || "New User"); setDevoteeCity(city || "Delhi");
+    localStorage.setItem("devsetu_user", JSON.stringify({ id: null, name, city }));
     setShowLogin(false); setShowUserOnboarding(true);
     toast(`Welcome, ${name}! 🙏`);
   };
@@ -165,20 +164,25 @@ export function AppProvider({ children }) {
     setCart(prev => prev.map(i => i.id === id ? { ...i, qty: Math.max(0, i.qty + delta) } : i).filter(i => i.qty > 0));
   };
 
+  const isValidUUID = (v) => v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+
   const confirmBooking = async () => {
     if (!bookingDraft) return;
     setLoading(true);
-    const { data, error } = await db.bookings().insert({
-      devotee_id: devoteeId, devotee_name: devoteeName, devotee_emoji: "👤",
-      pandit_id: bookingDraft.panditId, pandit_name: bookingDraft.panditName,
-      ritual: bookingDraft.ritual, ritual_icon: bookingDraft.ritualIcon,
-      amount: bookingDraft.amount, booking_date: bookingDraft.date, booking_time: bookingDraft.time,
-      location: bookingDraft.location, address: bookingDraft.address, notes: bookingDraft.notes,
-      status: 'confirmed'
+    const { data, error } = await supabase.from('bookings').insert({
+      devotee_id:   isValidUUID(devoteeId)              ? devoteeId              : null,
+      pandit_id:    isValidUUID(bookingDraft.panditId)  ? bookingDraft.panditId  : null,
+      ritual_name:  bookingDraft.ritual  || 'Custom Pooja',
+      booking_date: bookingDraft.date    || new Date().toISOString().split('T')[0],
+      address:      bookingDraft.address || null,
+      total_amount: Number(bookingDraft.amount || 0),
+      status:       'confirmed',
+      created_at:   new Date().toISOString(),
     }).select().single();
     if (!error) {
       toast("Booking Confirmed! 🙏"); setShowConfirm(false); setBookingDraft(null); setActivePage("history");
     } else {
+      console.error('[confirmBooking] error:', error.message, error.details);
       toast("Error recording booking", "❌");
     }
     setLoading(false);

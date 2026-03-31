@@ -1,6 +1,6 @@
 export const SEED_PANDITS = [
   {
-    id: 'seed-001',
+    id: '00000000-0000-0000-0000-000000000001',
     name: 'Pt. Ramesh Sharma',
     city: 'Delhi',
     years_of_experience: 22,
@@ -16,7 +16,7 @@ export const SEED_PANDITS = [
     intro_video_url: null,
   },
   {
-    id: 'seed-002',
+    id: '00000000-0000-0000-0000-000000000002',
     name: 'Pt. Suresh Mishra',
     city: 'Varanasi',
     years_of_experience: 35,
@@ -32,7 +32,7 @@ export const SEED_PANDITS = [
     intro_video_url: null,
   },
   {
-    id: 'seed-003',
+    id: '00000000-0000-0000-0000-000000000003',
     name: 'Pt. Anil Tripathi',
     city: 'Mumbai',
     years_of_experience: 15,
@@ -48,7 +48,7 @@ export const SEED_PANDITS = [
     intro_video_url: null,
   },
   {
-    id: 'seed-004',
+    id: '00000000-0000-0000-0000-000000000004',
     name: 'Pt. Govind Joshi',
     city: 'Bengaluru',
     years_of_experience: 18,
@@ -64,7 +64,7 @@ export const SEED_PANDITS = [
     intro_video_url: null,
   },
   {
-    id: 'seed-005',
+    id: '00000000-0000-0000-0000-000000000005',
     name: 'Pt. Deepak Pandey',
     city: 'Noida',
     years_of_experience: 12,
@@ -80,7 +80,7 @@ export const SEED_PANDITS = [
     intro_video_url: null,
   },
   {
-    id: 'seed-006',
+    id: '00000000-0000-0000-0000-000000000006',
     name: 'Pt. Vijay Upadhyay',
     city: 'Delhi',
     years_of_experience: 28,
@@ -96,7 +96,7 @@ export const SEED_PANDITS = [
     intro_video_url: null,
   },
   {
-    id: 'seed-007',
+    id: '00000000-0000-0000-0000-000000000007',
     name: 'Pt. Mukesh Tiwari',
     city: 'Ayodhya',
     years_of_experience: 40,
@@ -112,7 +112,7 @@ export const SEED_PANDITS = [
     intro_video_url: null,
   },
   {
-    id: 'seed-008',
+    id: '00000000-0000-0000-0000-000000000008',
     name: 'Pt. Harish Shukla',
     city: 'Ujjain',
     years_of_experience: 20,
@@ -128,7 +128,7 @@ export const SEED_PANDITS = [
     intro_video_url: null,
   },
   {
-    id: 'seed-009',
+    id: '00000000-0000-0000-0000-000000000009',
     name: 'Pt. Rajesh Dubey',
     city: 'Gurgaon',
     years_of_experience: 10,
@@ -144,7 +144,7 @@ export const SEED_PANDITS = [
     intro_video_url: null,
   },
   {
-    id: 'seed-010',
+    id: '00000000-0000-0000-0000-000000000010',
     name: 'Pt. Narayan Bhatt',
     city: 'Mumbai',
     years_of_experience: 25,
