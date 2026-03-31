@@ -22,6 +22,16 @@ ALTER TABLE bookings ADD COLUMN IF NOT EXISTS notes                 TEXT;
 ALTER TABLE bookings ADD COLUMN IF NOT EXISTS samagri_items         JSONB;
 ALTER TABLE bookings ADD COLUMN IF NOT EXISTS updated_at            TIMESTAMPTZ;
 
+-- ── PANDITS: core columns (missing from initial schema) ──
+ALTER TABLE pandits ADD COLUMN IF NOT EXISTS years_of_experience   INTEGER DEFAULT 0;
+ALTER TABLE pandits ADD COLUMN IF NOT EXISTS rating                NUMERIC(3,1) DEFAULT 0;
+ALTER TABLE pandits ADD COLUMN IF NOT EXISTS review_count          INTEGER DEFAULT 0;
+ALTER TABLE pandits ADD COLUMN IF NOT EXISTS min_fee               NUMERIC DEFAULT 0;
+ALTER TABLE pandits ADD COLUMN IF NOT EXISTS max_fee               NUMERIC DEFAULT 0;
+ALTER TABLE pandits ADD COLUMN IF NOT EXISTS specializations       TEXT[] DEFAULT '{}';
+ALTER TABLE pandits ADD COLUMN IF NOT EXISTS languages             TEXT[] DEFAULT '{}';
+ALTER TABLE pandits ADD COLUMN IF NOT EXISTS status                TEXT DEFAULT 'pending_verification';
+
 -- ── PANDITS: extended columns ──
 ALTER TABLE pandits ADD COLUMN IF NOT EXISTS bio                   TEXT;
 ALTER TABLE pandits ADD COLUMN IF NOT EXISTS intro_video_url       TEXT;
