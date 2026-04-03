@@ -93,7 +93,7 @@ export default function BookingWizard() {
     setLoading(true);
     if (r.id === 'on-demand') {
       setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price, samagriId: null, samagriAmount: 0 }));
-      setStep(3); // Skip Samagri for on-demand
+      setStep(2); // Show samagri question even for on-demand
     } else {
       const { data } = await bookingApi.getSamagriKits(r.id);
       const kits = data || [];
@@ -286,29 +286,59 @@ export default function BookingWizard() {
             <h1 style={{ fontFamily: 'Cinzel,serif', fontSize: 32, fontWeight: 900, textAlign: 'center', color: '#F0C040', marginBottom: 10 }}>⚡ Sacred Service Selection ⚡</h1>
             <p style={{ textAlign: 'center', color: 'rgba(255,248,240,0.6)', marginBottom: 30 }}>Choose a specialized ritual or book an expert scholar directly.</p>
             
-            {/* Quick On-Demand CTA */}
-            <div style={{ 
-              background: 'linear-gradient(135deg, rgba(255,107,0,0.15), rgba(212,160,23,0.05))', 
-              border: '1px solid rgba(255,107,0,0.3)', 
-              borderRadius: '24px', 
-              padding: '24px', 
+            {/* Quick On-Demand CTA — 60-min guarantee */}
+            <div style={{
+              background: 'linear-gradient(135deg, rgba(255,107,0,0.18), rgba(212,160,23,0.06))',
+              border: '1.5px solid rgba(255,107,0,0.45)',
+              borderRadius: '24px',
+              padding: '28px 28px 24px',
               marginBottom: '40px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: '20px',
-              boxShadow: '0 15px 35px rgba(255,107,0,0.1)'
+              boxShadow: '0 15px 40px rgba(255,107,0,0.15)',
+              position: 'relative',
+              overflow: 'hidden',
             }}>
-              <div>
-                <h3 style={{ fontFamily: 'Cinzel', color: '#FF6B00', margin: 0, fontSize: '20px' }}>⚡ On-Demand Pandit Booking</h3>
-                <p style={{ margin: '5px 0 0', color: 'rgba(255,248,240,0.5)', fontSize: '13px' }}>Book for custom rituals, consultations, or urgent Vedic guidance.</p>
+              {/* Urgency ribbon */}
+              <div style={{ position: 'absolute', top: 14, right: -28, background: '#FF6B00', color: '#fff', fontSize: 10, fontWeight: 900, padding: '4px 36px', transform: 'rotate(35deg)', letterSpacing: 1 }}>
+                INSTANT
               </div>
-              <button 
-                onClick={() => selectRitual({ id: 'on-demand', name: 'On-Demand Scholar', icon: '⚡', price: 1500, description: 'Book a certified scholar for custom needs.', samagriRequired: false })}
-                style={{ background: 'linear-gradient(135deg, #FF6B00, #F0C040)', border: 'none', color: '#fff', padding: '12px 25px', borderRadius: '12px', fontWeight: 800, cursor: 'pointer', whiteSpace: 'nowrap' }}
-              >
-                Book Scholar Now →
-              </button>
+
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 20, flexWrap: 'wrap' }}>
+                <div style={{ flex: 1 }}>
+                  {/* Guarantee badge */}
+                  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,107,0,0.2)', border: '1px solid rgba(255,107,0,0.4)', borderRadius: 30, padding: '4px 12px', marginBottom: 10 }}>
+                    <span style={{ fontSize: 12 }}>⏱️</span>
+                    <span style={{ color: '#FF9F40', fontWeight: 900, fontSize: 11, letterSpacing: 0.5 }}>GUARANTEED IN 60 MINUTES</span>
+                  </div>
+
+                  <h3 style={{ fontFamily: 'Cinzel', color: '#FF6B00', margin: '0 0 6px', fontSize: '22px', fontWeight: 900 }}>
+                    ⚡ Pandit at Your Door — Now
+                  </h3>
+                  <p style={{ margin: '0 0 12px', color: 'rgba(255,248,240,0.6)', fontSize: '13px', lineHeight: 1.6 }}>
+                    Certified Vedic scholar dispatched immediately for urgent poojas, last-rites, consultations, or any custom ritual.
+                  </p>
+
+                  {/* Trust signals */}
+                  <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
+                    {['✅ Verified Pandit', '📍 Tracks to your door', '💬 No planning needed'].map(t => (
+                      <span key={t} style={{ color: 'rgba(255,248,240,0.45)', fontSize: 11, fontWeight: 700 }}>{t}</span>
+                    ))}
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, minWidth: 140 }}>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ color: 'rgba(255,248,240,0.35)', fontSize: 11, textDecoration: 'line-through' }}>₹1,500</div>
+                    <div style={{ color: '#F0C040', fontFamily: 'Cinzel', fontWeight: 900, fontSize: 26 }}>₹2,499</div>
+                    <div style={{ color: 'rgba(255,248,240,0.4)', fontSize: 10 }}>priority dispatch fee</div>
+                  </div>
+                  <button
+                    onClick={() => selectRitual({ id: 'on-demand', name: 'On-Demand Scholar', icon: '⚡', price: 2499, description: 'Certified Vedic scholar at your door in 60 minutes.', samagriRequired: false })}
+                    style={{ background: 'linear-gradient(135deg, #FF6B00, #F0C040)', border: 'none', color: '#fff', padding: '13px 22px', borderRadius: '14px', fontWeight: 900, cursor: 'pointer', fontSize: 14, whiteSpace: 'nowrap', boxShadow: '0 6px 20px rgba(255,107,0,0.4)' }}
+                  >
+                    Dispatch Now →
+                  </button>
+                </div>
+              </div>
             </div>
 
             <div style={{ position: 'relative' }}>
@@ -329,25 +359,94 @@ export default function BookingWizard() {
 
         {step === 2 && (
           <div className="fade-in">
-            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 10 }}>Sacred Samagri</h2>
-            <p style={{ textAlign: 'center', color: 'rgba(255,248,240,0.5)', marginBottom: 20 }}>Choose a curated kit for {draft.ritual} or arrange it yourself.</p>
-            <div style={{ background: 'rgba(255, 107, 0, 0.1)', border: '1px dashed rgba(255, 107, 0, 0.3)', padding: '12px 20px', borderRadius: '15px', color: '#FF6B00', fontWeight: 800, fontSize: '13px', textAlign: 'center', marginBottom: '30px', animation: 'pulse 3s infinite' }}>
-              🎁 BUNDLE OFFER: Save 10% when booking ritual with a samagri kit!
-            </div>
-            <SamagriSelector
-              kits={samagriKits}
-              selectedId={draft.samagriId}
-              onYes={() => {
-                setDraft(p => ({ ...p, samagriId: null, samagriAmount: 0, deliveryRequired: false }));
-                nextStep();
-              }}
-              onNo={() => {
-                navigate('/user/samagri', { state: { fromBooking: true, bookingDraft: draft } });
-              }}
-            />
-            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '30px' }}>
-              <button className="btn btn-outline" onClick={prevStep}>← Back</button>
-            </div>
+            {draft.ritualId === 'on-demand' ? (
+              /* ── Simplified samagri prompt for On-Demand bookings ── */
+              <>
+                <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 8 }}>🪔 Samagri Needed?</h2>
+                <p style={{ textAlign: 'center', color: 'rgba(255,248,240,0.5)', marginBottom: 36, fontSize: 15 }}>
+                  Your scholar arrives ready. Do you need ritual items delivered too?
+                </p>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20, maxWidth: 560, margin: '0 auto 36px' }}>
+                  {/* YES — needs samagri → go to marketplace */}
+                  <button
+                    onClick={() => navigate('/user/samagri', { state: { fromBooking: true, bookingDraft: draft } })}
+                    style={{
+                      background: 'linear-gradient(135deg, rgba(255,107,0,0.18), rgba(212,160,23,0.08))',
+                      border: '2px solid #FF6B00',
+                      borderRadius: 20,
+                      padding: '28px 20px',
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                      transition: 'all 0.25s',
+                    }}
+                  >
+                    <div style={{ fontSize: 40, marginBottom: 10 }}>📦</div>
+                    <div style={{ color: '#FF6B00', fontWeight: 900, fontSize: 18, fontFamily: 'Cinzel', marginBottom: 6 }}>Yes, I need it</div>
+                    <div style={{ color: 'rgba(255,248,240,0.55)', fontSize: 12, lineHeight: 1.5 }}>
+                      Browse our sacred marketplace and pick what you need. We'll deliver before your pandit arrives.
+                    </div>
+                    <div style={{ marginTop: 14, background: '#FF6B00', color: '#fff', borderRadius: 10, padding: '7px 16px', fontSize: 12, fontWeight: 800, display: 'inline-block' }}>
+                      Browse Samagri →
+                    </div>
+                  </button>
+
+                  {/* NO — already has samagri → skip */}
+                  <button
+                    onClick={() => {
+                      setDraft(p => ({ ...p, samagriId: null, samagriAmount: 0, deliveryRequired: false }));
+                      nextStep();
+                    }}
+                    style={{
+                      background: 'rgba(255,255,255,0.03)',
+                      border: '1px solid rgba(240,192,64,0.15)',
+                      borderRadius: 20,
+                      padding: '28px 20px',
+                      cursor: 'pointer',
+                      textAlign: 'center',
+                      opacity: 0.72,
+                      transition: 'all 0.25s',
+                    }}
+                  >
+                    <div style={{ fontSize: 40, marginBottom: 10 }}>🙏</div>
+                    <div style={{ color: 'rgba(255,248,240,0.8)', fontWeight: 800, fontSize: 17, fontFamily: 'Cinzel', marginBottom: 6 }}>No, I have it</div>
+                    <div style={{ color: 'rgba(255,248,240,0.4)', fontSize: 12, lineHeight: 1.5 }}>
+                      I already have the items or will arrange them myself. Continue to booking.
+                    </div>
+                    <div style={{ marginTop: 14, border: '1px solid rgba(255,248,240,0.15)', color: 'rgba(255,248,240,0.4)', borderRadius: 10, padding: '7px 16px', fontSize: 12, fontWeight: 700, display: 'inline-block' }}>
+                      Skip →
+                    </div>
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                  <button className="btn btn-outline" onClick={prevStep}>← Back</button>
+                </div>
+              </>
+            ) : (
+              /* ── Full samagri kit selector for ritual bookings ── */
+              <>
+                <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 10 }}>Sacred Samagri</h2>
+                <p style={{ textAlign: 'center', color: 'rgba(255,248,240,0.5)', marginBottom: 20 }}>Choose a curated kit for {draft.ritual} or arrange it yourself.</p>
+                <div style={{ background: 'rgba(255, 107, 0, 0.1)', border: '1px dashed rgba(255, 107, 0, 0.3)', padding: '12px 20px', borderRadius: '15px', color: '#FF6B00', fontWeight: 800, fontSize: '13px', textAlign: 'center', marginBottom: '30px', animation: 'pulse 3s infinite' }}>
+                  🎁 BUNDLE OFFER: Save 10% when booking ritual with a samagri kit!
+                </div>
+                <SamagriSelector
+                  kits={samagriKits}
+                  selectedId={draft.samagriId}
+                  onYes={() => {
+                    setDraft(p => ({ ...p, samagriId: null, samagriAmount: 0, deliveryRequired: false }));
+                    nextStep();
+                  }}
+                  onNo={() => {
+                    navigate('/user/samagri', { state: { fromBooking: true, bookingDraft: draft } });
+                  }}
+                />
+                <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '30px' }}>
+                  <button className="btn btn-outline" onClick={prevStep}>← Back</button>
+                </div>
+              </>
+            )}
           </div>
         )}
 
