@@ -1,70 +1,72 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 export function SamagriSelector({ kits, selectedId, onYes, onNo }) {
+  const [picked, setPicked] = useState('no'); // NO is default
+
+  const handleYes = () => { setPicked('yes'); onYes(); };
+  const handleNo  = () => { setPicked('no');  onNo();  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
       {/* Question */}
-      <p style={{
-        fontFamily: 'Cinzel,serif', fontSize: 17, color: '#F0C040',
-        fontWeight: 800, textAlign: 'center', margin: 0,
-      }}>
+      <p style={{ fontFamily: 'Cinzel,serif', fontSize: 16, color: '#F0C040', fontWeight: 800, textAlign: 'center', margin: 0 }}>
         Do you already have the samagri for this ritual?
       </p>
 
-      {/* YES / NO big cards */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+      {/* YES / NO toggle row */}
+      <div style={{ display: 'flex', gap: 14, justifyContent: 'center' }}>
 
         {/* YES */}
         <button
-          onClick={onYes}
+          onClick={handleYes}
           style={{
-            padding: '24px 16px',
-            borderRadius: 18,
-            border: '2px solid rgba(74,222,128,0.4)',
-            background: 'rgba(74,222,128,0.08)',
+            flex: 1, maxWidth: 200,
+            padding: '16px 12px',
+            borderRadius: 14,
+            border: picked === 'yes' ? '2px solid #4ade80' : '2px solid rgba(74,222,128,0.2)',
+            background: picked === 'yes' ? 'rgba(74,222,128,0.14)' : 'rgba(26,15,7,0.4)',
             cursor: 'pointer',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-            transition: 'all 0.22s',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            transition: 'all 0.2s',
             fontFamily: 'Nunito,sans-serif',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.border = '2px solid #4ade80'; e.currentTarget.style.background = 'rgba(74,222,128,0.14)'; }}
-          onMouseLeave={e => { e.currentTarget.style.border = '2px solid rgba(74,222,128,0.4)'; e.currentTarget.style.background = 'rgba(74,222,128,0.08)'; }}
-        >
-          <span style={{ fontSize: 38 }}>✅</span>
-          <span style={{ fontWeight: 900, fontSize: 20, color: '#4ade80', fontFamily: 'Cinzel,serif' }}>Yes</span>
-          <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.5)', textAlign: 'center', lineHeight: 1.5 }}>
-            I have all items.<br />I'll arrange it myself.
-          </span>
-          <span style={{ marginTop: 6, background: 'rgba(74,222,128,0.2)', color: '#4ade80', fontSize: 11, fontWeight: 800, padding: '4px 12px', borderRadius: 20 }}>
-            → Go to Timing
-          </span>
+          }}>
+          <div style={{
+            width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+            border: `2px solid ${picked === 'yes' ? '#4ade80' : 'rgba(74,222,128,0.3)'}`,
+            background: picked === 'yes' ? '#4ade80' : 'transparent',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            {picked === 'yes' && <span style={{ color: '#000', fontSize: 12, fontWeight: 900 }}>✓</span>}
+          </div>
+          <span style={{ fontWeight: 800, fontSize: 15, color: picked === 'yes' ? '#4ade80' : 'rgba(255,248,240,0.6)' }}>Yes</span>
+          <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.4)' }}>— I'll arrange it</span>
         </button>
 
-        {/* NO */}
+        {/* NO (default) */}
         <button
-          onClick={onNo}
+          onClick={handleNo}
           style={{
-            padding: '24px 16px',
-            borderRadius: 18,
-            border: '2px solid rgba(255,107,0,0.4)',
-            background: 'rgba(255,107,0,0.08)',
+            flex: 1, maxWidth: 200,
+            padding: '16px 12px',
+            borderRadius: 14,
+            border: picked === 'no' ? '2px solid #FF6B00' : '2px solid rgba(255,107,0,0.2)',
+            background: picked === 'no' ? 'rgba(255,107,0,0.14)' : 'rgba(26,15,7,0.4)',
             cursor: 'pointer',
-            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
-            transition: 'all 0.22s',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
+            transition: 'all 0.2s',
             fontFamily: 'Nunito,sans-serif',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.border = '2px solid #FF6B00'; e.currentTarget.style.background = 'rgba(255,107,0,0.14)'; }}
-          onMouseLeave={e => { e.currentTarget.style.border = '2px solid rgba(255,107,0,0.4)'; e.currentTarget.style.background = 'rgba(255,107,0,0.08)'; }}
-        >
-          <span style={{ fontSize: 38 }}>🛍️</span>
-          <span style={{ fontWeight: 900, fontSize: 20, color: '#FF9F40', fontFamily: 'Cinzel,serif' }}>No</span>
-          <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.5)', textAlign: 'center', lineHeight: 1.5 }}>
-            I need a kit<br />delivered to my door.
-          </span>
-          <span style={{ marginTop: 6, background: 'rgba(255,107,0,0.2)', color: '#FF9F40', fontSize: 11, fontWeight: 800, padding: '4px 12px', borderRadius: 20 }}>
-            → Samagri Store
-          </span>
+          }}>
+          <div style={{
+            width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+            border: `2px solid ${picked === 'no' ? '#FF6B00' : 'rgba(255,107,0,0.3)'}`,
+            background: picked === 'no' ? '#FF6B00' : 'transparent',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+          }}>
+            {picked === 'no' && <span style={{ color: '#fff', fontSize: 12, fontWeight: 900 }}>✓</span>}
+          </div>
+          <span style={{ fontWeight: 800, fontSize: 15, color: picked === 'no' ? '#FF9F40' : 'rgba(255,248,240,0.6)' }}>No</span>
+          <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.4)' }}>— Send me a kit</span>
         </button>
       </div>
 
