@@ -17,30 +17,31 @@ export function SamagriSelector({ kits, selectedId, onYes, onNo }) {
       {/* YES / NO toggle row */}
       <div style={{ display: 'flex', gap: 14, justifyContent: 'center' }}>
 
-        {/* YES */}
+        {/* YES — kept intentionally muted */}
         <button
           onClick={handleYes}
           style={{
             flex: 1, maxWidth: 200,
             padding: '16px 12px',
             borderRadius: 14,
-            border: picked === 'yes' ? '2px solid #4ade80' : '2px solid rgba(74,222,128,0.2)',
-            background: picked === 'yes' ? 'rgba(74,222,128,0.14)' : 'rgba(26,15,7,0.4)',
+            border: '2px solid rgba(255,248,240,0.1)',
+            background: 'rgba(26,15,7,0.3)',
             cursor: 'pointer',
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
             transition: 'all 0.2s',
             fontFamily: 'Nunito,sans-serif',
+            opacity: 0.7,
           }}>
           <div style={{
             width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
-            border: `2px solid ${picked === 'yes' ? '#4ade80' : 'rgba(74,222,128,0.3)'}`,
-            background: picked === 'yes' ? '#4ade80' : 'transparent',
+            border: '2px solid rgba(255,248,240,0.2)',
+            background: picked === 'yes' ? 'rgba(255,248,240,0.2)' : 'transparent',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            {picked === 'yes' && <span style={{ color: '#000', fontSize: 12, fontWeight: 900 }}>✓</span>}
+            {picked === 'yes' && <span style={{ color: 'rgba(255,248,240,0.7)', fontSize: 12, fontWeight: 900 }}>✓</span>}
           </div>
-          <span style={{ fontWeight: 800, fontSize: 15, color: picked === 'yes' ? '#4ade80' : 'rgba(255,248,240,0.6)' }}>Yes</span>
-          <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.4)' }}>— I'll arrange it</span>
+          <span style={{ fontWeight: 600, fontSize: 15, color: 'rgba(255,248,240,0.45)' }}>Yes</span>
+          <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.3)' }}>— I'll arrange it</span>
         </button>
 
         {/* NO (default) */}
