@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../../store/AppCtx';
 import { supabase } from '../../../services/supabase';
 
@@ -131,6 +132,7 @@ function PanditOnboardingForm({ onComplete }) {
 
 // ── Main Dashboard ─────────────────────────────────────────────
 export default function Dashboard() {
+  const navigate = useNavigate();
   const { panditId, panditName, panditOnline, setPanditOnline, toast, setShowLogin, loginPanditDemo } = useApp();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -189,51 +191,32 @@ export default function Dashboard() {
 
   // Not logged in
   if (!panditId) return (
-    <div style={{ background:'linear-gradient(135deg,#1a0f07,#3d2211)', borderRadius:16, padding:'32px 24px', minHeight:'60vh' }}>
-      {showForm ? (
-        <div>
-          <button onClick={()=>setShowForm(false)} style={{ background:'rgba(255,255,255,0.1)', color:'#fff', border:'none', borderRadius:20, padding:'8px 18px', cursor:'pointer', marginBottom:20, fontWeight:600 }}>← Back</button>
-          {formDone ? (
-            <div style={{ textAlign:'center', padding:'40px 0' }}>
-              <div style={{ fontSize:64 }}>🙏</div>
-              <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017' }}>Application Submitted!</h2>
-              <p style={{ color:'rgba(255,248,240,0.6)' }}>Our team will verify your profile within 24-48 hours.</p>
-            </div>
-          ) : (
-            <PanditOnboardingForm onComplete={()=>setFormDone(true)} />
-          )}
-        </div>
-      ) : (
-        <div style={{ display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', minHeight:'50vh', gap:20 }}>
-          <div style={{ fontSize:64 }}>🙏</div>
-          <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017' }}>Sacred Scholar Gateway</h2>
-          <p style={{ color:'rgba(255,248,240,0.5)' }}>Login as a Pandit or register to manage your bookings</p>
-          <div style={{ display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center' }}>
-            <button onClick={()=>setShowLogin && setShowLogin(true)} style={{ background:'linear-gradient(135deg,#D4A017,#F0C040)', color:'#1a0f07', border:'none', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>🪔 Login with OTP</button>
-            <button onClick={()=>setShowForm(true)} style={{ background:'rgba(255,107,0,0.2)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.4)', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>📝 Register as Pandit</button>
-          </div>
-          <div style={{ marginTop:12, textAlign:'center' }}>
-            <button onClick={()=>loginPanditDemo && loginPanditDemo()} style={{ background:'transparent', color:'rgba(240,192,64,0.4)', border:'1px solid rgba(240,192,64,0.15)', borderRadius:20, padding:'8px 20px', cursor:'pointer', fontSize:12, fontWeight:600 }}>⚡ Demo Access (Dev Mode)</button>
-          </div>
-        </div>
-      )}
+    <div style={{ background:'linear-gradient(135deg,#1a0f07,#3d2211)', borderRadius:16, padding:'32px 24px', minHeight:'60vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20 }}>
+      <div style={{ fontSize:64 }}>🙏</div>
+      <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017', textAlign:'center' }}>Sacred Scholar Gateway</h2>
+      <p style={{ color:'rgba(255,248,240,0.5)', textAlign:'center' }}>Login as a Pandit or register to manage your bookings</p>
+      <div style={{ display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center' }}>
+        <button onClick={()=>setShowLogin && setShowLogin(true)} style={{ background:'linear-gradient(135deg,#D4A017,#F0C040)', color:'#1a0f07', border:'none', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>🪔 Login with OTP</button>
+        <button onClick={()=>navigate('/pandit/onboard')} style={{ background:'rgba(255,107,0,0.2)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.4)', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>📝 Register as Pandit</button>
+      </div>
+      <div style={{ marginTop:12, textAlign:'center' }}>
+        <button onClick={()=>loginPanditDemo && loginPanditDemo()} style={{ background:'transparent', color:'rgba(240,192,64,0.4)', border:'1px solid rgba(240,192,64,0.15)', borderRadius:20, padding:'8px 20px', cursor:'pointer', fontSize:12, fontWeight:600 }}>⚡ Demo Access (Dev Mode)</button>
+      </div>
     </div>
   );
 
-  // Incomplete profile → show form
+  // Incomplete profile → redirect to full onboarding
   const profileComplete = profile && profile.name && profile.specializations?.length > 0;
   if (!profileComplete) return (
-    <div style={{ background:'linear-gradient(135deg,#1a0f07,#3d2211)', borderRadius:16, padding:'32px 24px' }}>
-      <div style={{ background:'rgba(255,107,0,0.1)', border:'1px solid rgba(255,107,0,0.3)', borderRadius:12, padding:'16px 20px', marginBottom:24, color:'#FF6B00', fontSize:14 }}>
-        Complete your profile to start receiving booking requests from devotees.
-      </div>
-      {formDone ? (
-        <div style={{ textAlign:'center', padding:'40px 0' }}>
-          <div style={{ fontSize:64 }}>🙏</div>
-          <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017' }}>Profile Submitted!</h2>
-          <p style={{ color:'rgba(255,248,240,0.6)' }}>Our team will verify your profile within 24-48 hours.</p>
-        </div>
-      ) : <PanditOnboardingForm onComplete={()=>setFormDone(true)} />}
+    <div style={{ background:'linear-gradient(135deg,#1a0f07,#3d2211)', borderRadius:16, padding:'32px 24px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20, minHeight:'60vh' }}>
+      <div style={{ fontSize:64 }}>📋</div>
+      <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017', textAlign:'center' }}>Complete Your Profile</h2>
+      <p style={{ color:'rgba(255,248,240,0.5)', textAlign:'center', maxWidth:400 }}>
+        Finish your pandit registration to start receiving booking requests from devotees — including uploading your intro video.
+      </p>
+      <button onClick={()=>navigate('/pandit/onboard')} style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:28, padding:'14px 40px', fontWeight:900, cursor:'pointer', fontSize:16 }}>
+        Complete Registration →
+      </button>
     </div>
   );
 

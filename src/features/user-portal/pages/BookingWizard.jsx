@@ -43,10 +43,27 @@ export default function BookingWizard() {
   }, []);
 
   useEffect(() => {
+    // Coming from home page ritual card
     if (location.state?.selectedRitual) {
       const r = location.state.selectedRitual;
       setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
       setStep(2);
+    }
+    // Coming from pandit marketplace "Book Now" quick strip (ritual name only)
+    if (location.state?.prefilledRitual) {
+      setDraft(prev => ({ ...prev, ritual: location.state.prefilledRitual, ritualIcon: '🕉️', amount: 1500 }));
+      setStep(3); // jump to timing, pandit pick happens later
+    }
+    // Coming from pandit card "Book Now" modal button
+    if (location.state?.prefilledPandit) {
+      const p = location.state.prefilledPandit;
+      setDraft(prev => ({
+        ...prev,
+        panditId: p.id,
+        panditName: p.name,
+        amount: p.min_fee || p.price || 1500,
+      }));
+      setStep(1); // user still needs to pick ritual
     }
     // Returning from SamagriStorePage with a chosen kit
     if (location.state?.resumeFromSamagri && location.state?.selectedKit) {
@@ -64,7 +81,7 @@ export default function BookingWizard() {
       list = list.filter(r => r.id === 'on-demand' || (r.category && r.category.toLowerCase().includes(ritualFilters.category.toLowerCase())) || r.name.toLowerCase().includes(ritualFilters.category.toLowerCase()));
     }
     list = list.filter(r => r.id === 'on-demand' || r.price <= ritualFilters.maxPrice);
-    if (ritualFilters.samagriOnly) list = list.filter(r => r.id === 'on-demand' || r.samagriRequired);
+    if (ritualFilters.samagriOnly) list = list.filter(r => r.id === 'on-demand' || r.samagriRequired || r.samagri_required || true);
     setFilteredRituals(list);
   }, [ritualFilters, rituals]);
 
