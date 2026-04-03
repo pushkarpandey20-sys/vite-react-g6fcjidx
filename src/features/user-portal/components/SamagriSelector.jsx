@@ -1,134 +1,132 @@
-import React, { useState } from 'react';
+import React from 'react';
 
+export function SamagriSelector({ kits, selectedId, onYes, onNo }) {
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+
+      {/* Question */}
+      <p style={{
+        fontFamily: 'Cinzel,serif', fontSize: 17, color: '#F0C040',
+        fontWeight: 800, textAlign: 'center', margin: 0,
+      }}>
+        Do you already have the samagri for this ritual?
+      </p>
+
+      {/* YES / NO big cards */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+
+        {/* YES */}
+        <button
+          onClick={onYes}
+          style={{
+            padding: '24px 16px',
+            borderRadius: 18,
+            border: '2px solid rgba(74,222,128,0.4)',
+            background: 'rgba(74,222,128,0.08)',
+            cursor: 'pointer',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+            transition: 'all 0.22s',
+            fontFamily: 'Nunito,sans-serif',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.border = '2px solid #4ade80'; e.currentTarget.style.background = 'rgba(74,222,128,0.14)'; }}
+          onMouseLeave={e => { e.currentTarget.style.border = '2px solid rgba(74,222,128,0.4)'; e.currentTarget.style.background = 'rgba(74,222,128,0.08)'; }}
+        >
+          <span style={{ fontSize: 38 }}>✅</span>
+          <span style={{ fontWeight: 900, fontSize: 20, color: '#4ade80', fontFamily: 'Cinzel,serif' }}>Yes</span>
+          <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.5)', textAlign: 'center', lineHeight: 1.5 }}>
+            I have all items.<br />I'll arrange it myself.
+          </span>
+          <span style={{ marginTop: 6, background: 'rgba(74,222,128,0.2)', color: '#4ade80', fontSize: 11, fontWeight: 800, padding: '4px 12px', borderRadius: 20 }}>
+            → Go to Timing
+          </span>
+        </button>
+
+        {/* NO */}
+        <button
+          onClick={onNo}
+          style={{
+            padding: '24px 16px',
+            borderRadius: 18,
+            border: '2px solid rgba(255,107,0,0.4)',
+            background: 'rgba(255,107,0,0.08)',
+            cursor: 'pointer',
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+            transition: 'all 0.22s',
+            fontFamily: 'Nunito,sans-serif',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.border = '2px solid #FF6B00'; e.currentTarget.style.background = 'rgba(255,107,0,0.14)'; }}
+          onMouseLeave={e => { e.currentTarget.style.border = '2px solid rgba(255,107,0,0.4)'; e.currentTarget.style.background = 'rgba(255,107,0,0.08)'; }}
+        >
+          <span style={{ fontSize: 38 }}>🛍️</span>
+          <span style={{ fontWeight: 900, fontSize: 20, color: '#FF9F40', fontFamily: 'Cinzel,serif' }}>No</span>
+          <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.5)', textAlign: 'center', lineHeight: 1.5 }}>
+            I need a kit<br />delivered to my door.
+          </span>
+          <span style={{ marginTop: 6, background: 'rgba(255,107,0,0.2)', color: '#FF9F40', fontSize: 11, fontWeight: 800, padding: '4px 12px', borderRadius: 20 }}>
+            → Samagri Store
+          </span>
+        </button>
+      </div>
+
+      {/* If a kit was selected (returned from store) — show it locked in */}
+      {selectedId && kits.length > 0 && (
+        <div style={{
+          background: 'linear-gradient(135deg, rgba(255,107,0,0.15), rgba(212,160,23,0.08))',
+          border: '2px solid #FF6B00',
+          borderRadius: 16,
+          padding: '18px 20px',
+          display: 'flex', alignItems: 'center', gap: 16,
+        }}>
+          <span style={{ fontSize: 32, flexShrink: 0 }}>📦</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ color: '#F0C040', fontWeight: 900, fontFamily: 'Cinzel,serif', fontSize: 15, marginBottom: 4 }}>
+              Kit Selected for Delivery ✓
+            </div>
+            {kits.filter(k => k.id === selectedId).map(k => (
+              <div key={k.id}>
+                <div style={{ color: 'rgba(255,248,240,0.85)', fontWeight: 700, fontSize: 14 }}>{k.name}</div>
+                <div style={{ color: '#FF9F40', fontWeight: 900, fontSize: 16, fontFamily: 'Cinzel,serif', marginTop: 2 }}>₹{k.price} · 🚚 {k.deliveryTime || '2 Days'}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{ background: '#FF6B00', color: '#fff', borderRadius: 20, padding: '4px 14px', fontSize: 11, fontWeight: 800, flexShrink: 0 }}>
+            🔒 LOCKED
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Keep SamagriKitCard export for compatibility
 export function SamagriKitCard({ kit, selected, onSelect }) {
   return (
     <div
       onClick={() => onSelect(kit)}
       style={{
-        padding: '20px',
+        padding: '18px 20px',
         border: selected ? '2px solid #FF6B00' : '1px solid rgba(240,192,64,0.2)',
-        borderRadius: '15px',
+        borderRadius: 14,
         cursor: 'pointer',
         background: selected ? 'rgba(255,107,0,0.08)' : 'rgba(26,15,7,0.5)',
-        transition: 'all 0.3s',
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 16,
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16,
+        transition: 'all 0.22s',
       }}>
-      <div style={{ flex: 1 }}>
-        <h4 style={{ margin: 0, fontSize: '1.1rem', color: '#F0C040', fontFamily: 'Cinzel,serif' }}>{kit.name}</h4>
-        <p style={{ margin: '4px 0 0', fontSize: '13px', color: 'rgba(255,248,240,0.5)' }}>
-          🚚 Delivery: {kit.deliveryTime || '2 Days'} &nbsp;·&nbsp; {kit.itemsIncluded?.length || 0} items included
-        </p>
+      <div>
+        <div style={{ color: '#F0C040', fontWeight: 800, fontSize: 14, fontFamily: 'Cinzel,serif' }}>{kit.name}</div>
+        <div style={{ color: 'rgba(255,248,240,0.45)', fontSize: 12, marginTop: 3 }}>🚚 {kit.deliveryTime || '2 Days'}</div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
-        <span style={{ fontSize: '1.3rem', fontWeight: 900, color: '#FF9F40', fontFamily: 'Cinzel,serif' }}>₹{kit.price}</span>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span style={{ color: '#FF9F40', fontWeight: 900, fontSize: 16, fontFamily: 'Cinzel,serif' }}>₹{kit.price}</span>
         <div style={{
-          width: 24, height: 24, borderRadius: '50%',
+          width: 22, height: 22, borderRadius: '50%',
           border: `2px solid ${selected ? '#FF6B00' : 'rgba(240,192,64,0.3)'}`,
           background: selected ? '#FF6B00' : 'transparent',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0,
         }}>
-          {selected && <span style={{ color: '#fff', fontSize: 13 }}>✓</span>}
+          {selected && <span style={{ color: '#fff', fontSize: 12 }}>✓</span>}
         </div>
       </div>
-    </div>
-  );
-}
-
-
-export function SamagriSelector({ kits, selectedId, onSelect, onSkip }) {
-  // null = not decided yet, 'yes' = have it, 'no' = need to buy
-  const [answer, setAnswer] = useState(
-    selectedId ? 'no' : selectedId === null ? null : 'yes'
-  );
-
-  const handleYes = () => {
-    setAnswer('yes');
-    onSkip();
-  };
-
-  const handleNo = () => {
-    setAnswer('no');
-  };
-
-  return (
-    <div className="samagri-selector-step">
-
-      {/* YES / NO Question */}
-      <div style={{ marginBottom: 28 }}>
-        <p style={{ fontFamily: 'Cinzel,serif', fontSize: 16, color: '#F0C040', fontWeight: 700, textAlign: 'center', marginBottom: 18 }}>
-          Do you already have the samagri for this ritual?
-        </p>
-        <div style={{ display: 'flex', gap: 16, justifyContent: 'center' }}>
-          {/* YES */}
-          <button
-            onClick={handleYes}
-            style={{
-              flex: 1, maxWidth: 220,
-              padding: '18px 0',
-              borderRadius: 16,
-              border: `2px solid ${answer === 'yes' ? '#4ade80' : 'rgba(74,222,128,0.25)'}`,
-              background: answer === 'yes' ? 'rgba(74,222,128,0.12)' : 'rgba(26,15,7,0.5)',
-              cursor: 'pointer',
-              transition: 'all 0.25s',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-            }}>
-            <span style={{ fontSize: 32 }}>✅</span>
-            <span style={{ fontWeight: 900, fontSize: 18, color: answer === 'yes' ? '#4ade80' : 'rgba(255,248,240,0.7)', fontFamily: 'Cinzel,serif' }}>Yes</span>
-            <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.4)', textAlign: 'center', paddingInline: 12 }}>I have all the items. I'll arrange it myself.</span>
-          </button>
-
-          {/* NO */}
-          <button
-            onClick={handleNo}
-            style={{
-              flex: 1, maxWidth: 220,
-              padding: '18px 0',
-              borderRadius: 16,
-              border: `2px solid ${answer === 'no' ? '#FF6B00' : 'rgba(255,107,0,0.25)'}`,
-              background: answer === 'no' ? 'rgba(255,107,0,0.1)' : 'rgba(26,15,7,0.5)',
-              cursor: 'pointer',
-              transition: 'all 0.25s',
-              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-            }}>
-            <span style={{ fontSize: 32 }}>🛍️</span>
-            <span style={{ fontWeight: 900, fontSize: 18, color: answer === 'no' ? '#FF9F40' : 'rgba(255,248,240,0.7)', fontFamily: 'Cinzel,serif' }}>No</span>
-            <span style={{ fontSize: 12, color: 'rgba(255,248,240,0.4)', textAlign: 'center', paddingInline: 12 }}>I need a kit delivered to my door.</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Kit list — only shown when NO */}
-      {answer === 'no' && kits.length > 0 && (
-        <div style={{ display: 'grid', gap: 14, marginBottom: 10 }}>
-          <p style={{ color: 'rgba(255,248,240,0.5)', fontSize: 13, margin: '0 0 6px', textAlign: 'center' }}>
-            🎁 Select a curated kit — <span style={{ color: '#FF6B00', fontWeight: 800 }}>Save 10%</span> when bundled with your booking
-          </p>
-          {kits.map(kit => (
-            <SamagriKitCard
-              key={kit.id}
-              kit={kit}
-              selected={selectedId === kit.id}
-              onSelect={onSelect}
-            />
-          ))}
-        </div>
-      )}
-
-      {/* Confirmation chips */}
-      {answer === 'yes' && (
-        <div style={{ textAlign: 'center', color: '#4ade80', fontWeight: 700, fontSize: 14, padding: '10px 0' }}>
-          ✓ Great! You'll bring your own samagri. Pandit will confirm the checklist.
-        </div>
-      )}
-      {answer === 'no' && !selectedId && (
-        <div style={{ textAlign: 'center', color: 'rgba(255,248,240,0.4)', fontSize: 13, paddingTop: 8 }}>
-          Please select a kit above, or go back and choose YES to continue without ordering.
-        </div>
-      )}
     </div>
   );
 }

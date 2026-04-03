@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import notificationStore from '../../../services/notificationService';
 import { useApp } from '../../../store/AppCtx';
 
@@ -47,6 +47,9 @@ const CUSTOM_CATS = ['All', 'Basic', 'Premium', 'Flowers', 'Fruits', 'Special'];
 
 export default function SamagriStorePage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const fromBooking = location.state?.fromBooking || false;
+  const bookingDraft = location.state?.bookingDraft || null;
   const { addToCart: globalAddToCart, setShowCart, toast } = useApp();
   const [activeTab, setActiveTab] = useState('ready');
   const [category, setCategory] = useState('All');
@@ -57,6 +60,7 @@ export default function SamagriStorePage() {
   const [checkoutDone, setCheckoutDone] = useState(false);
   const [customCart, setCustomCart] = useState({});
   const [customCat, setCustomCat] = useState('All');
+  const [bookingKit, setBookingKit] = useState(null); // kit selected for booking flow
 
   const filtered = PRODUCTS
     .filter(p => category === 'All' || p.category === category)
@@ -95,8 +99,29 @@ export default function SamagriStorePage() {
   const selStyle = { padding:'10px 14px', borderRadius:10, border:'1.5px solid rgba(240,192,64,0.2)',
     background:'rgba(255,248,240,0.05)', color:'rgba(255,248,240,0.85)', fontSize:13, outline:'none', cursor:'pointer', fontFamily:'Nunito,sans-serif' };
 
+  const handleAddToBooking = (product, e) => {
+    if (e) { e.stopPropagation(); e.preventDefault(); }
+    const kit = { id: `samagri_${product.id}`, name: product.name, price: product.price, icon: product.icon, deliveryTime: '2 Days', itemsIncluded: [] };
+    setBookingKit(kit);
+    navigate('/user/booking', { state: { resumeFromSamagri: true, selectedKit: kit, bookingDraft } });
+  };
+
   return (
     <div>
+      {/* Booking-mode banner */}
+      {fromBooking && (
+        <div style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', borderRadius: 16, padding: '14px 22px', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 14 }}>
+          <span style={{ fontSize: 28 }}>📦</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ color: '#fff', fontWeight: 900, fontSize: 15 }}>Pick a Kit for Your Booking</div>
+            <div style={{ color: 'rgba(255,255,255,0.8)', fontSize: 13 }}>Tap "Add to My Booking" on any kit below — it will be delivered with your ritual.</div>
+          </div>
+          <button onClick={() => navigate('/user/booking', { state: { resumeFromSamagri: false, bookingDraft } })}
+            style={{ background: 'rgba(255,255,255,0.2)', border: '1px solid rgba(255,255,255,0.4)', color: '#fff', borderRadius: 20, padding: '8px 18px', fontWeight: 700, cursor: 'pointer', fontSize: 13, whiteSpace: 'nowrap' }}>
+            ← Back to Booking
+          </button>
+        </div>
+      )}
       {/* Hero */}
       <div style={{ position:'relative', overflow:'hidden', ...dkCard, padding:'28px 26px', marginBottom:20, borderRadius:20 }}>
         <div style={{ position:'absolute', top:-50, right:-30, width:240, height:240,
@@ -277,12 +302,21 @@ export default function SamagriStorePage() {
               <div style={{ color:'#4ade80', fontSize:11, fontWeight:600, marginBottom:12 }}>Save ₹{(p.mrp-p.price).toLocaleString()}</div>
 
               {qty===0 ? (
+                fromBooking ? (
+                  <button onClick={e=>handleAddToBooking(p,e)}
+                    style={{ width:'100%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff',
+                      border:'none', borderRadius:10, padding:'10px', fontWeight:800, cursor:'pointer', fontSize:13,
+                      boxShadow:'0 4px 12px rgba(255,107,0,0.3)' }}>
+                    ✅ Add to My Booking
+                  </button>
+                ) : (
                 <button onClick={e=>addToCart(p,e)}
                   style={{ width:'100%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff',
                     border:'none', borderRadius:10, padding:'10px', fontWeight:800, cursor:'pointer', fontSize:13,
                     boxShadow:'0 4px 12px rgba(255,107,0,0.3)' }}>
                   🧺 Add to Basket
                 </button>
+                )
               ) : (
                 <div onClick={e=>e.stopPropagation()} style={{ display:'flex', alignItems:'center', gap:8 }}>
                   <button onClick={e=>removeFromCart(p.id,e)} style={{ width:36, height:36, borderRadius:'50%',

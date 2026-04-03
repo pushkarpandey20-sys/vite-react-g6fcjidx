@@ -70,8 +70,7 @@ export default function TemplePoojaBookingPage() {
           booking_date: options.date,
           status: 'confirmed',
           address: `${temple.name}, ${temple.city}`,
-          notes: `Names: ${options.familyNames} | Streaming: ${options.liveStreaming} | Prasad: ${options.prasadDelivery} | Delivery: ${options.deliveryAddress || 'N/A'}`,
-          payment_id: payment.payment_id,
+          notes: `Names: ${options.familyNames} | Streaming: ${options.liveStreaming} | Prasad: ${options.prasadDelivery} | Delivery: ${options.deliveryAddress || 'N/A'} | Payment: ${payment.payment_id || 'demo'}`,
         };
 
         const { error } = await db.bookings().insert(payload);
@@ -88,8 +87,8 @@ export default function TemplePoojaBookingPage() {
   };
 
   return (
-    <div className="temple-pooja-booking-page" style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(330px, 1fr) 300px', gap: '25px' }}>
-      <div className="wizard-card card" style={{ padding: '30px', background: '#fff' }}>
+    <div style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(330px, 1fr) 300px', gap: '25px', alignItems: 'start' }}>
+      <div style={{ padding: '30px', background: '#fff', borderRadius: 20, boxShadow: '0 4px 24px rgba(0,0,0,0.08)', border: '1px solid #f0e0d0' }}>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '30px' }}>
           <div style={{ width: '80px', height: '80px', background: 'linear-gradient(45deg, #FFFAF5, #FFF3E6)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>{temple.icon}</div>
           <div>
@@ -165,7 +164,7 @@ export default function TemplePoojaBookingPage() {
       </div>
 
       <aside>
-        <div className="card" style={{ padding: '20px', position: 'sticky', top: '20px' }}>
+        <div style={{ padding: '20px', position: 'sticky', top: '20px', background: '#fff', borderRadius: 16, boxShadow: '0 4px 20px rgba(0,0,0,0.07)', border: '1px solid #f0e0d0' }}>
           <h4 style={{ marginBottom: '15px', color: '#FF6B00' }}>🛕 About this Shrine</h4>
           <div style={{ fontSize: '13px', color: '#8B6347', lineHeight: 1.6, marginBottom: '20px' }}>
             {temple.description || "Establish your connection with the divine energy of this historic temple through remote offerings and traditional rituals."}

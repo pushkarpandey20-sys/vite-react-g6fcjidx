@@ -48,6 +48,14 @@ export default function BookingWizard() {
       setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
       setStep(2);
     }
+    // Returning from SamagriStorePage with a chosen kit
+    if (location.state?.resumeFromSamagri && location.state?.selectedKit) {
+      const kit = location.state.selectedKit;
+      const savedDraft = location.state.bookingDraft || {};
+      setDraft(prev => ({ ...prev, ...savedDraft, samagriId: kit.id, samagriAmount: kit.price, deliveryRequired: true }));
+      setSamagriKits(prev => prev.length ? prev : [kit]);
+      setStep(3); // Jump straight to timing
+    }
   }, [location.state]);
 
   useEffect(() => {
@@ -282,20 +290,19 @@ export default function BookingWizard() {
             <div style={{ background: 'rgba(255, 107, 0, 0.1)', border: '1px dashed rgba(255, 107, 0, 0.3)', padding: '12px 20px', borderRadius: '15px', color: '#FF6B00', fontWeight: 800, fontSize: '13px', textAlign: 'center', marginBottom: '30px', animation: 'pulse 3s infinite' }}>
               🎁 BUNDLE OFFER: Save 10% when booking ritual with a samagri kit!
             </div>
-            <SamagriSelector kits={samagriKits} selectedId={draft.samagriId}
-              onSelect={(kit) => { setDraft(p => ({ ...p, samagriId: kit.id, samagriAmount: kit.price, deliveryRequired: true })); }}
-              onSkip={() => { setDraft(p => ({ ...p, samagriId: null, samagriAmount: 0, deliveryRequired: false })); }} />
-            
-            <div style={{ textAlign: 'center', margin: '20px 0' }}>
-              <button className="btn btn-ghost" style={{ fontSize: '12px', color: 'rgba(240,192,64,0.6)' }} onClick={() => toast("Item-level customization available inside the kit selector!", "📦")}>
-                ⚙️ Need more customization? Click items above to toggle
-              </button>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px' }}>
+            <SamagriSelector
+              kits={samagriKits}
+              selectedId={draft.samagriId}
+              onYes={() => {
+                setDraft(p => ({ ...p, samagriId: null, samagriAmount: 0, deliveryRequired: false }));
+                nextStep();
+              }}
+              onNo={() => {
+                navigate('/user/samagri', { state: { fromBooking: true, bookingDraft: draft } });
+              }}
+            />
+            <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '30px' }}>
               <button className="btn btn-outline" onClick={prevStep}>← Back</button>
-              <button className="btn btn-primary" onClick={nextStep} style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 30px' }}>
-                {draft.samagriId ? "Proceed with Samagri →" : "Proceed without Samagri →"}
-              </button>
             </div>
           </div>
         )}
