@@ -95,9 +95,22 @@ export default function BookingWizard() {
       setStep(3); // Skip Samagri for on-demand
     } else {
       const { data } = await bookingApi.getSamagriKits(r.id);
-      setSamagriKits(data || []);
-      setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
-      nextStep();
+      const kits = data || [];
+      setSamagriKits(kits);
+
+      // If "With Samagri" filter is on → auto-select cheapest kit and skip step 2
+      if (ritualFilters.samagriOnly && kits.length > 0) {
+        const cheapest = [...kits].sort((a, b) => a.price - b.price)[0];
+        setDraft(prev => ({
+          ...prev,
+          ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price,
+          samagriId: cheapest.id, samagriAmount: cheapest.price, deliveryRequired: true,
+        }));
+        setStep(3); // Skip step 2, jump to timing
+      } else {
+        setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
+        nextStep();
+      }
     }
     setLoading(false);
   };
@@ -294,7 +307,7 @@ export default function BookingWizard() {
               <RitualFilters onFilterChange={(k, v) => setRitualFilters(p => ({ ...p, [k]: v }))} activeFilters={ritualFilters} />
               
               <div style={{ marginTop: '20px' }}>
-                {loading ? <Spinner /> : <RitualGrid rituals={filteredRituals.filter(r => r.id !== 'on-demand')} onSelect={selectRitual} activeId={draft.ritualId} />}
+                {loading ? <Spinner /> : <RitualGrid rituals={filteredRituals.filter(r => r.id !== 'on-demand')} onSelect={selectRitual} activeId={draft.ritualId} samagriOnly={ritualFilters.samagriOnly} />}
               </div>
             </div>
           </div>

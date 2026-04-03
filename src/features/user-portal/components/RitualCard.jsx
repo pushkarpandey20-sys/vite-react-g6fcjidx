@@ -1,4 +1,4 @@
-export default function RitualCard({ r, onSelect, active = false }) {
+export default function RitualCard({ r, onSelect, active = false, samagriOnly = false }) {
   const isSpecial = r.id === 'on-demand';
   const category = r._category || r.category || '';
 
@@ -58,6 +58,20 @@ export default function RitualCard({ r, onSelect, active = false }) {
         <div className="rc2-price">
           <span className="rc2-price-label">Starting from</span>
           <span className="rc2-price-val">{priceLabel}</span>
+          {samagriOnly && !isSpecial && (
+            <span style={{
+              display: 'inline-block',
+              marginTop: 4,
+              fontSize: 10,
+              fontWeight: 800,
+              color: '#FF9F40',
+              background: 'rgba(255,107,0,0.15)',
+              border: '1px solid rgba(255,107,0,0.35)',
+              borderRadius: 6,
+              padding: '2px 7px',
+              letterSpacing: 0.4,
+            }}>📦 + Samagri Kit Included</span>
+          )}
         </div>
         <button className={`rc2-btn ${active ? 'rc2-btn--selected' : ''}`}>
           {active ? '✓ Selected' : 'Book Now →'}

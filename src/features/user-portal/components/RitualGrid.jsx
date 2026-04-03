@@ -1,7 +1,7 @@
 import React from 'react';
 import RitualCard from './RitualCard';
 
-export default function RitualGrid({ rituals, onSelect, activeId }) {
+export default function RitualGrid({ rituals, onSelect, activeId, samagriOnly = false }) {
   if (rituals.length === 0) {
     return (
       <div className="rc-empty-state">
@@ -17,7 +17,7 @@ export default function RitualGrid({ rituals, onSelect, activeId }) {
   return (
     <div className="ritual-grid">
       {rituals.map(r => (
-        <RitualCard key={r.id} r={r} onSelect={onSelect} active={activeId === r.id} />
+        <RitualCard key={r.id} r={r} onSelect={onSelect} active={activeId === r.id} samagriOnly={samagriOnly} />
       ))}
     </div>
   );
