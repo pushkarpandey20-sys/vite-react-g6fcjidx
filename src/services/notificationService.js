@@ -169,14 +169,15 @@ export function getSmartRecommendations(userSearchHistory = [], userBookingHisto
   });
 
   userBookingHistory.forEach((booking, i) => {
-    if (booking.ritual_name) {
+    const rName = booking.ritual || booking.ritual_name;
+    if (rName) {
       recommendations.push({
         id: `rebooking_${i}`,
         type: 'rebooking',
         priority: 4,
-        title: `🔄 Repeat ${booking.ritual_name}`,
-        message: `You booked ${booking.ritual_name} before. Book it again on this auspicious ${getTodaysTithi().tithiInfo?.name || 'day'}.`,
-        rituals: [booking.ritual_name],
+        title: `🔄 Repeat ${rName}`,
+        message: `You booked ${rName} before. Book it again on this auspicious ${getTodaysTithi().tithiInfo?.name || 'day'}.`,
+        rituals: [rName],
         cta: 'Book Again',
         urgency: 'low',
       });
@@ -271,6 +272,7 @@ export const notificationStore = new NotificationStore();
 // Legacy alias for backward compat with Dashboard
 export const notificationService = {
   notifyDevoteeOfAcceptance: () => {},
+  notifyPanditOfNewBooking: () => {},
   send: async () => {},
 };
 
@@ -328,16 +330,19 @@ async function runDailyNotifications(devoteeId) {
   if (devoteeId) {
     try {
       const { data: bookings } = await supabase
-        .from('bookings').select('ritual_name, booking_date')
-        .eq('devotee_id', devoteeId).eq('status', 'confirmed')
+        .from('bookings').select('ritual, ritual_name, booking_date')
+        .eq('devotee_id', devoteeId)
         .order('created_at', { ascending: false }).limit(3);
       if (bookings?.length) {
         bookings.forEach(b => {
-          notificationStore.add({
-            type: 'rebooking', icon: '🔄', title: `Book ${b.ritual_name} Again`,
-            message: `Today is auspicious for ${b.ritual_name}. Book with your preferred pandit.`,
-            rituals: [b.ritual_name], cta: 'Book Again', url: '/user/booking', urgency: 'low',
-          });
+          const rName = b.ritual || b.ritual_name;
+          if (rName) {
+            notificationStore.add({
+              type: 'rebooking', icon: '🔄', title: `Book ${rName} Again`,
+              message: `Today is auspicious for ${rName}. Book with your preferred pandit.`,
+              rituals: [rName], cta: 'Book Again', url: '/user/booking', urgency: 'low',
+            });
+          }
         });
       }
     } catch (e) { console.log('notification booking fetch error', e); }

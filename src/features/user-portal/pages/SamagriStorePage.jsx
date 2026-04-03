@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import notificationStore from '../../../services/notificationService';
+import { useApp } from '../../../store/AppCtx';
 
 const CATEGORIES = ['All', 'Festival Kits', 'Daily Worship', 'Abhishek', 'Havan', 'Incense & Diyas'];
 const CAT_ICONS = { 'All':'🕉️', 'Festival Kits':'🎊', 'Daily Worship':'🪔', 'Abhishek':'🔱', 'Havan':'🔥', 'Incense & Diyas':'✨' };
@@ -46,6 +47,7 @@ const CUSTOM_CATS = ['All', 'Basic', 'Premium', 'Flowers', 'Fruits', 'Special'];
 
 export default function SamagriStorePage() {
   const navigate = useNavigate();
+  const { addToCart: globalAddToCart, setShowCart, toast } = useApp();
   const [activeTab, setActiveTab] = useState('ready');
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
@@ -62,8 +64,10 @@ export default function SamagriStorePage() {
     .sort((a,b) => sortBy==='price_low' ? a.price-b.price : sortBy==='price_high' ? b.price-a.price : sortBy==='rating' ? b.rating-a.rating : b.reviews-a.reviews);
 
   const addToCart = (product, e) => {
-    if(e) e.stopPropagation();
+    if(e) { e.stopPropagation(); e.preventDefault(); }
     setCart(prev => ({ ...prev, [product.id]: (prev[product.id]||0)+1 }));
+    // Also add to global cart so header badge updates
+    try { globalAddToCart({ id: `samagri_${product.id}`, name: product.name, price: product.price, icon: product.icon, qty: 1 }); } catch(_) {}
     if(notificationStore) notificationStore.recordSearch(product.name);
   };
   const removeFromCart = (productId, e) => {
@@ -234,7 +238,7 @@ export default function SamagriStorePage() {
       </div>
 
       {/* Product Grid */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(260px,1fr))', gap:16 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))', gap:16 }}>
         {filtered.map(p => {
           const qty = cart[p.id]||0;
           const discount = Math.round((1-p.price/p.mrp)*100);

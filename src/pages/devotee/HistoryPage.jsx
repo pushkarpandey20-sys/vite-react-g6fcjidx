@@ -13,7 +13,8 @@ export default function HistoryPage() {
 
   useEffect(() => {
     if (!devoteeId) { setLoading(false); return; }
-    db.bookings().select("*").eq("devotee_id", devoteeId).order("created_at", { ascending: false })
+    db.bookings().select("id, ritual, ritual_icon, pandit_name, booking_date, booking_time, amount, location, booking_status, status, prasad_required, dispatch_date, courier_tracking, delivery_address, created_at")
+      .eq("devotee_id", devoteeId).order("created_at", { ascending: false })
       .then(({ data }) => { setBookings(data || []); setLoading(false); });
   }, [devoteeId]);
 
@@ -63,13 +64,13 @@ export default function HistoryPage() {
       {filtered.map(b => (
         <div key={b.id} style={{ display: 'contents' }}>
           <div className="tr" style={{ gridTemplateColumns: ".7fr 1.3fr 1.5fr 1.2fr .8fr .8fr 1fr", borderBottom: b.prasad_required ? 'none' : '1px solid rgba(212,160,23,.09)' }}>
-            <div className="td" style={{ fontFamily: "'Cinzel',serif", fontSize: 10, color: "#FF6B00" }}>#{b.id?.slice(-6)}</div>
-            <div className="td">{b.ritual_icon} {b.ritual}</div>
-            <div className="td"><div style={{ fontSize: 12 }}>{b.pandit_name || "Temple Direct"}</div><div className="td2">{b.booking_time || "Scheduled"}</div></div>
-            <div className="td" style={{ fontSize: 12 }}>{b.location}</div>
-            <div className="td" style={{ fontSize: 12 }}>{b.booking_date}</div>
-            <div className="td" style={{ fontFamily: "'Cinzel',serif", fontWeight: 700 }}>₹{b.amount?.toLocaleString()}</div>
-            <div className="td" style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
+            <div className="td" data-label="ID" style={{ fontFamily: "'Cinzel',serif", fontSize: 10, color: "#FF6B00" }}>#{b.id?.slice(-6)}</div>
+            <div className="td" data-label="Ritual">{b.ritual_icon} {b.ritual}</div>
+            <div className="td" data-label="Pandit"><div style={{ fontSize: 12 }}>{b.pandit_name || "Temple Direct"}</div><div className="td2">{b.booking_time || "Scheduled"}</div></div>
+            <div className="td" data-label="Location" style={{ fontSize: 12 }}>{b.location}</div>
+            <div className="td" data-label="Date" style={{ fontSize: 12 }}>{b.booking_date}</div>
+            <div className="td" data-label="Amount" style={{ fontFamily: "'Cinzel',serif", fontWeight: 700 }}>₹{b.amount?.toLocaleString()}</div>
+            <div className="td" data-label="Status" style={{ display: "flex", flexDirection: "column", gap: 5, alignItems: "center" }}>
               <StatusBadge status={b.booking_status || b.status} />
               {(b.booking_status === 'ritual_completed' || b.status === 'completed') && (
                 <button className="btn btn-ghost btn-sm" style={{ fontSize: 9, padding: "2px 8px" }} onClick={() => setRatingBooking(b)}>⭐ Rate</button>

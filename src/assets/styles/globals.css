@@ -150,6 +150,26 @@ body {
   .logo-tagline { display: none; }
   .logo-name { font-size: 16px; }
   .nav-tabs { display: none !important; }
+  .layout { flex-direction: column; }
+  .sidebar-wrap {
+    position: fixed;
+    top: 62px;
+    left: -280px;
+    width: 260px;
+    height: calc(100vh - 62px);
+    z-index: 1000;
+    transition: left 0.3s ease;
+  }
+  .sidebar-open {
+    left: 0;
+  }
+  .sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+    top: 62px;
+  }
 }
 
 .logo {
@@ -411,6 +431,12 @@ body {
   grid-template-columns: repeat(2, 1fr);
 }
 
+@media (max-width: 768px) {
+  .stat-grid.sg4 { grid-template-columns: repeat(2, 1fr); }
+  .stat-grid.sg3 { grid-template-columns: 1fr; }
+  .stat-grid.sg2 { grid-template-columns: 1fr; }
+}
+
 .stat-card {
   background: #fff;
   border-radius: 14px;
@@ -625,6 +651,10 @@ body {
   gap: 16px;
 }
 
+@media (max-width: 600px) {
+  .fgrid { grid-template-columns: 1fr; }
+}
+
 .ffw {
   grid-column: 1/-1;
 }
@@ -639,6 +669,14 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 18px;
   margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .pgrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .pgrid { grid-template-columns: 1fr; }
 }
 
 .pc {
@@ -762,6 +800,18 @@ body {
   grid-template-columns: repeat(4, 1fr);
   gap: 14px;
   margin-bottom: 24px;
+}
+
+@media (max-width: 1024px) {
+  .rgrid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .rgrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .rgrid { grid-template-columns: 1fr; }
 }
 
 .rc {
@@ -4082,3 +4132,313 @@ body {
   z-index: 9999;
   backdrop-filter: blur(6px);
 }
+
+/* ── Mobile Responsive Grid Overrides ── */
+.home-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .home-grid { grid-template-columns: 1fr; }
+}
+
+.ritual-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 160px);
+  gap: 12px;
+  overflow-x: auto;
+  padding: 10px 0;
+}
+
+@media (max-width: 600px) {
+  .ritual-card-grid { 
+    grid-template-columns: repeat(3, 140px);
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+.mobile-hide {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .mobile-hide { display: none; }
+}
+
+/* ── History Table Responsive ── */
+@media (max-width: 900px) {
+  .thead { display: none !important; }
+  .tr { 
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    padding: 15px !important;
+    border: 1px solid rgba(212, 160, 23, 0.1) !important;
+    margin-bottom: 15px !important;
+    border-radius: 12px !important;
+    background: rgba(255, 255, 255, 0.02) !important;
+  }
+  .td { 
+    display: flex !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    text-align: right !important;
+    border: none !important;
+    padding: 2px 0 !important;
+  }
+  .td::before {
+    content: attr(data-label);
+    font-weight: 800;
+    font-size: 11px;
+    text-transform: uppercase;
+    color: var(--lb);
+    text-align: left;
+    display: block;
+  }
+  .ds-prasad-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 4px !important;
+    margin-top: -10px !important;
+    border-radius: 0 0 12px 12px !important;
+  }
+}
+
+/* ── Service Grid Responsive ── */
+.service-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 900px) {
+  .service-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .service-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+.service-card {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(240, 192, 64, 0.1);
+  border-radius: 16px;
+  padding: 16px 10px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.service-card:hover {
+  background: rgba(240, 192, 64, 0.08);
+  border-color: rgba(240, 192, 64, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ── Pandit Banner Responsive ── */
+.pandit-banner {
+  background: linear-gradient(135deg, #3d1f00, #5a2d00);
+  border-radius: 16px;
+  padding: 22px 24px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+@media (max-width: 768px) {
+  .pandit-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  .pandit-banner button { width: 100%; }
+}
+
+/* ── Modal Mobile Support ── */
+.overlay {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 10px;
+}
+.modal {
+  width: 100% !important;
+  max-width: 480px !important;
+  max-height: 90vh !important;
+  overflow-y: auto !important;
+}
+@media (max-width: 480px) {
+  .modal {
+    border-radius: 18px 18px 0 0 !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+}
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE RESPONSIVENESS — Comprehensive fixes for all pages
+   ══════════════════════════════════════════════════════════ */
+
+/* Global: Prevent horizontal overflow */
+body, #root { overflow-x: hidden; }
+.cb { padding: 16px 14px !important; }
+
+/* ── Booking Wizard ── */
+.wizard-container { padding: 16px 10px !important; }
+
+@media (max-width: 768px) {
+  .wizard-container { padding: 12px 8px !important; }
+
+  /* Stepper labels on mobile */
+  .step-lbl { display: none; }
+
+  /* Wizard glass-card inner padding */
+  .wizard-container .glass-card { padding: 20px 14px !important; border-radius: 18px !important; }
+
+  /* Booking wizard step 3 date/time & step 5 pandit grid — override inline grids */
+  .wizard-container [style*="grid-template-columns: 1fr 1fr"],
+  .wizard-container [style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Review summary rows */
+  .wizard-container [style*="justify-content: space-between"][style*="align-items: center"] {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+}
+
+/* ── UserHome Hero stat grid ── */
+@media (max-width: 600px) {
+  /* Force hero stat 4-col to 2x2 */
+  .ds-user-content [style*="repeat(4,1fr)"],
+  .ds-user-content [style*="repeat(4, 1fr)"] {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  /* Hero flex buttons wrap */
+  .ds-user-content [style*="Book Pandit Now"] {
+    width: 100%;
+  }
+}
+
+/* ── Global: flex button wrapping ── */
+@media (max-width: 480px) {
+  [style*="display:'flex'"][style*="gap:10"],
+  [style*="display: flex"][style*="gap: 10"] {
+    flex-wrap: wrap;
+  }
+}
+
+/* ── SamagriStorePage ── */
+@media (max-width: 600px) {
+  /* Product grid already uses auto-fill but minmax(260px) is too wide */
+  .ds-user-content [style*="minmax(260px"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* Tab switcher */
+  .ds-user-content [style*="width:'fit-content'"],
+  .ds-user-content [style*="width: fit-content"] {
+    width: 100% !important;
+  }
+}
+
+/* ── PanditOnboarding page ── */
+@media (max-width: 600px) {
+  [style*="maxWidth:660"] { max-width: 100% !important; padding: 0 4px !important; }
+  [style*="max-width: 660"] { max-width: 100% !important; }
+  /* Stepper text hide on very small screens */
+  [style*="whiteSpace:'nowrap'"] { white-space: normal !important; font-size: 8px !important; }
+}
+
+/* ── Page header ── */
+@media (max-width: 600px) {
+  .ph { padding: 16px 14px 14px !important; }
+  .ph-title { font-size: 18px !important; }
+  .ph-sub { font-size: 12px !important; }
+}
+
+/* ── Content area full width on mobile ── */
+@media (max-width: 768px) {
+  .content { overflow-x: hidden !important; }
+  .cb { padding: 12px 10px !important; }
+
+  /* Samagri store hero flex */
+  .ds-user-content [style*="flex-wrap:'wrap'"],
+  .ds-user-content [style*="flexWrap:'wrap'"] {
+    flex-wrap: wrap !important;
+  }
+}
+
+/* ── BookingWizard progress bar ── */
+@media (max-width: 480px) {
+  .wizard-container [style*="maxWidth: 800"] {
+    padding: 0 6px !important;
+  }
+  /* Hide step labels below numbers */
+  .wizard-container [style*="position: absolute"][style*="top: 38"] {
+    display: none !important;
+  }
+}
+
+/* ── UserHome: quick action buttons ── */
+@media (max-width: 480px) {
+  .ds-user-content [style*="flexWrap:'wrap'"] button,
+  .ds-user-content [style*="flex-wrap: wrap"] button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ── Ensure inputs don't overflow ── */
+input, select, textarea { max-width: 100% !important; }
+
+/* ── Cart drawer mobile ── */
+@media (max-width: 480px) {
+  .cart-drawer { width: 100vw !important; border-radius: 20px 20px 0 0 !important; }
+  .cart-drawer-overlay { align-items: flex-end !important; }
+}
+
+/* ── Pandit Marketplace grid ── */
+@media (max-width: 600px) {
+  .pgrid { grid-template-columns: 1fr !important; }
+  .stat-grid.sg4, .stat-grid.sg3 { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* ── Temple / Ritual pages table on mobile ── */
+@media (max-width: 600px) {
+  .dtable { overflow-x: auto; display: block !important; }
+}
+
+/* ── General card padding reduction on small screens ── */
+@media (max-width: 480px) {
+  .card-p { padding: 14px 12px !important; }
+  .stat-card { padding: 14px 12px !important; }
+}
+
+/* ── Sticky cart bar ── */
+@media (max-width: 480px) {
+  [style*="position:'sticky'"][style*="bottom:0"],
+  [style*="position: sticky"][style*="bottom: 0"] {
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+    border-radius: 14px !important;
+    margin: 0 -10px !important;
+  }
+}
+
+/* ── Samagri custom items grid ── */
+@media (max-width: 480px) {
+  [style*="minmax(180px"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+

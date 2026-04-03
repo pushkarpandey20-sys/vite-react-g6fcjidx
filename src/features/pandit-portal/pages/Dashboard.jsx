@@ -29,21 +29,24 @@ function PanditOnboardingForm({ onComplete }) {
     setSaving(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      const userId = panditId || user?.id;
-      await supabase.from('pandits').upsert({
-        id: userId,
+      const userId = panditId || user?.id || null;
+      const upsertData = {
         name: form.name,
         city: form.city,
-        years_of_experience: parseInt(form.years_of_experience) || 0,
+        phone: user?.phone || null,           // needed so login can find by phone
+        experience_years: parseInt(form.years_of_experience) || 0,
         bio: form.bio,
-        specializations: form.specializations,
+        specialization: form.specializations,
         languages: form.languages,
         min_fee: parseInt(form.min_fee) || 0,
         max_fee: parseInt(form.max_fee) || 0,
         bank_account: form.bank_account,
         ifsc_code: form.ifsc,
         status: 'pending_verification',
-      });
+      };
+      // Only set id when we have one — otherwise let DB auto-generate
+      if (userId) upsertData.id = userId;
+      await supabase.from('pandits').upsert(upsertData);
       onComplete && onComplete();
     } catch (e) {
       setErr('Submission failed. Please try again.');
@@ -128,7 +131,7 @@ function PanditOnboardingForm({ onComplete }) {
 
 // ── Main Dashboard ─────────────────────────────────────────────
 export default function Dashboard() {
-  const { panditId, panditName, panditOnline, setPanditOnline, toast, setShowLogin } = useApp();
+  const { panditId, panditName, panditOnline, setPanditOnline, toast, setShowLogin, loginPanditDemo } = useApp();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState(null);
@@ -206,8 +209,11 @@ export default function Dashboard() {
           <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017' }}>Sacred Scholar Gateway</h2>
           <p style={{ color:'rgba(255,248,240,0.5)' }}>Login as a Pandit or register to manage your bookings</p>
           <div style={{ display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center' }}>
-            <button onClick={()=>setShowLogin && setShowLogin(true)} style={{ background:'linear-gradient(135deg,#D4A017,#F0C040)', color:'#1a0f07', border:'none', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>🪔 Login as Pandit</button>
+            <button onClick={()=>setShowLogin && setShowLogin(true)} style={{ background:'linear-gradient(135deg,#D4A017,#F0C040)', color:'#1a0f07', border:'none', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>🪔 Login with OTP</button>
             <button onClick={()=>setShowForm(true)} style={{ background:'rgba(255,107,0,0.2)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.4)', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>📝 Register as Pandit</button>
+          </div>
+          <div style={{ marginTop:12, textAlign:'center' }}>
+            <button onClick={()=>loginPanditDemo && loginPanditDemo()} style={{ background:'transparent', color:'rgba(240,192,64,0.4)', border:'1px solid rgba(240,192,64,0.15)', borderRadius:20, padding:'8px 20px', cursor:'pointer', fontSize:12, fontWeight:600 }}>⚡ Demo Access (Dev Mode)</button>
           </div>
         </div>
       )}

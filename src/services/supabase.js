@@ -33,6 +33,14 @@ export const auth = {
   onAuthChange: (cb) => supabase.auth.onAuthStateChange(cb),
 };
 
-export function genId(prefix) {
-  return `${prefix}${Date.now().toString(36).toUpperCase()}`;
+export function genId(_prefix) {
+  // Always return a proper UUID so it's safe to store in UUID columns
+  return crypto.randomUUID();
+}
+
+// Returns id only if it matches UUID format, otherwise null.
+// Prevents "invalid input syntax for type uuid" when seed/demo IDs hit the DB.
+export function toUUID(id) {
+  if (!id) return null;
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id) ? id : null;
 }

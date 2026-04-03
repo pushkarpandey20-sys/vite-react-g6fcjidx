@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../store/AppCtx';
 import { paymentService } from '../../services/paymentService';
 import { Spinner } from '../../components/common/UIElements';
+import { toUUID } from '../../services/supabase';
 
 export default function SevaPage() {
   const { db, toast, devoteeId, devoteeName, SEVA_OPTIONS, setShowLogin } = useApp();
@@ -29,8 +30,8 @@ export default function SevaPage() {
       });
 
       if (payment.success) {
-        const { data, error } = await db.donations().insert({ 
-          devotee_id: devoteeId, 
+        const { data, error } = await db.donations().insert({
+          devotee_id: toUUID(devoteeId),
           devotee_name: devoteeName, 
           seva_name: seva.name, 
           seva_icon: seva.icon, 

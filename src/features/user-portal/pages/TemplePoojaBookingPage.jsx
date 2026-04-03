@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../../../store/AppCtx';
-import { db } from '../../../services/supabase';
+import { db, toUUID } from '../../../services/supabase';
 import { Spinner } from '../../../components/common/UIElements';
 import { paymentService } from '../../../services/paymentService';
 import { notificationService } from '../../../services/notificationService';
@@ -64,7 +64,7 @@ export default function TemplePoojaBookingPage() {
 
       if (payment.success) {
         const payload = {
-          devotee_id: devoteeId,
+          devotee_id: toUUID(devoteeId),
           devotee_name: devoteeName,
           ritual: `Temple: ${selectedPooja}`,
           ritual_icon: "🛕",

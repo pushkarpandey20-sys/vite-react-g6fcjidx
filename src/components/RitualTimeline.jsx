@@ -28,10 +28,11 @@ export default function RitualTimeline({ booking }) {
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', padding: '0 10px' }}>
-        {/* Progress Line */}
-        <div style={{ position: 'absolute', top: 11, left: '5%', right: '5%', height: 2, background: 'rgba(255,255,255,0.1)', zIndex: 0 }} />
-        <div style={{ position: 'absolute', top: 11, left: '5%', width: `${(currentIndex / (STATUS_MAP.length - 1)) * 90}%`, height: 2, background: '#FF6B00', zIndex: 0, transition: 'width 0.5s ease' }} />
+      <div className="ritual-timeline-container">
+        {/* Progress Line Desktop */}
+        <div className="timeline-line-desktop" style={{ width: `${(currentIndex / (STATUS_MAP.length - 1)) * 100}%` }} />
+        {/* Progress Line Mobile */}
+        <div className="timeline-line-mobile" style={{ height: `${(currentIndex / (STATUS_MAP.length - 1)) * 100}%` }} />
 
         {STATUS_MAP.map((s, i) => {
           const isCompleted = i < currentIndex;
@@ -39,28 +40,101 @@ export default function RitualTimeline({ booking }) {
           const isPending = i > currentIndex;
 
           return (
-            <div key={s.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, zIndex: 1, width: '16%' }}>
-              <div style={{ 
-                width: 24, height: 24, borderRadius: '50%', 
-                background: isCompleted || isCurrent ? '#FF6B00' : '#2A1A0E', 
-                border: `2px solid ${isCurrent ? '#F0C040' : (isCompleted ? '#FF6B00' : 'rgba(255,255,255,0.1)')}`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10,
-                boxShadow: isCurrent ? '0 0 10px rgba(255,107,0,0.4)' : 'none'
-              }}>
-                {isCompleted ? '✓' : ''}
+            <div key={s.key} className={`timeline-step ${isCurrent ? 'current' : ''} ${isCompleted ? 'completed' : ''}`}>
+              <div className="step-circle">
+                {isCompleted ? '✓' : s.icon}
               </div>
-              <div style={{ fontSize: 20 }}>{s.icon}</div>
-              <div style={{ 
-                fontSize: 9, fontWeight: 800, textAlign: 'center', 
-                color: isCurrent ? '#F0C040' : (isCompleted ? '#fff' : 'rgba(255,255,255,0.3)'),
-                textTransform: 'uppercase', letterSpacing: 0.5
-              }}>
+              <div className="step-label">
                 {s.label}
               </div>
             </div>
           );
         })}
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        .ritual-timeline-container {
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          padding: 0 10px;
+        }
+        .timeline-line-desktop {
+          position: absolute;
+          top: 11px;
+          left: 0;
+          height: 2px;
+          background: #FF6B00;
+          z-index: 0;
+          transition: width 0.5s ease;
+        }
+        .timeline-line-mobile { display: none; }
+        .timeline-step {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 8px;
+          z-index: 1;
+          width: 16%;
+        }
+        .step-circle {
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: #2A1A0E;
+          border: 2px solid rgba(255,255,255,0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 10px;
+        }
+        .timeline-step.completed .step-circle, .timeline-step.current .step-circle {
+          background: #FF6B00;
+          border-color: #FF6B00;
+        }
+        .timeline-step.current .step-circle {
+          border-color: #F0C040;
+          box-shadow: 0 0 10px rgba(255,107,0,0.4);
+        }
+        .step-label {
+          fontSize: 9px;
+          font-weight: 800;
+          text-align: center;
+          color: rgba(255,255,255,0.3);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        .timeline-step.current .step-label { color: #F0C040; }
+        .timeline-step.completed .step-label { color: #fff; }
+
+        @media (max-width: 768px) {
+          .ritual-timeline-container {
+            flex-direction: column;
+            gap: 20px;
+            padding-left: 30px;
+          }
+          .timeline-line-desktop { display: none; }
+          .timeline-line-mobile {
+            display: block;
+            position: absolute;
+            left: 11px;
+            top: 0;
+            width: 2px;
+            background: #FF6B00;
+            z-index: 0;
+            transition: height 0.5s ease;
+          }
+          .timeline-step {
+            flex-direction: row;
+            width: 100%;
+            justify-content: flex-start;
+          }
+          .step-label {
+            text-align: left;
+            font-size: 11px;
+          }
+        }
+      `}} />
     </div>
   );
 }

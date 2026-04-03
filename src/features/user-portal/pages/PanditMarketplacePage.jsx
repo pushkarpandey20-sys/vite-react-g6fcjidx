@@ -169,7 +169,7 @@ export default function PanditMarketplacePage() {
   const filtered = pandits
     .filter(p => filterSpec === 'All' || (Array.isArray(p.specializations) ? p.specializations : (typeof p.specializations === 'string' ? p.specializations.split(',').map(s=>s.trim()) : [])).includes(filterSpec))
     .filter(p => filterCity === 'All' || p.city === filterCity)
-    .filter(p => (p.years_of_experience || 0) >= filterMinExp)
+    .filter(p => (p.experience_years || p.years_of_experience || 0) >= filterMinExp)
     .filter(p => !filterOnline || p.is_online)
     .filter(p => !searchName || (p.name||'').toLowerCase().includes(searchName.toLowerCase()))
     .sort((a, b) => {

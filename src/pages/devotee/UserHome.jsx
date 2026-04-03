@@ -17,12 +17,12 @@ const SERVICES = [
 ];
 
 const RITUALS = [
-  { name:'Griha Pravesh', icon:'🏠', price:'₹2,100', path:'/user/booking' },
-  { name:'Satyanarayan',  icon:'🌟', price:'₹1,500', path:'/user/booking' },
-  { name:'Rudrabhishek',  icon:'🔱', price:'₹2,500', path:'/user/booking' },
-  { name:'Navgrah Puja',  icon:'⭐', price:'₹1,800', path:'/user/booking' },
-  { name:'Vivah',         icon:'💍', price:'₹8,000', path:'/user/booking' },
-  { name:'Custom Pooja',  icon:'✨', price:'Custom',  path:'/user/rituals' },
+  { name:'Griha Pravesh', icon:'🏠', price:'₹2,100', numPrice:2100, path:'/user/booking' },
+  { name:'Satyanarayan',  icon:'🌟', price:'₹1,500', numPrice:1500, path:'/user/booking' },
+  { name:'Rudrabhishek',  icon:'🔱', price:'₹2,500', numPrice:2500, path:'/user/booking' },
+  { name:'Navgrah Puja',  icon:'⭐', price:'₹1,800', numPrice:1800, path:'/user/booking' },
+  { name:'Vivah',         icon:'💍', price:'₹8,000', numPrice:8000, path:'/user/booking' },
+  { name:'Custom Pooja',  icon:'✨', price:'Custom',  numPrice:1500, path:'/user/rituals' },
 ];
 
 const SAMAGRI_HIGHLIGHTS = [
@@ -32,9 +32,9 @@ const SAMAGRI_HIGHLIGHTS = [
 ];
 
 const SAMPLE_PANDITS = [
-  { id:'1', name:'Pt. Ram Sharma',    city:'Delhi',   specializations:['Satyanarayan','Griha Pravesh'], years_of_experience:15, min_fee:1800, rating:4.9 },
-  { id:'2', name:'Pt. Anil Mishra',   city:'Noida',   specializations:['Rudrabhishek','Navgrah'],       years_of_experience:12, min_fee:1500, rating:4.8 },
-  { id:'3', name:'Pt. Suresh Tiwari', city:'Gurgaon', specializations:['Vivah','Mundan'],               years_of_experience:20, min_fee:2500, rating:4.7 },
+  { id:'1', name:'Pt. Ram Sharma',    city:'Delhi',   specialization:['Satyanarayan','Griha Pravesh'], experience_years:15, min_fee:1800, rating:4.9 },
+  { id:'2', name:'Pt. Anil Mishra',   city:'Noida',   specialization:['Rudrabhishek','Navgrah'],       experience_years:12, min_fee:1500, rating:4.8 },
+  { id:'3', name:'Pt. Suresh Tiwari', city:'Gurgaon', specialization:['Vivah','Mundan'],               experience_years:20, min_fee:2500, rating:4.7 },
 ];
 
 function StatChip({ icon, label, value, color }) {
@@ -58,11 +58,12 @@ export default function UserHome() {
   const [activeBooking, setActiveBooking] = useState(null);
 
   useEffect(() => {
-    supabase.from('pandits').select('id,name,city,years_of_experience,rating,specializations,min_fee')
+    supabase.from('pandits').select('id,name,city,experience_years,rating,specialization,min_fee')
       .eq('status','verified').order('rating',{ascending:false}).limit(3)
       .then(({data}) => { if(data?.length) setPandits(data); });
     if(devoteeId) {
-      supabase.from('bookings').select('*').eq('devotee_id',devoteeId)
+      supabase.from('bookings').select('id, ritual, ritual_name, ritual_icon, booking_date, booking_time, total_amount, amount, booking_status, status')
+        .eq('devotee_id',devoteeId)
         .order('created_at',{ascending:false}).limit(5)
         .then(({data}) => {
           setBookings(data||[]);
@@ -93,9 +94,9 @@ export default function UserHome() {
             <p style={{ color:'rgba(255,248,240,0.55)', margin:'0 0 18px', fontSize:13, fontFamily:'Nunito,sans-serif' }}>
               Book a certified pandit in under 60 seconds — verified, rated, ready.
             </p>
-            <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
+            <div style={{ display:'flex', gap:10, flexWrap:'wrap', width:'100%' }}>
               <button onClick={() => navigate('/user/booking')}
-                className="btn btn-primary" style={{ fontSize:14, padding:'11px 24px' }}>
+                className="btn btn-primary" style={{ fontSize:14, padding:'11px 24px', flex:'1 1 auto', justifyContent:'center' }}>
                 ⚡ Book Pandit Now
               </button>
               <button onClick={() => navigate('/user/rituals')}
@@ -108,7 +109,7 @@ export default function UserHome() {
           </div>
           <div style={{ fontSize:52, lineHeight:1, opacity:0.6 }}>🪔</div>
         </div>
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginTop:18 }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(70px, 1fr))', gap:10, marginTop:18 }}>
           <StatChip icon="🙏" label="Pandits" value="120+" color="#F0C040" />
           <StatChip icon="🕉️" label="Rituals" value="80+" color="#FF9F40" />
           <StatChip icon="📍" label="Cities" value="20+" color="#4ade80" />
@@ -117,12 +118,9 @@ export default function UserHome() {
       </div>
 
       {/* ── Service Icons Grid ── */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(6,1fr)', gap:10, marginBottom:20 }}>
+      <div className="service-grid">
         {SERVICES.map(({ icon, label, path, color }) => (
-          <div key={label} onClick={() => navigate(path)}
-            style={{ ...dkCard, padding:'16px 8px', textAlign:'center', cursor:'pointer', transition:'all 0.22s', borderRadius:14 }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor=color; e.currentTarget.style.background=`${color}18`; e.currentTarget.style.transform='translateY(-3px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(240,192,64,0.14)'; e.currentTarget.style.background='rgba(26,15,7,0.7)'; e.currentTarget.style.transform=''; }}>
+          <div key={label} onClick={() => navigate(path)} className="service-card">
             <div style={{ fontSize:26, marginBottom:7 }}>{icon}</div>
             <div style={{ color:'rgba(255,248,240,0.75)', fontSize:11, fontWeight:700 }}>{label}</div>
           </div>
@@ -130,16 +128,7 @@ export default function UserHome() {
       </div>
 
       {/* ── OB (Onboarding) Demand Section ── */}
-      <div style={{
-        background: 'linear-gradient(135deg, #3d1f00, #5a2d00)',
-        borderRadius: 16,
-        padding: '22px 24px',
-        marginBottom: 20,
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        gap: 16,
-      }}>
+      <div className="pandit-banner">
         <div style={{ flex: 1 }}>
           <div style={{ color: '#F0C040', fontSize: 11, fontWeight: 800, letterSpacing: 2, marginBottom: 8 }}>🪔 JOIN OUR PANDIT NETWORK</div>
           <h3 style={{ fontFamily: 'Cinzel,serif', color: '#fff', fontSize: 20, margin: '0 0 8px' }}>
@@ -157,7 +146,7 @@ export default function UserHome() {
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flexShrink: 0 }}>
           <button
-            onClick={() => navigate('/pandit/dashboard')}
+            onClick={() => navigate('/pandit/onboard')}
             style={{ background: 'linear-gradient(135deg,#FF6B00,#e55a00)', color: '#fff', border: 'none', borderRadius: 24, padding: '12px 24px', fontWeight: 800, cursor: 'pointer', fontSize: 14, whiteSpace: 'nowrap' }}
           >
             ✨ Register as Pandit
@@ -175,7 +164,7 @@ export default function UserHome() {
 
       <SmartRecommendations bookingHistory={bookings} />
 
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 300px', gap:20 }}>
+      <div className="home-grid">
         <div>
           {/* Most Booked Rituals */}
           <div style={{ ...dkCard, marginBottom:20 }}>
@@ -187,11 +176,18 @@ export default function UserHome() {
                 View All →
               </button>
             </div>
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+            <div className="ritual-card-grid">
               {(festivals?.length ? festivals[0].recommended_rituals : RITUALS.map(r => r.name)).slice(0, 6).map(name => {
                 const r = RITUALS.find(x => x.name === name) || { name, icon: '🕉️', price: '₹1,500', path: '/user/booking' };
                 return (
-                  <div key={r.name} onClick={() => { notificationStore.recordSearch(r.name); navigate(r.path); }}
+                  <div key={r.name} onClick={() => {
+                    notificationStore.recordSearch(r.name);
+                    if (r.path === '/user/booking') {
+                      navigate(r.path, { state: { selectedRitual: { id: r.name.toLowerCase().replace(/\s+/g,'-'), name: r.name, icon: r.icon, price: r.numPrice || 1500 } } });
+                    } else {
+                      navigate(r.path);
+                    }
+                  }}
                     style={{ background:'rgba(255,248,240,0.03)', border:'1px solid rgba(240,192,64,0.1)',
                       borderRadius:12, padding:'14px 8px', textAlign:'center', cursor:'pointer', transition:'all 0.22s', position: 'relative' }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor='rgba(255,107,0,0.35)'; e.currentTarget.style.background='rgba(255,107,0,0.06)'; e.currentTarget.style.transform='translateY(-2px)'; }}
@@ -216,7 +212,7 @@ export default function UserHome() {
                 Shop All →
               </button>
             </div>
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:10 }}>
+            <div className="ritual-card-grid">
               {SAMAGRI_HIGHLIGHTS.map(s => (
                 <div key={s.name} onClick={() => navigate('/user/samagri')}
                   style={{ background:'rgba(255,248,240,0.03)', border:'1px solid rgba(240,192,64,0.1)',
@@ -282,7 +278,7 @@ export default function UserHome() {
                         {(p.specializations||[]).slice(0,2).join(' · ')} · {p.city}
                       </div>
                       <div style={{ color:'rgba(255,248,240,0.3)', fontSize:10, marginTop:1 }}>
-                        {p.years_of_experience} yrs · ⭐ {p.rating||'New'}
+                        {p.experience_years || p.years_of_experience} yrs · ⭐ {p.rating||'New'}
                       </div>
                     </div>
                   </div>

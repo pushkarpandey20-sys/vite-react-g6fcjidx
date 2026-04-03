@@ -14,7 +14,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
     showAdminLogin, setShowAdminLogin,
     showUserOnboarding, setShowUserOnboarding, showPanditOnboarding, setShowPanditOnboarding,
     bookingDraft, confirmBooking, viewPandit, setViewPandit,
-    toasts, loading, loginAdmin, loginAdminDemo, setActivePage
+    toasts, loading, loginAdmin, loginAdminDemo, loginDevoteeDemo, setActivePage
   } = useApp();
 
   const navigate = useNavigate();
@@ -45,7 +45,14 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
           </div>
         )}
         <div className="nav-r">
-          {devoteeId && isUser && (
+          {isUser && !devoteeId && (
+            <button onClick={() => loginDevoteeDemo && loginDevoteeDemo('Test User')}
+              style={{ background:'linear-gradient(135deg,#7c3aed,#5b21b6)', color:'#fff', border:'none', borderRadius:20, padding:'5px 12px', fontWeight:800, cursor:'pointer', fontSize:11, fontFamily:'Nunito,sans-serif', display:'flex', alignItems:'center', gap:4 }}
+              title="Bypass login for testing">
+              ⚡ Test Login
+            </button>
+          )}
+          {isUser && (
             <div className="icon-btn" onClick={() => setShowCart(true)}>
               🛒{cartCount > 0 && <span className="badge">{cartCount}</span>}
             </div>
@@ -65,11 +72,11 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
 
       {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
 
-      <div className="layout" style={{ display: 'flex', height: 'calc(100vh - 60px)', overflow: 'hidden' }}>
+      <div className="layout">
         <div className={`sidebar-wrap ${sidebarOpen ? 'sidebar-open' : ''}`}>
           {React.cloneElement(sidebar, { onNavClick: () => setSidebarOpen(false) })}
         </div>
-        <div className="content" id="main-content" style={{ flex: 1, overflowY: 'auto', height: '100%' }}>
+        <div className="content" id="main-content">
           {children}
         </div>
       </div>

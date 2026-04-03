@@ -147,14 +147,13 @@ export default function PanditOnboardingPage() {
     try {
       const { error } = await supabase.from('pandits').insert({
         name:form.name, phone:form.phone, city:form.city,
-        years_of_experience:parseInt(form.years_of_experience)||0,
+        experience_years:parseInt(form.years_of_experience)||0,
         languages:form.languages,
-        specialization:form.specializations[0]||'',
-        specializations:form.specializations,
-        rituals:form.specializations,
+        specialization:form.specializations,
+        rituals_supported:form.specializations,
         min_fee:parseFloat(form.min_fee)||0,
         max_fee:parseFloat(form.max_fee)||0,
-        about:form.about,
+        bio:form.about,
         aadhar_number:form.aadhar_number, pan_number:form.pan_number,
         bank_account:form.bank_account, ifsc_code:form.ifsc_code,
         show_whatsapp:form.show_whatsapp,

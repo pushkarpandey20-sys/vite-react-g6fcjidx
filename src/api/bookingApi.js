@@ -1,4 +1,4 @@
-import { db } from '../services/supabase';
+import { db, toUUID } from '../services/supabase';
 import { withRetry } from '../utils/production/errorHandler';
 import { logger } from '../utils/production/logger';
 
@@ -8,28 +8,24 @@ export const bookingApi = {
     logger.ritual(`Recording ritual registration for devotee: ${bookingData.devoteeName}`, bookingData);
     return await withRetry(async () => {
       const { data, error } = await db.bookings().insert({
-        devotee_id: bookingData.devoteeId,
-        devotee_name: bookingData.devoteeName,
-        devotee_emoji: bookingData.devoteeEmoji || "👤",
-        pandit_id: bookingData.panditId,
-        pandit_name: bookingData.panditName,
-        ritual_id: bookingData.ritualId,
-        ritual: bookingData.ritual || "Pandit Consultation",
-        ritual_icon: bookingData.ritualIcon || "📿",
-        samagri_id: bookingData.samagriId,
-        delivery_required: bookingData.deliveryRequired || false,
-        amount: bookingData.amount || 0,
-        booking_date: bookingData.date,
-        booking_time: bookingData.time,
-        location: bookingData.location,
-        address: bookingData.address,
-        notes: bookingData.notes,
-        language: bookingData.language,
-        duration: bookingData.duration,
-        instant_booking: bookingData.instantBooking || false,
-        payment_id: bookingData.payment_id,
+        devotee_id:     toUUID(bookingData.devoteeId),
+        devotee_name:   bookingData.devoteeName,
+        pandit_id:      toUUID(bookingData.panditId),
+        pandit_name:    bookingData.panditName,
+        ritual_id:      bookingData.ritualId,
+        ritual:         bookingData.ritual || "Pandit Consultation",
+        ritual_name:    bookingData.ritual || "Pandit Consultation",
+        ritual_icon:    bookingData.ritualIcon || "📿",
+        amount:         bookingData.amount || 0,
+        booking_date:   bookingData.date,
+        booking_time:   bookingData.time,
+        start_time:     bookingData.time,
+        location:       bookingData.location,
+        address:        bookingData.address,
+        notes:          bookingData.notes,
+        payment_id:     bookingData.payment_id,
         payment_status: bookingData.payment_status || "pending",
-        status: "pending"
+        status:         "pending"
       }).select().single();
       
       if (error) throw error;

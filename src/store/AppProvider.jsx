@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { AppCtx } from './AppCtx';
-import { supabase, db, genId } from '../services/supabase';
+import { supabase, db, genId, toUUID } from '../services/supabase';
 import { MUHURTAS, SEVA_OPTIONS } from '../api/constants';
 
 export function AppProvider({ children }) {
@@ -55,6 +55,10 @@ export function AppProvider({ children }) {
       setPanditName(pandit.name);
       setPanditOnline(pandit.is_online || false);
       localStorage.setItem("devsetu_pandit", JSON.stringify({ id: pandit.id, name: pandit.name }));
+      // Redirect pandit to their portal after OTP login
+      if (typeof window !== 'undefined' && !window.location.pathname.startsWith('/pandit')) {
+        window.location.href = '/pandit/dashboard';
+      }
       return;
     }
 
@@ -94,10 +98,13 @@ export function AppProvider({ children }) {
           await loadUserProfile(session.user);
         } else {
           // Fallback: localStorage for offline/demo
+          // Only restore IDs that are valid UUIDs — discard old DEVXXXXX format IDs
           const saved = localStorage.getItem("devsetu_user");
           if (saved) {
             const u = JSON.parse(saved);
-            setDevoteeId(u.id); setDevoteeName(u.name); setDevoteeCity(u.city || "Delhi");
+            const safeId = toUUID(u.id) || genId();   // upgrade legacy IDs to real UUID
+            if (safeId !== u.id) localStorage.setItem("devsetu_user", JSON.stringify({ ...u, id: safeId }));
+            setDevoteeId(safeId); setDevoteeName(u.name); setDevoteeCity(u.city || "Delhi");
           }
           const ps = localStorage.getItem("devsetu_pandit");
           if (ps) {
@@ -136,6 +143,18 @@ export function AppProvider({ children }) {
     toast(`Welcome, ${name}! 🙏`);
   };
 
+  // Testing bypass — sets a demo devotee session without OTP
+  const loginDevoteeDemo = (name) => {
+    const id = genId();
+    const displayName = name || 'Demo Devotee';
+    setDevoteeId(id);
+    setDevoteeName(displayName);
+    setDevoteeCity('Delhi');
+    localStorage.setItem("devsetu_user", JSON.stringify({ id, name: displayName, city: 'Delhi' }));
+    setShowLogin(false);
+    toast(`Demo mode: logged in as ${displayName} 🙏`, "⚡");
+  };
+
   const logout = async () => {
     await supabase.auth.signOut().catch(() => {});
     clearUserState();
@@ -161,14 +180,24 @@ export function AppProvider({ children }) {
     toast(`Admin access granted (${role})`);
   };
 
+  // Demo pandit login — lets any developer/tester access the pandit portal
+  // without needing a real Supabase OTP session
+  const loginPanditDemo = (id, name) => {
+    const pid = id || genId();
+    setPanditId(pid);
+    setPanditName(name || 'Demo Pandit');
+    localStorage.setItem('devsetu_pandit', JSON.stringify({ id: pid, name: name || 'Demo Pandit' }));
+    toast(`Pandit portal unlocked 🕉️`);
+  };
+
   const addToCart = (item) => {
-    if (!devoteeId) { setShowLogin(true); return; }
+    // Allow guest cart for samagri browsing; only require login for actual booking checkout
     setCart(prev => {
       const ex = prev.find(i => i.id === item.id);
       if (ex) return prev.map(i => i.id === item.id ? { ...i, qty: i.qty + 1 } : i);
       return [...prev, { ...item, qty: 1 }];
     });
-    toast(`${item.name} added to cart!`, item.icon || "🛒");
+    toast(`${item.name} added to basket!`, item.icon || "🛒");
   };
 
   const updateCartQty = (id, delta) => {
@@ -181,12 +210,12 @@ export function AppProvider({ children }) {
     try {
       // 1. Create Booking Record
       const { data: booking, error: bErr } = await db.bookings().insert({
-        devotee_id: devoteeId, 
-        devotee_name: devoteeName, 
-        devotee_emoji: "👤",
-        pandit_id: bookingDraft.panditId, 
-        pandit_name: bookingDraft.panditName,
+        devotee_id:   toUUID(devoteeId),
+        devotee_name: devoteeName,
+        pandit_id:    toUUID(bookingDraft.panditId),
+        pandit_name:  bookingDraft.panditName,
         ritual: bookingDraft.ritual, 
+        ritual_name: bookingDraft.ritual,
         ritual_icon: bookingDraft.ritualIcon,
         ritual_id: bookingDraft.ritualId,
         amount: bookingDraft.amount, 
@@ -202,7 +231,7 @@ export function AppProvider({ children }) {
         order_id: paymentDetails?.razorpay_order_id,
         signature: paymentDetails?.razorpay_signature,
         timeline: [{ status: 'booking_confirmed', time: new Date().toISOString(), label: 'Booking Confirmed' }]
-      }).select().single();
+      }).select("id, ritual, booking_date, booking_time").single();
 
       if (bErr) throw bErr;
 
@@ -216,7 +245,7 @@ export function AppProvider({ children }) {
 
       // 3. Create Notification
       await supabase.from('notifications').insert({
-        user_id: devoteeId,
+        user_id: toUUID(devoteeId),
         type: 'booking_confirmed',
         message: `Your booking for ${booking.ritual} is confirmed for ${booking.booking_date} at ${booking.booking_time}.`
       });
@@ -241,8 +270,8 @@ export function AppProvider({ children }) {
     try {
       const { error } = await supabase.from('reviews').insert({
         booking_id: bookingId,
-        user_id: devoteeId,
-        pandit_id: panditId,
+        user_id:    toUUID(devoteeId),
+        pandit_id:  toUUID(panditId),
         rating,
         review_text: reviewText
       });
@@ -258,8 +287,8 @@ export function AppProvider({ children }) {
     db, supabase, activeApp, setActiveApp, activePage, setActivePage,
     devoteeId, devoteeName, devoteeCity, userPhone,
     panditId, panditName, panditOnline, setPanditOnline,
-    adminRole, setAdminRole, loginAdmin, loginAdminDemo, authLoading,
-    cart, addToCart, updateCartQty, cartCount: cart.length,
+    adminRole, setAdminRole, loginAdmin, loginAdminDemo, loginPanditDemo, loginDevoteeDemo, authLoading,
+    cart, addToCart, updateCartQty, cartCount: cart.reduce((sum, i) => sum + (i.qty || 1), 0),
     showCart, setShowCart, showLogin, setShowLogin,
     showAdminLogin, setShowAdminLogin,
     showConfirm, setShowConfirm,
