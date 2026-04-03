@@ -297,6 +297,7 @@ export function AppProvider({ children }) {
     showUserOnboarding, setShowUserOnboarding,
     showPanditOnboarding, setShowPanditOnboarding,
     toasts, toast, handleLogin, logout, confirmBooking, submitReview, loading,
+    viewPandit, setViewPandit,
     festivals, userReferral, MUHURTAS, SEVA_OPTIONS,
     verifyPayment: async (res) => {
       // In a real app, this should be verified via a backend/Edge Function
