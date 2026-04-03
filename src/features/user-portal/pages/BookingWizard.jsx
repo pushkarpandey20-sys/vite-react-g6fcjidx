@@ -62,6 +62,7 @@ export default function BookingWizard() {
         panditId: p.id,
         panditName: p.name,
         amount: p.min_fee || p.price || 1500,
+        location: p.city || p.location || p.area || '',  // auto-fill city from pandit profile
       }));
       setStep(1); // user still needs to pick ritual
     }
@@ -118,6 +119,13 @@ export default function BookingWizard() {
   const handleStep4Submit = (e) => {
     e.preventDefault();
     if (!draft.address || !draft.location) return toast("Location and Address are required!", "⚠️");
+
+    // Pandit already chosen from marketplace — skip scholar selection, go to review
+    if (draft.panditId) {
+      setStep(6);
+      return;
+    }
+
     (async () => {
       setLoading(true);
       const { data } = await bookingApi.getAvailablePandits(draft.ritual, draft.location, draft.date);
@@ -248,21 +256,27 @@ export default function BookingWizard() {
         <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', marginBottom: 10 }}>
           <div style={{ position: 'absolute', top: '50%', left: 0, right: 0, height: 2, background: 'rgba(240,192,64,0.1)', zIndex: 1 }} />
           <div style={{ position: 'absolute', top: '50%', left: 0, width: `${(step-1)*20}%`, height: 2, background: 'linear-gradient(to right, #FF6B00, #F0C040)', transition: 'width 0.5s', zIndex: 2 }} />
-          {[1, 2, 3, 4, 5, 6].map(s => (
-            <div key={s} style={{ 
-              width: 32, height: 32, borderRadius: '50%', 
-              background: step >= s ? 'linear-gradient(135deg, #FF6B00, #F0C040)' : '#2c1a0e',
-              border: `2px solid ${step >= s ? '#F0C040' : 'rgba(240,192,64,0.2)'}`,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 14, fontWeight: 900, color: step >= s ? '#fff' : 'rgba(240,192,64,0.4)',
-              zIndex: 3, position: 'relative', transition: 'all 0.3s'
-            }}>
-              {step > s ? '✓' : s}
-              <div style={{ position: 'absolute', top: 38, fontSize: 10, fontWeight: 700, color: step >= s ? '#F0C040' : 'rgba(240,192,64,0.3)', width: 'max-content' }}>
-                {['Ritual', 'Samagri', 'Timing', 'Location', 'Pandit', 'Pay'][s-1]}
+          {[1, 2, 3, 4, 5, 6].map(s => {
+            // Step 5 (Pandit) is auto-done when pandit pre-chosen from marketplace
+            const isAutoDone = s === 5 && !!draft.panditId && step === 6;
+            const isDone = step > s || isAutoDone;
+            const isActive = step === s && !isAutoDone;
+            return (
+              <div key={s} style={{
+                width: 32, height: 32, borderRadius: '50%',
+                background: (isDone || isActive) ? 'linear-gradient(135deg, #FF6B00, #F0C040)' : '#2c1a0e',
+                border: `2px solid ${(isDone || isActive) ? '#F0C040' : 'rgba(240,192,64,0.2)'}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 14, fontWeight: 900, color: (isDone || isActive) ? '#fff' : 'rgba(240,192,64,0.4)',
+                zIndex: 3, position: 'relative', transition: 'all 0.3s'
+              }}>
+                {isDone ? '✓' : s}
+                <div style={{ position: 'absolute', top: 38, fontSize: 10, fontWeight: 700, color: (isDone || isActive) ? '#F0C040' : 'rgba(240,192,64,0.3)', width: 'max-content' }}>
+                  {['Ritual', 'Samagri', 'Timing', 'Location', 'Pandit', 'Pay'][s-1]}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -367,13 +381,27 @@ export default function BookingWizard() {
 
         {step === 4 && (
           <form className="fade-in" onSubmit={handleStep4Submit}>
-            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 30 }}>Service Location</h2>
+            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 20 }}>Service Location</h2>
+
+            {/* Info banner when pandit pre-chosen from marketplace */}
+            {draft.panditId && (
+              <div style={{ background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)', borderRadius: 14, padding: '12px 20px', marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
+                <span style={{ fontSize: 22 }}>🕉️</span>
+                <div>
+                  <div style={{ color: '#4ade80', fontWeight: 800, fontSize: 14 }}>Scholar Already Chosen: {draft.panditName}</div>
+                  <div style={{ color: 'rgba(255,248,240,0.5)', fontSize: 12, marginTop: 2 }}>
+                    City auto-set to <strong style={{ color: '#4ade80' }}>{draft.location}</strong>. Just add your full address below.
+                  </div>
+                </div>
+              </div>
+            )}
+
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 20, marginBottom: 40 }}>
               <div>
                 <label style={{ display: 'block', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(240,192,64,0.6)', marginBottom: 8, letterSpacing: 1 }}>City / Region</label>
                 <select style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(240,192,64,0.2)', color: '#fff', padding: 15, borderRadius: 12, outline: 'none' }} required value={draft.location} onChange={e => setDraft(d => ({ ...d, location: e.target.value }))}>
                   <option value="">Select City</option>
-                  {["Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Mumbai", "Bengaluru", "Kashi", "Ayodhya", "Haridwar", "Ujjain", "Pune"].map(c => <option key={c} value={c}>{c}</option>)}
+                  {["Delhi", "Gurgaon", "Noida", "Faridabad", "Ghaziabad", "Mumbai", "Bengaluru", "Kashi", "Varanasi", "Ayodhya", "Haridwar", "Ujjain", "Pune"].map(c => <option key={c} value={c}>{c}</option>)}
                 </select>
               </div>
               <div>
@@ -383,7 +411,9 @@ export default function BookingWizard() {
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
               <button type="button" className="btn btn-outline" onClick={prevStep}>← Back</button>
-              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 30px' }}>Find Available Pandits →</button>
+              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 30px' }}>
+                {draft.panditId ? 'Review & Pay →' : 'Find Available Pandits →'}
+              </button>
             </div>
           </form>
         )}
