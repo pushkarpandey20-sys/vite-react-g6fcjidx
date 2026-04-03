@@ -65,21 +65,13 @@ export default function TemplePoojaBookingPage() {
       if (payment.success) {
         const payload = {
           devotee_id: toUUID(devoteeId),
-          devotee_name: devoteeName,
-          ritual: `Temple: ${selectedPooja}`,
-          ritual_icon: "🛕",
-          amount: totalPrice,
+          ritual_name: `Temple: ${selectedPooja}`,
+          total_amount: totalPrice,
           booking_date: options.date,
           status: 'confirmed',
-          location: temple.city,
-          address: temple.name,
-          notes: `Names: ${options.familyNames} | Streaming: ${options.liveStreaming} | Prasad: ${options.prasadDelivery}`,
-          delivery_address: options.prasadDelivery ? options.deliveryAddress : null,
-          prasad_required: options.prasadDelivery,
-          courier_tracking: null,
-          dispatch_date: null,
+          address: `${temple.name}, ${temple.city}`,
+          notes: `Names: ${options.familyNames} | Streaming: ${options.liveStreaming} | Prasad: ${options.prasadDelivery} | Delivery: ${options.deliveryAddress || 'N/A'}`,
           payment_id: payment.payment_id,
-          payment_status: 'paid'
         };
 
         const { error } = await db.bookings().insert(payload);
@@ -97,45 +89,51 @@ export default function TemplePoojaBookingPage() {
 
   return (
     <div className="temple-pooja-booking-page" style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(330px, 1fr) 300px', gap: '25px' }}>
-      <div className="wizard-card card" style={{ padding: '30px' }}>
+      <div className="wizard-card card" style={{ padding: '30px', background: '#fff' }}>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '30px' }}>
           <div style={{ width: '80px', height: '80px', background: 'linear-gradient(45deg, #FFFAF5, #FFF3E6)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>{temple.icon}</div>
           <div>
-            <h2 className="ph-title" style={{ color: '#F0C040', marginBottom: '4px' }}>Remote Pooja Booking</h2>
-            <p className="ph-sub">📍 {temple.name}, {temple.city}</p>
+            <h2 style={{ fontFamily: 'Cinzel,serif', color: '#FF6B00', marginBottom: '4px', fontSize: 22, fontWeight: 900 }}>Remote Pooja Booking</h2>
+            <p style={{ color: '#5C3317', margin: 0, fontSize: 14 }}>📍 {temple.name}, {temple.city}</p>
           </div>
         </div>
 
         <form onSubmit={handleBooking}>
           <div style={{ marginBottom: '30px' }}>
-            <label className="fl" style={{ marginBottom: '15px' }}>🔮 Select Sacred Pooja</label>
+            <label style={{ display: 'block', marginBottom: '12px', fontWeight: 800, color: '#2C1A0E', fontSize: 14 }}>🔮 Select Sacred Pooja</label>
             <div style={{ display: 'grid', gap: '10px' }}>
               {(temple.poojas || []).map(p => (
-                <div key={p} style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', borderRadius: '15px', border: `2px solid ${selectedPooja === p ? '#FF6B00' : '#eee'}`, background: selectedPooja === p ? 'rgba(255,107,0,0.05)' : '#fff', cursor: 'pointer', transition: '0.2s' }} onClick={() => setSelectedPooja(p)}>
-                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: `2px solid ${selectedPooja === p ? '#FF6B00' : '#ccc'}`, background: selectedPooja === p ? '#FF6B00' : 'transparent', position: 'relative' }}>
+                <div key={p} style={{ display: 'flex', alignItems: 'center', gap: '15px', padding: '15px', borderRadius: '15px', border: `2px solid ${selectedPooja === p ? '#FF6B00' : '#eee'}`, background: selectedPooja === p ? 'rgba(255,107,0,0.06)' : '#FFFAF5', cursor: 'pointer', transition: '0.2s' }} onClick={() => setSelectedPooja(p)}>
+                  <div style={{ width: '20px', height: '20px', borderRadius: '50%', border: `2px solid ${selectedPooja === p ? '#FF6B00' : '#ccc'}`, background: selectedPooja === p ? '#FF6B00' : 'transparent', flexShrink: 0, position: 'relative' }}>
                     {selectedPooja === p && <div style={{ position: 'absolute', inset: '4px', background: '#fff', borderRadius: '50%' }} />}
                   </div>
-                  <span style={{ fontWeight: 800 }}>{p}</span>
-                  <span style={{ marginLeft: 'auto', fontSize: '13px', color: '#8B6347' }}>₹{basePrice}/-</span>
+                  <span style={{ fontWeight: 800, color: '#2C1A0E' }}>{p}</span>
+                  <span style={{ marginLeft: 'auto', fontSize: '13px', color: '#8B6347', fontWeight: 700 }}>₹{basePrice}/-</span>
                 </div>
               ))}
             </div>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginBottom: '30px' }}>
-            <div className="fg"><label className="fl">Pooja Date</label><input type="date" className="fi" required value={options.date} onChange={e => setOptions({...options, date: e.target.value})} /></div>
-            <div className="fg"><label className="fl">Girdhari Names (For Sankalp)</label><input className="fi" placeholder="Rahul, Priya, etc." value={options.familyNames} onChange={e => setOptions({...options, familyNames: e.target.value})} /></div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px', marginBottom: '30px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontWeight: 800, color: '#2C1A0E', fontSize: 13 }}>Pooja Date</label>
+              <input type="date" style={{ padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e0d0c0', fontSize: 14, color: '#2C1A0E', background: '#FFFAF5', outline: 'none' }} required value={options.date} onChange={e => setOptions({...options, date: e.target.value})} />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <label style={{ fontWeight: 800, color: '#2C1A0E', fontSize: 13 }}>Names (For Sankalp)</label>
+              <input style={{ padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e0d0c0', fontSize: 14, color: '#2C1A0E', background: '#FFFAF5', outline: 'none' }} placeholder="Rahul, Priya, etc." value={options.familyNames} onChange={e => setOptions({...options, familyNames: e.target.value})} />
+            </div>
           </div>
 
-          <div style={{ background: '#f9f9f9', padding: '20px', borderRadius: '18px', border: '1px dashed #ddd', marginBottom: '30px' }}>
-            <h4 style={{ marginBottom: '15px' }}>✨ Exclusive Devotional Add-ons</h4>
+          <div style={{ background: '#FFF8F0', padding: '20px', borderRadius: '18px', border: '1px dashed #FFCCAA', marginBottom: '30px' }}>
+            <h4 style={{ marginBottom: '15px', color: '#2C1A0E', fontWeight: 800 }}>✨ Exclusive Devotional Add-ons</h4>
             <div style={{ display: 'grid', gap: '12px' }}>
               <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                   <input type="checkbox" checked={options.liveStreaming} onChange={e => setOptions({...options, liveStreaming: e.target.checked})} />
                   <div>
-                    <div style={{ fontSize: '14px', fontWeight: 800 }}>LIVE Streaming Darshan</div>
-                    <div style={{ fontSize: '11px', color: '#888' }}>Watch your pooja performed real-time via sacred link.</div>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#2C1A0E' }}>LIVE Streaming Darshan</div>
+                    <div style={{ fontSize: '11px', color: '#8B6347' }}>Watch your pooja performed real-time via sacred link.</div>
                   </div>
                 </div>
                 <span style={{ fontSize: '13px', fontWeight: 800, color: '#FF6B00' }}>+₹201/-</span>
@@ -144,17 +142,18 @@ export default function TemplePoojaBookingPage() {
                 <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                   <input type="checkbox" checked={options.prasadDelivery} onChange={e => setOptions({...options, prasadDelivery: e.target.checked})} />
                   <div>
-                    <div style={{ fontSize: '14px', fontWeight: 800 }}>Sacred Prasad Delivery</div>
-                    <div style={{ fontSize: '11px', color: '#888' }}>Blessed prasad shipped to your verified home address.</div>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#2C1A0E' }}>Sacred Prasad Delivery</div>
+                    <div style={{ fontSize: '11px', color: '#8B6347' }}>Blessed prasad shipped to your verified home address.</div>
                   </div>
                 </div>
                 <span style={{ fontSize: '13px', fontWeight: 800, color: '#FF6B00' }}>+₹101/-</span>
               </label>
             </div>
             {options.prasadDelivery && (
-              <div className="fg" style={{ marginTop: '20px' }}>
-                <label className="fl">Delivery Address (Verified Home)</label>
-                <textarea className="fta" required placeholder="Full address with Pincode..." value={options.deliveryAddress} onChange={e => setOptions({...options, deliveryAddress: e.target.value})} />
+              <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <label style={{ fontWeight: 800, color: '#2C1A0E', fontSize: 13 }}>Delivery Address (Verified Home)</label>
+                <textarea required placeholder="Full address with Pincode..." value={options.deliveryAddress} onChange={e => setOptions({...options, deliveryAddress: e.target.value})}
+                  style={{ padding: '10px 14px', borderRadius: 10, border: '1.5px solid #e0d0c0', fontSize: 14, color: '#2C1A0E', background: '#FFFAF5', outline: 'none', minHeight: 80, resize: 'vertical' }} />
               </div>
             )}
           </div>

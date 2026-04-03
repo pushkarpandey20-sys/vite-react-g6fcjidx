@@ -157,7 +157,7 @@ export default function BookingWizard() {
 
       // Notify pandit
       if (draft.panditId) {
-        notificationService.notifyPanditOfNewBooking(draft.panditId, draft.ritual).catch(() => {});
+        try { notificationService.notifyPanditOfNewBooking(draft.panditId, draft.ritual); } catch(e) {}
       }
 
       // Step 4: Show booking success modal with full details
