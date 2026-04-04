@@ -327,9 +327,11 @@ export default function BookingWizard() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, minWidth: 140 }}>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ color: 'rgba(255,248,240,0.35)', fontSize: 11, textDecoration: 'line-through' }}>₹1,500</div>
                     <div style={{ color: '#F0C040', fontFamily: 'Cinzel', fontWeight: 900, fontSize: 26 }}>₹2,499</div>
-                    <div style={{ color: 'rgba(255,248,240,0.4)', fontSize: 10 }}>priority dispatch fee</div>
+                    <div style={{ color: 'rgba(255,248,240,0.5)', fontSize: 10 }}>priority dispatch dakshina</div>
+                    <div style={{ color: 'rgba(255,248,240,0.35)', fontSize: 9, marginTop: 5, lineHeight: 1.5, maxWidth: 140, textAlign: 'right' }}>
+                      *Base dakshina. Final amount may vary based on ritual & duration.
+                    </div>
                   </div>
                   <button
                     onClick={() => selectRitual({ id: 'on-demand', name: 'On-Demand Scholar', icon: '⚡', price: 2499, description: 'Certified Vedic scholar at your door in 60 minutes.', samagriRequired: false })}
