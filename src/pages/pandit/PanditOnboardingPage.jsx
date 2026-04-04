@@ -142,7 +142,6 @@ export default function PanditOnboardingPage() {
   const prevStep   = () => setStep(s=>Math.max(s-1,1));
 
   const handleSubmit = async () => {
-    if (!files.intro_video) { toast('Please upload your 60-second intro video.','⚠️'); return; }
     setSubmitting(true);
     try {
       const { error } = await supabase.from('pandits').insert({
@@ -167,6 +166,7 @@ export default function PanditOnboardingPage() {
       toast('Application submitted! Our team will verify you within 48 hours. 🙏','✅');
       navigate('/pandit/dashboard');
     } catch(err) {
+      console.error('[onboarding] error:', err);
       toast(err.message||'Submission failed. Please try again.','⚠️');
     } finally { setSubmitting(false); }
   };

@@ -77,10 +77,10 @@ export default function UserHome() {
     <div style={{ color:'rgba(255,248,240,0.88)' }}>
 
       {/* ── Hero Welcome ── */}
-      <div style={{ position:'relative', overflow:'hidden', ...dkCard, padding:'28px 28px 22px', marginBottom:20 }}>
+      <div style={{ position:'relative', overflow:'hidden', ...dkCard, padding: mobile ? '18px 16px 16px' : '28px 28px 22px', marginBottom:20 }}>
         <div style={{ position:'absolute', top:-60, right:-40, width:280, height:280,
           background:'radial-gradient(ellipse,rgba(255,107,0,0.12) 0%,transparent 70%)', pointerEvents:'none' }} />
-        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:16 }}>
+        <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:16, flexWrap: mobile ? 'wrap' : 'nowrap' }}>
           <div style={{ flex:1 }}>
             <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:'rgba(240,192,64,0.1)',
               border:'1px solid rgba(240,192,64,0.25)', color:'#F0C040', fontSize:10, fontWeight:800,
@@ -234,8 +234,8 @@ export default function UserHome() {
 
           {/* Virtual Pooja Banner */}
           <div style={{ background:'linear-gradient(135deg,rgba(109,40,217,0.65),rgba(75,0,130,0.75))',
-            border:'1px solid rgba(167,139,250,0.3)', borderRadius:18, padding:'22px 26px', marginBottom:20,
-            display:'flex', justifyContent:'space-between', alignItems:'center', gap:16 }}>
+            border:'1px solid rgba(167,139,250,0.3)', borderRadius:18, padding: mobile ? '16px' : '22px 26px', marginBottom:20,
+            display:'flex', flexDirection: mobile ? 'column' : 'row', justifyContent:'space-between', alignItems: mobile ? 'flex-start' : 'center', gap:16 }}>
             <div>
               <div style={{ color:'#e9d5ff', fontWeight:800, fontSize:10, letterSpacing:2, marginBottom:5 }}>✨ NEW FEATURE</div>
               <h3 style={{ color:'#fff', fontFamily:'Cinzel,serif', margin:'0 0 5px', fontSize:17 }}>📱 Virtual Pooja</h3>
@@ -354,6 +354,16 @@ export default function UserHome() {
             <div style={{ color:'rgba(255,248,240,0.4)', fontSize:12, marginBottom:14 }}>Support temples & sacred traditions</div>
             <button className="btn btn-primary" style={{ width:'100%', justifyContent:'center' }}
               onClick={() => navigate('/user/donations')}>Donate Now ❤️</button>
+          </div>
+
+          {/* Referral Banner */}
+          <div style={{ background:'linear-gradient(135deg,rgba(124,58,237,0.12),rgba(99,102,241,0.08))', border:'1px solid rgba(124,58,237,0.25)', borderRadius:14, padding:'16px 18px', marginTop:14, textAlign:'center' }}>
+            <div style={{ fontSize:28, marginBottom:6 }}>🎁</div>
+            <div style={{ color:'#6d28d9', fontWeight:700, fontSize:14, marginBottom:4 }}>Refer & Earn ₹50</div>
+            <div style={{ color:'#7c3aed', fontSize:12, marginBottom:12 }}>Invite friends to DevSetu. Earn ₹50 per booking!</div>
+            <button onClick={() => navigate('/user/referral')} style={{ background:'linear-gradient(135deg,#7c3aed,#6d28d9)', color:'#fff', border:'none', borderRadius:20, padding:'8px 20px', fontWeight:700, cursor:'pointer', fontSize:13 }}>
+              Share & Earn →
+            </button>
           </div>
         </div>
       </div>

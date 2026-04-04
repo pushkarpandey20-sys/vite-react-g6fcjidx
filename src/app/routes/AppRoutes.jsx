@@ -87,8 +87,8 @@ export default function AppRoutes() {
         {/* Pandit Onboarding (standalone, no sidebar layout) */}
         <Route path="/pandit/onboard" element={<PanditOnboardingPage />} />
 
-        {/* Pandit Routes */}
-        <Route path="/pandit" element={<ProtectedRoute role="pandit"><PanditLayout /></ProtectedRoute>}>
+        {/* Pandit Routes — public; dashboard shows login UI when not authed */}
+        <Route path="/pandit" element={<PanditLayout />}>
           <Route index element={<Navigate to="/pandit/dashboard" replace />} />
           <Route path="dashboard" element={<PanditDashboard />} />
           <Route path="requests" element={<PanditReqPage />} />

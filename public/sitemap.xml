@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://vite-react-g6fcjidx.vercel.app/</loc><priority>1.0</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://vite-react-g6fcjidx.vercel.app/user/marketplace</loc><priority>0.9</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://vite-react-g6fcjidx.vercel.app/user/samagri</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://vite-react-g6fcjidx.vercel.app/user/temples</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://vite-react-g6fcjidx.vercel.app/user/virtual-pooja</loc><priority>0.8</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://vite-react-g6fcjidx.vercel.app/user/muhurta</loc><priority>0.7</priority><changefreq>daily</changefreq></url>
+  <url><loc>https://vite-react-g6fcjidx.vercel.app/user/donations</loc><priority>0.7</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://vite-react-g6fcjidx.vercel.app/roadmap</loc><priority>0.6</priority><changefreq>monthly</changefreq></url>
+</urlset>

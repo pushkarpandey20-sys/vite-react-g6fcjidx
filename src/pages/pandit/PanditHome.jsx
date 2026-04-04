@@ -10,8 +10,10 @@ export default function PanditHome() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const isValidUUID = (v) => v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+
   const loadBookings = async () => {
-    if (!panditId) return;
+    if (!isValidUUID(panditId)) { setLoading(false); return; }
     const { data } = await db.bookings()
       .select("*")
       .eq("pandit_id", panditId)
@@ -22,7 +24,7 @@ export default function PanditHome() {
 
   useEffect(() => {
     loadBookings();
-    if (!panditId) return;
+    if (!isValidUUID(panditId)) return;
 
     const channel = supabase.channel(`pandit_dashboard_${panditId}`)
       .on('postgres_changes', { 

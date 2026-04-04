@@ -162,25 +162,19 @@ export const SEED_PANDITS = [
 ];
 
 export const SEED_TEMPLES = [
-  { id: 'temple-001', name: 'Kashi Vishwanath', city: 'Varanasi', deity: 'Lord Shiva', icon: '🛕', state: 'Uttar Pradesh', is_live: false, description: 'One of the 12 Jyotirlingas, situated on the banks of the holy Ganges.' },
-  { id: 'temple-002', name: 'Mahakaleshwar', city: 'Ujjain', deity: 'Lord Shiva', icon: '🔱', state: 'Madhya Pradesh', is_live: true, description: 'Self-manifested (Swayambhu) Jyotirlinga. Famous for Bhasma Aarti at 4 AM.' },
-  { id: 'temple-003', name: 'Vrindavan Dham', city: 'Mathura', deity: 'Lord Krishna', icon: '🪷', state: 'Uttar Pradesh', is_live: false, description: "Sacred land of Lord Krishna's childhood. Hundreds of ancient temples." },
-  { id: 'temple-004', name: 'Ram Janmabhoomi', city: 'Ayodhya', deity: 'Lord Ram', icon: '🏹', state: 'Uttar Pradesh', is_live: false, description: 'Birthplace of Lord Ram. The newly consecrated Ram Mandir welcomes devotees.' },
-  { id: 'temple-005', name: 'Tirupati Balaji', city: 'Tirupati', deity: 'Lord Vishnu', icon: '🌺', state: 'Andhra Pradesh', is_live: false, description: "One of the world's most visited religious sites. Lord Venkateswara's abode." },
+  { id:'00000000-0000-0000-0001-000000000001', name:'Ram Janmabhoomi Temple',    city:'Ayodhya',  deity:'Lord Ram',          description:'Sacred birthplace of Lord Ram. New temple inaugurated January 2024.',       services:['Ram Puja','Aarti','Archana','Prasad'],    timing:'5:00 AM - 10:00 PM', is_live:false },
+  { id:'00000000-0000-0000-0001-000000000002', name:'Mahakaleshwar Jyotirlinga', city:'Ujjain',   deity:'Lord Shiva',        description:'Famous for Bhasma Aarti at 4 AM. One of 12 Jyotirlingas.',                   services:['Bhasma Aarti','Rudrabhishek','Darshan'], timing:'4:00 AM - 11:00 PM', is_live:true  },
+  { id:'00000000-0000-0000-0001-000000000003', name:'Kashi Vishwanath Temple',   city:'Varanasi', deity:'Lord Shiva',        description:'Most sacred Shiva temple. Kashi Vishwanath Corridor.',                       services:['Abhishek','Aarti','Darshan'],             timing:'3:00 AM - 11:00 PM', is_live:false },
+  { id:'00000000-0000-0000-0001-000000000004', name:'ISKCON Delhi Temple',       city:'Delhi',    deity:'Lord Krishna',      description:'Beautiful Krishna temple. Regular bhajans and Geeta lectures.',              services:['Darshan','Abhishek','Prasad'],            timing:'4:30 AM - 9:00 PM',  is_live:false },
+  { id:'00000000-0000-0000-0001-000000000005', name:'Vaishno Devi Shrine',       city:'Katra',    deity:'Mata Vaishno Devi', description:'Natural cave temple in Trikuta Mountains. 10M+ pilgrims annually.',         services:['Darshan','Helicopter','Prasad'],          timing:'24 hours',           is_live:false },
 ];
 
 export const SEED_DEVOTEES = [
-  { id: 'dev-001', name: 'Priya Sharma', city: 'Delhi', phone: '+91 9876543210' },
-  { id: 'dev-002', name: 'Amit Kumar', city: 'Mumbai', phone: '+91 9123456789' },
-  { id: 'dev-003', name: 'Sunita Gupta', city: 'Bengaluru', phone: '+91 9012345678' },
-  { id: 'dev-004', name: 'Ravi Verma', city: 'Noida', phone: '+91 8987654321' },
-  { id: 'dev-005', name: 'Meena Patel', city: 'Gurgaon', phone: '+91 8876543210' },
+  { id:'00000000-0000-0000-0002-000000000001', name:'Rahul Sharma', phone:'9711101101', city:'Delhi',     total_bookings:5 },
+  { id:'00000000-0000-0000-0002-000000000002', name:'Priya Singh',  phone:'9722202202', city:'Gurgaon',   total_bookings:3 },
+  { id:'00000000-0000-0000-0002-000000000003', name:'Amit Gupta',   phone:'9733303303', city:'Noida',     total_bookings:8 },
+  { id:'00000000-0000-0000-0002-000000000004', name:'Sunita Verma', phone:'9744404404', city:'Mumbai',    total_bookings:2 },
+  { id:'00000000-0000-0000-0002-000000000005', name:'Vikram Patel', phone:'9755505505', city:'Bengaluru', total_bookings:4 },
 ];
 
-export const SEED_BOOKINGS = [
-  { id: 'bk-001', devotee_name: 'Priya Sharma', pandit_name: 'Pt. Ramesh Sharma', ritual: 'Griha Pravesh', ritual_icon: '🏠', status: 'completed', amount: 2100, booking_date: '2026-03-10' },
-  { id: 'bk-002', devotee_name: 'Amit Kumar', pandit_name: 'Pt. Suresh Mishra', ritual: 'Rudrabhishek', ritual_icon: '🔱', status: 'accepted', amount: 3500, booking_date: '2026-03-26' },
-  { id: 'bk-003', devotee_name: 'Sunita Gupta', pandit_name: 'Pt. Govind Joshi', ritual: 'Vivah Pooja', ritual_icon: '💍', status: 'pending', amount: 8000, booking_date: '2026-04-05' },
-  { id: 'bk-004', devotee_name: 'Ravi Verma', pandit_name: 'Pt. Deepak Pandey', ritual: 'Kaal Sarp Dosh', ritual_icon: '🐍', status: 'completed', amount: 3500, booking_date: '2026-03-15' },
-  { id: 'bk-005', devotee_name: 'Meena Patel', pandit_name: 'Pt. Anil Tripathi', ritual: 'Satyanarayan', ritual_icon: '🌟', status: 'accepted', amount: 1500, booking_date: '2026-03-28' },
-];
+export const SEED_BOOKINGS = [];

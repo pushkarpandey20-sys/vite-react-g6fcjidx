@@ -10,6 +10,7 @@ import { SamagriSelector } from '../components/SamagriSelector';
 import { paymentService } from '../../../services/paymentService';
 import { notificationService } from '../../../services/notificationService';
 import { SEED_PANDITS } from '../../../data/seedData';
+import { sendBookingConfirmationWhatsApp, sendPanditNewBookingWhatsApp } from '../../../services/whatsappService';
 
 export default function BookingWizard() {
   const { devoteeId, devoteeName, userPhone, toast, setShowSuccess, setLastBooking } = useApp();

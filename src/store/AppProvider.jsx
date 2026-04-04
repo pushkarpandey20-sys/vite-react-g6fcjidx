@@ -48,10 +48,14 @@ export function AppProvider({ children }) {
     setUserPhone(phone);
     localStorage.setItem('ds_session', JSON.stringify({ phone, userId: user.id }));
 
+    const isValidUUID = (v) => v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+
     // Check pandits first
     const { data: pandit } = await db.pandits().select('*').eq('phone', phone).maybeSingle();
     if (pandit) {
-      setPanditId(pandit.id);
+      // Only use pandit.id if it's a real UUID — skip seed/legacy rows
+      const safePanditId = isValidUUID(pandit.id) ? pandit.id : null;
+      setPanditId(safePanditId);
       setPanditName(pandit.name);
       setPanditOnline(pandit.is_online || false);
       localStorage.setItem("devsetu_pandit", JSON.stringify({ id: pandit.id, name: pandit.name }));
@@ -91,6 +95,23 @@ export function AppProvider({ children }) {
 
   // Session restore on mount
   useEffect(() => {
+    // One-time cleanup of bad non-UUID IDs from localStorage
+    const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    try {
+      const stored = localStorage.getItem('devsetu_user');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.id && !uuidRegex.test(parsed.id)) localStorage.removeItem('devsetu_user');
+      }
+    } catch(e) { localStorage.removeItem('devsetu_user'); }
+    try {
+      const stored = localStorage.getItem('devsetu_pandit');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.id && !uuidRegex.test(parsed.id)) localStorage.removeItem('devsetu_pandit');
+      }
+    } catch(e) { localStorage.removeItem('devsetu_pandit'); }
+
     const restore = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
@@ -109,7 +130,8 @@ export function AppProvider({ children }) {
           const ps = localStorage.getItem("devsetu_pandit");
           if (ps) {
             const p = JSON.parse(ps);
-            setPanditId(p.id); setPanditName(p.name);
+            const validPanditId = p.id && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(p.id) ? p.id : null;
+            setPanditId(validPanditId); setPanditName(p.name);
           }
         }
         // Restore admin session
@@ -134,11 +156,10 @@ export function AppProvider({ children }) {
     return () => subscription.unsubscribe();
   }, [loadUserProfile, clearUserState]);
 
-  // Kept for guest/demo flow
+  // Kept for guest/demo flow — devoteeId stays null until Supabase auth creates a real UUID row
   const handleLogin = (phone, name, city) => {
-    const id = genId("DEV");
-    setDevoteeId(id); setDevoteeName(name || "New User"); setDevoteeCity(city || "Delhi");
-    localStorage.setItem("devsetu_user", JSON.stringify({ id, name, city }));
+    setDevoteeId(null); setDevoteeName(name || "New User"); setDevoteeCity(city || "Delhi");
+    localStorage.setItem("devsetu_user", JSON.stringify({ id: null, name, city }));
     setShowLogin(false); setShowUserOnboarding(true);
     toast(`Welcome, ${name}! 🙏`);
   };

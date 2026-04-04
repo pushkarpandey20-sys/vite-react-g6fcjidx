@@ -1,6 +1,4 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { useApp } from '../../store/AppCtx';
 
 export const ProtectedRoute = ({ children, role }) => {
   const { devoteeId, panditId, adminRole, authLoading, setShowLogin, loginPanditDemo } = useApp();

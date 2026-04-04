@@ -11,8 +11,10 @@ export default function PanditReqPage({ propFilter }) {
   const [filter, setFilter] = useState(initialFilter);
 
 
+  const isValidUUID = (v) => v && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(v);
+
   useEffect(() => {
-    if (!panditId) { setLoading(false); return; }
+    if (!isValidUUID(panditId)) { setLoading(false); return; }
     db.requests().select("*").eq("pandit_id", panditId).order("created_at", { ascending: false })
       .then(({ data }) => { setRequests(data || []); setLoading(false); });
   }, [panditId]);
