@@ -1,4 +1,4 @@
-import { db, toUUID } from '../services/supabase';
+import { supabase, db, toUUID } from '../services/supabase';
 import { withRetry } from '../utils/production/errorHandler';
 import { logger } from '../utils/production/logger';
 
