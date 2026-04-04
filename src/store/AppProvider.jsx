@@ -291,7 +291,7 @@ export function AppProvider({ children }) {
     cart, addToCart, updateCartQty, cartCount: cart.reduce((sum, i) => sum + (i.qty || 1), 0),
     showCart, setShowCart, showLogin, setShowLogin,
     showAdminLogin, setShowAdminLogin,
-    showConfirm, setShowConfirm,
+    showConfirm, setShowConfirm, bookingDraft, setBookingDraft,
     showSuccess, setShowSuccess,
     lastBooking, setLastBooking,
     showUserOnboarding, setShowUserOnboarding,

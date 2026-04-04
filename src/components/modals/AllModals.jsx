@@ -5,7 +5,25 @@ import { useApp } from '../../store/AppCtx';
 
 /* ─── CART MODAL ─────────────────────────────────────── */
 export function CartModal({ onClose, cart, updateCartQty, setShowConfirm, devoteeId, setShowLogin }) {
+  const { setBookingDraft } = useApp();
   const tot = cart.reduce((s, i) => s + (i.price * i.qty), 0);
+  const handleCheckout = () => {
+    if (!devoteeId) { setShowLogin(true); return; }
+    // Build a draft from cart items so ConfirmModal has data to display
+    const itemNames = cart.map(i => i.name).join(', ');
+    setBookingDraft({
+      ritual: itemNames.length > 40 ? itemNames.slice(0, 40) + '…' : itemNames,
+      ritualIcon: '📦',
+      panditName: 'Home Delivery',
+      amount: tot,
+      date: new Date().toISOString().split('T')[0],
+      time: 'Delivery window: 10 AM – 7 PM',
+      address: '',
+      addSamagri: true,
+    });
+    setShowConfirm(true);
+    onClose();
+  };
   return (
     <div className="overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
@@ -33,9 +51,7 @@ export function CartModal({ onClose, cart, updateCartQty, setShowConfirm, devote
         {cart.length > 0 && (
           <div className="modal-foot">
             <div style={{ flex: 1, fontWeight: 800, fontSize: 16 }}>Total: ₹{tot}</div>
-            <button className="btn btn-primary" onClick={() => {
-              if (!devoteeId) { setShowLogin(true); } else { setShowConfirm(true); onClose(); }
-            }}>Checkout</button>
+            <button className="btn btn-primary" onClick={handleCheckout}>Checkout</button>
           </div>
         )}
       </div>
@@ -45,6 +61,7 @@ export function CartModal({ onClose, cart, updateCartQty, setShowConfirm, devote
 
 /* ─── CONFIRM MODAL ──────────────────────────────────── */
 export function ConfirmModal({ draft, onCancel, onConfirm, loading }) {
+  const totalAmount = draft?.amount || draft?.total_amount || 0;
   return (
     <div className="overlay">
       <div className="modal" style={{ maxWidth: 480 }}>
@@ -52,25 +69,42 @@ export function ConfirmModal({ draft, onCancel, onConfirm, loading }) {
           <div className="modal-title">🙏 Confirm Booking</div>
           <div className="modal-sub">Review your sacred service details</div>
         </div>
-        <div className="modal-body">
-          <div className="card card-p" style={{ background: "rgba(255,107,0,.04)", border: "1.5px dashed var(--s)", marginBottom: 15 }}>
-            <div style={{ display: "flex", gap: 14, marginBottom: 12 }}>
-              <div style={{ fontSize: 32 }}>{draft?.ritualIcon}</div>
-              <div><div style={{ fontWeight: 800, fontSize: 16 }}>{draft?.ritual}</div><div style={{ fontSize: 12, color: "#8B6347" }}>with {draft?.panditName}</div></div>
+
+        {/* Explicit color:#2C1A0E on body so white modal bg never clashes with inherited light text */}
+        <div className="modal-body" style={{ color: '#2C1A0E' }}>
+          <div className="card card-p" style={{ background: "rgba(255,107,0,.04)", border: "1.5px dashed #FF6B00", marginBottom: 15 }}>
+
+            {/* Ritual + pandit row */}
+            <div style={{ display: "flex", gap: 14, alignItems: "center", marginBottom: 12 }}>
+              <div style={{ fontSize: 32, lineHeight: 1 }}>{draft?.ritualIcon || '🕉️'}</div>
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 16, color: '#2C1A0E' }}>
+                  {draft?.ritual || 'Sacred Service'}
+                </div>
+                <div style={{ fontSize: 12, color: '#8B6347', marginTop: 2 }}>
+                  {draft?.panditName ? `with ${draft.panditName}` : 'Doorstep Delivery'}
+                </div>
+              </div>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, fontSize: 12 }}>
-              <div>📅 <b>{draft?.date}</b></div><div>⏰ <b>{draft?.time}</b></div>
-              <div style={{ gridColumn: "1/-1" }}>📍 {draft?.address}</div>
+
+            {/* Date / time / address */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, fontSize: 12, color: '#2C1A0E' }}>
+              <div style={{ color: '#2C1A0E' }}>📅 <b>{draft?.date || '—'}</b></div>
+              <div style={{ color: '#2C1A0E' }}>⏰ <b>{draft?.time || '—'}</b></div>
+              <div style={{ gridColumn: "1/-1", color: '#2C1A0E' }}>
+                📍 {draft?.address || <span style={{ color: '#8B6347', fontStyle: 'italic' }}>Address to be confirmed at delivery</span>}
+              </div>
             </div>
+
             {draft?.addSamagri && (
-              <div style={{ marginTop: 8, fontSize: 11, color: "#FF6B00", fontWeight: 700 }}>📦 Includes Pooja Samagri Kit</div>
+              <div style={{ marginTop: 8, fontSize: 11, color: "#FF6B00", fontWeight: 700 }}>📦 Includes Samagri Kit</div>
             )}
           </div>
 
           {draft?.sankalp && (
-            <div className="card card-p" style={{ padding: 12, border: "1px solid #eee", fontSize: 12 }}>
+            <div className="card card-p" style={{ padding: 12, border: "1px solid #e8d5c0", fontSize: 12, color: '#2C1A0E', marginBottom: 12 }}>
               <div style={{ fontWeight: 800, marginBottom: 6, fontSize: 11, textTransform: "uppercase", color: "#8B6347" }}>Sankalp Details</div>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 10px" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4px 10px", color: '#2C1A0E' }}>
                 <div>Devotee: <b>{draft.sankalp.devotee_name}</b></div>
                 <div>Gotra: <b>{draft.sankalp.gotra || 'N/A'}</b></div>
                 <div style={{ gridColumn: "1/-1" }}>Purpose: <b>{draft.sankalp.purpose_of_puja || 'Sacred Ritual'}</b></div>
@@ -78,15 +112,18 @@ export function ConfirmModal({ draft, onCancel, onConfirm, loading }) {
             </div>
           )}
 
-          <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,107,0,.1)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <span style={{ fontWeight: 700 }}>Total Dakshina</span>
-            <span style={{ fontFamily: "'Cinzel',serif", fontSize: 20, fontWeight: 900, color: "var(--s)" }}>₹{draft?.amount?.toLocaleString()}</span>
+          {/* Total */}
+          <div style={{ marginTop: 14, paddingTop: 12, borderTop: "1px solid rgba(255,107,0,.15)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <span style={{ fontWeight: 700, color: '#2C1A0E' }}>Total Dakshina</span>
+            <span style={{ fontFamily: "'Cinzel',serif", fontSize: 20, fontWeight: 900, color: "#FF6B00" }}>
+              ₹{totalAmount.toLocaleString()}
+            </span>
           </div>
         </div>
+
         <div className="modal-foot">
           <button className="btn btn-outline" onClick={onCancel}>Cancel</button>
           <button className="btn btn-primary" onClick={() => {
-            // Mocking Razorpay success
             const mockPayment = {
               payment_id: "pay_" + Math.random().toString(36).substring(7),
               order_id: "order_" + Math.random().toString(36).substring(7),
