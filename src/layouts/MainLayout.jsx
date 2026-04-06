@@ -4,6 +4,7 @@ import { useApp } from '../store/AppCtx';
 import { Toast } from '../components/common/UIElements';
 import { CartModal, ConfirmModal, LoginModal, AdminLoginModal, UserOnboardingModal, PanditOnboardingModal, PanditModal, BookingSuccessModal } from '../components/modals/AllModals';
 import NotificationBell from '../components/NotificationBell';
+import PWAInstallBanner from '../components/PWAInstallBanner';
 
 export default function MainLayout({ children, sidebar, portalLabel, portalColor }) {
   const {
@@ -82,6 +83,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
       </div>
 
       <Toast toasts={toasts} />
+      <PWAInstallBanner />
 
       {showCart && <CartModal onClose={() => setShowCart(false)} cart={cart} updateCartQty={updateCartQty} setShowConfirm={() => setShowConfirm(true)} devoteeId={devoteeId} setShowLogin={setShowLogin} />}
       {showConfirm && <ConfirmModal draft={bookingDraft} onCancel={() => setShowConfirm(false)} onConfirm={confirmBooking} loading={loading} />}
