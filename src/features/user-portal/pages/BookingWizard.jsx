@@ -422,7 +422,7 @@ export default function BookingWizard() {
                   </button>
                 </div>
 
-                <div style={{ display: 'flex', justifyContent: 'flex-start' }}>
+                <div className="wz-btn-row" style={{ justifyContent: 'flex-start' }}>
                   <button className="btn btn-outline" onClick={prevStep}>← Back</button>
                 </div>
               </>
@@ -445,7 +445,7 @@ export default function BookingWizard() {
                     navigate('/user/samagri', { state: { fromBooking: true, bookingDraft: draft } });
                   }}
                 />
-                <div style={{ display: 'flex', justifyContent: 'flex-start', marginTop: '30px' }}>
+                <div className="wz-btn-row" style={{ justifyContent: 'flex-start' }}>
                   <button className="btn btn-outline" onClick={prevStep}>← Back</button>
                 </div>
               </>
@@ -481,9 +481,9 @@ export default function BookingWizard() {
                   onChange={e => setDraft(d => ({ ...d, time: e.target.value }))} />
               </div>
             </div>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <button type="button" className="btn btn-outline" onClick={prevStep} style={{ flex: '1 1 120px' }}>← Back</button>
-              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 24px', flex: '2 1 180px' }}>Choose Address →</button>
+            <div className="wz-btn-row">
+              <button type="button" className="btn btn-outline" onClick={prevStep}>← Back</button>
+              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none' }}>Choose Address →</button>
             </div>
           </form>
         )}
@@ -518,10 +518,10 @@ export default function BookingWizard() {
                 <textarea style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(240,192,64,0.2)', color: '#fff', padding: 15, borderRadius: 12, outline: 'none', minHeight: 100 }} required value={draft.address} onChange={e => setDraft(d => ({ ...d, address: e.target.value }))} placeholder="House no, Building, Street name..." />
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="wz-btn-row">
               <button type="button" className="btn btn-outline" onClick={prevStep}>← Back</button>
-              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 30px' }}>
-                {draft.panditId ? 'Review & Pay →' : 'Find Available Pandits →'}
+              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none' }}>
+                {draft.panditId ? 'Review & Pay →' : 'Find Pandits →'}
               </button>
             </div>
           </form>
@@ -565,7 +565,7 @@ export default function BookingWizard() {
                 ))
               )}
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div className="wz-btn-row" style={{ justifyContent: 'flex-start' }}>
               <button className="btn btn-outline" onClick={prevStep}>← Back</button>
             </div>
           </div>
@@ -600,13 +600,10 @@ export default function BookingWizard() {
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <button className="btn btn-outline" onClick={prevStep} style={{ flex: '1 1 100px' }}>← Back</button>
+            <div className="wz-btn-row">
+              <button className="btn btn-outline" onClick={prevStep}>← Back</button>
               <button className="btn btn-primary" disabled={submitting} onClick={confirmBooking}
-                style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none',
-                  padding: '14px 20px', fontSize: 'clamp(13px,3.5vw,16px)',
-                  borderRadius: 14, opacity: submitting ? 0.8 : 1, flex: '2 1 200px',
-                  whiteSpace: 'nowrap', justifyContent: 'center' }}>
+                style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', opacity: submitting ? 0.8 : 1 }}>
                 {submitting ? "⏳ Processing..." : "📿 Confirm & Pay"}
               </button>
             </div>

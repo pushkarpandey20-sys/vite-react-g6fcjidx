@@ -198,7 +198,7 @@ export default function RitualCatalogPage() {
                   transition:'all 0.15s', outline:'none', whiteSpace:'nowrap', flexShrink:0,
                   boxShadow: isOn ? `0 3px 10px ${cat.color}40` : 'none',
                 }}>
-                {cat.icon} {cat.label}
+                {cat.icon} {cat.key}
                 {cnt > 0 && <span style={{ marginLeft:5, opacity:0.75, fontSize:10 }}>({cnt})</span>}
               </button>
             );

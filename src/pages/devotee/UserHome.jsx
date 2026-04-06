@@ -213,7 +213,7 @@ export default function UserHome() {
                 Shop All →
               </button>
             </div>
-            <div className="ritual-card-grid">
+            <div className="ritual-card-grid samagri-row">
               {SAMAGRI_HIGHLIGHTS.map(s => (
                 <div key={s.name} onClick={() => navigate('/user/samagri')}
                   style={{ background:'rgba(255,248,240,0.03)', border:'1px solid rgba(240,192,64,0.1)',
@@ -234,7 +234,7 @@ export default function UserHome() {
           </div>
 
           {/* Virtual Pooja Banner */}
-          <div style={{ background:'linear-gradient(135deg,rgba(109,40,217,0.65),rgba(75,0,130,0.75))',
+          <div className="virtual-pooja-banner" style={{ background:'linear-gradient(135deg,rgba(109,40,217,0.65),rgba(75,0,130,0.75))',
             border:'1px solid rgba(167,139,250,0.3)', borderRadius:18, padding: mobile ? '16px' : '22px 26px', marginBottom:20,
             display:'flex', flexDirection: mobile ? 'column' : 'row', justifyContent:'space-between', alignItems: mobile ? 'flex-start' : 'center', gap:16 }}>
             <div>

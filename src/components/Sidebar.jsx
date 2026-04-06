@@ -36,7 +36,13 @@ export function UserSidebar({ onNavClick }) {
 }
 
 export function PanditSidebar({ onNavClick }) {
-  const { panditId, setShowPanditOnboarding } = useApp();
+  const { panditId, panditName, setShowPanditOnboarding } = useApp();
+  const navigate = useNavigate();
+
+  const logoutPandit = () => {
+    localStorage.removeItem('devsetu_pandit');
+    window.location.href = '/pandit/dashboard'; // hard reload clears state
+  };
 
   const handleProtectedNav = (e) => {
     if (!panditId) {
@@ -59,6 +65,17 @@ export function PanditSidebar({ onNavClick }) {
       <NavLink to="/pandit/profile" onClick={handleProtectedNav} className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`}><span className="s-icon">👤</span>Edit Profile</NavLink>
       <NavLink to="/pandit/earnings" onClick={handleProtectedNav} className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`}><span className="s-icon">💰</span>Earnings</NavLink>
       <NavLink to="/pandit/schedule" onClick={handleProtectedNav} className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`}><span className="s-icon">⏰</span>Availability</NavLink>
+      {panditId && <>
+        <div className="s-div" />
+        <div style={{ padding: '8px 16px' }}>
+          <div style={{ fontSize: 11, color: 'rgba(240,192,64,0.5)', fontWeight: 700, marginBottom: 6, letterSpacing: 0.5 }}>LOGGED IN AS</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,248,240,0.75)', fontWeight: 700, marginBottom: 10, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>🪔 {panditName || 'Pandit'}</div>
+          <button onClick={logoutPandit}
+            style={{ width: '100%', background: 'rgba(255,107,0,0.1)', color: '#FF6B00', border: '1px solid rgba(255,107,0,0.3)', borderRadius: 10, padding: '8px 12px', fontWeight: 700, cursor: 'pointer', fontSize: 12, fontFamily: 'Nunito,sans-serif', textAlign: 'left' }}>
+            🚪 Logout
+          </button>
+        </div>
+      </>}
     </div>
   );
 }
