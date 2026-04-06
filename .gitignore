@@ -3,3 +3,6 @@ node_modules
 dist
 .env*.local
 .DS_Store
+# Capacitor generated folders - added to existing .gitignore
+android/
+ios/

@@ -1,0 +1,75 @@
+name: Build iOS IPA
+
+on:
+  workflow_dispatch:   # manual trigger only — requires Apple certs
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'debug'
+        type: choice
+        options: [debug, release]
+
+jobs:
+  build-ios:
+    name: Build iOS ${{ github.event.inputs.build_type }}
+    runs-on: macos-latest
+
+    steps:
+      # ── 1. Checkout ───────────────────────────────────────
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ── 2. Setup Node ─────────────────────────────────────
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # ── 3. Install dependencies ───────────────────────────
+      - name: Install dependencies
+        run: npm ci
+
+      # ── 4. Build web app ──────────────────────────────────
+      - name: Build web app
+        run: npm run build
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+
+      # ── 5. Add iOS platform ───────────────────────────────
+      - name: Add iOS platform
+        run: npx cap add ios || echo "iOS platform already exists"
+
+      # ── 6. Sync Capacitor ─────────────────────────────────
+      - name: Sync Capacitor
+        run: npx cap sync ios
+
+      # ── 7. Install CocoaPods ──────────────────────────────
+      - name: Install CocoaPods dependencies
+        run: |
+          cd ios/App
+          pod install
+
+      # ── 8. Build IPA (unsigned debug) ────────────────────
+      - name: Build iOS (unsigned)
+        run: |
+          cd ios/App
+          xcodebuild \
+            -workspace App.xcworkspace \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -derivedDataPath build \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      # ── 9. Upload build artifact ──────────────────────────
+      - name: Upload iOS build
+        uses: actions/upload-artifact@v4
+        with:
+          name: DevSetu-iOS-${{ github.run_number }}
+          path: ios/App/build
+          retention-days: 14
