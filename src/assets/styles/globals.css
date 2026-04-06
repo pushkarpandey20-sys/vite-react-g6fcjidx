@@ -4442,3 +4442,112 @@ input, select, textarea { max-width: 100% !important; }
   }
 }
 
+
+/* ══════════════════════════════════════════════════
+   MOBILE FIXES — all screens ≤ 768px
+   ══════════════════════════════════════════════════ */
+
+/* ── Header: compact nav-r on small screens ─────── */
+@media (max-width: 640px) {
+  .nav-r { gap: 6px; }
+
+  /* Truncate long user names */
+  .nav-r > div:last-child {
+    max-width: 100px;
+    overflow: hidden;
+  }
+  .nav-r > div:last-child > div:first-child {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 72px;
+    font-size: 11px !important;
+  }
+  /* Shrink padding on user pill */
+  .nav-r > div:last-child {
+    padding: 4px 8px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Hide "Logout" text on very small phones, keep the username */
+  .nav-r > div:last-child > div:nth-child(2) { display: none; }
+  .nav-r > div:last-child { padding: 4px 6px !important; }
+}
+
+/* ── Pandit Marketplace: filter bar horizontal scroll ── */
+@media (max-width: 768px) {
+  .pm-filter-bar,
+  .pm-filter-bar > div {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .pm-filter-bar::-webkit-scrollbar { display: none; }
+}
+
+/* ── Ritual Catalog: category pills — horizontal scroll ── */
+.rc-cat-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 4px;
+}
+.rc-cat-scroll::-webkit-scrollbar { display: none; }
+
+/* ── Temple Pooja Booking: responsive 2→1 col ─────────── */
+.temple-booking-grid {
+  display: grid;
+  grid-template-columns: minmax(330px, 1fr) 300px;
+  gap: 25px;
+  align-items: start;
+  max-width: 900px;
+  margin: 0 auto;
+}
+@media (max-width: 768px) {
+  .temple-booking-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .temple-booking-grid aside {
+    order: -1;
+  }
+}
+
+/* ── Muhurta Finder: date inputs on mobile ──────────────── */
+@media (max-width: 640px) {
+  .compact-filter > div {
+    flex-direction: column !important;
+  }
+  .compact-filter > div > div,
+  .compact-filter > div > button {
+    width: 100% !important;
+    flex: unset !important;
+  }
+  .compact-filter select,
+  .compact-filter input[type="date"],
+  .compact-filter input[type="text"] {
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+}
+
+/* ── Muhurta Panchang table: horizontal scroll on mobile ── */
+.muhurat-page-container .dtable,
+.muhurat-panchang-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.muhurat-page-container .dtable > * {
+  min-width: 480px;
+}
+
+/* ── Seva / Donations: card layout fix on mobile ───────── */
+@media (max-width: 480px) {
+  .sev-card { padding: 16px !important; }
+  .sev-amts { gap: 6px !important; }
+  .amt-chip  { padding: 6px 10px !important; font-size: 12px !important; }
+}

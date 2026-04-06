@@ -177,32 +177,34 @@ export default function RitualCatalogPage() {
 
       {/* ── Filter Bar ── categories + budget + samagri ─────── */}
       <div style={{ background:'#fff', border:'1px solid rgba(212,160,23,0.2)', borderRadius:14,
-        padding:'12px 16px', marginBottom:22, display:'flex', alignItems:'center',
-        gap:8, flexWrap:'wrap', boxShadow:'0 2px 10px rgba(0,0,0,0.04)' }}>
+        padding:'12px 16px', marginBottom:22, boxShadow:'0 2px 10px rgba(0,0,0,0.04)' }}>
 
-        {/* Category label */}
-        <span style={{ fontSize:10, fontWeight:800, color:'#D4A017', letterSpacing:'1px',
-          textTransform:'uppercase', flexShrink:0 }}>Categories:</span>
-
-        {/* Category pills */}
-        {CATS.map(cat => {
-          const cnt = cat.key === 'All' ? rituals.length : (counts[cat.key] || 0);
-          const isOn = activeCat === cat.key;
-          return (
-            <button key={cat.key} onClick={() => setActiveCat(cat.key)}
-              style={{
-                padding:'6px 14px', borderRadius:20, fontSize:12, fontWeight:700, cursor:'pointer',
-                border:`1.5px solid ${isOn ? cat.color : 'rgba(139,99,71,0.2)'}`,
-                background: isOn ? cat.color : '#fff',
-                color: isOn ? '#fff' : '#5C3317',
-                transition:'all 0.15s', outline:'none',
-                boxShadow: isOn ? `0 3px 10px ${cat.color}40` : 'none',
-              }}>
-              {cat.icon} {cat.label}
-              {cnt > 0 && <span style={{ marginLeft:5, opacity:0.75, fontSize:10 }}>({cnt})</span>}
-            </button>
-          );
-        })}
+        {/* Category label + horizontal-scroll row */}
+        <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:8 }}>
+          <span style={{ fontSize:10, fontWeight:800, color:'#D4A017', letterSpacing:'1px',
+            textTransform:'uppercase', flexShrink:0 }}>Categories:</span>
+        </div>
+        <div className="rc-cat-scroll" style={{ marginBottom:10 }}>
+          {CATS.map(cat => {
+            const cnt = cat.key === 'All' ? rituals.length : (counts[cat.key] || 0);
+            const isOn = activeCat === cat.key;
+            return (
+              <button key={cat.key} onClick={() => setActiveCat(cat.key)}
+                style={{
+                  padding:'6px 14px', borderRadius:20, fontSize:12, fontWeight:700, cursor:'pointer',
+                  border:`1.5px solid ${isOn ? cat.color : 'rgba(139,99,71,0.2)'}`,
+                  background: isOn ? cat.color : '#fff',
+                  color: isOn ? '#fff' : '#5C3317',
+                  transition:'all 0.15s', outline:'none', whiteSpace:'nowrap', flexShrink:0,
+                  boxShadow: isOn ? `0 3px 10px ${cat.color}40` : 'none',
+                }}>
+                {cat.icon} {cat.label}
+                {cnt > 0 && <span style={{ marginLeft:5, opacity:0.75, fontSize:10 }}>({cnt})</span>}
+              </button>
+            );
+          })}
+        </div>
+        <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
 
         {/* Budget divider */}
         <div style={{ width:1, height:22, background:'rgba(212,160,23,0.2)', margin:'0 4px', flexShrink:0 }}/>
@@ -237,7 +239,8 @@ export default function RitualCatalogPage() {
             <span style={{ fontSize:12, fontWeight:700, color:'#5C3317', whiteSpace:'nowrap' }}>📦 Samagri Only</span>
           </label>
         </div>
-      </div>
+        </div>{/* end budget+samagri row */}
+      </div>{/* end filter bar */}
 
       {/* ── Results count ────────────────────────────────────── */}
       {!loading && (

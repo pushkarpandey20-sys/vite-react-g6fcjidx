@@ -56,6 +56,7 @@ export default function UserHome() {
   const [pandits, setPandits] = useState(SAMPLE_PANDITS);
   const [bookings, setBookings] = useState([]);
   const [activeBooking, setActiveBooking] = useState(null);
+  const mobile = window.innerWidth < 768;
 
   useEffect(() => {
     supabase.from('pandits').select('id,name,city,experience_years,rating,specialization,min_fee')

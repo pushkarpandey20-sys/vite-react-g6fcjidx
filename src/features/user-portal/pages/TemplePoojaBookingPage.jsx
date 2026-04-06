@@ -87,7 +87,7 @@ export default function TemplePoojaBookingPage() {
   };
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'minmax(330px, 1fr) 300px', gap: '25px', alignItems: 'start' }}>
+    <div className="temple-booking-grid">
       <div style={{ padding: '30px', background: '#fff', borderRadius: 20, boxShadow: '0 4px 24px rgba(0,0,0,0.08)', border: '1px solid #f0e0d0' }}>
         <div style={{ display: 'flex', gap: '20px', alignItems: 'center', marginBottom: '30px' }}>
           <div style={{ width: '80px', height: '80px', background: 'linear-gradient(45deg, #FFFAF5, #FFF3E6)', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '40px' }}>{temple.icon}</div>
@@ -127,26 +127,25 @@ export default function TemplePoojaBookingPage() {
           <div style={{ background: '#FFF8F0', padding: '20px', borderRadius: '18px', border: '1px dashed #FFCCAA', marginBottom: '30px' }}>
             <h4 style={{ marginBottom: '15px', color: '#2C1A0E', fontWeight: 800 }}>✨ Exclusive Devotional Add-ons</h4>
             <div style={{ display: 'grid', gap: '12px' }}>
-              <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <input type="checkbox" checked={options.liveStreaming} onChange={e => setOptions({...options, liveStreaming: e.target.checked})} />
-                  <div>
-                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#2C1A0E' }}>LIVE Streaming Darshan</div>
-                    <div style={{ fontSize: '11px', color: '#8B6347' }}>Watch your pooja performed real-time via sacred link.</div>
+              {[
+                { key: 'liveStreaming',  label: 'LIVE Streaming Darshan',  sub: 'Watch your pooja performed real-time via sacred link.',      price: '+₹201/-' },
+                { key: 'prasadDelivery', label: 'Sacred Prasad Delivery',  sub: 'Blessed prasad shipped to your verified home address.',      price: '+₹101/-' },
+              ].map(({ key, label, sub, price }) => (
+                <label key={key} style={{ display: 'flex', alignItems: 'flex-start', gap: '12px', cursor: 'pointer',
+                  background: options[key] ? 'rgba(255,107,0,0.05)' : '#FFFAF5',
+                  border: `1.5px solid ${options[key] ? '#FF6B00' : '#eee'}`,
+                  borderRadius: 12, padding: '12px 14px', transition: '0.2s' }}>
+                  <input type="checkbox"
+                    checked={options[key]}
+                    onChange={e => setOptions({ ...options, [key]: e.target.checked })}
+                    style={{ marginTop: 3, accentColor: '#FF6B00', width: 16, height: 16, flexShrink: 0, cursor: 'pointer' }} />
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#2C1A0E' }}>{label}</div>
+                    <div style={{ fontSize: '11px', color: '#8B6347', marginTop: 2 }}>{sub}</div>
                   </div>
-                </div>
-                <span style={{ fontSize: '13px', fontWeight: 800, color: '#FF6B00' }}>+₹201/-</span>
-              </label>
-              <label style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}>
-                <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                  <input type="checkbox" checked={options.prasadDelivery} onChange={e => setOptions({...options, prasadDelivery: e.target.checked})} />
-                  <div>
-                    <div style={{ fontSize: '14px', fontWeight: 800, color: '#2C1A0E' }}>Sacred Prasad Delivery</div>
-                    <div style={{ fontSize: '11px', color: '#8B6347' }}>Blessed prasad shipped to your verified home address.</div>
-                  </div>
-                </div>
-                <span style={{ fontSize: '13px', fontWeight: 800, color: '#FF6B00' }}>+₹101/-</span>
-              </label>
+                  <span style={{ fontSize: '13px', fontWeight: 800, color: '#FF6B00', whiteSpace: 'nowrap', flexShrink: 0 }}>{price}</span>
+                </label>
+              ))}
             </div>
             {options.prasadDelivery && (
               <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: 6 }}>

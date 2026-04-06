@@ -242,7 +242,7 @@ export default function PanditMarketplacePage() {
       )}
 
       {/* ── FILTER BAR — single compact row ── */}
-      <div style={{
+      <div className="pm-filter-bar" style={{
         background:'#fff',
         border:'1px solid rgba(212,160,23,0.25)',
         borderRadius:12,
@@ -252,6 +252,8 @@ export default function PanditMarketplacePage() {
         alignItems:'center',
         gap:10,
         flexWrap:'wrap',
+        overflowX:'auto',
+        WebkitOverflowScrolling:'touch',
       }}>
         {/* Search */}
         <input

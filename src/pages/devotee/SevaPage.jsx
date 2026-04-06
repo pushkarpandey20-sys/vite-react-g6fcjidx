@@ -61,9 +61,22 @@ export default function SevaPage() {
           <div className="sev-name">{s.name}</div>
           <div className="sev-desc">{s.desc}</div>
           <div className="sev-amts">
-            {s.amounts.map(a => <span key={a} className={`amt-chip ${selAmts[s.id] === a ? "selected" : ""} `} onClick={() => setSelAmts(p => ({ ...p, [s.id]: a }))}>₹{a}</span>)}
+            {s.amounts.map(a => (
+              <span key={a}
+                className={`amt-chip ${selAmts[s.id] === a && !customAmts[s.id] ? "selected" : ""}`}
+                onClick={() => {
+                  setSelAmts(p => ({ ...p, [s.id]: a }));
+                  setCustomAmts(p => ({ ...p, [s.id]: String(a) }));
+                }}>₹{a}</span>
+            ))}
           </div>
-          <input className="fi" placeholder="Custom ₹" type="number" value={customAmts[s.id] || ""} onChange={e => setCustomAmts(p => ({ ...p, [s.id]: e.target.value }))} style={{ fontSize: 12, padding: "6px 10px", marginBottom: 10 }} />
+          <input className="fi" placeholder="Custom ₹" type="number"
+            value={customAmts[s.id] || ""}
+            onChange={e => {
+              setCustomAmts(p => ({ ...p, [s.id]: e.target.value }));
+              setSelAmts(p => ({ ...p, [s.id]: null }));
+            }}
+            style={{ fontSize: 12, padding: "6px 10px", marginBottom: 10 }} />
           <button className="btn btn-gold btn-sm" style={{ width: "100%", justifyContent: "center" }} onClick={() => donate(s)}>🙏 Donate Now</button>
         </div>
       ))}
