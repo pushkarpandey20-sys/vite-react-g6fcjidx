@@ -201,14 +201,38 @@ export function AppProvider({ children }) {
     toast(`Admin access granted (${role})`);
   };
 
-  // Demo pandit login — lets any developer/tester access the pandit portal
-  // without needing a real Supabase OTP session
+  // Demo pandit login — full profile for end-to-end testing
+  const DEMO_PANDIT_PROFILE = {
+    id: 'demo-pandit-001',
+    name: 'Pt. Ramesh Sharma',
+    phone: '+91-9999888877',
+    city: 'Delhi',
+    experience_years: 22,
+    years_of_experience: 22,
+    rating: 4.9,
+    review_count: 148,
+    min_fee: 2100,
+    max_fee: 8500,
+    specializations: ['Griha Pravesh', 'Vivah', 'Satyanarayan Katha', 'Rudrabhishek', 'Navgrah Shanti'],
+    specialization: ['Griha Pravesh', 'Vivah', 'Satyanarayan Katha'],
+    languages: ['Hindi', 'Sanskrit', 'English'],
+    bio: 'Third-generation Vedic scholar trained in Kashi Vidyapeeth. Expert in house warming, wedding ceremonies, and planetary rituals. Available across Delhi NCR with 22+ years of experience.',
+    status: 'verified',
+    verified_status: 'approved',
+    is_online: true,
+    intro_video_url: null,
+    aadhar_verified: true,
+    education: 'Shastri, Kashi Vidyapeeth',
+    address: 'Laxmi Nagar, New Delhi - 110092',
+  };
+
   const loginPanditDemo = (id, name) => {
-    const pid = id || genId();
+    const pid = id || 'demo-pandit-001';
+    const pName = name || 'Pt. Ramesh Sharma';
     setPanditId(pid);
-    setPanditName(name || 'Demo Pandit');
-    localStorage.setItem('devsetu_pandit', JSON.stringify({ id: pid, name: name || 'Demo Pandit' }));
-    toast(`Pandit portal unlocked 🕉️`);
+    setPanditName(pName);
+    localStorage.setItem('devsetu_pandit', JSON.stringify({ id: pid, name: pName, profile: DEMO_PANDIT_PROFILE }));
+    toast(`Pandit portal unlocked — Namaste, ${pName} 🕉️`);
   };
 
   const addToCart = (item) => {

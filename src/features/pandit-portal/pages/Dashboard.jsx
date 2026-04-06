@@ -140,6 +140,14 @@ export default function Dashboard() {
   const [showForm, setShowForm] = useState(false);
   const [formDone, setFormDone] = useState(false);
 
+  // Load demo profile from localStorage if it was stored during loginPanditDemo
+  const getDemoProfile = () => {
+    try {
+      const stored = JSON.parse(localStorage.getItem('devsetu_pandit') || '{}');
+      return stored.profile || null;
+    } catch { return null; }
+  };
+
   useEffect(() => {
     if (!panditId) { setLoading(false); return; }
     (async () => {
@@ -147,7 +155,8 @@ export default function Dashboard() {
         supabase.from('pandits').select('*').eq('id', panditId).single(),
         supabase.from('bookings').select('*').eq('pandit_id', panditId).order('booking_date', { ascending: true }),
       ]);
-      setProfile(prof || null);
+      // Fall back to demo profile stored in localStorage if DB has no record
+      setProfile(prof || getDemoProfile());
       setBookings(bks || []);
       setLoading(false);
     })();
@@ -206,7 +215,9 @@ export default function Dashboard() {
   );
 
   // Incomplete profile → redirect to full onboarding
-  const profileComplete = profile && profile.name && profile.specializations?.length > 0;
+  // Accept both field name variants (specializations or specialization)
+  const profileComplete = profile && profile.name &&
+    ((profile.specializations?.length > 0) || (profile.specialization?.length > 0));
   if (!profileComplete) return (
     <div style={{ background:'linear-gradient(135deg,#1a0f07,#3d2211)', borderRadius:16, padding:'32px 24px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20, minHeight:'60vh' }}>
       <div style={{ fontSize:64 }}>📋</div>

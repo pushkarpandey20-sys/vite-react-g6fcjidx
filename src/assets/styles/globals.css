@@ -4551,3 +4551,30 @@ input, select, textarea { max-width: 100% !important; }
   .sev-amts { gap: 6px !important; }
   .amt-chip  { padding: 6px 10px !important; font-size: 12px !important; }
 }
+
+/* ── Nav: aggressive header compact on very small phones ── */
+@media (max-width: 480px) {
+  .nav-portal-badge { display: none !important; }
+  .nav-test-login   { display: none !important; }
+  .nav-user-pill    { max-width: 90px !important; padding: 4px 8px !important; }
+  .nav-r            { gap: 4px !important; }
+  .logo             { gap: 6px !important; }
+}
+@media (max-width: 360px) {
+  .logo-name  { font-size: 13px !important; }
+  .icon-btn   { width: 30px !important; height: 30px !important; font-size: 13px !important; }
+}
+
+/* ── Booking Wizard: all step buttons wrap nicely ─────── */
+.bw-btn-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.bw-btn-row .btn { flex: 1 1 120px; justify-content: center; }
+
+/* ── Booking Wizard: step indicator wraps on mobile ────── */
+@media (max-width: 480px) {
+  /* Step labels hidden on tiny screens, only circles */
+  .step-label { display: none; }
+}

@@ -463,20 +463,27 @@ export default function BookingWizard() {
             if (selectedDate < today) return toast("Cannot select a past date!", "⚠️");
             nextStep(); 
           }}>
-            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 30 }}>Pick Auspicious Timing</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 20, marginBottom: 40 }}>
+            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 'clamp(20px,5vw,28px)', marginBottom: 24 }}>Pick Auspicious Timing</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 16, marginBottom: 32 }}>
               <div>
-                <label style={{ display: 'block', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(240,192,64,0.6)', marginBottom: 8, letterSpacing: 1 }}>Preferred Date</label>
-                <input type="date" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(240,192,64,0.2)', color: '#fff', padding: 15, borderRadius: 12, outline: 'none' }} required value={draft.date} onChange={e => setDraft(d => ({ ...d, date: e.target.value }))} />
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(240,192,64,0.8)', marginBottom: 8, letterSpacing: 1 }}>📅 Preferred Date</label>
+                <input type="date"
+                  style={{ width: '100%', background: '#fff', border: '2px solid rgba(240,192,64,0.5)', color: '#1a0f07', padding: '12px 14px', borderRadius: 12, outline: 'none', fontSize: 15, boxSizing: 'border-box' }}
+                  required value={draft.date}
+                  min={new Date().toISOString().split('T')[0]}
+                  onChange={e => setDraft(d => ({ ...d, date: e.target.value }))} />
               </div>
               <div>
-                <label style={{ display: 'block', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(240,192,64,0.6)', marginBottom: 8, letterSpacing: 1 }}>Start Time</label>
-                <input type="time" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(240,192,64,0.2)', color: '#fff', padding: 15, borderRadius: 12, outline: 'none' }} required value={draft.time} onChange={e => setDraft(d => ({ ...d, time: e.target.value }))} />
+                <label style={{ display: 'block', fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'rgba(240,192,64,0.8)', marginBottom: 8, letterSpacing: 1 }}>🕐 Start Time</label>
+                <input type="time"
+                  style={{ width: '100%', background: '#fff', border: '2px solid rgba(240,192,64,0.5)', color: '#1a0f07', padding: '12px 14px', borderRadius: 12, outline: 'none', fontSize: 15, boxSizing: 'border-box' }}
+                  required value={draft.time}
+                  onChange={e => setDraft(d => ({ ...d, time: e.target.value }))} />
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <button type="button" className="btn btn-outline" onClick={prevStep}>← Back</button>
-              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 30px' }}>Choose Address →</button>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <button type="button" className="btn btn-outline" onClick={prevStep} style={{ flex: '1 1 120px' }}>← Back</button>
+              <button type="submit" className="btn btn-primary" style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '12px 24px', flex: '2 1 180px' }}>Choose Address →</button>
             </div>
           </form>
         )}
@@ -593,10 +600,14 @@ export default function BookingWizard() {
                 </div>
               </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <button className="btn btn-outline" onClick={prevStep}>← Back</button>
-              <button className="btn btn-primary" disabled={submitting} onClick={confirmBooking} style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '15px 40px', fontSize: 18, borderRadius: 15, opacity: submitting ? 0.8 : 1 }}>
-                {submitting ? "⏳ Processing Payment..." : "📿 Complete Payment & Confirm"}
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <button className="btn btn-outline" onClick={prevStep} style={{ flex: '1 1 100px' }}>← Back</button>
+              <button className="btn btn-primary" disabled={submitting} onClick={confirmBooking}
+                style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none',
+                  padding: '14px 20px', fontSize: 'clamp(13px,3.5vw,16px)',
+                  borderRadius: 14, opacity: submitting ? 0.8 : 1, flex: '2 1 200px',
+                  whiteSpace: 'nowrap', justifyContent: 'center' }}>
+                {submitting ? "⏳ Processing..." : "📿 Confirm & Pay"}
               </button>
             </div>
           </div>

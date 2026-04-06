@@ -40,17 +40,19 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
             <div className="logo-tagline">Bridging You to Divine Services</div>
           </div>
         </div>
+        {/* Portal badge — hidden on small screens via CSS */}
         {portalLabel && (
-          <div className="nav-portal-badge" style={{ padding: '3px 12px', borderRadius: 20, fontSize: 11, fontWeight: 800, letterSpacing: '.5px', fontFamily: "'Cinzel', serif", background: `${portalColor}22`, color: portalColor, border: `1px solid ${portalColor}55` }}>
+          <div className="nav-portal-badge" style={{ padding: '3px 10px', borderRadius: 20, fontSize: 10, fontWeight: 800, letterSpacing: '.5px', fontFamily: "'Cinzel', serif", background: `${portalColor}22`, color: portalColor, border: `1px solid ${portalColor}55`, whiteSpace: 'nowrap' }}>
             {portalLabel}
           </div>
         )}
         <div className="nav-r">
+          {/* Test Login — hide on ≤480px to save space */}
           {isUser && !devoteeId && (
-            <button onClick={() => loginDevoteeDemo && loginDevoteeDemo('Test User')}
-              style={{ background:'linear-gradient(135deg,#7c3aed,#5b21b6)', color:'#fff', border:'none', borderRadius:20, padding:'5px 12px', fontWeight:800, cursor:'pointer', fontSize:11, fontFamily:'Nunito,sans-serif', display:'flex', alignItems:'center', gap:4 }}
+            <button className="nav-test-login" onClick={() => loginDevoteeDemo && loginDevoteeDemo('Test User')}
+              style={{ background:'linear-gradient(135deg,#7c3aed,#5b21b6)', color:'#fff', border:'none', borderRadius:20, padding:'5px 10px', fontWeight:800, cursor:'pointer', fontSize:10, fontFamily:'Nunito,sans-serif', display:'flex', alignItems:'center', gap:3, whiteSpace:'nowrap' }}
               title="Bypass login for testing">
-              ⚡ Test Login
+              ⚡ Login
             </button>
           )}
           {isUser && (
@@ -59,13 +61,15 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
             </div>
           )}
           <NotificationBell />
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginLeft: 6, background: "rgba(255,255,255,.07)", padding: "4px 12px", borderRadius: 20, cursor: "pointer", border: "1px solid rgba(212,160,23,.3)" }}
+          {/* User pill — compact on mobile */}
+          <div className="nav-user-pill"
+            style={{ display: "flex", alignItems: "center", gap: 6, marginLeft: 4, background: "rgba(255,255,255,.07)", padding: "4px 10px", borderRadius: 20, cursor: "pointer", border: "1px solid rgba(212,160,23,.3)", maxWidth: 130, overflow: 'hidden' }}
             onClick={() => isUser && !devoteeId && setShowLogin(true)}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "#F0C040" }}>
-              {devoteeId && isUser ? `👤 ${devoteeName}` : isPandit ? '🪔 Pandit' : isUser ? '👤 Guest / Login' : '⚙️ Admin'}
+            <div style={{ fontSize: 12, fontWeight: 800, color: "#F0C040", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {devoteeId && isUser ? `👤 ${devoteeName.split(' ')[0]}` : isPandit ? '🪔 Pandit' : isUser ? '👤 Login' : '⚙️ Admin'}
             </div>
             {devoteeId && isUser && (
-              <div onClick={e => { e.stopPropagation(); logout(); }} style={{ fontSize: 10, color: "#FF6B00", fontWeight: 700 }}>Logout</div>
+              <div onClick={e => { e.stopPropagation(); logout(); }} style={{ fontSize: 9, color: "#FF6B00", fontWeight: 700, flexShrink: 0 }}>Out</div>
             )}
           </div>
         </div>
