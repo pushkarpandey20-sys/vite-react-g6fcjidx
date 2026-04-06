@@ -6,6 +6,7 @@ const C = { page:'#fff8f0', card:'#ffffff', border:'rgba(212,160,23,0.2)', orang
 
 export default function AdminHome() {
   const navigate = useNavigate();
+  const mobile = window.innerWidth < 768;
   const [stats, setStats] = useState({ devotees:0, pandits:0, bookings:0, revenue:0, pendingPandits:0, topRitual: 'N/A' });
   const [pendingPandits, setPendingPandits] = useState([]);
   const [recentBookings, setRecentBookings] = useState([]);
