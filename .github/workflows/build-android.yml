@@ -52,17 +52,21 @@ jobs:
       - name: Sync Capacitor
         run: npx cap sync android
 
-      # ── 9. Make gradlew executable ────────────────────────
+      # ── 9. Point Gradle at the Java 21 JDK setup-java installed ─
+      - name: Set Gradle JDK
+        run: echo "org.gradle.java.home=$JAVA_HOME" >> android/gradle.properties
+
+      # ── 10. Make gradlew executable ───────────────────────────
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
-      # ── 10. Build Debug APK ───────────────────────────────
+      # ── 11. Build Debug APK ───────────────────────────────
       - name: Build Debug APK
         run: |
           cd android
           ./gradlew assembleDebug --no-daemon
 
-      # ── 11. Upload APK as artifact ────────────────────────
+      # ── 12. Upload APK as artifact ────────────────────────
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
@@ -70,7 +74,7 @@ jobs:
           path: android/app/build/outputs/apk/debug/app-debug.apk
           retention-days: 30
 
-      # ── 12. Create GitHub Release on main push ────────────
+      # ── 13. Create GitHub Release on main push ────────────
       - name: Create Release
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
