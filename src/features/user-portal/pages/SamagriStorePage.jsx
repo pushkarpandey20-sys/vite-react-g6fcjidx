@@ -14,9 +14,9 @@ const PRODUCTS = [
   { id:5, name:'Satyanarayan Kit',    category:'Daily Worship',    icon:'🌟', price:299,  mrp:399,  items:24, desc:'24 items for Satyanarayan Katha: panchamrit ingredients (milk, curd, honey, ghee, sugar), banana, tulsi, yellow flowers, yellow cloth, akshat, camphor.', rating:4.8, reviews:278 },
   { id:6, name:'Rudrabhishek Kit',    category:'Abhishek',         icon:'🔱', price:449,  mrp:599,  items:18, desc:'18 items for Shiva abhishek: milk, honey, curd, ghee, sugar, gangajal, bel patra, dhatura, blue flowers, camphor, vibhuti, rudraksha, black sesame.', rating:4.9, reviews:167 },
   { id:7, name:'Havan Samagri Kit',   category:'Havan',            icon:'🔥', price:699,  mrp:899,  items:42, desc:'42 items complete havan kit: pure ghee 500ml, havan kund, samagri mix 500g, mango wood pieces, camphor, incense, navagraha herbs, sandalwood powder.', badge:'PREMIUM', rating:4.7, reviews:98 },
-  { id:8, name:'Daily Puja Kit',      category:'Daily Worship',    icon:'🌸', price:199,  mrp:299,  items:15, desc:'15 everyday essentials: incense sticks (3 varieties), camphor, matchbox, sindoor, roli, moli, flowers (artificial), ghee lamp, wick, small idol base cloth.', rating:4.5, reviews:456 },
-  { id:9, name:'Premium Incense Set', category:'Incense & Diyas',  icon:'🕯️', price:249,  mrp:349,  items:8,  desc:'8 varieties premium incense: sandalwood, jasmine, rose, camphor, guggul, mogra, lavender, chandan — 120 sticks total. Long-lasting 45-min burn time.', rating:4.6, reviews:203 },
-  { id:10,name:'Diya & Lamp Set',     category:'Incense & Diyas',  icon:'✨', price:349,  mrp:499,  items:12, desc:'12 piece set: 4 brass diyas, 4 clay diyas, 1 oil lamp with stand, cotton wicks (50), mustard oil 200ml, cleaning cloth. Perfect for daily aarti.', rating:4.8, reviews:321 },
+  { id:8, name:'Daily Puja Kit',      category:'Daily Worship',    icon:'🕉️', price:199,  mrp:299,  items:15, desc:'15 everyday essentials: incense sticks (3 varieties), camphor, matchbox, sindoor, roli, moli, flowers (artificial), ghee lamp, wick, small idol base cloth.', rating:4.5, reviews:456 },
+  { id:9, name:'Premium Incense Set', category:'Incense & Diyas',  icon:'🌫️', price:249,  mrp:349,  items:8,  desc:'8 varieties premium incense: sandalwood, jasmine, rose, camphor, guggul, mogra, lavender, chandan — 120 sticks total. Long-lasting 45-min burn time.', rating:4.6, reviews:203 },
+  { id:10,name:'Diya & Lamp Set',     category:'Incense & Diyas',  icon:'🪔', price:349,  mrp:499,  items:12, desc:'12 piece set: 4 brass diyas, 4 clay diyas, 1 oil lamp with stand, cotton wicks (50), mustard oil 200ml, cleaning cloth. Perfect for daily aarti.', rating:4.8, reviews:321 },
   { id:11,name:'Navgrah Shanti Kit',  category:'Havan',            icon:'⭐', price:799,  mrp:999,  items:54, desc:'54 items for 9-planet ritual: 9 grains, 9 flowers, 9 fruits, 9 herbs, havan samagri, ghee, navgrah yantra, colored cloth strips.', badge:'COMPLETE', rating:4.9, reviews:87 },
   { id:12,name:'Laxmi Puja Kit',      category:'Daily Worship',    icon:'🪷', price:399,  mrp:549,  items:28, desc:'28 items for Friday Laxmi puja: red/pink flowers, lotus, coins, betel leaves, supari, banana, fruits, red cloth, laxmi yantra, incense, camphor, sindoor.', rating:4.7, reviews:176 },
 ];
@@ -24,10 +24,10 @@ const PRODUCTS = [
 const BADGE_COLORS = { BESTSELLER:'#FF6B00', POPULAR:'#22c55e', PREMIUM:'#9B59B6', COMPLETE:'#3498DB' };
 
 const CUSTOM_ITEMS = [
-  { id:'c1', name:'Agarbatti (Incense)', icon:'🕯️', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
-  { id:'c2', name:'Camphor Tablets', icon:'🌿', price:39, unit:'10 tablets', cat:'Basic' },
+  { id:'c1', name:'Agarbatti (Incense)', icon:'🌫️', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
+  { id:'c2', name:'Camphor Tablets', icon:'🕯️', price:39, unit:'10 tablets', cat:'Basic' },
   { id:'c3', name:'Roli (Vermilion)', icon:'🔴', price:29, unit:'50g packet', cat:'Basic' },
-  { id:'c4', name:'Moli (Sacred Thread)', icon:'🧵', price:19, unit:'1 roll', cat:'Basic' },
+  { id:'c4', name:'Moli (Sacred Thread)', icon:'🔴', price:19, unit:'1 roll', cat:'Basic' },
   { id:'c5', name:'Akshat (Rice)', icon:'🍚', price:25, unit:'250g packet', cat:'Basic' },
   { id:'c6', name:'Supari (Betel Nut)', icon:'🥜', price:35, unit:'100g', cat:'Basic' },
   { id:'c7', name:'Ghee (Pure Cow)', icon:'🫙', price:299, unit:'500ml', cat:'Premium' },
