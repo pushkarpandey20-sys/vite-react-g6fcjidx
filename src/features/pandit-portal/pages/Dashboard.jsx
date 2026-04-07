@@ -22,8 +22,8 @@ function PanditOnboardingForm({ onComplete }) {
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const toggle = (k, v) => setForm(f => ({ ...f, [k]: f[k].includes(v) ? f[k].filter(x=>x!==v) : [...f[k], v] }));
 
-  const inp = { width:'100%', padding:'10px 14px', borderRadius:8, border:'1px solid rgba(212,160,23,0.3)', background:'rgba(255,255,255,0.05)', color:'#fff8f0', fontSize:14, marginBottom:12, boxSizing:'border-box' };
-  const pill = (active) => ({ padding:'6px 14px', borderRadius:20, fontSize:12, fontWeight:600, cursor:'pointer', border:`1px solid ${active?'#FF6B00':'rgba(212,160,23,0.2)'}`, background:active?'rgba(255,107,0,0.2)':'transparent', color:active?'#FF6B00':'rgba(255,248,240,0.5)', marginBottom:6, marginRight:6, display:'inline-block' });
+  const inp = { width:'100%', padding:'10px 14px', borderRadius:8, border:'1px solid rgba(212,160,23,0.4)', background:'#ffffff', color:'#1a0f07', fontSize:14, marginBottom:12, boxSizing:'border-box' };
+  const pill = (active) => ({ padding:'6px 14px', borderRadius:20, fontSize:12, fontWeight:600, cursor:'pointer', border:`1px solid ${active?'#FF6B00':'rgba(212,160,23,0.2)'}`, background:active?'rgba(255,107,0,0.1)':'transparent', color:active?'#FF6B00':'#5C3317', marginBottom:6, marginRight:6, display:'inline-block' });
 
   const handleSubmit = async () => {
     if (!form.agreed) { setErr('Please agree to the terms'); return; }
@@ -56,7 +56,7 @@ function PanditOnboardingForm({ onComplete }) {
   };
 
   return (
-    <div className="dark-input" style={{ maxWidth:600, margin:'0 auto' }}>
+    <div className="onboarding-form" style={{ maxWidth:600, margin:'0 auto' }}>
       {/* Stepper */}
       <div style={{ display:'flex', alignItems:'center', marginBottom:32 }}>
         {['Basic Info','Specializations','Verification'].map((s,i)=>(
@@ -70,12 +70,12 @@ function PanditOnboardingForm({ onComplete }) {
         ))}
       </div>
 
-      <div style={{ background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.2)', borderRadius:16, padding:28 }}>
+      <div style={{ background:'#ffffff', border:'1px solid rgba(212,160,23,0.2)', borderRadius:16, padding:28, boxShadow:'0 4px 20px rgba(0,0,0,0.05)' }}>
         {step===1 && (
           <>
             <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', marginTop:0 }}>Basic Information</h3>
             <input style={inp} placeholder="Full Name (e.g. Pt. Ram Sharma)" value={form.name} onChange={e=>set('name',e.target.value)}/>
-            <select style={{...inp,color:'#fff8f0'}} value={form.city} onChange={e=>set('city',e.target.value)}>
+            <select style={{...inp,color:'#1a0f07'}} value={form.city} onChange={e=>set('city',e.target.value)}>
               {CITIES.map(c=><option key={c} value={c} style={{background:'#1a0f07'}}>{c}</option>)}
             </select>
             <input style={inp} type="number" placeholder="Years of Experience" value={form.years_of_experience} onChange={e=>set('years_of_experience',e.target.value)}/>
@@ -107,7 +107,7 @@ function PanditOnboardingForm({ onComplete }) {
             <input style={inp} placeholder="Aadhaar Number (for verification)" value={form.aadhaar} onChange={e=>set('aadhaar',e.target.value)}/>
             <input style={inp} placeholder="Bank Account Number" value={form.bank_account} onChange={e=>set('bank_account',e.target.value)}/>
             <input style={inp} placeholder="IFSC Code" value={form.ifsc} onChange={e=>set('ifsc',e.target.value)}/>
-            <label style={{ display:'flex', gap:10, alignItems:'flex-start', color:'rgba(255,248,240,0.6)', fontSize:13, marginTop:8, cursor:'pointer' }}>
+            <label style={{ display:'flex', gap:10, alignItems:'flex-start', color:'#5C3317', fontSize:13, marginTop:8, cursor:'pointer' }}>
               <input type="checkbox" checked={form.agreed} onChange={e=>set('agreed',e.target.checked)} style={{ marginTop:3 }}/>
               I agree to DevSetu's Pandit Code of Conduct, terms of service, and commission structure (18% platform fee).
             </label>
@@ -200,10 +200,10 @@ export default function Dashboard() {
 
   // Not logged in
   if (!panditId) return (
-    <div style={{ background:'linear-gradient(135deg,#1a0f07,#3d2211)', borderRadius:16, padding:'32px 24px', minHeight:'60vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20 }}>
+    <div style={{ background:'linear-gradient(135deg,#fff8f0,#fff)', borderRadius:16, padding:'32px 24px', minHeight:'60vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20, border:'1px solid rgba(212,160,23,0.15)' }}>
       <div style={{ fontSize:64 }}>🙏</div>
       <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017', textAlign:'center' }}>Sacred Scholar Gateway</h2>
-      <p style={{ color:'rgba(255,248,240,0.5)', textAlign:'center' }}>Login as a Pandit or register to manage your bookings</p>
+      <p style={{ color:'#8B6347', textAlign:'center' }}>Login as a Pandit or register to manage your bookings</p>
       <div style={{ display:'flex', gap:12, flexWrap:'wrap', justifyContent:'center' }}>
         <button onClick={()=>setShowLogin && setShowLogin(true)} style={{ background:'linear-gradient(135deg,#D4A017,#F0C040)', color:'#1a0f07', border:'none', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>🪔 Login with OTP</button>
         <button onClick={()=>navigate('/pandit/onboard')} style={{ background:'rgba(255,107,0,0.2)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.4)', borderRadius:28, padding:'12px 36px', fontWeight:800, cursor:'pointer', fontSize:14 }}>📝 Register as Pandit</button>
@@ -219,10 +219,10 @@ export default function Dashboard() {
   const profileComplete = profile && profile.name &&
     ((profile.specializations?.length > 0) || (profile.specialization?.length > 0));
   if (!profileComplete) return (
-    <div style={{ background:'linear-gradient(135deg,#1a0f07,#3d2211)', borderRadius:16, padding:'32px 24px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20, minHeight:'60vh' }}>
+    <div style={{ background:'linear-gradient(135deg,#fff8f0,#fff)', borderRadius:16, padding:'32px 24px', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:20, minHeight:'60vh', border:'1px solid rgba(212,160,23,0.15)' }}>
       <div style={{ fontSize:64 }}>📋</div>
       <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017', textAlign:'center' }}>Complete Your Profile</h2>
-      <p style={{ color:'rgba(255,248,240,0.5)', textAlign:'center', maxWidth:400 }}>
+      <p style={{ color:'#8B6347', textAlign:'center', maxWidth:400 }}>
         Finish your pandit registration to start receiving booking requests from devotees — including uploading your intro video.
       </p>
       <button onClick={()=>navigate('/pandit/onboard')} style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:28, padding:'14px 40px', fontWeight:900, cursor:'pointer', fontSize:16 }}>
@@ -232,7 +232,7 @@ export default function Dashboard() {
   );
 
   // Full dashboard
-  const card = { background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.12)', borderRadius:14, padding:'20px' };
+  const card = { background:'#ffffff', border:'1px solid rgba(212,160,23,0.15)', borderRadius:14, padding:'20px', boxShadow:'0 2px 10px rgba(0,0,0,0.04)' };
 
   return (
     <div>
@@ -242,9 +242,9 @@ export default function Dashboard() {
           <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017', margin:0, fontSize:22 }}>Namaste, {profile?.name || panditName || 'Pt. Ji'} 🙏</h2>
           <p style={{ color:'rgba(255,248,240,0.5)', margin:'4px 0 0', fontSize:13 }}>Managing your sacred schedule</p>
         </div>
-        <div style={{ display:'flex', alignItems:'center', gap:12, background:'rgba(255,255,255,0.04)', border:'1px solid rgba(212,160,23,0.15)', borderRadius:12, padding:'10px 16px' }}>
+        <div style={{ display:'flex', alignItems:'center', gap:12, background:'#ffffff', border:'1px solid rgba(212,160,23,0.15)', borderRadius:12, padding:'10px 16px' }}>
           <div style={{ width:10, height:10, borderRadius:'50%', background:panditOnline?'#22c55e':'#ef4444', boxShadow:panditOnline?'0 0 8px #22c55e':'none' }}/>
-          <span style={{ color:'rgba(255,248,240,0.7)', fontSize:13 }}>{panditOnline?'Online':'Offline'}</span>
+          <span style={{ color:'#5C3317', fontSize:13 }}>{panditOnline?'Online':'Offline'}</span>
           <button onClick={()=>toggleOnline(!panditOnline)} style={{ background:panditOnline?'rgba(239,68,68,0.2)':'rgba(34,197,94,0.2)', color:panditOnline?'#ef4444':'#22c55e', border:`1px solid ${panditOnline?'rgba(239,68,68,0.3)':'rgba(34,197,94,0.3)'}`, borderRadius:20, padding:'4px 12px', cursor:'pointer', fontSize:12, fontWeight:700 }}>
             {panditOnline?'Go Offline':'Go Online'}
           </button>
@@ -261,8 +261,8 @@ export default function Dashboard() {
         ].map(s=>(
           <div key={s.label} style={{ ...card, textAlign:'center' }}>
             <div style={{ color:s.color, fontWeight:800, fontSize:28, marginBottom:4 }}>{s.value}</div>
-            <div style={{ color:'rgba(255,248,240,0.8)', fontWeight:600, fontSize:13 }}>{s.label}</div>
-            <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, marginTop:2 }}>{s.sub}</div>
+            <div style={{ color:'#5C3317', fontWeight:700, fontSize:13 }}>{s.label}</div>
+            <div style={{ color:'#9a8070', fontSize:11, marginTop:2 }}>{s.sub}</div>
           </div>
         ))}
       </div>
@@ -272,14 +272,14 @@ export default function Dashboard() {
         <div style={card}>
           <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:15, marginBottom:16 }}>Pending Invitations ({stats.pending.length})</div>
           {stats.pending.length===0 ? (
-            <div style={{ textAlign:'center', padding:'20px 0', color:'rgba(255,248,240,0.4)', fontSize:13 }}>✨ All caught up!</div>
+            <div style={{ textAlign:'center', padding:'20px 0', color:'#9a8070', fontSize:13 }}>✨ All caught up!</div>
           ) : stats.pending.map(b=>(
-            <div key={b.id} style={{ background:'rgba(255,255,255,0.03)', borderRadius:10, padding:'12px', marginBottom:10, border:'1px solid rgba(212,160,23,0.08)' }}>
+            <div key={b.id} style={{ background:'#fffdfa', borderRadius:10, padding:'12px', marginBottom:10, border:'1px solid rgba(212,160,23,0.15)' }}>
               <div style={{ display:'flex', justifyContent:'space-between', marginBottom:6 }}>
-                <div style={{ color:'#F0C040', fontWeight:700, fontSize:13 }}>{b.ritual_name || b.ritual || 'Pooja'}</div>
-                <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12 }}>{b.booking_date}</div>
+                <div style={{ color:'#D4A017', fontWeight:700, fontSize:13 }}>{b.ritual_name || b.ritual || 'Pooja'}</div>
+                <div style={{ color:'#9a8070', fontSize:12 }}>{b.booking_date}</div>
               </div>
-              <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12, marginBottom:10 }}>📍 {b.address || b.location || 'Location TBD'}</div>
+              <div style={{ color:'#8B6347', fontSize:12, marginBottom:10 }}>📍 {b.address || b.location || 'Location TBD'}</div>
               <div style={{ display:'flex', gap:8 }}>
                 <button onClick={()=>handleAction(b.id,'declined')} style={{ flex:1, background:'rgba(239,68,68,0.15)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', borderRadius:8, padding:'6px', cursor:'pointer', fontSize:12, fontWeight:600 }}>Decline</button>
                 <button onClick={()=>handleAction(b.id,'accepted')} style={{ flex:1, background:'rgba(34,197,94,0.15)', color:'#22c55e', border:'1px solid rgba(34,197,94,0.3)', borderRadius:8, padding:'6px', cursor:'pointer', fontSize:12, fontWeight:700 }}>Accept ✓</button>
@@ -292,12 +292,12 @@ export default function Dashboard() {
         <div style={card}>
           <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:15, marginBottom:16 }}>Today's Schedule ({stats.today.length})</div>
           {stats.today.length===0 ? (
-            <div style={{ textAlign:'center', padding:'20px 0', color:'rgba(255,248,240,0.4)', fontSize:13 }}>📿 No rituals today</div>
+            <div style={{ textAlign:'center', padding:'20px 0', color:'#9a8070', fontSize:13 }}>📿 No rituals today</div>
           ) : stats.today.map(b=>(
-            <div key={b.id} style={{ background:'rgba(34,197,94,0.06)', borderRadius:10, padding:'12px', marginBottom:10, border:'1px solid rgba(34,197,94,0.15)' }}>
-              <div style={{ color:'#22c55e', fontWeight:700, fontSize:13, marginBottom:4 }}>{b.ritual_name || b.ritual || 'Pooja'}</div>
-              <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12 }}>⏰ {b.booking_time || 'Time TBD'}</div>
-              <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12 }}>📍 {b.address || b.location || 'Location TBD'}</div>
+            <div key={b.id} style={{ background:'rgba(34,197,94,0.08)', borderRadius:10, padding:'12px', marginBottom:10, border:'1px solid rgba(34,197,94,0.2)' }}>
+              <div style={{ color:'#166534', fontWeight:700, fontSize:13, marginBottom:4 }}>{b.ritual_name || b.ritual || 'Pooja'}</div>
+              <div style={{ color:'#15803d', fontSize:12, fontWeight:600 }}>⏰ {b.booking_time || 'Time TBD'}</div>
+              <div style={{ color:'#15803d', fontSize:12 }}>📍 {b.address || b.location || 'Location TBD'}</div>
             </div>
           ))}
         </div>
@@ -307,14 +307,14 @@ export default function Dashboard() {
       <div style={card}>
         <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:15, marginBottom:16 }}>Upcoming This Week ({stats.upcoming.length})</div>
         {stats.upcoming.length===0 ? (
-          <div style={{ textAlign:'center', padding:'20px 0', color:'rgba(255,248,240,0.4)', fontSize:13 }}>No upcoming bookings in the next 7 days</div>
+          <div style={{ textAlign:'center', padding:'20px 0', color:'#9a8070', fontSize:13 }}>No upcoming bookings in the next 7 days</div>
         ) : (
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))', gap:12 }}>
             {stats.upcoming.map(b=>(
-              <div key={b.id} style={{ background:'rgba(255,255,255,0.03)', borderRadius:10, padding:'12px', border:'1px solid rgba(212,160,23,0.08)' }}>
-                <div style={{ color:'#F0C040', fontWeight:600, fontSize:13 }}>{b.ritual_name || b.ritual || 'Pooja'}</div>
-                <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12, marginTop:4 }}>{b.booking_date} {b.booking_time ? `· ${b.booking_time}` : ''}</div>
-                <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, marginTop:2 }}>📍 {b.address || b.location || 'TBD'}</div>
+              <div key={b.id} style={{ background:'#fffdfa', borderRadius:10, padding:'12px', border:'1px solid rgba(212,160,23,0.15)' }}>
+                <div style={{ color:'#D4A017', fontWeight:700, fontSize:13 }}>{b.ritual_name || b.ritual || 'Pooja'}</div>
+                <div style={{ color:'#5C3317', fontSize:12, marginTop:4, fontWeight:600 }}>{b.booking_date} {b.booking_time ? `· ${b.booking_time}` : ''}</div>
+                <div style={{ color:'#9a8070', fontSize:11, marginTop:2 }}>📍 {b.address || b.location || 'TBD'}</div>
               </div>
             ))}
           </div>
