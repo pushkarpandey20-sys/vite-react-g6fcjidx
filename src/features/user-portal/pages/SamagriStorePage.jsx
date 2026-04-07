@@ -7,32 +7,32 @@ const CATEGORIES = ['All', 'Festival Kits', 'Daily Worship', 'Abhishek', 'Havan'
 const CAT_ICONS = { 'All':'🕉️', 'Festival Kits':'🎊', 'Daily Worship':'🪔', 'Abhishek':'🔱', 'Havan':'🔥', 'Incense & Diyas':'✨' };
 
 const PRODUCTS = [
-  { id:1, name:'Diwali Pooja Kit',    category:'Festival Kits',    icon:'🪔', price:899,  mrp:1199, items:61, desc:'Complete Lakshmi-Ganesh puja essentials — 61 items including diyas, rangoli, incense, sweets prasad, red cloth, sindoor, lotus flowers, roli, moli, supari, betel leaves.', badge:'BESTSELLER', rating:4.8, reviews:234 },
-  { id:2, name:'Ganesh Puja Kit',     category:'Festival Kits',    icon:'🐘', price:349,  mrp:499,  items:29, desc:'29 items: modak, durva grass, red flowers, coconut, camphor, roli, moli, supari, banana, red cloth, incense sticks, ghee, vermilion, sesame seeds, akshat.', rating:4.7, reviews:189 },
-  { id:3, name:'Griha Pravesh Kit',   category:'Festival Kits',    icon:'🏡', price:599,  mrp:799,  items:52, desc:'52 items: sacred thread, turmeric, rice, copper kalash, mango leaves, coconut, flowers, navadhanya, holy water, camphor, ghee, incense, red cloth, coins.', badge:'POPULAR', rating:4.9, reviews:312 },
-  { id:4, name:'Navratri Pooja Kit',  category:'Festival Kits',    icon:'🌺', price:499,  mrp:699,  items:35, desc:'35 items for 9-day Durga puja. Chunri, sindoor, shakkar, fruits, incense, camphor, oil lamp, red flowers, coconut, betel leaves, kum kum, durga yantra.', rating:4.6, reviews:145 },
-  { id:5, name:'Satyanarayan Kit',    category:'Daily Worship',    icon:'🌟', price:299,  mrp:399,  items:24, desc:'24 items for Satyanarayan Katha: panchamrit ingredients (milk, curd, honey, ghee, sugar), banana, tulsi, yellow flowers, yellow cloth, akshat, camphor.', rating:4.8, reviews:278 },
+  { id:1, name:'Diwali Pooja Kit',    category:'Festival Kits',    icon:'🏮', price:899,  mrp:1199, items:61, desc:'Complete Lakshmi-Ganesh puja essentials — 61 items including diyas, rangoli, incense, sweets prasad, red cloth, sindoor, lotus flowers, roli, moli, supari, betel leaves.', badge:'BESTSELLER', rating:4.8, reviews:234 },
+  { id:2, name:'Ganesh Puja Kit',     category:'Festival Kits',    icon:'📿', price:349,  mrp:499,  items:29, desc:'29 items: modak, durva grass, red flowers, coconut, camphor, roli, moli, supari, banana, red cloth, incense sticks, ghee, vermilion, sesame seeds, akshat.', rating:4.7, reviews:189 },
+  { id:3, name:'Griha Pravesh Kit',   category:'Festival Kits',    icon:'🗝️', price:599,  mrp:799,  items:52, desc:'52 items: sacred thread, turmeric, rice, copper kalash, mango leaves, coconut, flowers, navadhanya, holy water, camphor, ghee, incense, red cloth, coins.', badge:'POPULAR', rating:4.9, reviews:312 },
+  { id:4, name:'Navratri Pooja Kit',  category:'Festival Kits',    icon:'🚩', price:499,  mrp:699,  items:35, desc:'35 items for 9-day Durga puja. Chunri, sindoor, shakkar, fruits, incense, camphor, oil lamp, red flowers, coconut, betel leaves, kum kum, durga yantra.', rating:4.6, reviews:145 },
+  { id:5, name:'Satyanarayan Kit',    category:'Daily Worship',    icon:'🥣', price:299,  mrp:399,  items:24, desc:'24 items for Satyanarayan Katha: panchamrit ingredients (milk, curd, honey, ghee, sugar), banana, tulsi, yellow flowers, yellow cloth, akshat, camphor.', rating:4.8, reviews:278 },
   { id:6, name:'Rudrabhishek Kit',    category:'Abhishek',         icon:'🔱', price:449,  mrp:599,  items:18, desc:'18 items for Shiva abhishek: milk, honey, curd, ghee, sugar, gangajal, bel patra, dhatura, blue flowers, camphor, vibhuti, rudraksha, black sesame.', rating:4.9, reviews:167 },
   { id:7, name:'Havan Samagri Kit',   category:'Havan',            icon:'🔥', price:699,  mrp:899,  items:42, desc:'42 items complete havan kit: pure ghee 500ml, havan kund, samagri mix 500g, mango wood pieces, camphor, incense, navagraha herbs, sandalwood powder.', badge:'PREMIUM', rating:4.7, reviews:98 },
   { id:8, name:'Daily Puja Kit',      category:'Daily Worship',    icon:'🕉️', price:199,  mrp:299,  items:15, desc:'15 everyday essentials: incense sticks (3 varieties), camphor, matchbox, sindoor, roli, moli, flowers (artificial), ghee lamp, wick, small idol base cloth.', rating:4.5, reviews:456 },
-  { id:9, name:'Premium Incense Set', category:'Incense & Diyas',  icon:'🌫️', price:249,  mrp:349,  items:8,  desc:'8 varieties premium incense: sandalwood, jasmine, rose, camphor, guggul, mogra, lavender, chandan — 120 sticks total. Long-lasting 45-min burn time.', rating:4.6, reviews:203 },
+  { id:9, name:'Premium Incense Set', category:'Incense & Diyas',  icon:'💨', price:249,  mrp:349,  items:8,  desc:'8 varieties premium incense: sandalwood, jasmine, rose, camphor, guggul, mogra, lavender, chandan — 120 sticks total. Long-lasting 45-min burn time.', rating:4.6, reviews:203 },
   { id:10,name:'Diya & Lamp Set',     category:'Incense & Diyas',  icon:'🪔', price:349,  mrp:499,  items:12, desc:'12 piece set: 4 brass diyas, 4 clay diyas, 1 oil lamp with stand, cotton wicks (50), mustard oil 200ml, cleaning cloth. Perfect for daily aarti.', rating:4.8, reviews:321 },
-  { id:11,name:'Navgrah Shanti Kit',  category:'Havan',            icon:'⭐', price:799,  mrp:999,  items:54, desc:'54 items for 9-planet ritual: 9 grains, 9 flowers, 9 fruits, 9 herbs, havan samagri, ghee, navgrah yantra, colored cloth strips.', badge:'COMPLETE', rating:4.9, reviews:87 },
+  { id:11,name:'Navgrah Shanti Kit',  category:'Havan',            icon:'🪐', price:799,  mrp:999,  items:54, desc:'54 items for 9-planet ritual: 9 grains, 9 flowers, 9 fruits, 9 herbs, havan samagri, ghee, navgrah yantra, colored cloth strips.', badge:'COMPLETE', rating:4.9, reviews:87 },
   { id:12,name:'Laxmi Puja Kit',      category:'Daily Worship',    icon:'🪷', price:399,  mrp:549,  items:28, desc:'28 items for Friday Laxmi puja: red/pink flowers, lotus, coins, betel leaves, supari, banana, fruits, red cloth, laxmi yantra, incense, camphor, sindoor.', rating:4.7, reviews:176 },
 ];
 
 const BADGE_COLORS = { BESTSELLER:'#FF6B00', POPULAR:'#22c55e', PREMIUM:'#9B59B6', COMPLETE:'#3498DB' };
 
 const CUSTOM_ITEMS = [
-  { id:'c1', name:'Agarbatti (Incense)', icon:'🕯️', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
-  { id:'c2', name:'Camphor Tablets', icon:'🌿', price:39, unit:'10 tablets', cat:'Basic' },
+  { id:'c1', name:'Aggarbatti', icon:'💨', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
+  { id:'c2', name:'Camphor Tablets', icon:'⚪', price:39, unit:'10 tablets', cat:'Basic' },
   { id:'c3', name:'Roli (Vermilion)', icon:'🔴', price:29, unit:'50g packet', cat:'Basic' },
   { id:'c4', name:'Moli (Sacred Thread)', icon:'🧵', price:19, unit:'1 roll', cat:'Basic' },
-  { id:'c5', name:'Akshat (Rice)', icon:'🍚', price:25, unit:'250g packet', cat:'Basic' },
-  { id:'c6', name:'Supari (Betel Nut)', icon:'🌰', price:35, unit:'100g', cat:'Basic' },
+  { id:'c5', name:'Akshat (Rice)', icon:'🌾', price:25, unit:'250g packet', cat:'Basic' },
+  { id:'c6', name:'Supari (Betel Nut)', icon:'🟤', price:35, unit:'100g', cat:'Basic' },
   { id:'c7', name:'Ghee (Pure Cow)', icon:'🧈', price:299, unit:'500ml', cat:'Premium' },
-  { id:'c8', name:'Panchamrit Mix', icon:'🥛', price:149, unit:'Complete set', cat:'Premium' },
-  { id:'c9', name:'Gangajal (Holy Water)', icon:'💧', price:89, unit:'500ml bottle', cat:'Premium' },
+  { id:'c8', name:'Panchamrit Mix', icon:'🥣', price:149, unit:'Complete set', cat:'Premium' },
+  { id:'c9', name:'Gangajal (Holy Water)', icon:'🧴', price:89, unit:'500ml bottle', cat:'Premium' },
   { id:'c10', name:'Kalash (Copper Pot)', icon:'🏺', price:199, unit:'1 piece', cat:'Premium' },
   { id:'c11', name:'Bel Patra', icon:'🍃', price:49, unit:'Fresh pack', cat:'Flowers' },
   { id:'c12', name:'Lotus Flowers', icon:'🪷', price:99, unit:'5 flowers', cat:'Flowers' },
@@ -158,7 +158,7 @@ export default function SamagriStorePage() {
 
       {/* Tab Switcher */}
       <div style={{ display:'flex', background:'rgba(240,192,64,0.1)', borderRadius:12, padding:4, marginBottom:18, width:'fit-content' }}>
-        {[['ready','📦 Ready-Made Kits'],['custom','🎨 Build Custom Kit']].map(([id,label])=>(
+        {[['ready','📦 Ready-Made Kits'],['custom','🛠️ Build Custom Kit']].map(([id,label])=>(
           <button key={id} onClick={()=>setActiveTab(id)}
             style={{ padding:'9px 20px', borderRadius:10, border:'none', cursor:'pointer', fontWeight:700, fontSize:14, transition:'all 0.2s',
               background: activeTab===id ? '#FF6B00' : 'transparent',
@@ -171,7 +171,7 @@ export default function SamagriStorePage() {
       {activeTab === 'custom' ? (
         <div style={{ paddingBottom:20 }}>
           <div style={{ background:'rgba(212,160,23,0.08)', border:'1px solid rgba(212,160,23,0.2)', borderRadius:12, padding:'14px 18px', marginBottom:18 }}>
-            <div style={{ color:'rgba(255,248,240,0.9)', fontWeight:700, fontSize:14, marginBottom:4 }}>🎨 Build Your Perfect Pooja Kit</div>
+            <div style={{ color:'rgba(255,248,240,0.9)', fontWeight:700, fontSize:14, marginBottom:4 }}>🛠️ Build Your Perfect Pooja Kit</div>
             <div style={{ color:'rgba(255,248,240,0.55)', fontSize:13 }}>Select individual items for your specific ritual. Perfect for experienced devotees who know exactly what they need.</div>
           </div>
           <div style={{ display:'flex', gap:8, marginBottom:16, flexWrap:'wrap' }}>
@@ -215,7 +215,7 @@ export default function SamagriStorePage() {
           {customCount > 0 && (
             <div style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', borderRadius:14, padding:'18px 22px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
               <div>
-                <div style={{ color:'#fff', fontWeight:700, fontSize:15 }}>🎨 Your Custom Kit: {customCount} items</div>
+                <div style={{ color:'#fff', fontWeight:700, fontSize:15 }}>🛠️ Your Custom Kit: {customCount} items</div>
                 <div style={{ color:'rgba(255,255,255,0.85)', fontSize:13, marginTop:2 }}>Curated just for your ritual</div>
               </div>
               <div style={{ display:'flex', gap:12, alignItems:'center' }}>
