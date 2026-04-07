@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { db } from '../../services/supabase';
 
 const C = {
   card:'#ffffff', border:'rgba(212,160,23,0.2)',
@@ -27,7 +28,8 @@ const ICONS = ['🪔','🐘','🏡','🌺','🌟','🔱','🔥','🌸','🕯️'
 const EMPTY = { name:'', cat:'Festival Kits', icon:'🪔', price:'', mrp:'', stock:'', sold:0, active:true, desc:'' };
 
 export default function AdminSamagriList() {
-  const [items, setItems]             = useState(INIT_ITEMS);
+  const [items, setItems]             = useState([]);
+  const [loading, setLoading]         = useState(true);
   const [search, setSearch]           = useState('');
   const [catFilter, setCatFilter]     = useState('All');
   const [editItem, setEditItem]       = useState(null);
@@ -35,6 +37,34 @@ export default function AdminSamagriList() {
   const [formData, setFormData]       = useState(EMPTY);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [view, setView]               = useState('table');
+
+  useEffect(() => {
+    fetchItems();
+  }, []);
+
+  const fetchItems = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await db.samagri().select('*').order('created_at', { ascending: false });
+      if (error) throw error;
+      setItems(data?.length ? data.map(i => ({
+        ...i,
+        name: i.kit_name || i.name,
+        cat: i.category || i.cat || 'Festival Kits',
+        desc: i.description || i.desc || '',
+        price: Number(i.price),
+        mrp: Number(i.mrp || i.price),
+        stock: Number(i.stock || 0),
+        sold: Number(i.sold || 0),
+        active: i.active ?? true,
+      })) : INIT_ITEMS);
+    } catch (err) {
+      console.error("Error fetching samagri:", err);
+      setItems(INIT_ITEMS);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const totalRevenue = items.reduce((s,i) => s + i.price * i.sold, 0);
   const totalStock   = items.reduce((s,i) => s + i.stock, 0);
@@ -55,30 +85,63 @@ export default function AdminSamagriList() {
     setEditItem(item.id);
     setShowForm(true);
   };
-  const saveItem = () => {
+  const saveItem = async () => {
     if (!formData.name || !formData.price) return;
+    setLoading(true);
     const cleaned = {
-      ...formData,
-      price: Number(formData.price),
-      mrp:   Number(formData.mrp)   || Number(formData.price),
-      stock: Number(formData.stock) || 0,
-      sold:  Number(formData.sold)  || 0,
+      kit_name: formData.name,
+      category: formData.cat,
+      icon:     formData.icon,
+      price:    Number(formData.price),
+      mrp:      Number(formData.mrp)   || Number(formData.price),
+      stock:    Number(formData.stock) || 0,
+      sold:     Number(formData.sold)  || 0,
+      active:   formData.active,
+      description: formData.desc,
     };
-    if (editItem) {
-      setItems(prev => prev.map(i => i.id === editItem ? cleaned : i));
-    } else {
-      setItems(prev => [...prev, cleaned]);
+
+    try {
+      if (editItem) {
+        const { error } = await db.samagri().update(cleaned).eq('id', editItem);
+        if (error) throw error;
+      } else {
+        const { error } = await db.samagri().insert([cleaned]);
+        if (error) throw error;
+      }
+      await fetchItems();
+      setShowForm(false);
+      setEditItem(null);
+      setFormData(EMPTY);
+    } catch (err) {
+      console.error("Error saving samagri:", err);
+    } finally {
+      setLoading(false);
     }
-    setShowForm(false);
-    setEditItem(null);
-    setFormData(EMPTY);
   };
-  const deleteItem = (id) => {
-    setItems(prev => prev.filter(i => i.id !== id));
-    setDeleteConfirm(null);
+  const deleteItem = async (id) => {
+    try {
+      const { error } = await db.samagri().delete().eq('id', id);
+      if (error) throw error;
+      setItems(prev => prev.filter(i => i.id !== id));
+    } catch (err) {
+      console.error("Error deleting samagri:", err);
+    } finally {
+      setDeleteConfirm(null);
+    }
   };
-  const toggleActive  = (id) => setItems(prev => prev.map(i => i.id === id ? { ...i, active: !i.active } : i));
-  const updateStock   = (id, delta) => setItems(prev => prev.map(i => i.id === id ? { ...i, stock: Math.max(0, i.stock + delta) } : i));
+  const toggleActive  = async (id, current) => {
+    try {
+      await db.samagri().update({ active: !current }).eq('id', id);
+      setItems(prev => prev.map(i => i.id === id ? { ...i, active: !current } : i));
+    } catch (err) {}
+  };
+  const updateStock   = async (id, current, delta) => {
+    try {
+      const news = Math.max(0, current + delta);
+      await db.samagri().update({ stock: news }).eq('id', id);
+      setItems(prev => prev.map(i => i.id === id ? { ...i, stock: news } : i));
+    } catch (err) {}
+  };
   const fld = (k, v) => setFormData(f => ({ ...f, [k]: v }));
 
   const inp = { width:'100%', padding:'9px 12px', borderRadius:8, border:`1.5px solid rgba(212,160,23,0.4)`, background:'#fffbf5', color:C.dark, fontSize:13, fontFamily:'inherit', outline:'none', boxSizing:'border-box' };
@@ -168,15 +231,15 @@ export default function AdminSamagriList() {
                   </td>
                   <td style={{ padding:'12px 14px' }}>
                     <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                      <button onClick={()=>updateStock(item.id,-1)} style={{ width:24,height:24,borderRadius:'50%',background:'rgba(239,68,68,0.1)',color:C.red,border:`1px solid rgba(239,68,68,0.3)`,cursor:'pointer',fontWeight:800,fontSize:14,display:'flex',alignItems:'center',justifyContent:'center' }}>−</button>
+                      <button onClick={()=>updateStock(item.id, item.stock, -1)} style={{ width:24,height:24,borderRadius:'50%',background:'rgba(239,68,68,0.1)',color:C.red,border:`1px solid rgba(239,68,68,0.3)`,cursor:'pointer',fontWeight:800,fontSize:14,display:'flex',alignItems:'center',justifyContent:'center' }}>−</button>
                       <span style={{ color:item.stock<100?C.red:C.dark, fontWeight:700, fontSize:14, minWidth:32, textAlign:'center' }}>{item.stock}</span>
-                      <button onClick={()=>updateStock(item.id,1)} style={{ width:24,height:24,borderRadius:'50%',background:'rgba(34,197,94,0.1)',color:C.green,border:`1px solid rgba(34,197,94,0.3)`,cursor:'pointer',fontWeight:800,fontSize:14,display:'flex',alignItems:'center',justifyContent:'center' }}>+</button>
+                      <button onClick={()=>updateStock(item.id, item.stock, 1)} style={{ width:24,height:24,borderRadius:'50%',background:'rgba(34,197,94,0.1)',color:C.green,border:`1px solid rgba(34,197,94,0.3)`,cursor:'pointer',fontWeight:800,fontSize:14,display:'flex',alignItems:'center',justifyContent:'center' }}>+</button>
                     </div>
                     {item.stock < 100 && <div style={{ color:C.red, fontSize:10, marginTop:2, fontWeight:600 }}>⚠️ Low stock</div>}
                   </td>
                   <td style={{ padding:'12px 14px', color:C.green, fontWeight:700 }}>{item.sold.toLocaleString()}</td>
                   <td style={{ padding:'12px 14px' }}>
-                    <div onClick={()=>toggleActive(item.id)} style={{ display:'inline-flex', alignItems:'center', gap:6, cursor:'pointer' }}>
+                    <div onClick={()=>toggleActive(item.id, item.active)} style={{ display:'inline-flex', alignItems:'center', gap:6, cursor:'pointer' }}>
                       <div style={{ width:38,height:22,borderRadius:11,background:item.active?C.green:'rgba(0,0,0,0.15)',position:'relative',transition:'background 0.3s' }}>
                         <div style={{ width:16,height:16,borderRadius:'50%',background:'#fff',position:'absolute',top:3,left:item.active?19:3,transition:'left 0.3s',boxShadow:'0 1px 3px rgba(0,0,0,0.2)' }}/>
                       </div>
@@ -221,7 +284,7 @@ export default function AdminSamagriList() {
                 <span style={{ color:C.green }}>Sold: <b>{item.sold}</b></span>
               </div>
               <div style={{ display:'flex', alignItems:'center', gap:8 }}>
-                <div onClick={()=>toggleActive(item.id)} style={{ width:36,height:20,borderRadius:10,background:item.active?C.green:'rgba(0,0,0,0.15)',position:'relative',cursor:'pointer',transition:'background 0.3s',flexShrink:0 }}>
+                <div onClick={()=>toggleActive(item.id, item.active)} style={{ width:36,height:20,borderRadius:10,background:item.active?C.green:'rgba(0,0,0,0.15)',position:'relative',cursor:'pointer',transition:'background 0.3s',flexShrink:0 }}>
                   <div style={{ width:14,height:14,borderRadius:'50%',background:'#fff',position:'absolute',top:3,left:item.active?19:3,transition:'left 0.3s' }}/>
                 </div>
                 <span style={{ fontSize:12, color:item.active?C.green:C.soft }}>{item.active?'Active':'Hidden'}</span>

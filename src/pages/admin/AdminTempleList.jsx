@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../../services/supabase';
 import { SEED_TEMPLES } from '../../data/seedData';
 
 const C = { card:'#ffffff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070', green:'#16a34a', red:'#dc2626' };
@@ -16,7 +17,13 @@ export default function AdminTempleList() {
     })();
   }, []);
 
-  const toggleLive = (id) => setTemples(prev=>prev.map(t=>t.id===id?{...t,is_live:!t.is_live}:t));
+  const toggleLive = async (id, current) => {
+    const next = !current;
+    setTemples(prev => prev.map(t => t.id === id ? { ...t, is_live: next } : t));
+    try {
+      await supabase.from('temples').update({ is_live: next }).eq('id', id);
+    } catch (e) {}
+  };
 
   return (
     <div style={{ fontFamily:'Nunito,sans-serif' }}>
@@ -35,7 +42,7 @@ export default function AdminTempleList() {
               </div>
               <div style={{ display:'flex', flexDirection:'column', alignItems:'flex-end', gap:6 }}>
                 {t.is_live && <span style={{ background:'rgba(239,68,68,0.12)', color:C.red, fontSize:10, padding:'2px 8px', borderRadius:10, fontWeight:800 }}>🔴 LIVE</span>}
-                <button onClick={()=>toggleLive(t.id)} style={{ background:t.is_live?'rgba(239,68,68,0.08)':'rgba(34,197,94,0.1)', color:t.is_live?C.red:'#15803d', border:`1px solid ${t.is_live?'rgba(239,68,68,0.25)':'rgba(34,197,94,0.3)'}`, borderRadius:8, padding:'4px 10px', cursor:'pointer', fontSize:11, fontWeight:700 }}>
+                <button onClick={() => toggleLive(t.id, t.is_live)} style={{ background:t.is_live?'rgba(239,68,68,0.08)':'rgba(34,197,94,0.1)', color:t.is_live?C.red:'#15803d', border:`1px solid ${t.is_live?'rgba(239,68,68,0.25)':'rgba(34,197,94,0.3)'}`, borderRadius:8, padding:'4px 10px', cursor:'pointer', fontSize:11, fontWeight:700 }}>
                   {t.is_live?'Stop Live':'Go Live'}
                 </button>
               </div>

@@ -92,29 +92,36 @@ export default function BookingWizard() {
 
   const selectRitual = async (r) => {
     setLoading(true);
-    if (r.id === 'on-demand') {
-      setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price, samagriId: null, samagriAmount: 0 }));
-      setStep(2); // Show samagri question even for on-demand
-    } else {
-      const { data } = await bookingApi.getSamagriKits(r.id);
-      const kits = data || [];
-      setSamagriKits(kits);
-
-      // If "With Samagri" filter is on → auto-select cheapest kit and skip step 2
-      if (ritualFilters.samagriOnly && kits.length > 0) {
-        const cheapest = [...kits].sort((a, b) => a.price - b.price)[0];
-        setDraft(prev => ({
-          ...prev,
-          ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price,
-          samagriId: cheapest.id, samagriAmount: cheapest.price, deliveryRequired: true,
-        }));
-        setStep(3); // Skip step 2, jump to timing
+    try {
+      if (r.id === 'on-demand') {
+        const { data: all } = await bookingApi.getRituals();
+        setRituals(all || []);
+        setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price, samagriId: null, samagriAmount: 0 }));
+        setStep(2);
       } else {
-        setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
-        nextStep();
+        const { data } = await bookingApi.getSamagriKits(r.id);
+        const kits = data || [];
+        setSamagriKits(kits);
+
+        if (ritualFilters.samagriOnly && kits.length > 0) {
+          const cheapest = [...kits].sort((a, b) => a.price - b.price)[0];
+          setDraft(prev => ({
+            ...prev,
+            ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price,
+            samagriId: cheapest.id, samagriAmount: cheapest.price, deliveryRequired: true,
+          }));
+          setStep(3);
+        } else {
+          setDraft(prev => ({ ...prev, ritualId: r.id, ritual: r.name, ritualIcon: r.icon, amount: r.price }));
+          nextStep();
+        }
       }
+    } catch (err) {
+      console.error("Selection error:", err);
+      toast("Unable to select ritual. Please check your connection.", "❌");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleStep4Submit = (e) => {

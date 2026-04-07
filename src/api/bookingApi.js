@@ -146,7 +146,9 @@ export const bookingApi = {
   },
 
   async getSamagriKits(ritualId) {
-    const { data } = await supabase.from('samagri').select('*').eq('is_kit', true);
+    // Return kits that match the ritual, or all kits if ritualId is generic
+    const query = supabase.from('samagri_kits').select('*');
+    const { data } = ritualId ? await query.eq('ritual_id', ritualId) : await query;
     return { data: data || [] };
   },
 };

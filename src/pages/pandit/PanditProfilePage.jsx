@@ -11,14 +11,41 @@ export default function PanditProfilePage() {
 
   useEffect(() => {
     if (!panditId) { setLoading(false); return; }
-    db.pandits().select("*").eq("id", panditId).single().then(({ data }) => { if (data) { setForm(data); } setLoading(false); });
+    db.pandits().select("*").eq("id", panditId).single().then(({ data }) => { 
+      if (data) { 
+        setForm({
+          ...data,
+          tags: data.specialization || data.tags || []
+        }); 
+      } 
+      setLoading(false); 
+    });
   }, [panditId]);
 
   const save = async () => {
     setSaving(true);
-    if (panditId) { await db.pandits().update(form).eq("id", panditId); }
+    if (panditId) { 
+      const payload = {
+        name: form.name,
+        speciality: form.speciality,
+        experience_years: Number(form.experience_years),
+        city: form.city,
+        bio: form.bio,
+        specialization: form.tags, // correctly maps to schema
+        latitude: form.latitude ? parseFloat(form.latitude) : null,
+        longitude: form.longitude ? parseFloat(form.longitude) : null,
+        phone: form.phone
+      };
+      
+      const { error } = await db.pandits().update(payload).eq("id", panditId);
+      if (error) {
+        console.error("Error saving profile:", error);
+        toast("Error saving profile", "❌");
+      } else {
+        toast("Profile saved!", "✅");
+      }
+    }
     setSaving(false);
-    toast("Profile saved!", "✅");
   };
 
   if (loading) return <Spinner />;

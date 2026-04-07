@@ -6,6 +6,26 @@ import CartDrawer from '../../features/user-portal/components/CartDrawer';
 import CheckoutModal from '../../features/user-portal/components/CheckoutModal';
 import { Spinner } from '../../components/common/UIElements';
 
+const getSamagriIcon = (name) => {
+  const n = (name || "").toLowerCase();
+  if (n.includes("thali")) return "🥣";
+  if (n.includes("kit")) return "📦";
+  if (n.includes("diya") || n.includes("lamp")) return "🪔";
+  if (n.includes("incense") || n.includes("agarbatti")) return "☁️";
+  if (n.includes("flower")) return "🌸";
+  if (n.includes("fruit")) return "🍎";
+  if (n.includes("ghee")) return "🧈";
+  if (n.includes("honey")) return "🍯";
+  if (n.includes("gangajal")) return "🧴";
+  if (n.includes("rice") || n.includes("akshat")) return "🌾";
+  if (n.includes("turmeric") || n.includes("haldi")) return "🧂";
+  if (n.includes("sandalwood") || n.includes("chandan")) return "🪵";
+  if (n.includes("coconut")) return "🥥";
+  if (n.includes("bell")) return "🔔";
+  if (n.includes("cloth")) return "🧣";
+  return "📦";
+};
+
 export default function SamagriPage() {
   const { db, toast } = useApp();
   const { cart, addToCart, removeFromCart, updateQty, clearCart, subtotal, cartCount } = useCart();
@@ -83,7 +103,7 @@ export default function SamagriPage() {
         <div className="overlay" onClick={() => setViewItem(null)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
             <div className="modal-head">
-              <div style={{ fontSize: 60, marginBottom: 15 }}>{viewItem.icon}</div>
+              <div style={{ fontSize: 60, marginBottom: 15 }}>{viewItem.icon && viewItem.icon !== '📦' ? viewItem.icon : getSamagriIcon(viewItem.name)}</div>
               <div className="modal-title">{viewItem.name}</div>
               <div className="modal-sub">📦 {viewItem.item_count} items · ₹{viewItem.price}</div>
               <button className="modal-close" onClick={() => setViewItem(null)}>✕</button>

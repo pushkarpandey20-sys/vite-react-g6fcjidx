@@ -1,29 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import { supabase } from '../../services/supabase';
 import { SEED_PANDITS } from '../../data/seedData';
 
 const C = { page:'#fff8f0', card:'#ffffff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070', green:'#16a34a', red:'#dc2626' };
 
 export default function AdminPanditList() {
-  const [pandits, setPandits] = useState(SEED_PANDITS);
+  const [pandits, setPandits] = useState([]);
   const [filter, setFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const { supabase } = await import('../../services/supabase');
-        const { data } = await supabase.from('pandits').select('*').order('created_at',{ascending:false});
-        if (data?.length) setPandits(data);
-      } catch(e) {}
-      setLoading(false);
-    })();
+    fetchPandits();
   }, []);
+
+  const fetchPandits = async () => {
+    setLoading(true);
+    try {
+      const { data } = await supabase.from('pandits').select('*').order('created_at',{ascending:false});
+      if (data?.length) setPandits(data);
+      else setPandits(SEED_PANDITS);
+    } catch(e) {}
+    setLoading(false);
+  };
 
   const updateStatus = async (id, status) => {
     setPandits(prev => prev.map(p => p.id===id ? {...p,status} : p));
     try {
-      const { supabase } = await import('../../services/supabase');
       await supabase.from('pandits').update({status}).eq('id',id);
     } catch(e) {}
   };

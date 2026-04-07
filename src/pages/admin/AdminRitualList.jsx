@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../services/supabase';
 
 const C = { card:'#ffffff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070' };
 
@@ -16,8 +17,21 @@ const RITUALS = [
 ];
 
 export default function AdminRitualList() {
+  const [rituals, setRituals] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
-  const displayed = RITUALS.filter(r=>!search||r.name.toLowerCase().includes(search.toLowerCase()));
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data, error } = await supabase.from('rituals').select('*').order('name');
+        if (data?.length) setRituals(data);
+        else setRituals(RITUALS); // Fallback to seed if empty
+      } catch (e) {} finally { setLoading(false); }
+    })();
+  }, []);
+
+  const displayed = rituals.filter(r => !search || r.name?.toLowerCase().includes(search.toLowerCase()));
 
   return (
     <div style={{ fontFamily:'Nunito,sans-serif' }}>
@@ -44,13 +58,15 @@ export default function AdminRitualList() {
                 onMouseEnter={e=>e.currentTarget.style.background='rgba(255,107,0,0.03)'}
                 onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
                 <td style={{ padding:'12px 14px', color:C.dark, fontWeight:700 }}>{r.name}</td>
-                <td style={{ padding:'12px 14px', color:C.soft, fontSize:13 }}>{r.category}</td>
-                <td style={{ padding:'12px 14px', color:C.orange, fontWeight:700 }}>₹{r.baseFee.toLocaleString()}</td>
-                <td style={{ padding:'12px 14px', color:C.soft, fontSize:13 }}>{r.duration}</td>
-                <td style={{ padding:'12px 14px', color:'#16a34a', fontWeight:700 }}>{r.pandits}</td>
-                <td style={{ padding:'12px 14px', color:C.mid, fontWeight:600 }}>{r.bookings}</td>
+                <td style={{ padding:'12px 14px', color:C.soft, fontSize:13 }}>{r.category || 'General'}</td>
+                <td style={{ padding:'12px 14px', color:C.orange, fontWeight:700 }}>₹{(r.price || r.baseFee || 0).toLocaleString()}</td>
+                <td style={{ padding:'12px 14px', color:C.soft, fontSize:13 }}>{r.duration || '2 hrs'}</td>
+                <td style={{ padding:'12px 14px', color:'#16a34a', fontWeight:700 }}>{r.active_pandits || 0}</td>
+                <td style={{ padding:'12px 14px', color:C.mid, fontWeight:600 }}>{r.total_bookings || 0}</td>
               </tr>
             ))}
+            {loading && <tr><td colSpan="6" style={{ textAlign:'center', padding:20, color:C.soft }}>Syncing with DevSetu Network...</td></tr>}
+            {!loading && rituals.length === 0 && <tr><td colSpan="6" style={{ textAlign:'center', padding:20, color:C.soft }}>No rituals found in database.</td></tr>}
           </tbody>
         </table>
       </div>

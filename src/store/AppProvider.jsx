@@ -142,7 +142,7 @@ export function AppProvider({ children }) {
       }
     };
     const loadFestivals = async () => {
-      const { data } = await supabase.from('festivals').select('*').gte('festival_date', new Date().toISOString().split('T')[0]);
+      const { data } = await supabase.from('festivals').select('*').gte('date', new Date().toISOString().split('T')[0]);
       setFestivals(data || []);
     };
 

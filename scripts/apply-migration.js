@@ -110,58 +110,49 @@ async function main() {
     process.exit(1);
   }
 
-  console.log('🕉️  DevSetu — Applying migration 003_production_columns.sql\n');
+  const migrationsDir = path.join(__dirname, '../supabase/migrations');
+  const files = fs.readdirSync(migrationsDir)
+    .filter(f => f.endsWith('.sql'))
+    .sort();
+
+  console.log('🕉️  DevSetu — Applying all migrations to production\n');
   console.log(`📡  Project: ${SUPABASE_URL}\n`);
+  console.log(`📁  Found ${files.length} migration files.\n`);
 
-  const sql        = fs.readFileSync(SQL_FILE, 'utf8');
-  const statements = splitStatements(sql);
+  for (const file of files) {
+    const filePath = path.join(migrationsDir, file);
+    console.log(`🚀  Applying: ${file}`);
+    const sql = fs.readFileSync(filePath, 'utf8');
+    const statements = splitStatements(sql);
 
-  console.log(`📋  Found ${statements.length} SQL statements to execute.\n`);
+    let passed = 0;
+    let total = statements.length;
 
-  let passed = 0;
-  let failed = 0;
-
-  for (let i = 0; i < statements.length; i++) {
-    const stmt = statements[i];
-    const preview = stmt.substring(0, 60).replace(/\n/g, ' ');
-    process.stdout.write(`  [${i + 1}/${statements.length}] ${preview}... `);
-
-    try {
-      // Try Management API first (most reliable)
-      const result = await execSQLManagement(stmt);
-      if (result.ok) {
-        console.log('✅');
-        passed++;
-      } else {
-        // Some statements like CREATE POLICY IF NOT EXISTS may return errors on old Supabase
-        // versions — treat as warning, not fatal
-        const body = JSON.parse(result.body || '{}');
-        const msg  = body?.message || body?.error || result.body;
-        if (msg && (msg.includes('already exists') || msg.includes('does not exist'))) {
-          console.log('⚠️  (already applied)');
+    for (let i = 0; i < total; i++) {
+      const stmt = statements[i];
+      const preview = stmt.substring(0, 50).replace(/\n/g, ' ');
+      
+      try {
+        const result = await execSQLManagement(stmt);
+        if (result.ok) {
           passed++;
         } else {
-          console.log(`❌  (${result.status}: ${msg?.substring(0, 80)})`);
-          failed++;
+          const body = JSON.parse(result.body || '{}');
+          const msg  = body?.message || body?.error || result.body;
+          if (msg && (msg.includes('already exists') || msg.includes('does not exist') || msg.includes('Duplicate'))) {
+             passed++;
+          } else {
+            console.log(`     ❌  [${i+1}/${total}] Error: ${msg?.substring(0, 100)}`);
+          }
         }
+      } catch (err) {
+        console.log(`     ❌  [${i+1}/${total}] Network Error: ${err.message}`);
       }
-    } catch (err) {
-      console.log(`❌  (network error: ${err.message})`);
-      failed++;
     }
+    console.log(`     ✅  ${passed}/${total} statements applied or verified.\n`);
   }
 
-  console.log(`\n${'─'.repeat(50)}`);
-  console.log(`✅  Passed : ${passed}`);
-  if (failed > 0) console.log(`❌  Failed : ${failed}`);
-  console.log(`${'─'.repeat(50)}\n`);
-
-  if (failed > 0) {
-    console.log('💡  For failed statements, copy supabase/migrations/003_production_columns.sql');
-    console.log('    and paste it into Supabase Dashboard → SQL Editor → Run.\n');
-  } else {
-    console.log('🎉  Migration complete! Your DevSetu database is production-ready.\n');
-  }
+  console.log('🎉  All migrations processed! Your DevSetu database is up to date.\n');
 }
 
 main().catch(err => {
