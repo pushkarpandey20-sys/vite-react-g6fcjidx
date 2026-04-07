@@ -86,11 +86,11 @@ function PanditOnboardingForm({ onComplete }) {
         {step===2 && (
           <>
             <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', marginTop:0 }}>Specializations & Fees</h3>
-            <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12, marginBottom:8, letterSpacing:1 }}>SPECIALIZATIONS (select all that apply)</div>
+            <div style={{ color:'#8B6347', fontSize:12, marginBottom:8, letterSpacing:1 }}>SPECIALIZATIONS (select all that apply)</div>
             <div style={{ marginBottom:16 }}>
               {SPECIALIZATIONS.map(s=><span key={s} style={pill(form.specializations.includes(s))} onClick={()=>toggle('specializations',s)}>{s}</span>)}
             </div>
-            <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12, marginBottom:8, letterSpacing:1 }}>LANGUAGES</div>
+            <div style={{ color:'#8B6347', fontSize:12, marginBottom:8, letterSpacing:1 }}>LANGUAGES</div>
             <div style={{ marginBottom:16 }}>
               {LANGUAGES.map(l=><span key={l} style={pill(form.languages.includes(l))} onClick={()=>toggle('languages',l)}>{l}</span>)}
             </div>
@@ -194,7 +194,7 @@ export default function Dashboard() {
 
   if (loading) return (
     <div style={{ display:'flex', alignItems:'center', justifyContent:'center', height:'60vh' }}>
-      <div style={{ color:'rgba(255,248,240,0.5)', fontSize:14 }}>Loading your dashboard...</div>
+      <div style={{ color:'#9a8070', fontSize:14 }}>Loading your dashboard...</div>
     </div>
   );
 
@@ -237,10 +237,10 @@ export default function Dashboard() {
   return (
     <div>
       {/* Header with online toggle */}
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:24 }}>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:20, gap:12, flexWrap:'wrap' }}>
         <div>
           <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017', margin:0, fontSize:22 }}>Namaste, {profile?.name || panditName || 'Pt. Ji'} 🙏</h2>
-          <p style={{ color:'rgba(255,248,240,0.5)', margin:'4px 0 0', fontSize:13 }}>Managing your sacred schedule</p>
+          <p style={{ color:'#9a8070', margin:'4px 0 0', fontSize:13 }}>Managing your sacred schedule</p>
         </div>
         <div style={{ display:'flex', alignItems:'center', gap:12, background:'#ffffff', border:'1px solid rgba(212,160,23,0.15)', borderRadius:12, padding:'10px 16px' }}>
           <div style={{ width:10, height:10, borderRadius:'50%', background:panditOnline?'#22c55e':'#ef4444', boxShadow:panditOnline?'0 0 8px #22c55e':'none' }}/>
@@ -252,7 +252,7 @@ export default function Dashboard() {
       </div>
 
       {/* Stats */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:16, marginBottom:24 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:12, marginBottom:20 }}>
         {[
           { label:'This Month', value:`₹${Math.round(stats.monthEarnings).toLocaleString()}`, sub:'After 18% commission', color:'#F0C040' },
           { label:"Today's Rituals", value:stats.today.length, sub:'Accepted bookings', color:'#22c55e' },
@@ -267,7 +267,7 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:20, marginBottom:20 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:16, marginBottom:16 }}>
         {/* Pending Requests */}
         <div style={card}>
           <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:15, marginBottom:16 }}>Pending Invitations ({stats.pending.length})</div>
