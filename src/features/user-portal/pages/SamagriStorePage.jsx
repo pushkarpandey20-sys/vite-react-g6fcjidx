@@ -24,14 +24,14 @@ const PRODUCTS = [
 const BADGE_COLORS = { BESTSELLER:'#FF6B00', POPULAR:'#22c55e', PREMIUM:'#9B59B6', COMPLETE:'#3498DB' };
 
 const CUSTOM_ITEMS = [
-  { id:'c1', name:'Agarbatti (Incense)', icon:'🌫️', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
-  { id:'c2', name:'Camphor Tablets', icon:'🕯️', price:39, unit:'10 tablets', cat:'Basic' },
+  { id:'c1', name:'Agarbatti (Incense)', icon:'🕯️', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
+  { id:'c2', name:'Camphor Tablets', icon:'🌿', price:39, unit:'10 tablets', cat:'Basic' },
   { id:'c3', name:'Roli (Vermilion)', icon:'🔴', price:29, unit:'50g packet', cat:'Basic' },
-  { id:'c4', name:'Moli (Sacred Thread)', icon:'🔴', price:19, unit:'1 roll', cat:'Basic' },
+  { id:'c4', name:'Moli (Sacred Thread)', icon:'🧵', price:19, unit:'1 roll', cat:'Basic' },
   { id:'c5', name:'Akshat (Rice)', icon:'🍚', price:25, unit:'250g packet', cat:'Basic' },
-  { id:'c6', name:'Supari (Betel Nut)', icon:'🥜', price:35, unit:'100g', cat:'Basic' },
-  { id:'c7', name:'Ghee (Pure Cow)', icon:'🫙', price:299, unit:'500ml', cat:'Premium' },
-  { id:'c8', name:'Panchamrit Mix', icon:'🍯', price:149, unit:'Complete set', cat:'Premium' },
+  { id:'c6', name:'Supari (Betel Nut)', icon:'🌰', price:35, unit:'100g', cat:'Basic' },
+  { id:'c7', name:'Ghee (Pure Cow)', icon:'🧈', price:299, unit:'500ml', cat:'Premium' },
+  { id:'c8', name:'Panchamrit Mix', icon:'🥛', price:149, unit:'Complete set', cat:'Premium' },
   { id:'c9', name:'Gangajal (Holy Water)', icon:'💧', price:89, unit:'500ml bottle', cat:'Premium' },
   { id:'c10', name:'Kalash (Copper Pot)', icon:'🏺', price:199, unit:'1 piece', cat:'Premium' },
   { id:'c11', name:'Bel Patra', icon:'🍃', price:49, unit:'Fresh pack', cat:'Flowers' },
