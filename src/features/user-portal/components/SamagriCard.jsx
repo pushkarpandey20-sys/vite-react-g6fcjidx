@@ -65,7 +65,7 @@ const getSamagriIcon = (name) => {
 };
 
 export default function SamagriCard({ item, onAdd, onView }) {
-  const icon = item.icon && item.icon !== "📦" ? item.icon : getSamagriIcon(item.name);
+  const icon = getSamagriIcon(item.name);
   return (
     <div className="samagri-card card">
       <div className="sc-img-box" onClick={() => onView(item)}>
