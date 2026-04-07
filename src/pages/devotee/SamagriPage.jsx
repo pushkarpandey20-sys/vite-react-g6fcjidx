@@ -57,7 +57,8 @@ const getSamagriIcon = (name) => {
   if (n.includes("oil") || n.includes("tel")) return "🫙";
   if (n.includes("water") || n.includes("jal")) return "💧";
   if (n.includes("leaf") || n.includes("tulsi") || n.includes("basil")) return "🌿";
-  if (n.includes("thread") || n.includes("mauli") || n.includes("kalava")) return "🧵";
+  if (n.includes("mauli") || n.includes("kalava")) return "🔴";
+  if (n.includes("thread") || n.includes("janeu")) return "🧵";
   if (n.includes("sugar") || n.includes("shakkar") || n.includes("mishri")) return "🍬";
   if (n.includes("curd") || n.includes("dahi") || n.includes("yogurt")) return "🥛";
   if (n.includes("milk") || n.includes("dudh")) return "🥛";
