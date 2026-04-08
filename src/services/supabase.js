@@ -6,12 +6,17 @@ const _rawKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 const hasValidUrl = Boolean(_rawUrl && _rawUrl.startsWith('http'));
 const hasValidKey = Boolean(_rawKey && !_rawKey.startsWith('your_'));
 
+const FALLBACK_SUPABASE_URL = 'https://lnhlnogpmpjajwtmmrmq.supabase.co';
+const FALLBACK_SUPABASE_KEY = 'sb_publishable_hkLodTGQEUBQ5QcLTIey1Q_snE7L9j1';
+
 if (!hasValidUrl || !hasValidKey) {
-  throw new Error('Supabase environment variables are missing or still set to placeholder values. Configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY before starting the app.');
+  console.warn(
+    'Supabase environment variables are missing or still set to placeholder values. Falling back to the default public project config.'
+  );
 }
 
-export const SUPABASE_URL = _rawUrl;
-export const SUPABASE_KEY = _rawKey;
+export const SUPABASE_URL = hasValidUrl ? _rawUrl : FALLBACK_SUPABASE_URL;
+export const SUPABASE_KEY = hasValidKey ? _rawKey : FALLBACK_SUPABASE_KEY;
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export const db = {

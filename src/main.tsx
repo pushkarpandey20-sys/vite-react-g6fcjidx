@@ -9,7 +9,7 @@ import { initNotifications } from './services/notificationService';
 
 // Sentry error monitoring (no-op if DSN is not set)
 const SENTRY_DSN = import.meta.env.VITE_SENTRY_DSN;
-if (SENTRY_DSN) {
+if (SENTRY_DSN && !SENTRY_DSN.startsWith('your_')) {
   import('@sentry/react').then(Sentry => {
     Sentry.init({
       dsn: SENTRY_DSN,
