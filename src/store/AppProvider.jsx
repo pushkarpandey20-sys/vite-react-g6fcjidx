@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { AppCtx } from './AppCtx';
+// NOTE: AppCtx must be imported using correct relative paths in all components.
+// Standardizing on relative paths to src/store/ to prevent resolution errors.
 import { supabase, db, genId, toUUID } from '../services/supabase';
 import { MUHURTAS, SEVA_OPTIONS } from '../api/constants';
 
