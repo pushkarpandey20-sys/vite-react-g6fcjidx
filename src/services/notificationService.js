@@ -56,11 +56,11 @@ const VEDIC_CALENDAR = {
     6: { deity: 'Saturn', recommended: ['Shani Pooja', 'Hanuman Pooja', 'Kaal Sarp Dosh Nivaran'], message: "Saturday — Shani Dev's day, powerful for dosh removal", icon: '🌑' },
   },
   festivals: [
-    { date: '2025-03-30', name: 'Holi', recommended: ['Holika Dahan Pooja', 'Laxmi Pooja'], message: 'Holi approaching — book Holika Dahan Pooja now', icon: '🎨' },
-    { date: '2025-04-02', name: 'Ram Navami', recommended: ['Ram Navami Pooja', 'Sunderkand Path'], message: 'Ram Navami in 3 days — book your pooja now', icon: '🏹' },
-    { date: '2025-04-14', name: 'Baisakhi', recommended: ['Vishnu Pooja', 'Satyanarayan Katha'], message: 'Baisakhi approaching — celebrate with a special pooja', icon: '🌾' },
-    { date: '2025-10-02', name: 'Navratri', recommended: ['Navratri Pooja', 'Durga Pooja', 'Kanya Pooja'], message: 'Navratri coming — book your 9-day Durga Pooja package', icon: '🌺' },
-    { date: '2025-10-21', name: 'Diwali', recommended: ['Laxmi Pooja', 'Diwali Pooja', 'Kali Pooja'], message: 'Diwali approaching — book Laxmi Pooja with verified pandit', icon: '🪔' },
+    { month: 3, day: 14, name: 'Holi', recommended: ['Holika Dahan Pooja', 'Laxmi Pooja'], message: 'Holi approaching — book Holika Dahan Pooja now', icon: '🎨' },
+    { month: 4, day: 6, name: 'Ram Navami', recommended: ['Ram Navami Pooja', 'Sunderkand Path'], message: 'Ram Navami approaching — book your pooja now', icon: '🏹' },
+    { month: 4, day: 14, name: 'Baisakhi', recommended: ['Vishnu Pooja', 'Satyanarayan Katha'], message: 'Baisakhi approaching — celebrate with a special pooja', icon: '🌾' },
+    { month: 9, day: 22, name: 'Navratri', recommended: ['Navratri Pooja', 'Durga Pooja', 'Kanya Pooja'], message: 'Navratri coming — book your 9-day Durga Pooja package', icon: '🌺' },
+    { month: 11, day: 8, name: 'Diwali', recommended: ['Laxmi Pooja', 'Diwali Pooja', 'Kali Pooja'], message: 'Diwali approaching — book Laxmi Pooja with verified pandit', icon: '🪔' },
   ],
 };
 
@@ -100,11 +100,18 @@ export function getTodaysTithi() {
 // ── Upcoming Festivals ─────────────────────────────────────────
 export function getUpcomingFestivals(daysAhead = 7) {
   const now = new Date();
-  return VEDIC_CALENDAR.festivals.filter(f => {
-    const fDate = new Date(f.date);
-    const diff = (fDate - now) / (1000 * 60 * 60 * 24);
-    return diff >= 0 && diff <= daysAhead;
-  });
+  return VEDIC_CALENDAR.festivals
+    .map(f => {
+      let nextDate = new Date(now.getFullYear(), f.month - 1, f.day);
+      if (nextDate < now) {
+        nextDate = new Date(now.getFullYear() + 1, f.month - 1, f.day);
+      }
+
+      const diff = (nextDate - now) / (1000 * 60 * 60 * 24);
+      return { ...f, date: nextDate.toISOString().split('T')[0], daysAway: Math.ceil(diff) };
+    })
+    .filter(f => f.daysAway >= 0 && f.daysAway <= daysAhead)
+    .sort((a, b) => a.daysAway - b.daysAway);
 }
 
 // ── Smart Recommendation Engine ────────────────────────────────

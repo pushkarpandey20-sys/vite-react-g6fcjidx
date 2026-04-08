@@ -2,9 +2,16 @@ import { createClient } from "@supabase/supabase-js";
 
 const _rawUrl = import.meta.env.VITE_SUPABASE_URL;
 const _rawKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-// Reject placeholder values that don't start with http
-export const SUPABASE_URL = (_rawUrl && _rawUrl.startsWith('http')) ? _rawUrl : "https://lnhlnogpmpjajwtmmrmq.supabase.co";
-export const SUPABASE_KEY = (_rawKey && !_rawKey.startsWith('your_')) ? _rawKey : "sb_publishable_hkLodTGQEUBQ5QcLTIey1Q_snE7L9j1";
+
+const hasValidUrl = Boolean(_rawUrl && _rawUrl.startsWith('http'));
+const hasValidKey = Boolean(_rawKey && !_rawKey.startsWith('your_'));
+
+if (!hasValidUrl || !hasValidKey) {
+  throw new Error('Supabase environment variables are missing or still set to placeholder values. Configure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY before starting the app.');
+}
+
+export const SUPABASE_URL = _rawUrl;
+export const SUPABASE_KEY = _rawKey;
 export const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
 
 export const db = {
