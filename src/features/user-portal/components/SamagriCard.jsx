@@ -1,7 +1,12 @@
 import React from 'react';
+import { PremiumIcon } from '../../../components/Icons';
 
 const getSamagriIcon = (name) => {
   const n = (name || "").toLowerCase();
+  if (n.includes("ghee")) return "/icons/ghee.png";
+  if (n.includes("havan") || n.includes("homa") || n.includes("yagna")) return "/icons/havan.png";
+  if (n.includes("diya") || n.includes("deepak")) return "/icons/diya.png";
+  if (n.includes("lotus")) return "/icons/lotus.png";
   // Rituals / Occasions
   if (n.includes("diwali")) return "🪔";
   if (n.includes("griha pravesh") || n.includes("griha") || n.includes("housewarming")) return "🏠";
@@ -69,7 +74,9 @@ export default function SamagriCard({ item, onAdd, onView }) {
   return (
     <div className="samagri-card card">
       <div className="sc-img-box" onClick={() => onView(item)}>
-        <span className="sc-icon">{icon}</span>
+        <span className="sc-icon">
+          {icon.startsWith('/') ? <PremiumIcon src={icon} size={32} /> : icon}
+        </span>
       </div>
       <div className="sc-meta-row">
         <span className="sc-category-tag">Sacred Item</span>

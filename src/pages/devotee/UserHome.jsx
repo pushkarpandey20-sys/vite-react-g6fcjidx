@@ -6,15 +6,16 @@ import notificationStore from '../../services/notificationService';
 import { supabase } from '../../services/supabase';
 import RitualTimeline from '../../components/RitualTimeline';
 import SmartRecommendations from '../../components/SmartRecommendations';
+import { PremiumIcon } from '../../components/Icons';
 
 /* ── Static data ──────────────────────────────────────────── */
 const SERVICES = [
-  { icon:'🛕', label:'Book Pandit',  path:'/user/booking',       color:'#FF6B00' },
-  { icon:'📦', label:'Buy Samagri',  path:'/user/samagri',       color:'#F0C040' },
-  { icon:'📱', label:'Virtual Puja', path:'/user/virtual-pooja', color:'#9B59B6' },
-  { icon:'🏛️', label:'Temples',      path:'/user/temples',       color:'#27AE60' },
-  { icon:'❤️', label:'Donate',       path:'/user/donations',     color:'#E91E8C' },
-  { icon:'📅', label:'Muhurta',      path:'/user/muhurta',       color:'#3498DB' },
+  { icon:'/icons/lotus.png', label:'Book Pandit',  path:'/user/booking',       color:'#FF6B00' },
+  { icon:'/icons/havan.png', label:'Buy Samagri',  path:'/user/samagri',       color:'#F0C040' },
+  { icon:'/icons/muhurta.png', label:'Virtual Puja', path:'/user/virtual-pooja', color:'#9B59B6' },
+  { icon:'/icons/temple.png', label:'Temples',      path:'/user/temples',       color:'#27AE60' },
+  { icon:'/icons/thali.png', label:'Donate',       path:'/user/donations',     color:'#E91E8C' },
+  { icon:'/icons/diya.png', label:'Muhurta',      path:'/user/muhurta',       color:'#3498DB' },
 ];
 
 const RITUALS = [
@@ -75,6 +76,15 @@ export default function UserHome() {
   const [pandits, setPandits]   = useState(SAMPLE_PANDITS);
   const [bookings, setBookings] = useState([]);
   const [activeBooking, setActiveBooking] = useState(null);
+  const [bgIndex, setBgIndex] = useState(0);
+  const BG_IMAGES = ['/temple-bg.png', '/temple-bg-2.png', '/temple-bg-3.png'];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBgIndex(prev => (prev + 1) % BG_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     supabase.from('pandits').select('id,name,city,experience_years,rating,specialization,min_fee')
@@ -97,43 +107,90 @@ export default function UserHome() {
     <div style={{ color:'rgba(255,248,240,0.88)', display:'flex', flexDirection:'column', gap:14 }}>
 
       {/* ── Hero ──────────────────────────────────────────── */}
-      <div style={{ background:'rgba(26,15,7,0.75)', border:'1px solid rgba(240,192,64,0.14)',
-        borderRadius:18, padding:'18px 16px 16px', backdropFilter:'blur(16px)', position:'relative', overflow:'hidden' }}>
-        <div style={{ position:'absolute', top:-60, right:-40, width:220, height:220,
-          background:'radial-gradient(ellipse,rgba(255,107,0,0.12) 0%,transparent 70%)', pointerEvents:'none' }} />
-        <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:'rgba(240,192,64,0.1)',
-          border:'1px solid rgba(240,192,64,0.25)', color:'#F0C040', fontSize:9, fontWeight:800,
-          letterSpacing:'1.2px', textTransform:'uppercase', padding:'3px 10px', borderRadius:20, marginBottom:8 }}>
-          🕉️ DevSetu — Bridging You to the Divine
-        </div>
-        <h1 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:'clamp(17px,4.5vw,24px)',
-          margin:'0 0 5px', fontWeight:900 }}>
-          {devoteeName ? `Namaste, ${devoteeName.split(' ')[0]} 🙏` : 'Namaste, Devotee 🙏'}
-        </h1>
-        <p style={{ color:'rgba(255,248,240,0.5)', margin:'0 0 14px', fontSize:12 }}>
-          Book a certified pandit in under 60 seconds.
-        </p>
-        <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-          <button onClick={() => navigate('/user/booking')}
-            className="btn btn-primary" style={{ flex:'1 1 140px', justifyContent:'center', fontSize:13 }}>
-            ⚡ Book Pandit Now
-          </button>
-          <button onClick={() => navigate('/user/rituals')}
-            style={{ flex:'1 1 120px', background:'rgba(240,192,64,0.1)', color:'#F0C040',
-              border:'1.5px solid rgba(240,192,64,0.3)', borderRadius:20,
-              padding:'10px 16px', fontWeight:700, cursor:'pointer', fontSize:12, fontFamily:'Nunito,sans-serif' }}>
-            🕉️ View Rituals
-          </button>
-        </div>
-        {/* Stats row */}
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:8, marginTop:14 }}>
-          {[['🙏','120+','Pandits'],['🕉️','80+','Rituals'],['📍','20+','Cities'],['⭐','4.9','Avg Rating']].map(([ic,val,lbl]) => (
-            <div key={lbl} style={{ ...dk, padding:'10px 4px', textAlign:'center', borderRadius:12 }}>
-              <div style={{ fontSize:18 }}>{ic}</div>
-              <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:800, fontSize:16, lineHeight:1.2 }}>{val}</div>
-              <div style={{ color:'rgba(255,248,240,0.4)', fontSize:9, fontWeight:700, textTransform:'uppercase', letterSpacing:'0.5px' }}>{lbl}</div>
-            </div>
+      {/* ── Hero with Dynamic Banner ──────────────────── */}
+      <div className="hero-glass" style={{
+        position:'relative', overflow:'hidden', borderRadius:24, padding:'40px 20px 24px',
+        display:'flex', flexDirection:'column', justifyContent:'flex-end',
+        boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
+      }}>
+        {/* Background Image Slider guarantees full height coverage and no blocked video loads */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, backgroundColor: '#0d0700' }}>
+          {BG_IMAGES.map((img, idx) => (
+            <img 
+              key={img}
+              src={img} 
+              alt="Sacred Background"
+              style={{ 
+                position: 'absolute', top: 0, left: 0, 
+                width: '100%', height: '100%', objectFit: 'cover', 
+                opacity: bgIndex === idx ? 0.6 : 0,
+                transition: 'opacity 1.5s ease-in-out'
+              }}
+            />
           ))}
+          {/* Lighter Gradient Overlay so the temple is clearly visible */}
+          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(26,15,7,0.3) 0%, rgba(26,15,7,0.85) 80%)' }} />
+        </div>
+
+        <div style={{ position:'relative', zIndex:1, paddingTop: 60 }}>
+          <div className="banner-glow" style={{
+            display:'inline-flex', alignItems:'center', gap:6, background:'rgba(255,107,0,0.2)',
+            border:'1px solid rgba(255,107,0,0.4)', color:'#FFD700', fontSize:10, fontWeight:900,
+            letterSpacing:'1.5px', textTransform:'uppercase', padding:'4px 12px', borderRadius:25, marginBottom:12
+          }}>
+            <span className="float-anim">✨</span> RECLAIM YOUR SACRED ROOTS
+          </div>
+
+          <h1 style={{
+            fontFamily:'Cinzel,serif', color:'#FFD700', fontSize:'clamp(20px,6vw,32px)',
+            margin:'0 0 8px', fontWeight:900, textShadow:'0 2px 10px rgba(0,0,0,0.5)',
+            lineHeight:1.1
+          }}>
+            {devoteeName ? `Jai Shree Ram, ${devoteeName.split(' ')[0]} 🙏` : 'Vande Mataram, Devotee 🙏'}
+          </h1>
+
+          <p style={{ color:'rgba(255,248,240,0.75)', margin:'0 0 20px', fontSize:14, maxWidth:280, lineHeight:1.5 }}>
+            Ancient Vedic traditions, delivered with <strong style={{ color:'#FFD700' }}>modern precision</strong>.
+          </p>
+
+          <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
+            <button onClick={() => navigate('/user/booking')}
+              className="btn btn-primary" style={{ flex:'1 1 150px', justifyContent:'center', fontSize:14, padding:'12px 20px', borderRadius:30, border:'1px solid rgba(255,255,255,0.2)' }}>
+              ⚡ Book Pooja Now
+            </button>
+            <button onClick={() => navigate('/user/rituals')}
+              style={{
+                flex:'1 1 120px', background:'rgba(255,255,255,0.1)', color:'#FFF',
+                backdropFilter:'blur(10px)', border:'1.5px solid rgba(255,255,255,0.3)', borderRadius:30,
+                padding:'12px 20px', fontWeight:800, cursor:'pointer', fontSize:13, fontFamily:'Nunito,sans-serif'
+              }}>
+              🕉️ Ritual Catalog
+            </button>
+          </div>
+
+          {/* Interactive Stats Row */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginTop:24 }}>
+            {[
+              { ic:'🙏', val:'180+', lbl:'Pandits', path:'/user/marketplace' },
+              { ic:'🔥', val:'80+', lbl:'Rituals', path:'/user/rituals' },
+              { ic:'📍', val:'50+', lbl:'Cities', path:'/user/marketplace' },
+              { ic:'⭐', val:'4.9', lbl:'Rating', path:'/user/history' }
+            ].map((s) => (
+              <div
+                key={s.lbl}
+                onClick={() => navigate(s.path)}
+                className="clickable-stat"
+                style={{
+                  ...dk, padding:'12px 4px', textAlign:'center', borderRadius:16,
+                  background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)'
+                }}
+              >
+                <div style={{ fontSize:20, filter:'drop-shadow(0 2px 4px rgba(0,0,0,0.3))' }}>{s.ic}</div>
+                <div style={{ color:'#FFD700', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:18, lineHeight:1 }}>{s.val}</div>
+                <div style={{ color:'rgba(255,248,240,0.4)', fontSize:9, fontWeight:800, textTransform:'uppercase', letterSpacing:'0.8px', marginTop:3 }}>{s.lbl}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -145,7 +202,9 @@ export default function UserHome() {
               transition:'all 0.2s' }}
             onTouchStart={e => e.currentTarget.style.background='rgba(255,107,0,0.1)'}
             onTouchEnd={e => e.currentTarget.style.background='rgba(255,248,240,0.04)'}>
-            <div style={{ fontSize:26, marginBottom:6 }}>{icon}</div>
+            <div style={{ fontSize:26, marginBottom:6 }}>
+              {icon.startsWith('/') ? <PremiumIcon src={icon} size={32} /> : icon}
+            </div>
             <div style={{ color:'rgba(255,248,240,0.75)', fontSize:11, fontWeight:700 }}>{label}</div>
           </div>
         ))}
@@ -181,7 +240,9 @@ export default function UserHome() {
                     FESTIVAL
                   </div>
                 )}
-                <div style={{ fontSize:26, marginBottom:7 }}>{r.icon}</div>
+                <div style={{ fontSize:26, marginBottom:7 }}>
+                  {r.icon.startsWith('/') ? <PremiumIcon src={r.icon} size={32} /> : r.icon}
+                </div>
                 <div style={{ color:'rgba(255,248,240,0.88)', fontSize:11, fontWeight:700, marginBottom:4, lineHeight:1.3 }}>{r.name}</div>
                 <div style={{ color:'#FF9F40', fontSize:11, fontWeight:800, fontFamily:'Cinzel,serif' }}>from {r.price}</div>
               </div>
@@ -207,7 +268,9 @@ export default function UserHome() {
                   color:'#fff', fontSize:7, fontWeight:800, padding:'2px 7px',
                   borderRadius:'0 14px 0 8px', letterSpacing:'0.5px' }}>{s.badge}</div>
               )}
-              <div style={{ fontSize:26, marginBottom:5 }}>{s.icon}</div>
+              <div style={{ fontSize:26, marginBottom:5 }}>
+                {s.icon.startsWith('/') ? <PremiumIcon src={s.icon} size={32} /> : s.icon}
+              </div>
               <div style={{ color:'rgba(255,248,240,0.88)', fontSize:11, fontWeight:700, marginBottom:2 }}>{s.name}</div>
               <div style={{ color:'rgba(255,248,240,0.35)', fontSize:10, marginBottom:5 }}>{s.items}</div>
               <div style={{ color:'#FF9F40', fontSize:13, fontWeight:800, fontFamily:'Cinzel,serif' }}>{s.price}</div>
@@ -226,48 +289,86 @@ export default function UserHome() {
       </Section>
 
       {/* ── Virtual Pooja ─────────────────────────────────── */}
+      {/* ── Premium Virtual Pooja Feature ────────────────── */}
       <div onClick={() => navigate('/user/virtual-pooja')}
-        style={{ background:'linear-gradient(135deg,rgba(109,40,217,0.7),rgba(75,0,130,0.8))',
-          border:'1px solid rgba(167,139,250,0.35)', borderRadius:18, padding:'16px',
-          cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'space-between', gap:12 }}>
-        <div>
-          <div style={{ color:'#e9d5ff', fontWeight:800, fontSize:9, letterSpacing:2, marginBottom:4 }}>✨ NEW FEATURE</div>
-          <div style={{ color:'#fff', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:16, marginBottom:3 }}>📱 Virtual Pooja</div>
-          <div style={{ color:'rgba(255,255,255,0.65)', fontSize:12 }}>Sacred rituals live · Prasad delivered home</div>
+        className="banner-glow vibrant-gradient-2"
+        style={{
+          borderRadius:24, padding:'20px 24px', position:'relative', overflow:'hidden',
+          cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'space-between', gap:12,
+          boxShadow:'0 15px 35px -5px rgba(124,58,237,0.4)', transition:'transform 0.3s ease'
+        }}>
+        {/* Subtle geometric particles */}
+        <div style={{ position:'absolute', top:-20, right:-20, fontSize:100, opacity:0.1, color:'#fff' }}>🕉️</div>
+
+        <div style={{ position:'relative', zIndex:1 }}>
+          <div style={{
+            background:'rgba(255,255,255,0.2)', color:'#fff', padding:'3px 10px',
+            borderRadius:20, fontSize:9, fontWeight:900, marginBottom:8, display:'inline-block',
+            letterSpacing:1.5
+          }}>
+            🚀 FUTURE OF WORSHIP
+          </div>
+          <div style={{ color:'#fff', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:22, marginBottom:4, display:'flex', alignItems:'center', gap:8 }}>
+            📱 Virtual Pooja <span className="float-anim" style={{ fontSize:14 }}>✨</span>
+          </div>
+          <div style={{ color:'rgba(255,255,255,0.85)', fontSize:13, fontWeight:600 }}>
+            Live HD Streaming · Direct Connection · Prasad 🚚
+          </div>
         </div>
-        <button style={{ background:'rgba(255,255,255,0.15)', color:'#fff',
-          border:'1px solid rgba(255,255,255,0.35)', borderRadius:20,
-          padding:'8px 14px', fontWeight:800, cursor:'pointer', fontSize:12, flexShrink:0, whiteSpace:'nowrap' }}>
-          Book →
-        </button>
+        <div style={{
+          width:50, height:50, borderRadius:'50%', background:'rgba(255,255,255,0.15)',
+          display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, color:'#fff',
+          border:'1px solid rgba(255,255,255,0.4)', flexShrink:0
+        }}>
+          ➔
+        </div>
       </div>
 
       {/* ── Verified Pandits ──────────────────────────────── */}
-      <Section title="🙏 Verified Scholars" onViewAll={() => navigate('/user/marketplace')} viewLabel="All Pandits →">
-        <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
-          {pandits.slice(0,3).map(p => (
+      {/* ── Verified Scholars with Premium Accents ────────── */}
+      <Section title="🙏 Vedic Scholars & Acharyas" onViewAll={() => navigate('/user/marketplace')} viewLabel="Meet All Scholars →">
+        <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
+          {pandits.slice(0,3).map((p, idx) => (
             <div key={p.id} onClick={() => navigate('/user/marketplace')}
-              style={{ ...dk, borderRadius:12, padding:'10px 12px',
-                cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center', transition:'all 0.2s' }}>
-              <div style={{ display:'flex', gap:10, alignItems:'center', minWidth:0 }}>
-                <div style={{ width:38, height:38, borderRadius:'50%',
-                  background:'linear-gradient(135deg,rgba(255,107,0,0.15),rgba(240,192,64,0.15))',
-                  border:'1.5px solid rgba(240,192,64,0.2)',
-                  display:'flex', alignItems:'center', justifyContent:'center', fontSize:18, flexShrink:0 }}>🙏</div>
+              style={{
+                ...dk, borderRadius:18, padding:'14px 16px',
+                background: idx === 0 ? 'rgba(255,107,0,0.06)' : 'rgba(255,248,240,0.04)',
+                border: idx === 0 ? '1px solid rgba(255,107,0,0.3)' : '1px solid rgba(240,192,64,0.12)',
+                cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center', transition:'all 0.3s'
+              }}>
+              <div style={{ display:'flex', gap:14, alignItems:'center', minWidth:0 }}>
+                <div style={{
+                  width:46, height:46, borderRadius:'50%',
+                  background:'linear-gradient(135deg,#FF6B00,#D4A017)',
+                  border:'2px solid rgba(255,255,255,0.2)',
+                  display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, flexShrink:0,
+                  boxShadow:'0 4px 12px rgba(255,107,0,0.2)'
+                }}>🙏</div>
                 <div style={{ minWidth:0 }}>
-                  <div style={{ color:'rgba(255,248,240,0.92)', fontWeight:700, fontSize:13, fontFamily:'Cinzel,serif',
-                    whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:160 }}>{p.name}</div>
-                  <div style={{ color:'rgba(255,248,240,0.35)', fontSize:10, marginTop:1 }}>
-                    📍{p.city} · {p.experience_years||p.years_of_experience}yr · ⭐{p.rating||'New'}
+                  <div style={{ display:'flex', alignItems:'center', gap:6 }}>
+                    <div style={{ color:'rgba(255,248,240,0.92)', fontWeight:900, fontSize:15, fontFamily:'Cinzel,serif',
+                      whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:140 }}>{p.name}</div>
+                    {p.rating >= 4.9 && (
+                      <span style={{ background:'#FFD700', color:'#1a0f07', fontSize:8, fontWeight:900, padding:'2px 6px', borderRadius:4, letterSpacing:0.5 }}>PREMIUM</span>
+                    )}
+                  </div>
+                  <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, marginTop:2, fontWeight:600 }}>
+                    📍 {p.city} · {p.experience_years||p.years_of_experience}yr Exp · ⭐ {p.rating||'New'}
                   </div>
                 </div>
               </div>
               <div style={{ textAlign:'right', flexShrink:0 }}>
-                <div style={{ color:'#FF9F40', fontWeight:800, fontFamily:'Cinzel,serif', fontSize:12 }}>₹{(p.min_fee||1500).toLocaleString()}</div>
-                <button onClick={e => { e.stopPropagation(); navigate('/user/booking'); }}
-                  style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff',
-                    border:'none', borderRadius:8, padding:'4px 10px', fontWeight:700,
-                    cursor:'pointer', fontSize:10, marginTop:4 }}>Book</button>
+                <div style={{ color:'#FFD700', fontWeight:900, fontFamily:'Cinzel,serif', fontSize:15 }}>₹{(p.min_fee||1500).toLocaleString()}</div>
+                <button onClick={idx === 0 ? e => { e.stopPropagation(); navigate('/user/booking'); } : undefined}
+                  style={{
+                    background: idx === 0 ? 'linear-gradient(135deg,#FF6B00,#D4A017)' : 'rgba(255,255,255,0.1)',
+                    color: idx === 0 ? '#fff' : 'rgba(255,248,240,0.6)',
+                    border: idx === 0 ? 'none' : '1px solid rgba(255,255,255,0.2)',
+                    borderRadius:10, padding:'6px 14px', fontWeight:800,
+                    cursor:'pointer', fontSize:11, marginTop:6
+                  }}>
+                  {idx === 0 ? '⚡ Book' : 'Details'}
+                </button>
               </div>
             </div>
           ))}

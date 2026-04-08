@@ -1,4 +1,5 @@
 import React from 'react';
+import { PremiumIcon } from '../../../components/Icons';
 
 export default function CartDrawer({ cart, onUpdate, onRemove, subtotal, onClose, onCheckout }) {
   return (
@@ -20,7 +21,9 @@ export default function CartDrawer({ cart, onUpdate, onRemove, subtotal, onClose
           ) : (
             cart.map(i => (
               <div key={i.id} className="cd-item">
-                <div className="cd-i-icon">{i.icon}</div>
+                <div className="cd-i-icon">
+                  {i.icon?.startsWith('/') ? <PremiumIcon src={i.icon} size={32} /> : i.icon}
+                </div>
                 <div className="cd-i-details">
                   <div className="cd-i-name">{i.name}</div>
                   <div className="cd-i-price">₹{i.price * i.qty}</div>

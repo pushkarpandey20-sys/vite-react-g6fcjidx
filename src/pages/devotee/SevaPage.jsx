@@ -3,6 +3,7 @@ import { useApp } from '../../store/AppCtx';
 import { paymentService } from '../../services/paymentService';
 import { Spinner } from '../../components/common/UIElements';
 import { toUUID } from '../../services/supabase';
+import { PremiumIcon } from '../../components/Icons';
 
 export default function SevaPage() {
   const { db, toast, devoteeId, devoteeName, SEVA_OPTIONS, setShowLogin } = useApp();
@@ -57,7 +58,9 @@ export default function SevaPage() {
     <div className="sev-grid">
       {SEVA_OPTIONS.map(s => (
         <div key={s.id} className="sev-card">
-          <div className="sev-icon">{s.icon}</div>
+          <div className="sev-icon">
+            {s.icon.startsWith('/') ? <PremiumIcon src={s.icon} size={48} /> : s.icon}
+          </div>
           <div className="sev-name">{s.name}</div>
           <div className="sev-desc">{s.desc}</div>
           <div className="sev-amts">
@@ -89,7 +92,9 @@ export default function SevaPage() {
         </div>
         {donations.map(d => (
           <div key={d.id} className="tr" style={{ gridTemplateColumns: "1fr 2fr 1fr 1fr" }}>
-            <div className="td" style={{ fontSize: 22 }}>{d.seva_icon}</div>
+            <div className="td" style={{ fontSize: 22 }}>
+              {d.seva_icon?.startsWith('/') ? <PremiumIcon src={d.seva_icon} size={32} /> : d.seva_icon}
+            </div>
             <div className="td">{d.seva_name}</div>
             <div className="td" style={{ fontFamily: "'Cinzel',serif", fontWeight: 700, color: "#FF6B00" }}>₹{d.amount}</div>
             <div className="td" style={{ fontSize: 12, color: "#8B6347" }}>{new Date(d.created_at).toLocaleDateString("en-IN")}</div>

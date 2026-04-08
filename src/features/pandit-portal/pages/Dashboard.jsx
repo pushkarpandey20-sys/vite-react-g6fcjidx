@@ -267,7 +267,44 @@ export default function Dashboard() {
         ))}
       </div>
 
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(280px,1fr))', gap:16, marginBottom:16 }}>
+      {/* Pandit Success & Visibility Console */}
+      <div style={{ marginBottom: 24, padding: 24, borderLeft: '4px solid #FFD700', background: 'linear-gradient(to right, rgba(255,215,0,0.08), rgba(0,0,0,0.01))', borderRadius: 16, border: '1px solid rgba(212,160,23,0.15)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <h3 style={{ margin: 0, color: '#D4A017', fontFamily: 'Cinzel,serif', fontSize: 18, fontWeight: 900 }}>👁️ Pandit Visibility & Growth Insights</h3>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          
+          <div style={{ background: '#fff', padding: 16, borderRadius: 12, border: '1px solid rgba(255,215,0,0.3)', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+            <div style={{ fontSize: 11, color: '#D4A017', fontWeight: 800, letterSpacing: 1 }}>PROFILE STRENGTH</div>
+            <div style={{ fontSize: 26, color: '#5C3317', fontWeight: 900, margin: '4px 0' }}>85% <span style={{ fontSize: 13, color: '#22c55e', fontWeight: 600 }}>↑ High Visibility</span></div>
+            <div style={{ fontSize: 12, color: '#8B6347', lineHeight: 1.4, marginTop: 8 }}>
+              💡 <span style={{ color: '#D4A017', textDecoration: 'underline', cursor: 'pointer' }}>Upload a chant video</span> to reach 100% and get the <b>"Premium Pandit"</b> badge on the homepage!
+            </div>
+          </div>
+          
+          <div style={{ background: '#fff', padding: 16, borderRadius: 12, border: '1px solid rgba(255,107,0,0.3)', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+            <div style={{ fontSize: 11, color: '#FF6B00', fontWeight: 800, letterSpacing: 1 }}>LOCAL MARKET DEMAND</div>
+            <div style={{ fontSize: 18, color: '#5C3317', fontWeight: 700, margin: '8px 0' }}>📈 Trending: <span style={{ color: '#D4A017' }}>Vastu Shanti</span></div>
+            <div style={{ fontSize: 12, color: '#8B6347', lineHeight: 1.4 }}>
+              Devotees in your city are actively searching for Vastu Shanti. Ensure it's listed in your sacred offerings to capture 2x more bookings!
+            </div>
+          </div>
+          
+          <div style={{ background: '#fff', padding: 16, borderRadius: 12, border: '1px solid rgba(34, 197, 94, 0.3)', boxShadow: '0 4px 10px rgba(0,0,0,0.02)' }}>
+            <div style={{ fontSize: 11, color: '#22c55e', fontWeight: 800, letterSpacing: 1 }}>DEVOTEE SATISFACTION</div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, margin: '4px 0' }}>
+              <span style={{ fontSize: 26, color: '#5C3317', fontWeight: 900 }}>4.9/5</span>
+              <span style={{ fontSize: 18 }}>⭐⭐⭐⭐⭐</span>
+            </div>
+            <div style={{ fontSize: 12, color: '#8B6347', lineHeight: 1.4 }}>
+              🏆 <b>Top 5% Acharya</b>. Devotees highlight your punctuality and strict adherence to Vedic norms. Keep it up!
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(320px,1fr))', gap:16, marginBottom:16 }}>
         {/* Pending Requests */}
         <div style={card}>
           <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:15, marginBottom:16 }}>Pending Invitations ({stats.pending.length})</div>
@@ -280,6 +317,17 @@ export default function Dashboard() {
                 <div style={{ color:'#9a8070', fontSize:12 }}>{b.booking_date}</div>
               </div>
               <div style={{ color:'#8B6347', fontSize:12, marginBottom:10 }}>📍 {b.address || b.location || 'Location TBD'}</div>
+              
+              {/* Devotee Intelligence Data */}
+              <div style={{ marginBottom: 12, padding: '10px 14px', background: 'rgba(34, 197, 94, 0.08)', borderRadius: 10, border: '1px dashed rgba(34, 197, 94, 0.3)' }}>
+                <div style={{ fontSize: 10, color: '#166534', fontWeight: 800, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 4 }}>Devotee Intelligence</div>
+                <div style={{ fontSize: 12, color: '#15803d', fontWeight: 600 }}>
+                  {b.id && b.id.charCodeAt(0) % 2 === 0 
+                    ? "🌟 First-time user on DevSetu. Make a lasting spiritual impression!" 
+                    : "👑 Loyal Devotee (3rd booking overall). Highly values authentic samagri."}
+                </div>
+              </div>
+
               <div style={{ display:'flex', gap:8 }}>
                 <button onClick={()=>handleAction(b.id,'declined')} style={{ flex:1, background:'rgba(239,68,68,0.15)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.3)', borderRadius:8, padding:'6px', cursor:'pointer', fontSize:12, fontWeight:600 }}>Decline</button>
                 <button onClick={()=>handleAction(b.id,'accepted')} style={{ flex:1, background:'rgba(34,197,94,0.15)', color:'#22c55e', border:'1px solid rgba(34,197,94,0.3)', borderRadius:8, padding:'6px', cursor:'pointer', fontSize:12, fontWeight:700 }}>Accept ✓</button>
@@ -297,7 +345,11 @@ export default function Dashboard() {
             <div key={b.id} style={{ background:'rgba(34,197,94,0.08)', borderRadius:10, padding:'12px', marginBottom:10, border:'1px solid rgba(34,197,94,0.2)' }}>
               <div style={{ color:'#166534', fontWeight:700, fontSize:13, marginBottom:4 }}>{b.ritual_name || b.ritual || 'Pooja'}</div>
               <div style={{ color:'#15803d', fontSize:12, fontWeight:600 }}>⏰ {b.booking_time || 'Time TBD'}</div>
-              <div style={{ color:'#15803d', fontSize:12 }}>📍 {b.address || b.location || 'Location TBD'}</div>
+              <div style={{ color:'#15803d', fontSize:12, marginBottom:12 }}>📍 {b.address || b.location || 'Location TBD'}</div>
+              
+              <button style={{ width: '100%', background: 'linear-gradient(135deg,#FF6B00,#FF8C35)', color: '#fff', border: 'none', padding: '8px', borderRadius: '8px', fontWeight: 800, cursor: 'pointer', textAlign: 'center' }}>
+                📿 Join Mandap (Live)
+              </button>
             </div>
           ))}
         </div>

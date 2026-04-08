@@ -99,162 +99,165 @@ export default function RitualCatalogPage() {
 
   return (
     /* Cream/warm light background — overrides ds-user-content dark bg */
-    <div style={{ background:'#fff8f0', minHeight:'100%', margin:'-20px', padding:'20px' }}>
+    <div style={{ background:'#fff8f0', minHeight:'100%', margin:'-20px', padding:'20px', fontFamily:'Nunito,sans-serif' }}>
 
-      {/* ── On-Demand Strip ─────────────────────────────────── */}
-      <div style={{
-        background:'linear-gradient(135deg,#fff3e0,#fff8f0)',
-        border:'1.5px solid rgba(255,107,0,0.25)',
-        borderRadius:16, padding:'16px 20px', marginBottom:22,
+      {/* ── Premium On-Demand Strip ─────────────────────────── */}
+      <div className="banner-glow" style={{
+        background:'linear-gradient(135deg, rgba(44,26,14,0.95) 0%, rgba(61,28,0,0.95) 100%)',
+        border:'1.5px solid rgba(240,192,64,0.3)',
+        borderRadius:20, padding:'20px 24px', marginBottom:28,
         display:'flex', alignItems:'center', justifyContent:'space-between',
         gap:16, flexWrap:'wrap',
-        boxShadow:'0 2px 12px rgba(255,107,0,0.08)',
+        boxShadow:'0 15px 30px rgba(255,107,0,0.15)',
+        position:'relative', overflow:'hidden'
       }}>
-        <div style={{ display:'flex', alignItems:'center', gap:14 }}>
-          <div style={{ width:46, height:46, borderRadius:12,
-            background:'linear-gradient(135deg,#FF6B00,#FF8C35)',
+        <div style={{ position:'absolute', top:-30, left:-30, width:120, height:120, background:'rgba(255,107,0,0.1)', borderRadius:'50%', filter:'blur(20px)' }} />
+        
+        <div style={{ display:'flex', alignItems:'center', gap:16, position:'relative', zIndex:1 }}>
+          <div className="float-anim" style={{ 
+            width:56, height:56, borderRadius:16,
+            background:'rgba(255,255,255,0.15)',
+            backdropFilter:'blur(10px)',
             display:'flex', alignItems:'center', justifyContent:'center',
-            fontSize:22, flexShrink:0, boxShadow:'0 4px 12px rgba(255,107,0,0.35)' }}>⚡</div>
+            fontSize:28, flexShrink:0, border:'1px solid rgba(255,255,255,0.3)' 
+          }}>⚡</div>
           <div>
-            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:2 }}>
-              <span style={{ fontFamily:'Cinzel,serif', color:'#FF6B00', fontWeight:900, fontSize:15 }}>On-Demand Pandit Booking</span>
-              <span style={{ background:'rgba(255,107,0,0.1)', color:'#FF6B00', fontSize:9,
-                fontWeight:800, padding:'2px 8px', borderRadius:8, border:'1px solid rgba(255,107,0,0.25)',
-                letterSpacing:'1px' }}>INSTANT</span>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:4 }}>
+              <span style={{ fontFamily:'Cinzel,serif', color:'#FFD700', fontWeight:900, fontSize:18, letterSpacing:1 }}>Instant Spiritual Guidance</span>
+              <span style={{ background:'#FF6B00', color:'#fff', fontSize:9,
+                fontWeight:900, padding:'3px 10px', borderRadius:20, boxShadow:'0 4px 10px rgba(255,107,0,0.3)',
+                letterSpacing:'1.5px' }}>LIVE NOW</span>
             </div>
-            <p style={{ color:'#8B6347', fontSize:12, margin:0 }}>
-              Certified pandit for any custom ritual, consultation, or urgent Vedic guidance — available now.
+            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0, fontWeight:600 }}>
+              Connect with a verified Pandit instantly for Sankalp, Gyaan, or Special Puja.
             </p>
           </div>
         </div>
-        <div style={{ display:'flex', gap:8, flexShrink:0 }}>
-          <button onClick={() => navigate('/user/instant-booking')} style={{
-            background:'linear-gradient(135deg,#FF6B00,#FF8C35)', border:'none', color:'#fff',
-            padding:'10px 22px', borderRadius:12, fontWeight:800, cursor:'pointer', fontSize:13,
-            boxShadow:'0 4px 14px rgba(255,107,0,0.3)', whiteSpace:'nowrap' }}>
-            Book Now →
-          </button>
-          <button onClick={() => navigate('/user/marketplace')} style={{
-            background:'#fff', border:'1.5px solid rgba(212,160,23,0.35)', color:'#8B6347',
-            padding:'10px 18px', borderRadius:12, fontWeight:700, cursor:'pointer', fontSize:12, whiteSpace:'nowrap' }}>
-            Browse Pandits
+        <div style={{ display:'flex', gap:12, flexShrink:0, position:'relative', zIndex:1 }}>
+          <button onClick={() => navigate('/user/instant-booking')} className="btn btn-primary" style={{
+            background:'#FFD700', color:'#1a0f07', border:'none',
+            padding:'12px 28px', borderRadius:30, fontWeight:900, cursor:'pointer', fontSize:14,
+            boxShadow:'0 10px 20px rgba(0,0,0,0.15)' }}>
+            Book Instantly →
           </button>
         </div>
       </div>
 
       {/* ── Page Header + Search ─────────────────────────────── */}
-      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, marginBottom:18, flexWrap:'wrap' }}>
+      <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', gap:14, marginBottom:22, flexWrap:'wrap' }}>
         <div>
-          <h1 style={{ fontFamily:'Cinzel,serif', color:'#1a0f07', margin:'0 0 3px', fontSize:'clamp(17px,2.5vw,24px)', fontWeight:900 }}>
+          <h1 style={{ fontFamily:'Cinzel,serif', color:'#126180', margin:'0 0 4px', fontSize:'clamp(18px,3vw,26px)', fontWeight:900 }}>
             🕉️ Sacred Ritual Catalog
           </h1>
-          <p style={{ color:'#8B6347', margin:0, fontSize:12 }}>
-            {loading ? 'Loading rituals…' : `${rituals.length} Vedic ceremonies · Verified pandits · Pan India`}
+          <p style={{ color:'#8B6347', margin:0, fontSize:13, fontWeight:600 }}>
+            {loading ? 'Discovering divine ceremonies…' : `${rituals.length} Authentic Rituals · 120+ Verified Acharyas`}
           </p>
         </div>
-        <div style={{ position:'relative', width:'min(100%,300px)' }}>
-          <span style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)',
-            color:'#C7A96B', fontSize:14, pointerEvents:'none' }}>🔍</span>
+        <div style={{ position:'relative', width:'min(100%,320px)' }}>
+          <span style={{ position:'absolute', left:14, top:'50%', transform:'translateY(-50%)',
+            color:'#D4A017', fontSize:16, pointerEvents:'none' }}>🔍</span>
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
-            placeholder="Search poojas, ceremonies…"
-            style={{ width:'100%', padding:'10px 32px 10px 34px', borderRadius:24,
-              background:'#fff', border:'1.5px solid rgba(212,160,23,0.3)',
-              color:'#1a0f07', fontSize:13, outline:'none', boxSizing:'border-box',
-              fontFamily:'Nunito,sans-serif', transition:'border-color 0.2s',
-              boxShadow:'0 2px 8px rgba(0,0,0,0.04)' }}
-            onFocus={e => e.target.style.borderColor='rgba(255,107,0,0.5)'}
-            onBlur={e => e.target.style.borderColor='rgba(212,160,23,0.3)'}
+            placeholder="Search for a Pooja or Ceremony..."
+            style={{ width:'100%', padding:'12px 36px 12px 38px', borderRadius:30,
+              background:'#fff', border:'2px solid rgba(212,160,23,0.15)',
+              color:'#1a0f07', fontSize:14, outline:'none', boxSizing:'border-box',
+              fontFamily:'Nunito,sans-serif', transition:'all 0.3s',
+              boxShadow:'0 4px 15px rgba(0,0,0,0.03)' }}
           />
           {search && (
-            <button onClick={() => setSearch('')} style={{ position:'absolute', right:10,
-              top:'50%', transform:'translateY(-50%)', background:'none', border:'none',
-              color:'#C7A96B', cursor:'pointer', fontSize:14 }}>✕</button>
+            <button onClick={() => setSearch('')} style={{ position:'absolute', right:12,
+              top:'50%', transform:'translateY(-50%)', background:'rgba(0,0,0,0.05)', border:'none',
+              color:'#8B6347', cursor:'pointer', fontSize:10, width:20, height:20, borderRadius:'50%',
+              display:'flex', alignItems:'center', justifyContent:'center' }}>✕</button>
           )}
         </div>
       </div>
 
-      {/* ── Filter Bar ── categories + budget + samagri ─────── */}
-      <div style={{ background:'#fff', border:'1px solid rgba(212,160,23,0.2)', borderRadius:14,
-        padding:'12px 16px', marginBottom:22, boxShadow:'0 2px 10px rgba(0,0,0,0.04)' }}>
-
-        {/* Category label + horizontal-scroll row */}
-        <div style={{ display:'flex', alignItems:'center', gap:6, marginBottom:8 }}>
-          <span style={{ fontSize:10, fontWeight:800, color:'#D4A017', letterSpacing:'1px',
-            textTransform:'uppercase', flexShrink:0 }}>Categories:</span>
+      {/* ── Premium Filter Bar ──────────────────────────── */}
+      <div style={{ 
+        background:'#fff', border:'1px solid rgba(212,160,23,0.15)', borderRadius:20,
+        padding:'16px 20px', marginBottom:28, boxShadow:'0 10px 25px rgba(0,0,0,0.03)',
+        display:'flex', flexDirection:'column', gap:16
+      }}>
+        <div style={{ display:'flex', alignItems:'center', gap:10 }}>
+          <span style={{ fontSize:11, fontWeight:800, color:'#D4A017', letterSpacing:'1.5px', textTransform:'uppercase' }}>Explore by Category</span>
+          <div style={{ flex:1, height:1, background:'rgba(212,160,23,0.1)' }} />
         </div>
-        <div className="rc-cat-scroll" style={{ marginBottom:10 }}>
+
+        <div className="rc-cat-scroll" style={{ display:'flex', gap:10, overflowX:'auto', paddingBottom:4 }}>
           {CATS.map(cat => {
             const cnt = cat.key === 'All' ? rituals.length : (counts[cat.key] || 0);
             const isOn = activeCat === cat.key;
             return (
               <button key={cat.key} onClick={() => setActiveCat(cat.key)}
                 style={{
-                  padding:'6px 14px', borderRadius:20, fontSize:12, fontWeight:700, cursor:'pointer',
-                  border:`1.5px solid ${isOn ? cat.color : 'rgba(139,99,71,0.2)'}`,
-                  background: isOn ? cat.color : '#fff',
+                  padding:'10px 18px', borderRadius:25, fontSize:13, fontWeight:800, cursor:'pointer',
+                  border:`2px solid ${isOn ? cat.color : 'rgba(139,99,71,0.1)'}`,
+                  background: isOn ? cat.color : 'rgba(255,255,255,0.05)',
                   color: isOn ? '#fff' : '#5C3317',
-                  transition:'all 0.15s', outline:'none', whiteSpace:'nowrap', flexShrink:0,
-                  boxShadow: isOn ? `0 3px 10px ${cat.color}40` : 'none',
+                  transition:'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', outline:'none', whiteSpace:'nowrap', flexShrink:0,
+                  boxShadow: isOn ? `0 8px 16px ${cat.color}30` : 'none',
+                  display:'flex', alignItems:'center', gap:8
                 }}>
-                {cat.icon} {cat.key}
-                {cnt > 0 && <span style={{ marginLeft:5, opacity:0.75, fontSize:10 }}>({cnt})</span>}
+                <span style={{ fontSize:16 }}>{cat.icon}</span>
+                {cat.key}
+                {cnt > 0 && <span style={{ opacity:0.6, fontSize:10, background:isOn ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.05)', padding:'2px 6px', borderRadius:8 }}>{cnt}</span>}
               </button>
             );
           })}
         </div>
-        <div style={{ display:'flex', alignItems:'center', gap:8, flexWrap:'wrap' }}>
 
-        {/* Budget divider */}
-        <div style={{ width:1, height:22, background:'rgba(212,160,23,0.2)', margin:'0 4px', flexShrink:0 }}/>
-        <span style={{ fontSize:10, fontWeight:800, color:'#D4A017', letterSpacing:'1px',
-          textTransform:'uppercase', flexShrink:0 }}>Budget:</span>
-
-        {/* Budget pills */}
-        {PRICE_OPTIONS.map((pr,i) => {
-          const isOn = activePri === i;
-          return (
-            <button key={i} onClick={() => setActivePri(i)}
-              style={{ padding:'6px 12px', borderRadius:20, fontSize:11, fontWeight:700, cursor:'pointer',
-                border:`1.5px solid ${isOn ? '#D4A017' : 'rgba(139,99,71,0.2)'}`,
-                background: isOn ? '#D4A017' : '#fff',
-                color: isOn ? '#fff' : '#5C3317', transition:'all 0.15s', outline:'none',
-              }}>{pr.label}</button>
-          );
-        })}
-
-        {/* Samagri toggle */}
-        <div style={{ marginLeft:'auto', display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
-          <label style={{ display:'flex', alignItems:'center', gap:7, cursor:'pointer', userSelect:'none' }}>
-            <div onClick={() => setSamagri(s => !s)}
-              style={{ width:36, height:20, borderRadius:10,
-                background: samagri ? '#FF6B00' : 'rgba(139,99,71,0.15)',
-                border:`1.5px solid ${samagri ? '#FF6B00' : 'rgba(139,99,71,0.25)'}`,
-                position:'relative', cursor:'pointer', transition:'all 0.2s', flexShrink:0 }}>
-              <div style={{ position:'absolute', top:2, left: samagri ? 16 : 2,
-                width:12, height:12, borderRadius:'50%', background:'#fff',
-                transition:'left 0.2s', boxShadow:'0 1px 4px rgba(0,0,0,0.2)' }}/>
+        <div style={{ display:'flex', alignItems:'center', gap:12, flexWrap:'wrap', paddingTop:8, borderTop:'1px solid rgba(212,160,23,0.08)' }}>
+          <div style={{ display:'flex', alignItems:'center', gap:8 }}>
+            <span style={{ fontSize:11, fontWeight:800, color:'#D4A017', letterSpacing:'1.2px', textTransform:'uppercase' }}>Budget</span>
+            <div style={{ display:'flex', gap:6 }}>
+              {PRICE_OPTIONS.map((pr,i) => {
+                const isOn = activePri === i;
+                return (
+                  <button key={i} onClick={() => setActivePri(i)}
+                    style={{ 
+                      padding:'6px 14px', borderRadius:15, fontSize:12, fontWeight:700, cursor:'pointer',
+                      border:`1.5px solid ${isOn ? '#FF6B00' : 'rgba(139,99,71,0.15)'}`,
+                      background: isOn ? '#FF6B00' : '#fff',
+                      color: isOn ? '#fff' : '#8B6347', transition:'all 0.15s', outline:'none',
+                    }}>{pr.label}</button>
+                );
+              })}
             </div>
-            <span style={{ fontSize:12, fontWeight:700, color:'#5C3317', whiteSpace:'nowrap' }}>📦 Samagri Only</span>
-          </label>
+          </div>
+          
+          <div style={{ marginLeft:'auto', display:'flex', alignItems:'center', gap:12 }}>
+            <label style={{ display:'flex', alignItems:'center', gap:10, cursor:'pointer' }}>
+              <div onClick={() => setSamagri(s => !s)}
+                style={{ 
+                  width:40, height:22, borderRadius:12,
+                  background: samagri ? '#27AE60' : 'rgba(139,99,71,0.15)',
+                  position:'relative', cursor:'pointer', transition:'all 0.3s' 
+                }}>
+                <div style={{ position:'absolute', top:3, left: samagri ? 21 : 3,
+                  width:16, height:16, borderRadius:'50%', background:'#fff',
+                  transition:'left 0.2s', boxShadow:'0 2px 5px rgba(0,0,0,0.2)' }}/>
+              </div>
+              <span style={{ fontSize:13, fontWeight:800, color:'#126180' }}>📦 Include Samagri</span>
+            </label>
+          </div>
         </div>
-        </div>{/* end budget+samagri row */}
-      </div>{/* end filter bar */}
+      </div>
 
       {/* ── Results count ────────────────────────────────────── */}
       {!loading && (
-        <div style={{ marginBottom:14, display:'flex', alignItems:'center', gap:8 }}>
-          <span style={{ fontSize:13, color:'#8B6347' }}>
-            Showing <strong style={{ color:'#1a0f07' }}>{filtered.length}</strong> ritual{filtered.length !== 1 ? 's' : ''}
-            {activeCat !== 'All' && <span style={{ color:'#D4A017' }}> · {activeCat}</span>}
-            {PRICE_OPTIONS[activePri].max < 99999 && <span style={{ color:'#D4A017' }}> · {PRICE_OPTIONS[activePri].label}</span>}
+        <div style={{ marginBottom:18, display:'flex', alignItems:'center', gap:10 }}>
+          <span style={{ fontSize:14, color:'#8B6347', fontWeight:600 }}>
+            Showing <strong style={{ color:'#126180' }}>{filtered.length}</strong> divine options
+            {activeCat !== 'All' && <span style={{ color:'#FF6B00' }}> in {activeCat}</span>}
           </span>
           {(activeCat !== 'All' || activePri !== 0 || samagri || search) && (
             <button onClick={() => { setActiveCat('All'); setActivePri(0); setSamagri(false); setSearch(''); }}
               style={{ fontSize:11, color:'#C0392B', background:'rgba(192,57,43,0.07)', border:'1px solid rgba(192,57,43,0.2)',
-                borderRadius:12, padding:'3px 10px', cursor:'pointer', fontWeight:700 }}>
-              ✕ Reset
+                borderRadius:12, padding:'4px 12px', cursor:'pointer', fontWeight:800, transition:'all 0.2s' }}>
+              ✕ Reset Filters
             </button>
           )}
         </div>
@@ -264,18 +267,23 @@ export default function RitualCatalogPage() {
       {loading ? (
         <div style={{ padding:'80px 0', display:'flex', justifyContent:'center' }}><Spinner /></div>
       ) : filtered.length === 0 ? (
-        <div style={{ textAlign:'center', padding:'60px 20px', background:'#fff',
-          borderRadius:16, border:'1px solid rgba(212,160,23,0.15)',
-          boxShadow:'0 2px 12px rgba(0,0,0,0.04)' }}>
-          <div style={{ fontSize:48, marginBottom:12 }}>🔍</div>
-          <div style={{ fontFamily:'Cinzel,serif', color:'#1a0f07', marginBottom:6 }}>No Rituals Found</div>
-          <div style={{ color:'#8B6347', fontSize:13, marginBottom:18 }}>Try a different category or budget</div>
-          <button className="btn btn-primary" onClick={() => { setActiveCat('All'); setActivePri(0); setSearch(''); setSamagri(false); }}>
-            Reset Filters
+        <div className="banner-glow" style={{ 
+          textAlign:'center', padding:'80px 20px', background:'#fff',
+          borderRadius:24, border:'1px solid rgba(212,160,23,0.15)',
+          boxShadow:'0 15px 40px rgba(0,0,0,0.04)' 
+        }}>
+          <div className="float-anim" style={{ fontSize:64, marginBottom:20 }}>🧘‍♂️</div>
+          <div style={{ fontFamily:'Cinzel,serif', color:'#1a0f07', fontSize:22, fontWeight:900, marginBottom:8 }}>No Rituals Match Your Quiet</div>
+          <div style={{ color:'#8B6347', fontSize:14, marginBottom:24, maxWidth:300, margin:'0 auto 24px' }}>
+            We couldn't find rituals for these criteria. Try broadening your search or budget.
+          </div>
+          <button className="btn btn-primary" style={{ padding:'12px 30px', borderRadius:30 }}
+            onClick={() => { setActiveCat('All'); setActivePri(0); setSearch(''); setSamagri(false); }}>
+            Reset All Filters
           </button>
         </div>
       ) : (
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(270px,1fr))', gap:14 }}>
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:20 }}>
           {filtered.map(r => <RitualCard key={r.id} r={r} onBook={() => navigate('/user/booking', { state:{ selectedRitual:r } })} />)}
         </div>
       )}

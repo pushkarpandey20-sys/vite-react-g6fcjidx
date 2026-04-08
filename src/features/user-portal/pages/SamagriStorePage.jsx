@@ -2,45 +2,53 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import notificationStore from '../../../services/notificationService';
 import { useApp } from '../../../store/AppCtx';
+import { PremiumIcon, IconVerified, IconSearch } from '../../../components/Icons';
 
 const CATEGORIES = ['All', 'Festival Kits', 'Daily Worship', 'Abhishek', 'Havan', 'Incense & Diyas'];
-const CAT_ICONS = { 'All':'🕉️', 'Festival Kits':'🎊', 'Daily Worship':'🪔', 'Abhishek':'🔱', 'Havan':'🔥', 'Incense & Diyas':'✨' };
+const CAT_ICONS = { 
+  'All':<PremiumIcon src="/icons/om.png" size={18} />, 
+  'Festival Kits':<PremiumIcon src="/icons/diwali_kit.png" size={18} />, 
+  'Daily Worship':<PremiumIcon src="/icons/diya.png" size={18} />, 
+  'Abhishek':<PremiumIcon src="/icons/lotus.png" size={18} />, 
+  'Havan':<PremiumIcon src="/icons/havan.png" size={18} />, 
+  'Incense & Diyas':<PremiumIcon src="/icons/diya.png" size={18} /> 
+};
 
 const PRODUCTS = [
-  { id:1, name:'Diwali Pooja Kit',    category:'Festival Kits',    icon:'🏮', price:899,  mrp:1199, items:61, desc:'Complete Lakshmi-Ganesh puja essentials — 61 items including diyas, rangoli, incense, sweets prasad, red cloth, sindoor, lotus flowers, roli, moli, supari, betel leaves.', badge:'BESTSELLER', rating:4.8, reviews:234 },
+  { id:1, name:'Diwali Pooja Kit',    category:'Festival Kits',    icon:'/icons/diwali_kit.png', price:899,  mrp:1199, items:61, desc:'Complete Lakshmi-Ganesh puja essentials — 61 items including diyas, rangoli, incense, sweets prasad, red cloth, sindoor, lotus flowers, roli, moli, supari, betel leaves.', badge:'BESTSELLER', rating:4.8, reviews:234 },
   { id:2, name:'Ganesh Puja Kit',     category:'Festival Kits',    icon:'📿', price:349,  mrp:499,  items:29, desc:'29 items: modak, durva grass, red flowers, coconut, camphor, roli, moli, supari, banana, red cloth, incense sticks, ghee, vermilion, sesame seeds, akshat.', rating:4.7, reviews:189 },
   { id:3, name:'Griha Pravesh Kit',   category:'Festival Kits',    icon:'🗝️', price:599,  mrp:799,  items:52, desc:'52 items: sacred thread, turmeric, rice, copper kalash, mango leaves, coconut, flowers, navadhanya, holy water, camphor, ghee, incense, red cloth, coins.', badge:'POPULAR', rating:4.9, reviews:312 },
   { id:4, name:'Navratri Pooja Kit',  category:'Festival Kits',    icon:'🚩', price:499,  mrp:699,  items:35, desc:'35 items for 9-day Durga puja. Chunri, sindoor, shakkar, fruits, incense, camphor, oil lamp, red flowers, coconut, betel leaves, kum kum, durga yantra.', rating:4.6, reviews:145 },
   { id:5, name:'Satyanarayan Kit',    category:'Daily Worship',    icon:'🥣', price:299,  mrp:399,  items:24, desc:'24 items for Satyanarayan Katha: panchamrit ingredients (milk, curd, honey, ghee, sugar), banana, tulsi, yellow flowers, yellow cloth, akshat, camphor.', rating:4.8, reviews:278 },
-  { id:6, name:'Rudrabhishek Kit',    category:'Abhishek',         icon:'🔱', price:449,  mrp:599,  items:18, desc:'18 items for Shiva abhishek: milk, honey, curd, ghee, sugar, gangajal, bel patra, dhatura, blue flowers, camphor, vibhuti, rudraksha, black sesame.', rating:4.9, reviews:167 },
-  { id:7, name:'Havan Samagri Kit',   category:'Havan',            icon:'🔥', price:699,  mrp:899,  items:42, desc:'42 items complete havan kit: pure ghee 500ml, havan kund, samagri mix 500g, mango wood pieces, camphor, incense, navagraha herbs, sandalwood powder.', badge:'PREMIUM', rating:4.7, reviews:98 },
-  { id:8, name:'Daily Puja Kit',      category:'Daily Worship',    icon:'🕉️', price:199,  mrp:299,  items:15, desc:'15 everyday essentials: incense sticks (3 varieties), camphor, matchbox, sindoor, roli, moli, flowers (artificial), ghee lamp, wick, small idol base cloth.', rating:4.5, reviews:456 },
+  { id:6, name:'Rudrabhishek Kit',    category:'Abhishek',         icon:'/icons/lotus.png', price:449,  mrp:599,  items:18, desc:'18 items for Shiva abhishek: milk, honey, curd, ghee, sugar, gangajal, bel patra, dhatura, blue flowers, camphor, vibhuti, rudraksha, black sesame.', rating:4.9, reviews:167 },
+  { id:7, name:'Havan Samagri Kit',   category:'Havan',            icon:'/icons/havan.png', price:699,  mrp:899,  items:42, desc:'42 items complete havan kit: pure ghee 500ml, havan kund, samagri mix 500g, mango wood pieces, camphor, incense, navagraha herbs, sandalwood powder.', badge:'PREMIUM', rating:4.7, reviews:98 },
+  { id:8, name:'Daily Puja Kit',      category:'Daily Worship',    icon:'/icons/diya.png', price:199,  mrp:299,  items:15, desc:'15 everyday essentials: incense sticks (3 varieties), camphor, matchbox, sindoor, roli, moli, flowers (artificial), ghee lamp, wick, small idol base cloth.', rating:4.5, reviews:456 },
   { id:9, name:'Premium Incense Set', category:'Incense & Diyas',  icon:'💨', price:249,  mrp:349,  items:8,  desc:'8 varieties premium incense: sandalwood, jasmine, rose, camphor, guggul, mogra, lavender, chandan — 120 sticks total. Long-lasting 45-min burn time.', rating:4.6, reviews:203 },
-  { id:10,name:'Diya & Lamp Set',     category:'Incense & Diyas',  icon:'🪔', price:349,  mrp:499,  items:12, desc:'12 piece set: 4 brass diyas, 4 clay diyas, 1 oil lamp with stand, cotton wicks (50), mustard oil 200ml, cleaning cloth. Perfect for daily aarti.', rating:4.8, reviews:321 },
+  { id:10,name:'Diya & Lamp Set',     category:'Incense & Diyas',  icon:'/icons/diya.png', price:349,  mrp:499,  items:12, desc:'12 piece set: 4 brass diyas, 4 clay diyas, 1 oil lamp with stand, cotton wicks (50), mustard oil 200ml, cleaning cloth. Perfect for daily aarti.', rating:4.8, reviews:321 },
   { id:11,name:'Navgrah Shanti Kit',  category:'Havan',            icon:'🪐', price:799,  mrp:999,  items:54, desc:'54 items for 9-planet ritual: 9 grains, 9 flowers, 9 fruits, 9 herbs, havan samagri, ghee, navgrah yantra, colored cloth strips.', badge:'COMPLETE', rating:4.9, reviews:87 },
-  { id:12,name:'Laxmi Puja Kit',      category:'Daily Worship',    icon:'🪷', price:399,  mrp:549,  items:28, desc:'28 items for Friday Laxmi puja: red/pink flowers, lotus, coins, betel leaves, supari, banana, fruits, red cloth, laxmi yantra, incense, camphor, sindoor.', rating:4.7, reviews:176 },
+  { id:12,name:'Laxmi Puja Kit',      category:'Daily Worship',    icon:'/icons/lotus.png', price:399,  mrp:549,  items:28, desc:'28 items for Friday Laxmi puja: red/pink flowers, lotus, coins, betel leaves, supari, banana, fruits, red cloth, laxmi yantra, incense, camphor, sindoor.', rating:4.7, reviews:176 },
 ];
 
 const BADGE_COLORS = { BESTSELLER:'#FF6B00', POPULAR:'#22c55e', PREMIUM:'#9B59B6', COMPLETE:'#3498DB' };
 
 const CUSTOM_ITEMS = [
-  { id:'c1', name:'Aggarbatti', icon:'💨', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
-  { id:'c2', name:'Camphor Tablets', icon:'⚪', price:39, unit:'10 tablets', cat:'Basic' },
+  { id:'c1', name:'Aggarbatti', icon:'🪔', img:'/samagri/aggarbatti.jpg', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
+  { id:'c2', name:'Camphor Tablets', icon:'🧊', img:'/samagri/camphor.jpg', price:39, unit:'10 tablets', cat:'Basic' },
   { id:'c3', name:'Roli (Vermilion)', icon:'🔴', price:29, unit:'50g packet', cat:'Basic' },
-  { id:'c4', name:'Moli (Sacred Thread)', icon:'🧵', price:19, unit:'1 roll', cat:'Basic' },
-  { id:'c5', name:'Akshat (Rice)', icon:'🌾', price:25, unit:'250g packet', cat:'Basic' },
-  { id:'c6', name:'Supari (Betel Nut)', icon:'🟤', price:35, unit:'100g', cat:'Basic' },
-  { id:'c7', name:'Ghee (Pure Cow)', icon:'🧈', price:299, unit:'500ml', cat:'Premium' },
-  { id:'c8', name:'Panchamrit Mix', icon:'🥣', price:149, unit:'Complete set', cat:'Premium' },
-  { id:'c9', name:'Gangajal (Holy Water)', icon:'🧴', price:89, unit:'500ml bottle', cat:'Premium' },
-  { id:'c10', name:'Kalash (Copper Pot)', icon:'🏺', price:199, unit:'1 piece', cat:'Premium' },
+  { id:'c4', name:'Moli (Sacred Thread)', icon:'🧶', price:19, unit:'1 roll', cat:'Basic' },
+  { id:'c5', name:'Akshat (Rice)', icon:'🍚', price:25, unit:'250g packet', cat:'Basic' },
+  { id:'c6', name:'Supari (Betel Nut)', icon:'🌰', img:'/samagri/supari.jpg', price:35, unit:'100g', cat:'Basic' },
+  { id:'c7', name:'Ghee (Pure Cow)', icon:'🧈', img:'/icons/ghee.png', price:299, unit:'500ml', cat:'Premium' },
+  { id:'c8', name:'Panchamrit', icon:'🍯', price:149, unit:'Complete set', cat:'Premium' },
+  { id:'c9', name:'Gangajal', icon:'💧', price:89, unit:'500ml bottle', cat:'Premium' },
+  { id:'c10', name:'Copper Kalash', icon:'🏺', price:199, unit:'1 piece', cat:'Premium' },
   { id:'c11', name:'Bel Patra', icon:'🍃', price:49, unit:'Fresh pack', cat:'Flowers' },
   { id:'c12', name:'Lotus Flowers', icon:'🪷', price:99, unit:'5 flowers', cat:'Flowers' },
   { id:'c13', name:'Yellow Flowers', icon:'🌼', price:69, unit:'1 bunch', cat:'Flowers' },
   { id:'c14', name:'Rose Petals', icon:'🌹', price:59, unit:'1 packet', cat:'Flowers' },
   { id:'c15', name:'Coconut', icon:'🥥', price:45, unit:'1 piece', cat:'Fruits' },
-  { id:'c16', name:'Banana Bunch', icon:'🍌', price:79, unit:'1 bunch', cat:'Fruits' },
-  { id:'c17', name:'Havan Kund', icon:'🔥', price:599, unit:'Small size', cat:'Special' },
+  { id:'c16', name:'Banana Bunch', icon:'🍌', img:'/samagri/banana.png', price:79, unit:'1 bunch', cat:'Fruits' },
+  { id:'c17', name:'Havan Kund', icon:'🪵', img:'/icons/havan.png', price:599, unit:'Small size', cat:'Special' },
   { id:'c18', name:'Rudraksha Mala', icon:'📿', price:299, unit:'108 beads', cat:'Special' },
 ];
 const CUSTOM_CATS = ['All', 'Basic', 'Premium', 'Flowers', 'Fruits', 'Special'];
@@ -184,14 +192,34 @@ export default function SamagriStorePage() {
               </button>
             ))}
           </div>
+
+          {/* Custom Kit Quick Commerce Progress Bar */}
+          <div style={{ background: 'rgba(26,15,7,0.72)', padding: '16px 20px', borderRadius: 16, marginBottom: 20, border: '1px solid rgba(240,192,64,0.15)', backdropFilter: 'blur(10px)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <span style={{ color: '#F0C040', fontSize: 13, fontWeight: 800 }}>🚚 Free Delivery Milestone</span>
+              <span style={{ color: customTotal >= 500 ? '#4ade80' : 'rgba(255,248,240,0.6)', fontSize: 12, fontWeight: 800 }}>
+                {customTotal >= 500 ? '🎉 Unlocked!' : `₹${500 - customTotal} away`}
+              </span>
+            </div>
+            <div style={{ background: 'rgba(255,255,255,0.05)', height: 8, borderRadius: 10, overflow: 'hidden' }}>
+              <div style={{ background: customTotal >= 500 ? '#4ade80' : 'linear-gradient(90deg, #FF6B00, #F0C040)', height: '100%', width: `${Math.min((customTotal/500)*100, 100)}%`, transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }} />
+            </div>
+          </div>
+
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(180px,1fr))', gap:12, marginBottom:24 }}>
             {customFiltered.map(item => {
               const qty = customCart[item.id] || 0;
               return (
                 <div key={item.id} style={{ background:'rgba(26,15,7,0.72)', border:`1px solid ${qty>0?'rgba(255,107,0,0.5)':'rgba(240,192,64,0.14)'}`, borderRadius:12, padding:'14px', backdropFilter:'blur(16px)',
                   boxShadow: qty>0?'0 2px 12px rgba(255,107,0,0.15)':'none' }}>
-                  <div style={{ fontSize:30, marginBottom:8, textAlign:'center' }}>{item.icon}</div>
-                  <div style={{ color:'rgba(255,248,240,0.9)', fontWeight:600, fontSize:13, marginBottom:2, textAlign:'center' }}>{item.name}</div>
+                  {item.img ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, height: 60 }}>
+                      <img src={item.img} alt={item.name} style={{ height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
+                    </div>
+                  ) : (
+                    <div style={{ fontSize:40, marginBottom:8, textAlign:'center', filter:'drop-shadow(0 4px 6px rgba(0,0,0,0.4))' }}>{item.icon}</div>
+                  )}
+                  <div style={{ color:'rgba(255,248,240,0.9)', fontWeight:700, fontSize:13, marginBottom:2, textAlign:'center' }}>{item.name}</div>
                   <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, textAlign:'center', marginBottom:8 }}>{item.unit}</div>
                   <div style={{ color:'#FF9F40', fontWeight:800, fontSize:18, textAlign:'center', marginBottom:10, fontFamily:'Cinzel,sans-serif' }}>₹{item.price}</div>
                   {qty === 0 ? (
@@ -215,8 +243,10 @@ export default function SamagriStorePage() {
           {customCount > 0 && (
             <div style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', borderRadius:14, padding:'18px 22px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
               <div>
-                <div style={{ color:'#fff', fontWeight:700, fontSize:15 }}>🛠️ Your Custom Kit: {customCount} items</div>
-                <div style={{ color:'rgba(255,255,255,0.85)', fontSize:13, marginTop:2 }}>Curated just for your ritual</div>
+                <div style={{ color:'#fff', fontWeight:700, fontSize:15 }}>🛠️ Custom Built Kit ({customCount} items)</div>
+                <div style={{ color:'rgba(255,255,255,0.85)', fontSize:12, marginTop:4, display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden', maxWidth: '60vw' }}>
+                  {Object.entries(customCart).map(([id, q]) => { const i = CUSTOM_ITEMS.find(x=>x.id===id); return i ? `${i.icon} ${i.name} (x${q})` : ''; }).join(', ')}
+                </div>
               </div>
               <div style={{ display:'flex', gap:12, alignItems:'center' }}>
                 <div style={{ color:'#fff', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:22 }}>₹{customTotal.toLocaleString()}</div>
@@ -232,18 +262,17 @@ export default function SamagriStorePage() {
         <>
 
       {/* Filters */}
-      <div style={{ ...dkCard, padding:'14px 18px', marginBottom:18, borderRadius:16 }}>
-        <div style={{ display:'flex', gap:10, marginBottom:12, flexWrap:'wrap' }}>
-          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Search samagri kits..."
-            style={{ ...selStyle, flex:1, minWidth:180 }} />
-          <select value={sortBy} onChange={e=>setSortBy(e.target.value)} style={selStyle}>
-            <option value="popular">Most Popular</option>
-            <option value="rating">Highest Rated</option>
-            <option value="price_low">Price: Low → High</option>
-            <option value="price_high">Price: High → Low</option>
+      <div className="dark-input compact-filter" style={{ ...dkCard, padding:'14px 18px', marginBottom:18, borderRadius:16 }}>
+        <div style={{ display:'flex', gap:12, marginBottom:16, flexWrap:'wrap', alignItems: 'center' }}>
+          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Search samagri kits..." />
+          <select value={sortBy} onChange={e=>setSortBy(e.target.value)}>
+            <option value="popular" style={{ backgroundColor: '#1a0f07', color: '#fff' }}>Most Popular</option>
+            <option value="rating" style={{ backgroundColor: '#1a0f07', color: '#fff' }}>Highest Rated</option>
+            <option value="price_low" style={{ backgroundColor: '#1a0f07', color: '#fff' }}>Price: Low → High</option>
+            <option value="price_high" style={{ backgroundColor: '#1a0f07', color: '#fff' }}>Price: High → Low</option>
           </select>
-          <div style={{ color:'rgba(255,248,240,0.35)', fontSize:12, fontWeight:600, display:'flex', alignItems:'center' }}>
-            {filtered.length} kits
+          <div style={{ color:'rgba(255,248,240,0.5)', fontSize:13, fontWeight:700, padding: '0 8px' }}>
+            {filtered.length} kits found
           </div>
         </div>
         <div style={{ display:'flex', gap:8, overflowX:'auto', scrollbarWidth:'none', paddingBottom:2 }}>
@@ -285,10 +314,15 @@ export default function SamagriStorePage() {
                 color:'#fff', fontSize:10, fontWeight:800, padding:'3px 10px',
                 borderRadius:'16px 0 10px 0' }}>✓ In Basket ({qty})</div>}
 
-              <div style={{ fontSize:42, textAlign:'center', marginBottom:10, marginTop: qty>0||p.badge ? 10 : 0,
-                filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.3))' }}>{p.icon}</div>
-              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:'0 0 4px', fontSize:15, fontWeight:700 }}>{p.name}</h3>
-              <div style={{ color:'rgba(255,248,240,0.35)', fontSize:11, marginBottom:8 }}>
+              <div style={{ fontSize:42, textAlign:'center', marginBottom:10, marginTop: qty>0||p.badge ? 10 : 0 }}>
+                {p.icon.startsWith('/') ? <PremiumIcon src={p.icon} size={64} /> : p.icon}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(34,197,94,0.1)', border: '1px solid rgba(34,197,94,0.3)', padding: '4px 10px', borderRadius: 20, width: 'fit-content', margin: '0 auto 12px' }}>
+                <IconVerified size={10} color="#4ade80" />
+                <span style={{ fontSize: 10, color: '#4ade80', fontWeight: 800, letterSpacing: 0.5, textTransform: 'uppercase' }}>100% Vedic Verified</span>
+              </div>
+              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:'0 0 4px', fontSize:15, fontWeight:700, textAlign: 'center' }}>{p.name}</h3>
+              <div style={{ color:'rgba(255,248,240,0.35)', fontSize:11, marginBottom:8, textAlign: 'center' }}>
                 🧺 {p.items} items · ⭐ {p.rating} ({p.reviews} reviews)
               </div>
               <p style={{ color:'rgba(255,248,240,0.45)', fontSize:12, lineHeight:1.5, margin:'0 0 12px',
@@ -356,7 +390,9 @@ export default function SamagriStorePage() {
                   display:'flex', alignItems:'center', justifyContent:'center' }}>✕</button>
             </div>
             <div style={{ textAlign:'center', marginBottom:16 }}>
-              <div style={{ fontSize:56, filter:'drop-shadow(0 4px 12px rgba(0,0,0,0.4))' }}>{selectedProduct.icon}</div>
+              <div style={{ fontSize:56 }}>
+                {selectedProduct.icon.startsWith('/') ? <PremiumIcon src={selectedProduct.icon} size={80} /> : selectedProduct.icon}
+              </div>
             </div>
             <p style={{ color:'rgba(255,248,240,0.6)', fontSize:14, lineHeight:1.65, marginBottom:16 }}>{selectedProduct.desc}</p>
             <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:8 }}>

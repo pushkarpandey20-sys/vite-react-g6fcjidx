@@ -54,6 +54,32 @@ export default function Landing() {
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState(0);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [notification, setNotification] = useState(null);
+  const [bgIndex, setBgIndex] = useState(0);
+  const BG_IMAGES = ['/temple-bg.png', '/temple-bg-2.png', '/temple-bg-3.png'];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setBgIndex(prev => (prev + 1) % BG_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const notifications = [
+      "🙏 Rahul from Mumbai just booked a Griha Pravesh",
+      "✨ Priya from Delhi bought a Navratri Samagri Kit",
+      "🔥 Amit from Bangalore booked a Rudrabhishek pooja",
+      "🪔 Sneha from Pune booked a Virtual Satyanarayan Katha"
+    ];
+    let index = 0;
+    const interval = setInterval(() => {
+      setNotification(notifications[index]);
+      index = (index + 1) % notifications.length;
+      setTimeout(() => setNotification(null), 5000); // Hide after 5 seconds
+    }, 12000); // Show next notification every 12 seconds
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -97,28 +123,67 @@ export default function Landing() {
         </div>
       </nav>
 
-      {/* Hero */}
-
-      <div style={{ textAlign:'center', padding:'80px 5% 60px', maxWidth:900, margin:'0 auto' }}>
-        <div style={{ fontSize:72, marginBottom:20, display:'inline-block', animation:'float 4s ease-in-out infinite' }}>🕉️</div>
-        <h1 style={{ fontFamily:'Cinzel,serif', fontSize:52, fontWeight:900, background:'linear-gradient(135deg,#FF6B00,#F0C040,#FF6B00)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text', margin:'0 0 12px', letterSpacing:2 }}>
-          India's Spiritual Super-App
-        </h1>
-        <p style={{ color:'rgba(255,248,240,0.6)', fontSize:18, fontFamily:'Crimson Pro,serif', fontStyle:'italic', marginBottom:36 }}>
-          Book verified pandits, buy pooja samagri, attend virtual rituals — all in one sacred platform
-        </p>
-        <div style={{ display:'flex', justifyContent:'center', gap:16, marginBottom:48, flexWrap:'wrap' }}>
-          <button style={btn()} onClick={()=>navigate('/user/booking')}>⚡ Book a Pandit Now</button>
-          <button style={btn('rgba(255,255,255,0.08)',{border:'1px solid rgba(255,255,255,0.2)'})} onClick={()=>navigate('/user/home')}>Explore DevSetu →</button>
-        </div>
-        {/* Stats */}
-        <div style={{ display:'flex', justifyContent:'center', gap:40, flexWrap:'wrap' }}>
-          {[['500+','Verified Pandits'],['10,000+','Happy Devotees'],['100+','Sacred Rituals'],['4.9★','Average Rating']].map(([v,l])=>(
-            <div key={l} style={{ textAlign:'center' }}>
-              <div style={{ fontFamily:'Cinzel,serif', fontSize:28, fontWeight:900, color:'#F0C040' }}>{v}</div>
-              <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12 }}>{l}</div>
-            </div>
+      {/* Hero with Interactive Temple Background Slider */}
+      <div style={{ position: 'relative', textAlign:'center', padding:'120px 5% 100px', overflow: 'hidden' }}>
+        {/* Stable Background Image Slider */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, backgroundColor: '#0d0700' }}>
+          {BG_IMAGES.map((img, idx) => (
+            <img 
+              key={img}
+              src={img} 
+              alt="Temple Background"
+              style={{ 
+                position: 'absolute', top: 0, left: 0, 
+                width: '100%', height: '100%', objectFit: 'cover', 
+                opacity: bgIndex === idx ? 0.6 : 0,
+                transition: 'opacity 2s ease-in-out'
+              }}
+            />
           ))}
+          {/* Lighter Gradient Overlay so the temple is clearly visible */}
+          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to bottom, rgba(13,7,0,0.6), rgba(13,7,0,0.1), #0d0700)' }}></div>
+        </div>
+
+        <div style={{ position: 'relative', zIndex: 2, maxWidth: 1100, margin: '0 auto' }}>
+          
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,107,0,0.15)', border: '1px solid rgba(255,107,0,0.4)', padding: '8px 20px', borderRadius: 30, marginBottom: 30, fontSize: 13, fontWeight: 800, color: '#F0C040', letterSpacing: 1, backdropFilter: 'blur(4px)' }}>
+            <span style={{ display:'inline-block', width:8, height:8, borderRadius:'50%', background:'#4ade80', boxShadow:'0 0 10px #4ade80', animation:'pulse 1.5s infinite' }}></span>
+            LIVE: BOOKINGS OPEN FOR NAVRATRI 2026
+          </div>
+          
+          <h1 style={{ fontFamily:'Cinzel,serif', fontSize: 'clamp(40px, 6vw, 76px)', fontWeight:900, color: '#fff', textShadow: '0 4px 30px rgba(0,0,0,0.8)', margin:'0 0 24px', lineHeight: 1.1, letterSpacing: 1 }}>
+            India's Most Trusted<br />
+            <span style={{ background:'linear-gradient(135deg,#FF6B00,#F0C040,#FF6B00)', backgroundSize: '200% auto', animation: 'pulse 3s infinite', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>Spiritual Platform</span>
+          </h1>
+          
+          <p style={{ color:'rgba(255,248,240,0.85)', fontSize: 'clamp(16px, 2vw, 22px)', fontFamily:'Crimson Pro,serif', fontStyle:'italic', marginBottom:48, maxWidth: 650, margin: '0 auto 48px', textShadow: '0 2px 10px rgba(0,0,0,0.9)', lineHeight: 1.5 }}>
+            Experience authentic Vedic rituals at your doorstep. From finding the right Pandit to sacred Pooja Samagri — we arrange everything.
+          </p>
+          
+          <div style={{ display:'flex', justifyContent:'center', gap:24, marginBottom:70, flexWrap:'wrap' }}>
+            <button style={{...btn(), padding: '16px 36px', fontSize: 16, boxShadow: '0 8px 30px rgba(255,107,0,0.5)', display:'flex', alignItems:'center', gap:8 }} onClick={()=>navigate('/user/booking')}>
+              <span style={{ fontSize: 20 }}>⚡</span> Book a Pandit Now
+            </button>
+            <button style={{...btn('rgba(255,255,255,0.05)', {border:'1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)'}), padding: '16px 36px', fontSize: 16, color: '#fff'}} onClick={()=>navigate('/user/home')}>
+              Explore Services →
+            </button>
+          </div>
+          
+          {/* Prominent Stats Banner (Glassmorphism) */}
+          <div style={{ display:'flex', justifyContent:'center', gap: 'clamp(20px, 4vw, 60px)', flexWrap:'wrap', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(212,160,23,0.2)', borderBottom: '1px solid rgba(255,107,0,0.3)', padding: '30px 40px', borderRadius: 24, boxShadow: '0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
+            {[
+              ['180+','Verified Pandits','🙏'],
+              ['80+','Sacred Rituals','🔥'],
+              ['10k+','Happy Devotees','✨'],
+              ['4.9★','Average Rating','⭐']
+            ].map(([v,l,icon])=>(
+              <div key={l} style={{ textAlign:'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                <div style={{ fontSize: 28, marginBottom: 12, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>{icon}</div>
+                <div style={{ fontFamily:'Cinzel,serif', fontSize:36, fontWeight:900, color:'#F0C040', textShadow: '0 2px 15px rgba(240,192,64,0.3)', lineHeight: 1 }}>{v}</div>
+                <div style={{ color:'rgba(255,248,240,0.6)', fontSize:13, fontWeight: 700, letterSpacing: 1, marginTop: 6, textTransform: 'uppercase' }}>{l}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -305,6 +370,27 @@ export default function Landing() {
         </div>
       </div>
 
+      {/* Trust & Verification Section */}
+      <div style={{ padding:'80px 5%', background:'linear-gradient(to bottom, rgba(13,7,0,1), rgba(255,107,0,0.03), rgba(13,7,0,1))' }}>
+        <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', textAlign:'center', marginBottom:12, fontSize:32 }}>Why Devotees Trust DevSetu</h2>
+        <p style={{ textAlign:'center', color:'rgba(255,248,240,0.6)', marginBottom:48, fontSize:15, maxWidth:600, margin:'0 auto 48px' }}>We don't just connect you; we ensure a pure, uncompromising spiritual experience.</p>
+        
+        <div style={{ display:'flex', justifyContent:'center', gap:32, flexWrap:'wrap', maxWidth:1100, margin:'0 auto' }}>
+          {[
+            { icon:'📜', title:'100% Vedic Verification', desc:'Every Pandit undergoes a strict 4-step interview assessing their Vedic knowledge and chanting accuracy.' },
+            { icon:'🔒', title:'Transparent Pricing', desc:'No hidden dakshina. You know exactly what you pay before the ritual starts.' },
+            { icon:'📦', title:'Pure Samagri Guarantee', desc:'We use only Grade-A authenticated holy materials sourced directly from pilgrim cities.' },
+            { icon:'🛡️', title:'Secure Rescheduling', desc:'Change of plans? Easily postpone your pooja with zero penalty up to 24 hours prior.' },
+          ].map((t)=>(
+            <div key={t.title} style={{ flex:'1 1 200px', background:'rgba(255,255,255,0.03)', border:'1px solid rgba(212,160,23,0.15)', borderRadius:16, padding:'30px 24px', textAlign:'center', transition:'transform 0.2s, box-shadow 0.2s', cursor:'default', boxShadow:'0 10px 30px rgba(0,0,0,0.2)' }} onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-5px)'; e.currentTarget.style.boxShadow='0 15px 40px rgba(255,107,0,0.15)';}} onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)'; e.currentTarget.style.boxShadow='0 10px 30px rgba(0,0,0,0.2)';}}>
+              <div style={{ fontSize:40, marginBottom:16 }}>{t.icon}</div>
+              <div style={{ fontFamily:'Cinzel,serif', color:'#D4A017', fontSize:18, fontWeight:800, marginBottom:12 }}>{t.title}</div>
+              <div style={{ color:'rgba(255,248,240,0.5)', fontSize:13, lineHeight:1.6 }}>{t.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
       {/* Pandit CTA */}
       <div style={{ textAlign:'center', padding:'60px 5%', maxWidth:700, margin:'0 auto' }}>
         <div style={{ fontSize:52, marginBottom:16 }}>🪔</div>
@@ -336,10 +422,46 @@ export default function Landing() {
         </div>
       </footer>
 
+      {/* Live Booking Notification Toast */}
+      <div className={`live-toast ${notification ? 'show' : ''}`}>
+        <div style={{ fontSize: 22, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }}>{notification?.split(' ')[0]}</div>
+        <div>
+          <div style={{ color: '#4ade80', fontSize: 11, fontWeight: 800, marginBottom: 2, textTransform: 'uppercase', letterSpacing: 1 }}>Verified Booking • Just Now</div>
+          <div style={{ color: '#fff8f0', fontSize: 13, fontWeight: 500 }}>{notification?.split(' ').slice(1).join(' ')}</div>
+        </div>
+      </div>
+
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;1,400&family=Nunito:wght@400;600;700;800&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Crimson+Pro:ital,wght@0,400;1,400&family=Nunito:wght@400;500;600;700;800&display=swap');
         @keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
         @keyframes pulse{0%,100%{opacity:1;}50%{opacity:0.4;}}
+
+        .live-toast {
+          position: fixed;
+          bottom: 24px;
+          left: 24px;
+          background: rgba(13,7,0,0.85);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          border: 1px solid rgba(212,160,23,0.3);
+          border-left: 4px solid #4ade80;
+          padding: 16px 20px;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+          z-index: 1000;
+          transform: translateY(150%);
+          opacity: 0;
+          transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+          max-width: 320px;
+        }
+        
+        .live-toast.show {
+          transform: translateY(0);
+          opacity: 1;
+        }
 
         .landing-nav {
           position: sticky;

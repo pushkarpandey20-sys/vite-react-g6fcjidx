@@ -8,10 +8,10 @@ export const MUHURTAS = [
 ];
 
 export const SEVA_OPTIONS = [
-  { id: 1, icon: "🍽️", name: "Brahmin Bhojan", desc: "Feed learned Brahmins and earn divine blessings", amounts: [251, 501, 1001, 2100] },
-  { id: 2, icon: "🐄", name: "Gau Seva", desc: "Support and nourish sacred cows, considered auspicious", amounts: [101, 251, 501, 1001] },
-  { id: 3, icon: "🛕", name: "Temple Donation", desc: "Directly support temple renovation and daily operations", amounts: [501, 1001, 2501, 5001] },
-  { id: 4, icon: "📚", name: "Veda Pathshala", desc: "Sponsor Vedic education for students learning scriptures", amounts: [1001, 2001, 5001, 11000] },
-  { id: 5, icon: "🌿", name: "Tulsi Puja", desc: "Sponsor daily Tulsi worship at temple premises", amounts: [51, 101, 251, 501] },
-  { id: 6, icon: "🪔", name: "Akhand Deep", desc: "Keep the eternal flame burning in temples", amounts: [251, 351, 501, 1001] },
+  { id: 1, icon: "/icons/thali.png", name: "Brahmin Bhojan", desc: "Feed learned Brahmins and earn divine blessings", amounts: [251, 501, 1001, 2100] },
+  { id: 2, icon: "/icons/cow.png", name: "Gau Seva", desc: "Support and nourish sacred cows, considered auspicious", amounts: [101, 251, 501, 1001] },
+  { id: 3, icon: "/icons/om.png", name: "Temple Donation", desc: "Directly support temple renovation and daily operations", amounts: [501, 1001, 2501, 5001] },
+  { id: 4, icon: "/icons/book.png", name: "Veda Pathshala", desc: "Sponsor Vedic education for students learning scriptures", amounts: [1001, 2001, 5001, 11000] },
+  { id: 5, icon: "/icons/lotus.png", name: "Tulsi Puja", desc: "Sponsor daily Tulsi worship at temple premises", amounts: [51, 101, 251, 501] },
+  { id: 6, icon: "/icons/diya.png", name: "Akhand Deep", desc: "Keep the eternal flame burning in temples", amounts: [251, 351, 501, 1001] },
 ];

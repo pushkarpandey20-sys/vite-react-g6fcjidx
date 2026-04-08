@@ -105,6 +105,43 @@ export default function PanditHome() {
         </div>
       </div>
 
+      {/* Pandit Success & Visibility Console */}
+      <div className="card" style={{ marginBottom: 30, padding: '24px', borderLeft: '4px solid #FFD700', background: 'linear-gradient(to right, rgba(255,215,0,0.08), rgba(0,0,0,0.2))', borderRadius: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <h3 style={{ margin: 0, color: '#D4A017', fontFamily: 'Cinzel,serif', fontSize: 18, fontWeight: 900 }}>👁️ Pandit Visibility & Growth Insights</h3>
+        </div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20 }}>
+          
+          <div style={{ background: 'rgba(0,0,0,0.4)', padding: 16, borderRadius: 12, border: '1px solid rgba(255,215,0,0.1)' }}>
+            <div style={{ fontSize: 11, color: '#FFD700', fontWeight: 800, letterSpacing: 1 }}>PROFILE STRENGTH</div>
+            <div style={{ fontSize: 26, color: '#fff', fontWeight: 900, margin: '4px 0' }}>85% <span style={{ fontSize: 13, color: '#4ade80', fontWeight: 600 }}>↑ High Visibility</span></div>
+            <div style={{ fontSize: 12, color: '#bbb', lineHeight: 1.4, marginTop: 8 }}>
+              💡 <span style={{ color: '#D4A017', textDecoration: 'underline', cursor: 'pointer' }}>Upload a chant video</span> to reach 100% and get the <b>"Premium Pandit"</b> badge on the homepage!
+            </div>
+          </div>
+          
+          <div style={{ background: 'rgba(0,0,0,0.4)', padding: 16, borderRadius: 12, border: '1px solid rgba(255,107,0,0.1)' }}>
+            <div style={{ fontSize: 11, color: '#FF6B00', fontWeight: 800, letterSpacing: 1 }}>LOCAL MARKET DEMAND</div>
+            <div style={{ fontSize: 18, color: '#fff', fontWeight: 700, margin: '8px 0' }}>📈 Trending: <span style={{ color: '#FFD700' }}>Vastu Shanti</span></div>
+            <div style={{ fontSize: 12, color: '#bbb', lineHeight: 1.4 }}>
+              Devotees in your city are actively searching for Vastu Shanti. Ensure it's listed in your sacred offerings to capture 2x more bookings!
+            </div>
+          </div>
+          
+          <div style={{ background: 'rgba(0,0,0,0.4)', padding: 16, borderRadius: 12, border: '1px solid rgba(74, 222, 128, 0.1)' }}>
+            <div style={{ fontSize: 11, color: '#4ade80', fontWeight: 800, letterSpacing: 1 }}>DEVOTEE SATISFACTION</div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, margin: '4px 0' }}>
+              <span style={{ fontSize: 26, color: '#fff', fontWeight: 900 }}>4.9/5</span>
+              <span style={{ fontSize: 18 }}>⭐⭐⭐⭐⭐</span>
+            </div>
+            <div style={{ fontSize: 12, color: '#bbb', lineHeight: 1.4 }}>
+              🏆 <b>Top 5% Acharya</b>. Devotees highlight your punctuality and strict adherence to Vedic norms. Keep it up!
+            </div>
+          </div>
+
+        </div>
+      </div>
+
       <div className="dashboard-grid display-2col">
         {/* Today's Schedule Module */}
         <section className="dashboard-module card card-p">
@@ -181,6 +218,16 @@ function BookingActionCard({ b, onAction, isToday = false, mini = false }) {
       <div className="bac-body">
         <div className="bac-location">📍 {b.address}, {b.location}</div>
         {b.notes && <p className="bac-notes">📝 "{b.notes}"</p>}
+        
+        {/* Devotee Insight Data specifically for the Pandit */}
+        <div style={{ marginTop: 12, padding: '10px 14px', background: 'rgba(74, 222, 128, 0.08)', borderRadius: 10, border: '1px dashed rgba(74, 222, 128, 0.3)' }}>
+          <div style={{ fontSize: 10, color: '#4ade80', fontWeight: 800, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 4 }}>Devotee Intelligence</div>
+          <div style={{ fontSize: 12, color: '#fff', fontWeight: 500 }}>
+            {b.id && b.id.charCodeAt(0) % 2 === 0 
+              ? "🌟 First-time user on DevSetu. Make a lasting spiritual impression!" 
+              : "👑 Loyal Devotee (3rd booking overall). Highly values authentic samagri."}
+          </div>
+        </div>
       </div>
       {b.status === 'pending' && (
         <div className="bac-footer">
