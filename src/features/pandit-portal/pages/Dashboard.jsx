@@ -151,15 +151,22 @@ export default function Dashboard() {
   useEffect(() => {
     if (!panditId) { setLoading(false); return; }
     (async () => {
-      const [{ data: prof }, { data: bks }] = await Promise.all([
-        supabase.from('pandits').select('*').eq('id', panditId).single(),
-        supabase.from('bookings').select('*').eq('pandit_id', panditId).order('booking_date', { ascending: true }),
-      ]);
-      // Fall back to demo profile stored in localStorage if DB has no record
-      setProfile(prof || getDemoProfile());
-      setBookings(bks || []);
+      try {
+        const [{ data: prof }, { data: bks }] = await Promise.all([
+          supabase.from('pandits').select('*').eq('id', panditId).single(),
+          supabase.from('bookings').select('*').eq('pandit_id', panditId).order('booking_date', { ascending: true }),
+        ]);
+        // Fall back to demo profile stored in localStorage if DB has no record
+        setProfile(prof || getDemoProfile());
+        setBookings(bks || []);
+      } catch {
+        setProfile(getDemoProfile());
+        setBookings([]);
+      }
       setLoading(false);
     })();
+
+    if (panditId === '00000000-0000-4000-a000-000000000001') return; // skip realtime for demo
 
     const channel = supabase.channel(`dashboard_${panditId}`)
       .on('postgres_changes', { event: '*', schema: 'public', table: 'bookings', filter: `pandit_id=eq.${panditId}` }, (payload) => {

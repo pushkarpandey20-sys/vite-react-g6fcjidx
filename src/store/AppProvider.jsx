@@ -218,8 +218,9 @@ export function AppProvider({ children }) {
   };
 
   // Demo pandit login — full profile for end-to-end testing
+  const DEMO_PANDIT_UUID = '00000000-0000-4000-a000-000000000001';
   const DEMO_PANDIT_PROFILE = {
-    id: 'demo-pandit-001',
+    id: DEMO_PANDIT_UUID,
     name: 'Pt. Ramesh Sharma',
     phone: '+91-9999888877',
     city: 'Delhi',
@@ -243,7 +244,7 @@ export function AppProvider({ children }) {
   };
 
   const loginPanditDemo = (id, name) => {
-    const pid = id || 'demo-pandit-001';
+    const pid = id || DEMO_PANDIT_UUID;
     const pName = name || 'Pt. Ramesh Sharma';
     setPanditId(pid);
     setPanditName(pName);
