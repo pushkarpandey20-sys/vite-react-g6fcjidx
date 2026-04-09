@@ -243,7 +243,7 @@ export default function PanditMarketplacePage() {
 
       {/* ── FILTER BAR — single compact row ── */}
       <div className="pm-filter-bar" style={{
-        background:'#fff',
+        background:'rgba(26,15,7,0.88)',
         border:'1px solid rgba(212,160,23,0.25)',
         borderRadius:12,
         padding:'10px 16px',
@@ -264,22 +264,22 @@ export default function PanditMarketplacePage() {
             flex:'1 1 140px', minWidth:120,
             padding:'7px 12px', borderRadius:8,
             border:'1.5px solid rgba(212,160,23,0.35)',
-            background:'#fffbf5', color:'#3d1f00',
+            background:'rgba(40,15,5,0.8)', color:'rgba(255,248,240,0.85)',
             fontSize:13, fontFamily:'inherit', outline:'none',
           }}
         />
         {/* Specialization */}
-        <select value={filterSpec} onChange={e => setFilterSpec(e.target.value)} style={{ flex:'1 1 140px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'#fffbf5', color:'#3d1f00', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
+        <select value={filterSpec} onChange={e => setFilterSpec(e.target.value)} style={{ flex:'1 1 140px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'rgba(40,15,5,0.8)', color:'rgba(255,248,240,0.85)', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
           <option value="All">📿 All Rituals</option>
           {['Vivah','Griha Pravesh','Satyanarayan','Rudrabhishek','Navgrah','Kaal Sarp','Mundan','Namkaran','Vastu Shastra','Antyesti'].map(s=><option key={s} value={s}>{s}</option>)}
         </select>
         {/* City */}
-        <select value={filterCity} onChange={e => setFilterCity(e.target.value)} style={{ flex:'1 1 120px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'#fffbf5', color:'#3d1f00', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
+        <select value={filterCity} onChange={e => setFilterCity(e.target.value)} style={{ flex:'1 1 120px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'rgba(40,15,5,0.8)', color:'rgba(255,248,240,0.85)', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
           <option value="All">📍 All Cities</option>
           {['Delhi','Noida','Gurgaon','Mumbai','Bengaluru','Ayodhya','Faridabad','Ghaziabad'].map(c=><option key={c} value={c}>{c}</option>)}
         </select>
         {/* Experience */}
-        <select value={filterMinExp} onChange={e => setFilterMinExp(Number(e.target.value))} style={{ flex:'1 1 120px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'#fffbf5', color:'#3d1f00', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
+        <select value={filterMinExp} onChange={e => setFilterMinExp(Number(e.target.value))} style={{ flex:'1 1 120px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'rgba(40,15,5,0.8)', color:'rgba(255,248,240,0.85)', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
           <option value={0}>⏳ Any Exp</option>
           <option value={5}>5+ Years</option>
           <option value={10}>10+ Years</option>
@@ -288,7 +288,7 @@ export default function PanditMarketplacePage() {
         {/* Online toggle */}
         <label style={{ display:'flex', alignItems:'center', gap:6, cursor:'pointer', whiteSpace:'nowrap', padding:'7px 0' }}>
           <input type="checkbox" checked={filterOnline} onChange={e => setFilterOnline(e.target.checked)} style={{ width:'auto', accentColor:'#FF6B00' }} />
-          <span style={{ color:'#3d1f00', fontSize:13 }}>🟢 Online Now</span>
+          <span style={{ color:'rgba(255,248,240,0.75)', fontSize:13 }}>🟢 Online Now</span>
         </label>
         {/* Result count */}
         <span style={{ color:'#9a8070', fontSize:12, whiteSpace:'nowrap', marginLeft:'auto' }}>

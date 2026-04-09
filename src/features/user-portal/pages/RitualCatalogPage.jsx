@@ -88,11 +88,11 @@ export default function RitualCatalogPage() {
 
   return (
     /* Cream/warm light background — overrides ds-user-content dark bg */
-    <div style={{ background:'#fff8f0', minHeight:'100%', margin:'-20px', padding:'20px', fontFamily:'Nunito,sans-serif' }}>
+    <div style={{ background:'transparent', minHeight:'100%', margin:'-20px', padding:'20px', fontFamily:'Nunito,sans-serif' }}>
 
       {/* ── Premium On-Demand Strip ─────────────────────────── */}
       <div className="banner-glow" style={{
-        background:'linear-gradient(135deg, #FFFDFB 0%, #FFF5E6 100%)',
+        background:'linear-gradient(135deg,rgba(61,31,0,0.9) 0%,rgba(26,10,0,0.95) 100%)',
         border:'1.5px solid #FF6B00',
         borderRadius:20, padding:'24px', marginBottom:28,
         display:'flex', alignItems:'center', justifyContent:'space-between',
@@ -111,12 +111,12 @@ export default function RitualCatalogPage() {
           }}>⚡</div>
           <div>
             <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:4 }}>
-              <span style={{ fontFamily:'Cinzel,serif', color:'#2C1A0E', fontWeight:900, fontSize:20, letterSpacing:0.5 }}>Instant Spiritual Guidance</span>
+              <span style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontWeight:900, fontSize:20, letterSpacing:0.5 }}>Instant Spiritual Guidance</span>
               <span style={{ background:'#FF6B00', color:'#fff', fontSize:9,
                 fontWeight:900, padding:'3px 10px', borderRadius:20, boxShadow:'0 4px 10px rgba(255,107,0,0.3)',
                 letterSpacing:1 }}>LIVE NOW</span>
             </div>
-            <p style={{ color:'#5C3317', fontSize:14, margin:0, fontWeight:700 }}>
+            <p style={{ color:'rgba(255,248,240,0.85)', fontSize:14, margin:0, fontWeight:700 }}>
               Connect with a verified Pandit instantly for Sankalp or Special Puja.
             </p>
           </div>
@@ -135,7 +135,7 @@ export default function RitualCatalogPage() {
           <h1 style={{ fontFamily:'Cinzel,serif', color:'#126180', margin:'0 0 4px', fontSize:'clamp(18px,3vw,26px)', fontWeight:900 }}>
             🕉️ Sacred Ritual Catalog
           </h1>
-          <p style={{ color:'#8B6347', margin:0, fontSize:13, fontWeight:600 }}>
+          <p style={{ color:'rgba(255,248,240,0.6)', margin:0, fontSize:13, fontWeight:600 }}>
             {loading ? 'Discovering divine ceremonies…' : `${rituals.length} Authentic Rituals · 120+ Verified Acharyas`}
           </p>
         </div>
@@ -147,15 +147,15 @@ export default function RitualCatalogPage() {
             onChange={e => setSearch(e.target.value)}
             placeholder="Search for a Pooja or Ceremony..."
             style={{ width:'100%', padding:'12px 36px 12px 38px', borderRadius:30,
-              background:'#fff', border:'2px solid rgba(212,160,23,0.15)',
-              color:'#1a0f07', fontSize:14, outline:'none', boxSizing:'border-box',
+              background:'rgba(40,15,5,0.8)', border:'2px solid rgba(212,160,23,0.15)',
+              color:'rgba(255,248,240,0.85)', fontSize:14, outline:'none', boxSizing:'border-box',
               fontFamily:'Nunito,sans-serif', transition:'all 0.3s',
               boxShadow:'0 4px 15px rgba(0,0,0,0.03)' }}
           />
           {search && (
             <button onClick={() => setSearch('')} style={{ position:'absolute', right:12,
               top:'50%', transform:'translateY(-50%)', background:'rgba(0,0,0,0.05)', border:'none',
-              color:'#8B6347', cursor:'pointer', fontSize:10, width:20, height:20, borderRadius:'50%',
+              color:'rgba(255,248,240,0.6)', cursor:'pointer', fontSize:10, width:20, height:20, borderRadius:'50%',
               display:'flex', alignItems:'center', justifyContent:'center' }}>✕</button>
           )}
         </div>
@@ -163,8 +163,8 @@ export default function RitualCatalogPage() {
 
       {/* ── Premium Filter Bar ──────────────────────────── */}
       <div style={{ 
-        background:'#fff', border:'1px solid rgba(212,160,23,0.15)', borderRadius:20,
-        padding:'16px 20px', marginBottom:28, boxShadow:'0 10px 25px rgba(0,0,0,0.03)',
+        background:'rgba(26,15,7,0.88)', border:'1px solid rgba(212,160,23,0.18)', borderRadius:20,
+        padding:'16px 20px', marginBottom:28, boxShadow:'0 4px 20px rgba(0,0,0,0.4)',
         display:'flex', flexDirection:'column', gap:16
       }}>
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
@@ -181,8 +181,8 @@ export default function RitualCatalogPage() {
                 style={{
                   padding:'10px 18px', borderRadius:25, fontSize:13, fontWeight:800, cursor:'pointer',
                   border:`2px solid ${isOn ? cat.color : 'rgba(139,99,71,0.1)'}`,
-                  background: isOn ? cat.color : 'rgba(255,255,255,0.05)',
-                  color: isOn ? '#fff' : '#5C3317',
+                  background: isOn ? cat.color : 'rgba(61,31,0,0.6)',
+                  color: isOn ? '#fff' : 'rgba(255,248,240,0.6)',
                   transition:'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)', outline:'none', whiteSpace:'nowrap', flexShrink:0,
                   boxShadow: isOn ? `0 8px 16px ${cat.color}30` : 'none',
                   display:'flex', alignItems:'center', gap:8
@@ -206,8 +206,8 @@ export default function RitualCatalogPage() {
                     style={{ 
                       padding:'6px 14px', borderRadius:15, fontSize:12, fontWeight:700, cursor:'pointer',
                       border:`1.5px solid ${isOn ? '#FF6B00' : 'rgba(139,99,71,0.15)'}`,
-                      background: isOn ? '#FF6B00' : '#fff',
-                      color: isOn ? '#fff' : '#8B6347', transition:'all 0.15s', outline:'none',
+                      background: isOn ? '#FF6B00' : 'rgba(61,31,0,0.6)',
+                      color: isOn ? '#fff' : 'rgba(255,248,240,0.6)', transition:'all 0.15s', outline:'none',
                     }}>{pr.label}</button>
                 );
               })}
@@ -235,7 +235,7 @@ export default function RitualCatalogPage() {
       {/* ── Results count ────────────────────────────────────── */}
       {!loading && (
         <div style={{ marginBottom:18, display:'flex', alignItems:'center', gap:10 }}>
-          <span style={{ fontSize:14, color:'#8B6347', fontWeight:600 }}>
+          <span style={{ fontSize:14, color:'rgba(255,248,240,0.6)', fontWeight:600 }}>
             Showing <strong style={{ color:'#126180' }}>{filtered.length}</strong> divine options
             {activeCat !== 'All' && <span style={{ color:'#FF6B00' }}> in {activeCat}</span>}
           </span>
@@ -254,13 +254,13 @@ export default function RitualCatalogPage() {
         <div style={{ padding:'80px 0', display:'flex', justifyContent:'center' }}><Spinner /></div>
       ) : filtered.length === 0 ? (
         <div className="banner-glow" style={{ 
-          textAlign:'center', padding:'80px 20px', background:'#fff',
+          textAlign:'center', padding:'80px 20px', background:'rgba(26,15,7,0.88)',
           borderRadius:24, border:'1px solid rgba(212,160,23,0.15)',
           boxShadow:'0 15px 40px rgba(0,0,0,0.04)' 
         }}>
           <div className="float-anim" style={{ fontSize:64, marginBottom:20 }}>🧘‍♂️</div>
-          <div style={{ fontFamily:'Cinzel,serif', color:'#1a0f07', fontSize:22, fontWeight:900, marginBottom:8 }}>No Rituals Match Your Quiet</div>
-          <div style={{ color:'#8B6347', fontSize:14, marginBottom:24, maxWidth:300, margin:'0 auto 24px' }}>
+          <div style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:22, fontWeight:900, marginBottom:8 }}>No Rituals Match Your Quiet</div>
+          <div style={{ color:'rgba(255,248,240,0.6)', fontSize:14, marginBottom:24, maxWidth:300, margin:'0 auto 24px' }}>
             We couldn't find rituals for these criteria. Try broadening your search or budget.
           </div>
           <button className="btn btn-primary" style={{ padding:'12px 30px', borderRadius:30 }}
@@ -287,7 +287,7 @@ function RitualCard({ r, onBook }) {
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
       style={{
-        background:'#fff',
+        background:'rgba(26,15,7,0.88)',
         border:`1.5px solid ${hov ? catMeta.color+'50' : 'rgba(212,160,23,0.2)'}`,
         borderRadius:16,
         padding:'18px',
@@ -320,9 +320,9 @@ function RitualCard({ r, onBook }) {
       </div>
 
       {/* Name + desc */}
-      <h3 style={{ fontFamily:'Cinzel,serif', color:'#1a0f07', margin:'0 0 7px',
+      <h3 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', margin:'0 0 7px',
         fontSize:14, fontWeight:800, lineHeight:1.3 }}>{r.name}</h3>
-      <p style={{ color:'#8B6347', fontSize:12, lineHeight:1.6, margin:'0 0 14px', flex:1,
+      <p style={{ color:'rgba(255,248,240,0.6)', fontSize:12, lineHeight:1.6, margin:'0 0 14px', flex:1,
         display:'-webkit-box', WebkitLineClamp:2, WebkitBoxOrient:'vertical', overflow:'hidden' }}>
         {r.description}
       </p>

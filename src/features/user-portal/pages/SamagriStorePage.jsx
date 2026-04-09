@@ -232,9 +232,9 @@ export default function SamagriStorePage() {
   const customTotal = Object.entries(customCart).reduce((s,[id,q]) => { const item = CUSTOM_ITEMS.find(i=>i.id===id); return s + (item ? item.price * q : 0); }, 0);
   const customCount = Object.values(customCart).reduce((s,q)=>s+q, 0);
 
-  const dkCard = { background:'#FFFFFF', border:'1px solid rgba(255,107,0,0.15)', borderRadius:16, boxShadow:'0 4px 15px rgba(255,107,0,0.05)' };
+  const dkCard = { background:'rgba(26,15,7,0.88)', border:'1px solid rgba(212,160,23,0.18)', borderRadius:16, boxShadow:'0 4px 20px rgba(0,0,0,0.4)' };
   const selStyle = { padding:'10px 14px', borderRadius:10, border:'1.5px solid rgba(255,107,0,0.2)',
-    background:'#FFFDFB', color:'#2C1A0E', fontSize:13, outline:'none', cursor:'pointer', fontFamily:'Nunito,sans-serif' };
+    background:'rgba(61,31,0,0.6)', color:'rgba(255,248,240,0.85)', fontSize:13, outline:'none', cursor:'pointer', fontFamily:'Nunito,sans-serif' };
 
   const handleAddToBooking = (product, e) => {
     if (e) { e.stopPropagation(); e.preventDefault(); }
@@ -270,8 +270,8 @@ export default function SamagriStorePage() {
               letterSpacing:'1.2px', textTransform:'uppercase', padding:'4px 12px', borderRadius:20, marginBottom:10 }}>
               📦 Purity Certified · Same-day Delivery
             </div>
-            <h2 style={{ fontFamily:'Cinzel,serif', color:'#2C1A0E', fontSize:'clamp(20px,3.5vw,28px)', margin:'0 0 6px', fontWeight:900 }}>🛍️ Pooja Samagri Store</h2>
-            <p style={{ color:'#8B6347', margin:0, fontSize:14, fontWeight:600 }}>Authentic ritual kits delivered to your door · Free delivery above ₹999</p>
+            <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:'clamp(20px,3.5vw,28px)', margin:'0 0 6px', fontWeight:900 }}>🛍️ Pooja Samagri Store</h2>
+            <p style={{ color:'rgba(255,248,240,0.6)', margin:0, fontSize:14, fontWeight:600 }}>Authentic ritual kits delivered to your door · Free delivery above ₹999</p>
           </div>
           {totalItems > 0 && (
             <button onClick={() => { setCheckoutDone(true); setTimeout(()=>{ setCart({}); setCheckoutDone(false); },3000); }}
@@ -287,7 +287,7 @@ export default function SamagriStorePage() {
           {[['🚚','Same-day Delivery'],['✅','100% Authentic'],['🔄','Easy Returns'],['🆓','Free over ₹999']].map(([ic,tx])=>(
             <div key={tx} style={{ display:'flex', alignItems:'center', gap:5 }}>
               <span>{ic}</span>
-              <span style={{ color:'#8B6347', fontSize:11, fontWeight:800 }}>{tx}</span>
+              <span style={{ color:'rgba(255,248,240,0.55)', fontSize:11, fontWeight:800 }}>{tx}</span>
             </div>
           ))}
         </div>
@@ -351,19 +351,19 @@ export default function SamagriStorePage() {
             {CUSTOM_CATS.map(c => (
               <button key={c} onClick={()=>setCustomCat(c)}
                 style={{ padding:'8px 18px', borderRadius:20, cursor:'pointer', fontWeight:800, fontSize:13, fontFamily:'Nunito,sans-serif',
-                  background: customCat===c ? '#FF6B00' : '#FFFDFB',
+                  background: customCat===c ? '#FF6B00' : 'rgba(61,31,0,0.6)',
                   border: customCat===c ? 'none' : '1px solid rgba(255,107,0,0.2)',
-                  color: customCat===c ? '#fff' : '#5C3317' }}>
+                  color: customCat===c ? '#fff' : 'rgba(255,248,240,0.6)' }}>
                 {c}
               </button>
             ))}
           </div>
 
           {/* Custom Kit Quick Commerce Progress Bar */}
-          <div style={{ background: '#FFFDFB', padding: '16px 20px', borderRadius: 16, marginBottom: 20, border: '1.5px solid rgba(255,107,0,0.12)', boxShadow: '0 4px 12px rgba(255,107,0,0.04)' }}>
+          <div style={{ background: 'rgba(26,15,7,0.85)', padding: '16px 20px', borderRadius: 16, marginBottom: 20, border: '1.5px solid rgba(255,107,0,0.12)', boxShadow: '0 4px 12px rgba(255,107,0,0.04)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <span style={{ color: '#FF6B00', fontSize: 13, fontWeight: 900 }}>🚚 Free Delivery Milestone</span>
-              <span style={{ color: customTotal >= 500 ? '#27AE60' : '#8B6347', fontSize: 12, fontWeight: 900 }}>
+              <span style={{ color: customTotal >= 500 ? '#27AE60' : 'rgba(255,248,240,0.55)', fontSize: 12, fontWeight: 900 }}>
                 {customTotal >= 500 ? '🎉 Unlocked!' : `₹${500 - customTotal} away`}
               </span>
             </div>
@@ -376,7 +376,7 @@ export default function SamagriStorePage() {
             {customFiltered.map(item => {
               const qty = customCart[item.id] || 0;
               return (
-                <div key={item.id} style={{ background:'#FFFFFF', border:`1.5px solid ${qty>0?'rgba(255,107,0,0.5)':'rgba(255,107,0,0.1)'}`, borderRadius:12, padding:'14px',
+                <div key={item.id} style={{ background:'rgba(26,15,7,0.88)', border:`1.5px solid ${qty>0?'rgba(255,107,0,0.5)':'rgba(255,107,0,0.1)'}`, borderRadius:12, padding:'14px',
                   boxShadow: qty>0?'0 4px 15px rgba(255,107,0,0.1)':'0 2px 8px rgba(0,0,0,0.03)' }}>
                   {item.img ? (
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, height: 60 }}>
@@ -385,8 +385,8 @@ export default function SamagriStorePage() {
                   ) : (
                     <div style={{ fontSize:40, marginBottom:8, textAlign:'center', filter:'drop-shadow(0 4px 6px rgba(0,0,0,0.4))' }}>{item.icon}</div>
                   )}
-                  <div style={{ color:'#2C1A0E', fontWeight:900, fontSize:14, marginBottom:2, textAlign:'center' }}>{item.name}</div>
-                  <div style={{ color:'#8B6347', fontSize:11, textAlign:'center', marginBottom:8, fontWeight:600 }}>{item.unit}</div>
+                  <div style={{ color:'#F0C040', fontWeight:900, fontSize:14, marginBottom:2, textAlign:'center' }}>{item.name}</div>
+                  <div style={{ color:'rgba(255,248,240,0.55)', fontSize:11, textAlign:'center', marginBottom:8, fontWeight:600 }}>{item.unit}</div>
                   <div style={{ color:'#FF6B00', fontWeight:900, fontSize:19, textAlign:'center', marginBottom:12, fontFamily:'Cinzel,sans-serif' }}>₹{item.price}</div>
                   {qty === 0 ? (
                     <button onClick={()=>setCustomCart(c=>({...c,[item.id]:1}))}
@@ -397,7 +397,7 @@ export default function SamagriStorePage() {
                     <div style={{ display:'flex', alignItems:'center', gap:6 }}>
                       <button onClick={()=>setCustomCart(c=>{const n={...c};if(n[item.id]<=1)delete n[item.id];else n[item.id]--;return n;})}
                         style={{ width:32,height:32,borderRadius:'50%',background:'rgba(255,107,0,0.08)',color:'#FF6B00',border:'1.5px solid rgba(255,107,0,0.3)',cursor:'pointer',fontWeight:900,fontSize:18,display:'flex',alignItems:'center',justifyContent:'center' }}>−</button>
-                      <span style={{ flex:1,textAlign:'center',fontWeight:900,color:'#2C1A0E',fontSize:16 }}>{qty}</span>
+                      <span style={{ flex:1,textAlign:'center',fontWeight:900,color:'rgba(255,248,240,0.9)',fontSize:16 }}>{qty}</span>
                       <button onClick={()=>setCustomCart(c=>({...c,[item.id]:(c[item.id]||0)+1}))}
                         style={{ width:32,height:32,borderRadius:'50%',background:'#FF6B00',color:'#fff',border:'none',cursor:'pointer',fontWeight:900,fontSize:18,display:'flex',alignItems:'center',justifyContent:'center' }}>+</button>
                     </div>
@@ -417,7 +417,7 @@ export default function SamagriStorePage() {
               <div style={{ display:'flex', gap:12, alignItems:'center' }}>
                 <div style={{ color:'#fff', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:22 }}>₹{customTotal.toLocaleString()}</div>
                 <button onClick={()=>{ alert('Custom kit order placed! ✅ We will contact you to confirm.'); setCustomCart({}); }}
-                  style={{ background:'#fff', color:'#FF6B00', border:'none', borderRadius:20, padding:'10px 22px', fontWeight:800, cursor:'pointer', fontSize:14 }}>
+                  style={{ background:'rgba(255,107,0,0.1)', color:'#FF6B00', border:'none', borderRadius:20, padding:'10px 22px', fontWeight:800, cursor:'pointer', fontSize:14 }}>
                   Order Custom Kit →
                 </button>
               </div>
@@ -430,14 +430,14 @@ export default function SamagriStorePage() {
       {/* Filters */}
       <div className="compact-filter" style={{ ...dkCard, padding:'14px 18px', marginBottom:18, borderRadius:16 }}>
         <div style={{ display:'flex', gap:12, marginBottom:16, flexWrap:'wrap', alignItems: 'center' }}>
-          <input style={{ flex: 1, background: '#FFFDFB', color: '#2C1A0E', border: '1.5px solid rgba(255,107,0,0.2)', borderRadius: 10, padding: '10px 14px' }} value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Search samagri kits..." />
+          <input style={{ flex: 1, background: 'rgba(40,15,5,0.8)', color: 'rgba(255,248,240,0.85)', border: '1.5px solid rgba(255,107,0,0.2)', borderRadius: 10, padding: '10px 14px' }} value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Search samagri kits..." />
           <select style={selStyle} value={sortBy} onChange={e=>setSortBy(e.target.value)}>
             <option value="popular">Most Popular</option>
             <option value="rating">Highest Rated</option>
             <option value="price_low">Price: Low → High</option>
             <option value="price_high">Price: High → Low</option>
           </select>
-          <div style={{ color:'#8B6347', fontSize:13, fontWeight:900, padding: '0 8px' }}>
+          <div style={{ color:'rgba(255,248,240,0.55)', fontSize:13, fontWeight:900, padding: '0 8px' }}>
             {filtered.length} kits found
           </div>
         </div>
@@ -471,7 +471,7 @@ export default function SamagriStorePage() {
           const discount = Math.round((1-p.price/p.mrp)*100);
           return (
             <div key={p.id} onClick={()=>setSelectedProduct(p)}
-              style={{ background:'#FFFFFF', padding:18, cursor:'pointer', position:'relative',
+              style={{ background:'rgba(26,15,7,0.88)', padding:18, cursor:'pointer', position:'relative',
                 border: qty>0 ? '1.5px solid #FF6B00' : '1.5px solid rgba(255,107,0,0.12)',
                 borderRadius: 20,
                 transition:'all 0.3s',
@@ -498,15 +498,15 @@ export default function SamagriStorePage() {
                 <IconVerified size={10} color="#27AE60" />
                 <span style={{ fontSize: 10, color: '#27AE60', fontWeight: 900, letterSpacing: 0.5, textTransform: 'uppercase' }}>100% Vedic Verified</span>
               </div>
-              <h3 style={{ color:'#2C1A0E', fontFamily:'Cinzel,serif', margin:'0 0 6px', fontSize:16, fontWeight:900, textAlign: 'center' }}>{p.name}</h3>
-              <div style={{ color:'#8B6347', fontSize:11, marginBottom:10, textAlign: 'center', fontWeight:700 }}>
+              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:'0 0 6px', fontSize:16, fontWeight:900, textAlign: 'center' }}>{p.name}</h3>
+              <div style={{ color:'rgba(255,248,240,0.55)', fontSize:11, marginBottom:10, textAlign: 'center', fontWeight:700 }}>
                 🧺 {Array.isArray(p.items) ? p.items.length : p.items} items · ⭐ {p.rating} ({p.reviews})
               </div>
-              <p style={{ color:'#5C3317', fontSize:13, lineHeight:1.6, margin:'0 0 14px', fontWeight:500,
+              <p style={{ color:'rgba(255,248,240,0.6)', fontSize:13, lineHeight:1.6, margin:'0 0 14px', fontWeight:500,
                 display:'-webkit-box', WebkitLineClamp:3, WebkitBoxOrient:'vertical', overflow:'hidden', textAlign: 'center' }}>{p.desc}</p>
               <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, marginBottom:6 }}>
                 <span style={{ color:'#FF6B00', fontWeight:900, fontSize:22, fontFamily:'Cinzel,serif' }}>₹{p.price}</span>
-                <span style={{ color:'#8B6347', fontSize:14, textDecoration:'line-through', opacity:0.6 }}>₹{p.mrp}</span>
+                <span style={{ color:'rgba(255,248,240,0.45)', fontSize:14, textDecoration:'line-through', opacity:0.6 }}>₹{p.mrp}</span>
                 <span style={{ background:'rgba(39,174,96,0.1)', color:'#27AE60',
                   fontSize:11, padding:'2px 10px', borderRadius:20, fontWeight:900 }}>{discount}% OFF</span>
               </div>
@@ -533,7 +533,7 @@ export default function SamagriStorePage() {
                   <button onClick={e=>removeFromCart(p.id,e)} style={{ width:36, height:36, borderRadius:'50%',
                     background:'rgba(255,107,0,0.08)', color:'#FF6B00', border:'1.5px solid rgba(255,107,0,0.3)',
                     cursor:'pointer', fontWeight:900, fontSize:18, display:'flex', alignItems:'center', justifyContent:'center' }}>−</button>
-                  <span style={{ color:'#2C1A0E', fontWeight:900, fontSize:18, flex:1, textAlign:'center' }}>{qty}</span>
+                  <span style={{ color:'rgba(255,248,240,0.9)', fontWeight:900, fontSize:18, flex:1, textAlign:'center' }}>{qty}</span>
                   <button onClick={e=>addToCart(p,e)} style={{ width:36, height:36, borderRadius:'50%',
                     background:'#FF6B00', color:'#fff', border:'none', cursor:'pointer',
                     fontWeight:900, fontSize:18, display:'flex', alignItems:'center', justifyContent:'center' }}>+</button>
@@ -555,14 +555,14 @@ export default function SamagriStorePage() {
           style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.75)', zIndex:1000,
             display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
           <div onClick={e=>e.stopPropagation()}
-            style={{ background:'#FFFFFF',
+            style={{ background:'rgba(20,8,2,0.98)',
               border:'2px solid #FF6B00', borderRadius:24, padding:32,
               maxWidth:480, width:'100%', maxHeight:'90vh', overflowY:'auto',
               boxShadow:'0 30px 70px rgba(0,0,0,0.15)' }}>
             <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
-              <h2 style={{ fontFamily:'Cinzel,serif', color:'#2C1A0E', margin:0, fontSize:22, fontWeight:900 }}>{selectedProduct.name}</h2>
+              <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', margin:0, fontSize:22, fontWeight:900 }}>{selectedProduct.name}</h2>
               <button onClick={()=>setSelectedProduct(null)}
-                style={{ background:'rgba(0,0,0,0.05)', border:'none', color:'#2C1A0E',
+                style={{ background:'rgba(255,107,0,0.1)', border:'none', color:'#F0C040',
                   borderRadius:'50%', width:32, height:32, cursor:'pointer', fontSize:14,
                   display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800 }}>✕</button>
             </div>
@@ -571,10 +571,10 @@ export default function SamagriStorePage() {
                 {selectedProduct.icon.startsWith('/') ? <PremiumIcon src={selectedProduct.icon} size={80} /> : selectedProduct.icon}
               </div>
             </div>
-            <p style={{ color:'#5C3317', fontSize:15, lineHeight:1.7, marginBottom:24, fontWeight:500 }}>{selectedProduct.desc}</p>
+            <p style={{ color:'rgba(255,248,240,0.6)', fontSize:15, lineHeight:1.7, marginBottom:24, fontWeight:500 }}>{selectedProduct.desc}</p>
             <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:12 }}>
               <span style={{ color:'#FF6B00', fontWeight:900, fontSize:32, fontFamily:'Cinzel,serif' }}>₹{selectedProduct.price}</span>
-              <span style={{ color:'#8B6347', fontSize:18, textDecoration:'line-through', opacity:0.5 }}>₹{selectedProduct.mrp}</span>
+              <span style={{ color:'rgba(255,248,240,0.45)', fontSize:18, textDecoration:'line-through', opacity:0.5 }}>₹{selectedProduct.mrp}</span>
               <span style={{ background:'rgba(39,174,96,0.1)', color:'#27AE60', padding:'4px 12px', borderRadius:20, fontSize:14, fontWeight:900 }}>
                 {Math.round((1-selectedProduct.price/selectedProduct.mrp)*100)}% OFF
               </span>
@@ -589,14 +589,14 @@ export default function SamagriStorePage() {
                   <button onClick={e=>removeFromCart(selectedProduct.id,e)} style={{ width:40, height:40, borderRadius:'50%',
                     background:'rgba(255,107,0,0.1)', color:'#FF6B00', border:'2px solid rgba(255,107,0,0.3)',
                     cursor:'pointer', fontWeight:900, fontSize:20, display:'flex', alignItems:'center', justifyContent:'center' }}>−</button>
-                  <span style={{ flex:1, textAlign:'center', fontWeight:900, fontSize:20, color:'#2C1A0E' }}>{cart[selectedProduct.id]}</span>
+                  <span style={{ flex:1, textAlign:'center', fontWeight:900, fontSize:20, color:'rgba(255,248,240,0.9)' }}>{cart[selectedProduct.id]}</span>
                   <button onClick={e=>addToCart(selectedProduct,e)} style={{ width:40, height:40, borderRadius:'50%',
                     background:'#FF6B00', color:'#fff', border:'none', cursor:'pointer',
                     fontWeight:900, fontSize:20, display:'flex', alignItems:'center', justifyContent:'center' }}>+</button>
                 </div>
               )}
               <button onClick={()=>setSelectedProduct(null)}
-                style={{ background:'#FDF9F4', color:'#8B6347',
+                style={{ background:'rgba(26,15,7,0.85)', color:'rgba(255,248,240,0.6)',
                   border:'1.5px solid rgba(255,107,0,0.15)', borderRadius:14, padding:'12px 24px', fontWeight:800, cursor:'pointer' }}>Close</button>
             </div>
           </div>
@@ -615,7 +615,7 @@ export default function SamagriStorePage() {
           <div style={{ display:'flex', alignItems:'center', gap:12 }}>
             <div style={{ color:'#fff', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:22 }}>₹{totalPrice.toLocaleString()}</div>
             <button onClick={()=>{ setCheckoutDone(true); setTimeout(()=>{ setCart({}); setCheckoutDone(false); },3000); }}
-              style={{ background:'#fff', color:'#FF6B00', border:'none', borderRadius:24,
+              style={{ background:'rgba(255,107,0,0.1)', color:'#FF6B00', border:'none', borderRadius:24,
                 padding:'10px 24px', fontWeight:800, cursor:'pointer', fontSize:14 }}>
               {checkoutDone ? '✅ Order Placed!' : 'Checkout →'}
             </button>

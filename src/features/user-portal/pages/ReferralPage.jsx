@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useApp } from '../../../store/AppCtx';
 import { supabase } from '../../../services/supabase';
 
-const C = { bg:'#fff8f0', card:'#fff', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'#3d1f00', mid:'#7a5c3a', soft:'#9a8070', green:'#16a34a' };
+const C = { bg:'transparent', card:'rgba(26,15,7,0.85)', border:'rgba(212,160,23,0.2)', orange:'#FF6B00', gold:'#D4A017', dark:'rgba(255,248,240,0.85)', mid:'rgba(255,248,240,0.6)', soft:'rgba(255,248,240,0.45)', green:'#16a34a' };
 
 export default function ReferralPage() {
   const { devoteeId } = useApp();
@@ -76,7 +76,7 @@ export default function ReferralPage() {
       <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'22px 24px', marginBottom:18, boxShadow:'0 2px 8px rgba(212,160,23,0.06)' }}>
         <div style={{ color:C.dark, fontWeight:700, fontSize:15, marginBottom:14 }}>🔗 Your Referral Link</div>
         <div style={{ display:'flex', gap:10, marginBottom:12 }}>
-          <div style={{ flex:1, background:'#fffbf5', border:`1.5px solid ${C.border}`, borderRadius:10, padding:'11px 16px', fontFamily:'monospace', fontSize:14, color:C.dark, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+          <div style={{ flex:1, background:'rgba(26,15,7,0.85)', border:`1.5px solid ${C.border}`, borderRadius:10, padding:'11px 16px', fontFamily:'monospace', fontSize:14, color:C.dark, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
             {refLink}
           </div>
           <button onClick={copy} style={{ background: copied?'rgba(34,197,94,0.15)':'rgba(255,107,0,0.1)', color: copied?C.green:C.orange, border:`1px solid ${copied?'rgba(34,197,94,0.3)':'rgba(255,107,0,0.3)'}`, borderRadius:10, padding:'11px 18px', fontWeight:700, cursor:'pointer', fontSize:13, whiteSpace:'nowrap' }}>
@@ -84,7 +84,7 @@ export default function ReferralPage() {
           </button>
         </div>
         <div style={{ display:'flex', gap:10 }}>
-          <div style={{ background:'#fffbf5', border:`1.5px solid ${C.border}`, borderRadius:10, padding:'10px 20px', display:'flex', alignItems:'center', gap:8 }}>
+          <div style={{ background:'rgba(26,15,7,0.85)', border:`1.5px solid ${C.border}`, borderRadius:10, padding:'10px 20px', display:'flex', alignItems:'center', gap:8 }}>
             <span style={{ color:C.soft, fontSize:12 }}>Your code:</span>
             <span style={{ color:C.orange, fontWeight:800, fontSize:18, fontFamily:'monospace', letterSpacing:2 }}>{refCode}</span>
           </div>
