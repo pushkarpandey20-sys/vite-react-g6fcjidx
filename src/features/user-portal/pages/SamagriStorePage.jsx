@@ -6,18 +6,17 @@ import { PremiumIcon, IconVerified, IconSearch } from '../../../components/Icons
 
 const CATEGORIES = [
   { id:'All',             label:'All',              icon:'🕉️' },
-  { id:'festival',        label:'Festival Kits',    icon:'🪔' },
-  { id:'daily',           label:'Daily Worship',    icon:'🌺' },
+  { id:'festival',        label:'Festival Kits',    icon:'🎊' },
+  { id:'daily',           label:'Daily Worship',    icon:'🙏' },
   { id:'abhishek',        label:'Abhishek',         icon:'🔱' },
   { id:'havan',           label:'Havan',            icon:'🔥' },
-  { id:'incense',         label:'Incense & Diyas',  icon:'🪔' },
+  { id:'incense',         label:'Incense & Diyas',  icon:'🕯️' },
 ];
 
 const PRODUCTS = [
   {
     id: 'diwali-kit', name: 'Diwali Pooja Kit', category: 'festival', icon: '🪔',
     price: 599, mrp: 799,
-    image: 'https://images.unsplash.com/photo-1574293876203-8a7a0f4c9f9e?w=400&h=300&fit=crop',
     badge: 'POPULAR', rating: 4.8, reviews: 234, weight: '850g',
     desc: 'Complete Diwali puja kit with diyas, incense, roli, akshat, moli, camphor, agarbatti and sweets offering tray.',
     items: ['12 Clay Diyas', 'Roli & Akshat', 'Moli (5m)', 'Camphor', 'Agarbatti (20 sticks)', 'Offering Tray', 'Coconut'],
@@ -25,31 +24,27 @@ const PRODUCTS = [
   {
     id: 'ganesh-kit', name: 'Ganesh Puja Kit', category: 'festival', icon: '🐘',
     price: 449, mrp: 599,
-    image: 'https://images.unsplash.com/photo-1602827115-c8b7e4fe3cc0?w=400&h=300&fit=crop',
     badge: 'BESTSELLER', rating: 4.9, reviews: 412, weight: '620g',
     desc: 'All items for Ganesh puja including modak, durva grass, red flowers, sindoor and more.',
     items: ['Durva Grass', 'Red Flowers', 'Modak (6 pcs)', 'Sindoor', 'Akshat', 'Moli', 'Agarbatti'],
   },
   {
-    id: 'griha-pravesh-kit', name: 'Griha Pravesh Kit', category: 'daily', icon: '🏡',
+    id: 'griha-pravesh-kit', name: 'Griha Pravesh Kit', category: 'daily', icon: '🏠',
     price: 1299, mrp: 1699,
-    image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=300&fit=crop',
     badge: null, rating: 4.7, reviews: 156, weight: '1.8kg',
     desc: 'Premium Griha Pravesh kit with all items for home-entry ceremony havan and puja.',
     items: ['Havan Samagri', 'Mango Leaves', 'Kalash', 'Coconut', 'Red Cloth', 'Kumkum', 'Akshat', 'Diyas (x6)', 'Ghee (200ml)'],
   },
   {
-    id: 'navratri-kit', name: 'Navratri Pooja Kit', category: 'festival', icon: '🌺',
+    id: 'navratri-kit', name: 'Navratri Pooja Kit', category: 'festival', icon: '🚩',
     price: 799, mrp: 999,
-    image: 'https://images.unsplash.com/photo-1603773896725-5d0b3b2e0f94?w=400&h=300&fit=crop',
     badge: 'NEW', rating: 4.8, reviews: 89, weight: '1.1kg',
     desc: 'Complete 9-day Navratri puja kit with Durga idol, red chunri, jowar and all essentials.',
     items: ['Red Chunri', 'Jowar Seeds', 'Earthen Pot', 'Sindoor', 'Bangles', 'Coconut', 'Agarbatti', 'Camphor'],
   },
   {
-    id: 'satyanarayan-kit', name: 'Satyanarayan Puja Kit', category: 'daily', icon: '🌟',
+    id: 'satyanarayan-kit', name: 'Satyanarayan Puja Kit', category: 'daily', icon: '🍌',
     price: 549, mrp: 699,
-    image: 'https://images.unsplash.com/photo-1564507592333-c60657eea523?w=400&h=300&fit=crop',
     badge: 'POPULAR', rating: 4.9, reviews: 321, weight: '780g',
     desc: 'Complete Satyanarayan Katha kit with panchamrit ingredients, tulsi, yellow cloth and all essentials.',
     items: ['Panchamrit Set', 'Tulsi Leaves', 'Yellow Cloth', 'Banana', 'Wheat Flour', 'Sugar', 'Milk', 'Honey', 'Ghee'],
@@ -57,47 +52,41 @@ const PRODUCTS = [
   {
     id: 'rudrabhishek-kit', name: 'Rudrabhishek Kit', category: 'abhishek', icon: '🔱',
     price: 699, mrp: 899,
-    image: 'https://images.unsplash.com/photo-1599494315876-5e82a35d6e9e?w=400&h=300&fit=crop',
     badge: null, rating: 4.8, reviews: 178, weight: '950g',
     desc: 'Premium Rudrabhishek kit with bel patra, gangajal, milk, honey and all abhishek items.',
     items: ['Bel Patra (x21)', 'Gangajal (250ml)', 'Milk', 'Honey', 'Curd', 'Camphor', 'Dhatura Flower', 'White Sandal'],
   },
   {
-    id: 'havan-kit', name: 'Havan Samagri Kit', category: 'havan', icon: '🔥',
+    id: 'havan-kit', name: 'Havan Samagri Kit', category: 'havan', icon: '🪵',
     price: 399, mrp: 499,
-    image: 'https://images.unsplash.com/photo-1582540765936-5e69a0041440?w=400&h=300&fit=crop',
     badge: null, rating: 4.6, reviews: 203, weight: '1.2kg',
     desc: 'Pure Vedic havan samagri with 51 herbs, ghee, sesame, barley and sacred wood.',
     items: ['Havan Samagri (500g)', 'Pure Ghee (200ml)', 'Til (Sesame)', 'Barley', 'Mango Wood', 'Camphor', 'Kesar'],
   },
   {
-    id: 'daily-puja-kit', name: 'Daily Puja Kit', category: 'daily', icon: '🌸',
+    id: 'daily-puja-kit', name: 'Daily Puja Kit', category: 'daily', icon: '🪔',
     price: 299, mrp: 399,
-    image: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?w=400&h=300&fit=crop',
     badge: 'BESTSELLER', rating: 4.7, reviews: 567, weight: '450g',
     desc: 'Everything for your daily puja — agarbatti, roli, akshat, moli, camphor and flowers.',
     items: ['Agarbatti (40 sticks)', 'Roli', 'Akshat', 'Moli', 'Camphor', 'Matchbox', 'Puja Thali'],
   },
   {
-    id: 'incense-set', name: 'Premium Incense Collection', category: 'incense', icon: '🕉️',
+    id: 'incense-set', name: 'Premium Incense Collection', category: 'incense', icon: '🌿',
     price: 349, mrp: 449,
-    image: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?w=400&h=300&fit=crop',
     badge: null, rating: 4.8, reviews: 145, weight: '350g',
     desc: 'Premium dhoop, agarbatti and sambrani collection with 10 sacred fragrances.',
     items: ['Chandan Agarbatti', 'Rose Agarbatti', 'Loban Dhoop', 'Sambrani Cups', 'Guggal', 'Camphor Cubes'],
   },
   {
-    id: 'diya-lamp-set', name: 'Diya & Lamp Set', category: 'incense', icon: '🪔',
+    id: 'diya-lamp-set', name: 'Diya & Lamp Set', category: 'incense', icon: '🕯️',
     price: 249, mrp: 349,
-    image: 'https://images.unsplash.com/photo-1574293876203-8a7a0f4c9f9e?w=400&h=300&fit=crop',
     badge: null, rating: 4.6, reviews: 98, weight: '600g',
     desc: 'Hand-crafted clay diyas and brass deepak for daily aarti and festival decorations.',
     items: ['Clay Diyas (24 pcs)', 'Brass Deepak', 'Cotton Wicks', 'Mustard Oil (100ml)'],
   },
   {
-    id: 'navgrah-kit', name: 'Navgrah Shanti Kit', category: 'abhishek', icon: '⭐',
+    id: 'navgrah-kit', name: 'Navgrah Shanti Kit', category: 'abhishek', icon: '🌐',
     price: 899, mrp: 1199,
-    image: 'https://images.unsplash.com/photo-1560343776-97e7d202ff0e?w=400&h=300&fit=crop',
     badge: null, rating: 4.7, reviews: 112, weight: '1.4kg',
     desc: 'Complete Navgrah shanti kit with 9 grain offerings, cloth pieces, and puja items.',
     items: ['9 Grains Set', '9 Color Cloths', 'Nav Dhanya', 'Coconut', 'Flowers', 'Akshat', 'Roli', 'Camphor'],
@@ -105,7 +94,6 @@ const PRODUCTS = [
   {
     id: 'lakshmi-kit', name: 'Lakshmi Puja Kit', category: 'festival', icon: '🪷',
     price: 499, mrp: 649,
-    image: 'https://images.unsplash.com/photo-1604413191066-4dd20bedf486?w=400&h=300&fit=crop',
     badge: 'NEW', rating: 4.9, reviews: 203, weight: '720g',
     desc: 'Complete Lakshmi puja kit with lotus, coins, red cloth, kumkum and all essentials.',
     items: ['Lotus Flower', 'Gold Coins (2)', 'Red Cloth', 'Kumkum', 'Haldi', 'Betel Leaves', 'Coconut', 'Agarbatti'],
@@ -399,15 +387,10 @@ export default function SamagriStorePage() {
                 color:'#fff', fontSize:10, fontWeight:800, padding:'3px 10px',
                 borderRadius:'16px 0 10px 0' }}>✓ In Basket ({qty})</div>}
 
-              {p.image ? (
-                <img src={p.image} alt={p.name}
-                  style={{ width:'100%', height:160, objectFit:'cover', borderRadius:'10px 10px 0 0', marginBottom:10, marginTop: qty>0||p.badge ? 10 : 0, display:'block' }}
-                  onError={e=>{ e.target.style.display='none'; e.target.nextSibling.style.display='flex'; }}
-                />
-              ) : null}
-              <div style={{ display: p.image ? 'none' : 'flex', fontSize:52, alignItems:'center',
-                justifyContent:'center', height:120, background:'rgba(212,160,23,0.06)', marginBottom:10,
-                marginTop: qty>0||p.badge ? 10 : 0, borderRadius:10 }}>
+              <div style={{ display:'flex', fontSize:64, alignItems:'center',
+                justifyContent:'center', height:110, background:'rgba(212,160,23,0.06)',
+                marginBottom:12, marginTop: qty>0||p.badge ? 10 : 0, borderRadius:12,
+                filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>
                 {p.icon}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(39,174,96,0.08)', border: '1px solid rgba(34,197,94,0.2)', padding: '5px 12px', borderRadius: 20, width: 'fit-content', margin: '0 auto 12px' }}>
