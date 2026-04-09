@@ -112,7 +112,7 @@ body {
 }
 
 .tnav {
-  background: #ffffff;
+  background: #1a0a00;
   padding: 0 24px;
   display: flex;
   align-items: center;
@@ -204,7 +204,7 @@ body {
 
 .logo-name {
   font-family: 'Cinzel', serif;
-  color: #2C1A0E;
+  color: #F0C040;
   font-size: 20px;
   font-weight: 900;
   letter-spacing: 1.2px;
@@ -212,7 +212,7 @@ body {
 
 .logo-tagline {
   font-family: 'Crimson Pro', serif;
-  color: #8B6347;
+  color: rgba(255,248,240,0.5);
   font-size: 11px;
   letter-spacing: 2px;
   text-transform: uppercase;

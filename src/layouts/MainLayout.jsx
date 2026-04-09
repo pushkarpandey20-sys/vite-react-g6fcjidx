@@ -30,7 +30,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
   return (
     <div className="layout-root">
       {/* Top Nav */}
-      <nav className="tnav" style={{ background: '#ffffff', borderBottom: '1.5px solid rgba(212,160,23,0.15)' }}>
+      <nav className="tnav" style={{ background: '#1a0a00', borderBottom: '1.5px solid rgba(212,160,23,0.2)' }}>
         <button className="hamburger" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle menu" style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <IconMenu size={22} color="#F0C040" />
         </button>
@@ -65,10 +65,10 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
           <NotificationBell />
           {/* User pill — compact on mobile */}
           <div className="nav-user-pill"
-            style={{ display: "flex", alignItems: "center", gap: 6, marginLeft: 4, background: "#FFFDFB", padding: "6px 14px", borderRadius: 20, cursor: "pointer", border: "1.5px solid rgba(255,107,0,0.2)", boxShadow: '0 2px 8px rgba(255,107,0,0.06)', maxWidth: 140, overflow: 'hidden' }}
+            style={{ display: "flex", alignItems: "center", gap: 6, marginLeft: 4, background: "rgba(61,31,0,0.6)", padding: "6px 14px", borderRadius: 20, cursor: "pointer", border: "1.5px solid rgba(255,107,0,0.25)", boxShadow: '0 2px 8px rgba(0,0,0,0.3)', maxWidth: 140, overflow: 'hidden' }}
             onClick={() => isUser && !devoteeId && setShowLogin(true)}>
-            <div style={{ fontSize: 12, fontWeight: 900, color: "#2C1A0E", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: 4 }}>
-              {devoteeId && isUser ? <><IconUser size={14} color="#2C1A0E" /> {devoteeName.split(' ')[0]}</> : isPandit ? '🪔 Pandit' : isUser ? <><IconUser size={14} color="#2C1A0E" /> Login</> : '⚙️ Admin'}
+            <div style={{ fontSize: 12, fontWeight: 900, color: "#F0C040", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: 4 }}>
+              {devoteeId && isUser ? <><IconUser size={14} color="#F0C040" /> {devoteeName.split(' ')[0]}</> : isPandit ? '🪔 Pandit' : isUser ? <><IconUser size={14} color="#F0C040" /> Login</> : '⚙️ Admin'}
             </div>
             {devoteeId && isUser && (
               <div onClick={e => { e.stopPropagation(); logout(); }} style={{ fontSize: 10, color: "#FF6B00", fontWeight: 800, flexShrink: 0, padding: '2px 6px', background: 'rgba(255,107,0,0.08)', borderRadius: 8, marginLeft: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
