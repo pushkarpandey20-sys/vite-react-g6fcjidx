@@ -97,7 +97,7 @@ export default function SevaPage() {
             </div>
             <div className="td">{d.seva_name}</div>
             <div className="td" style={{ fontFamily: "'Cinzel',serif", fontWeight: 700, color: "#FF6B00" }}>₹{d.amount}</div>
-            <div className="td" style={{ fontSize: 12, color: "#8B6347" }}>{new Date(d.created_at).toLocaleDateString("en-IN")}</div>
+            <div className="td" style={{ fontSize: 12, color: "rgba(255,248,240,0.5)" }}>{new Date(d.created_at).toLocaleDateString("en-IN")}</div>
           </div>
         ))}
       </div></div>
