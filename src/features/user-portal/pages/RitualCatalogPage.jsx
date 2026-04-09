@@ -103,41 +103,38 @@ export default function RitualCatalogPage() {
 
       {/* ── Premium On-Demand Strip ─────────────────────────── */}
       <div className="banner-glow" style={{
-        background:'linear-gradient(135deg, rgba(44,26,14,0.95) 0%, rgba(61,28,0,0.95) 100%)',
-        border:'1.5px solid rgba(240,192,64,0.3)',
-        borderRadius:20, padding:'20px 24px', marginBottom:28,
+        background:'linear-gradient(135deg, #FFFDFB 0%, #FFF5E6 100%)',
+        border:'1.5px solid #FF6B00',
+        borderRadius:20, padding:'24px', marginBottom:28,
         display:'flex', alignItems:'center', justifyContent:'space-between',
         gap:16, flexWrap:'wrap',
-        boxShadow:'0 15px 30px rgba(255,107,0,0.15)',
+        boxShadow:'0 15px 35px rgba(255,107,0,0.12)',
         position:'relative', overflow:'hidden'
       }}>
-        <div style={{ position:'absolute', top:-30, left:-30, width:120, height:120, background:'rgba(255,107,0,0.1)', borderRadius:'50%', filter:'blur(20px)' }} />
+        <div style={{ position:'absolute', top:-30, left:-30, width:120, height:120, background:'rgba(255,107,0,0.08)', borderRadius:'50%', filter:'blur(20px)' }} />
         
-        <div style={{ display:'flex', alignItems:'center', gap:16, position:'relative', zIndex:1 }}>
+        <div style={{ display:'flex', alignItems:'center', gap:20, position:'relative', zIndex:1 }}>
           <div className="float-anim" style={{ 
-            width:56, height:56, borderRadius:16,
-            background:'rgba(255,255,255,0.15)',
-            backdropFilter:'blur(10px)',
+            width:60, height:60, borderRadius:18,
+            background:'#FF6B00',
             display:'flex', alignItems:'center', justifyContent:'center',
-            fontSize:28, flexShrink:0, border:'1px solid rgba(255,255,255,0.3)' 
+            fontSize:32, flexShrink:0, boxShadow: '0 8px 16px rgba(255,107,0,0.3)' 
           }}>⚡</div>
           <div>
             <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:4 }}>
-              <span style={{ fontFamily:'Cinzel,serif', color:'#FFD700', fontWeight:900, fontSize:18, letterSpacing:1 }}>Instant Spiritual Guidance</span>
+              <span style={{ fontFamily:'Cinzel,serif', color:'#2C1A0E', fontWeight:900, fontSize:20, letterSpacing:0.5 }}>Instant Spiritual Guidance</span>
               <span style={{ background:'#FF6B00', color:'#fff', fontSize:9,
                 fontWeight:900, padding:'3px 10px', borderRadius:20, boxShadow:'0 4px 10px rgba(255,107,0,0.3)',
-                letterSpacing:'1.5px' }}>LIVE NOW</span>
+                letterSpacing:1 }}>LIVE NOW</span>
             </div>
-            <p style={{ color:'rgba(255,255,255,0.85)', fontSize:13, margin:0, fontWeight:600 }}>
-              Connect with a verified Pandit instantly for Sankalp, Gyaan, or Special Puja.
+            <p style={{ color:'#5C3317', fontSize:14, margin:0, fontWeight:700 }}>
+              Connect with a verified Pandit instantly for Sankalp or Special Puja.
             </p>
           </div>
         </div>
         <div style={{ display:'flex', gap:12, flexShrink:0, position:'relative', zIndex:1 }}>
           <button onClick={() => navigate('/user/instant-booking')} className="btn btn-primary" style={{
-            background:'#FFD700', color:'#1a0f07', border:'none',
-            padding:'12px 28px', borderRadius:30, fontWeight:900, cursor:'pointer', fontSize:14,
-            boxShadow:'0 10px 20px rgba(0,0,0,0.15)' }}>
+            padding:'14px 32px', borderRadius:30, fontWeight:900, cursor:'pointer', fontSize:15 }}>
             Book Instantly →
           </button>
         </div>

@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+import {
+  IconGrid, IconUser, IconBook, IconTemple,
+  IconShoppingBag, IconSettings, IconHome, IconLogout, IconOm
+} from '../components/icons/Icons';
 
 const NAV_ITEMS = [
-  { path:'/admin/overview',  icon:'📊', label:'Overview' },
-  { path:'/admin/pandits',   icon:'🙏', label:'Pandits' },
-  { path:'/admin/bookings',  icon:'📋', label:'Bookings' },
-  { path:'/admin/rituals',   icon:'🕉️', label:'Rituals' },
-  { path:'/admin/samagri',   icon:'🛍️', label:'Samagri' },
-  { path:'/admin/temples',   icon:'🏛️', label:'Temples' },
-  { path:'/admin/settings',  icon:'⚙️', label:'Settings' },
+  { path:'/admin/overview', Icon:IconGrid,        label:'Overview' },
+  { path:'/admin/pandits',  Icon:IconUser,        label:'Pandits' },
+  { path:'/admin/bookings', Icon:IconBook,        label:'Bookings' },
+  { path:'/admin/rituals',  Icon:IconOm,          label:'Rituals' },
+  { path:'/admin/samagri',  Icon:IconShoppingBag, label:'Samagri' },
+  { path:'/admin/temples',  Icon:IconTemple,      label:'Temples' },
+  { path:'/admin/settings', Icon:IconSettings,    label:'Settings' },
 ];
 
 function AdminLogin({ onLogin }) {
@@ -113,9 +117,9 @@ export default function AdminLayout() {
         </div>
 
         <nav style={{ flex:1, padding:'8px 0' }}>
-          {NAV_ITEMS.map(({ path, icon, label }) => (
+          {NAV_ITEMS.map(({ path, Icon, label }) => (
             <div key={path} style={ni(pathname.startsWith(path))} onClick={()=>navigate(path)}>
-              <span style={{ fontSize:16 }}>{icon}</span>
+              <Icon size={18} color={pathname.startsWith(path) ? '#FF6B00' : 'rgba(255,248,240,0.6)'} />
               <span>{label}</span>
             </div>
           ))}
@@ -123,10 +127,12 @@ export default function AdminLayout() {
 
         <div style={{ padding:'12px 8px', borderTop:'1px solid rgba(255,255,255,0.1)' }}>
           <div style={ni(false)} onClick={()=>navigate('/user/home')}>
-            <span>🏠</span><span style={{ fontSize:14 }}>Devotee App</span>
+            <IconHome size={16} color="rgba(255,248,240,0.6)" />
+            <span style={{ fontSize:14 }}>Devotee App</span>
           </div>
           <div style={ni(false)} onClick={handleLogout}>
-            <span>🚪</span><span style={{ fontSize:14 }}>Logout</span>
+            <IconLogout size={16} color="rgba(255,248,240,0.6)" />
+            <span style={{ fontSize:14 }}>Logout</span>
           </div>
         </div>
       </div>
@@ -143,10 +149,11 @@ export default function AdminLayout() {
           </div>
         </div>
 
-        <div id="admin-content" style={{ flex:1, overflowY:'auto', padding:'24px', background:'#fff8f0' }}>
+        <div id="admin-content" style={{ flex:1, overflowY:'auto', padding:'24px', background:'#f8f4ef' }}>
           <Outlet />
         </div>
       </div>
     </div>
   );
 }
+

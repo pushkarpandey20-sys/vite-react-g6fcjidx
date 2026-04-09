@@ -11,6 +11,8 @@ import { paymentService } from '../../../services/paymentService';
 import { notificationService } from '../../../services/notificationService';
 import { SEED_PANDITS } from '../../../data/seedData';
 import { sendBookingConfirmationWhatsApp, sendPanditNewBookingWhatsApp } from '../../../services/whatsappService';
+import { ALL_RITUALS, POPULAR_RITUALS, RITUAL_CATEGORIES } from '../../../data/ritualsData';
+import { sendBookingConfirmation } from '../../../services/emailService';
 
 export default function BookingWizard() {
   const { devoteeId, devoteeName, userPhone, toast, setShowSuccess, setLastBooking } = useApp();
@@ -20,6 +22,9 @@ export default function BookingWizard() {
   const [rituals, setRituals] = useState([]);
   const [filteredRituals, setFilteredRituals] = useState([]);
   const [ritualFilters, setRitualFilters] = useState({ category: 'All', maxPrice: 31000, samagriOnly: false });
+  const [ritualSearch, setRitualSearch] = useState('');
+  const [ritualCategory, setRitualCategory] = useState('All');
+  const [showAllRituals, setShowAllRituals] = useState(false);
   const [pandits, setPandits] = useState([]);
   const [samagriKits, setSamagriKits] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,9 +41,15 @@ export default function BookingWizard() {
     (async () => {
       const { data } = await bookingApi.getRituals();
       const onDemand = { id: 'on-demand', name: 'On-Demand Pandit', icon: '⚡', price: 1500, description: 'Book a certified scholar for a general consultation or custom rituals.', samagriRequired: false, category: 'General' };
-      const allRituals = [onDemand, ...(data || [])];
-      setRituals(allRituals); 
-      setFilteredRituals(allRituals); 
+      const dbRituals = data || [];
+      const dbIds = new Set(dbRituals.map(r => r.id));
+      // Merge local 40+ rituals with DB, avoiding duplicates
+      const localMapped = ALL_RITUALS.filter(r => !dbIds.has(r.id)).map(r => ({
+        ...r, description: r.desc, price: r.price,
+      }));
+      const allRituals = [onDemand, ...dbRituals, ...localMapped];
+      setRituals(allRituals);
+      setFilteredRituals(allRituals);
       setLoading(false);
     })();
   }, []);
@@ -230,6 +241,18 @@ export default function BookingWizard() {
       setLastBooking(successBooking);
       setShowSuccess(true);
       toast(draft.samagriId ? "Sacred Bundle Confirmed! +10% Savings 🙏" : "Booking Confirmed! 🙏", "🕉️");
+      // Send email confirmation
+      try {
+        sendBookingConfirmation({
+          devoteeName: devoteeName || 'Devotee',
+          devoteeEmail: '',
+          ritualName: draft.ritual || 'Pooja',
+          bookingDate: draft.date || '',
+          panditName: draft.panditName || 'Being assigned',
+          amount: totalAmount,
+          bookingId: String(bookingId),
+        });
+      } catch(_) {}
       // Navigate to history after a brief pause so user sees the success modal
       setTimeout(() => navigate('/user/history'), 300);
 
@@ -358,10 +381,58 @@ export default function BookingWizard() {
                 <div style={{ flex: 1, height: '1px', background: 'rgba(255,255,255,0.1)' }} />
               </div>
 
+              {/* Search & Category Filter */}
+              <div style={{ marginBottom: 16 }}>
+                <input
+                  value={ritualSearch}
+                  onChange={e => { setRitualSearch(e.target.value); setShowAllRituals(true); }}
+                  placeholder="🔍 Search ritual (e.g. Griha Pravesh, Mundan, Rudrabhishek...)"
+                  style={{ width:'100%', padding:'10px 14px', borderRadius:10,
+                    border:'1px solid rgba(212,160,23,0.3)', background:'rgba(255,255,255,0.06)',
+                    color:'#fff8f0', fontSize:14, fontFamily:'inherit', outline:'none',
+                    marginBottom:10, boxSizing:'border-box' }}
+                />
+                <div style={{ display:'flex', gap:6, flexWrap:'wrap', marginBottom:8 }}>
+                  {RITUAL_CATEGORIES.map(cat => (
+                    <button key={cat} onClick={() => { setRitualCategory(cat); setShowAllRituals(true); setRitualFilters(p => ({ ...p, category: cat === 'All' ? 'All' : cat })); }}
+                      style={{ padding:'5px 14px', borderRadius:20, border:'none', cursor:'pointer', fontWeight:600, fontSize:12, fontFamily:'inherit',
+                        background: ritualCategory===cat ? '#FF6B00' : 'rgba(255,255,255,0.08)',
+                        color: ritualCategory===cat ? '#fff' : 'rgba(255,248,240,0.6)', transition:'all 0.2s' }}>
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+                {!ritualSearch && ritualCategory === 'All' && (
+                  <div style={{ display:'flex', gap:8, marginBottom:4 }}>
+                    <button onClick={() => setShowAllRituals(false)}
+                      style={{ padding:'6px 16px', borderRadius:20, border:'none', cursor:'pointer', fontWeight:700, fontSize:13, fontFamily:'inherit',
+                        background: !showAllRituals ? '#FF6B00' : 'rgba(255,255,255,0.08)',
+                        color: !showAllRituals ? '#fff' : 'rgba(255,248,240,0.6)' }}>
+                      ⭐ Popular ({POPULAR_RITUALS.length})
+                    </button>
+                    <button onClick={() => setShowAllRituals(true)}
+                      style={{ padding:'6px 16px', borderRadius:20, border:'none', cursor:'pointer', fontWeight:700, fontSize:13, fontFamily:'inherit',
+                        background: showAllRituals ? '#FF6B00' : 'rgba(255,255,255,0.08)',
+                        color: showAllRituals ? '#fff' : 'rgba(255,248,240,0.6)' }}>
+                      📿 All Rituals ({ALL_RITUALS.length})
+                    </button>
+                  </div>
+                )}
+              </div>
+
               <RitualFilters onFilterChange={(k, v) => setRitualFilters(p => ({ ...p, [k]: v }))} activeFilters={ritualFilters} />
-              
+
               <div style={{ marginTop: '20px' }}>
-                {loading ? <Spinner /> : <RitualGrid rituals={filteredRituals.filter(r => r.id !== 'on-demand')} onSelect={selectRitual} activeId={draft.ritualId} samagriOnly={ritualFilters.samagriOnly} />}
+                {loading ? <Spinner /> : (() => {
+                  // Determine which rituals to display
+                  const base = (!showAllRituals && !ritualSearch && ritualCategory === 'All')
+                    ? POPULAR_RITUALS.map(r => ({ ...r, description: r.desc }))
+                    : filteredRituals.filter(r => r.id !== 'on-demand');
+                  const searched = ritualSearch
+                    ? base.filter(r => r.name.toLowerCase().includes(ritualSearch.toLowerCase()) || (r.description || r.desc || '').toLowerCase().includes(ritualSearch.toLowerCase()))
+                    : base;
+                  return <RitualGrid rituals={searched} onSelect={selectRitual} activeId={draft.ritualId} samagriOnly={ritualFilters.samagriOnly} />;
+                })()}
               </div>
             </div>
           </div>

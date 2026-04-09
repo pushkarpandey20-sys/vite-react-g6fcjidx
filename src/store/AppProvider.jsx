@@ -152,8 +152,22 @@ export function AppProvider({ children }) {
     loadFestivals();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (event === 'SIGNED_IN' && session?.user) await loadUserProfile(session.user);
-      else if (event === 'SIGNED_OUT') clearUserState();
+      if (event === 'SIGNED_IN' && session?.user) {
+        const user = session.user;
+        // Handle Google OAuth — user has email/name but no phone
+        if (user.app_metadata?.provider === 'google' || user.identities?.some(i => i.provider === 'google')) {
+          const name = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'Devotee';
+          setDevoteeId(user.id);
+          setDevoteeName(name);
+          localStorage.setItem('devsetu_user', JSON.stringify({ id: user.id, name, city: 'Delhi' }));
+          // Upsert devotee row
+          try {
+            await supabase.from('devotees').upsert({ id: user.id, name, created_at: new Date().toISOString() }, { onConflict:'id', ignoreDuplicates:true });
+          } catch(_) {}
+        } else {
+          await loadUserProfile(user);
+        }
+      } else if (event === 'SIGNED_OUT') clearUserState();
     });
     return () => subscription.unsubscribe();
   }, [loadUserProfile, clearUserState]);

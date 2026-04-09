@@ -5,6 +5,7 @@ import { Toast } from '../components/common/UIElements';
 import { CartModal, ConfirmModal, LoginModal, AdminLoginModal, UserOnboardingModal, PanditOnboardingModal, PanditModal, BookingSuccessModal } from '../components/modals/AllModals';
 import NotificationBell from '../components/NotificationBell';
 import PWAInstallBanner from '../components/PWAInstallBanner';
+import { IconMenu, IconShoppingBag, IconLogout, IconUser } from '../components/icons/Icons';
 
 export default function MainLayout({ children, sidebar, portalLabel, portalColor }) {
   const {
@@ -29,9 +30,9 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
   return (
     <div className="layout-root">
       {/* Top Nav */}
-      <nav className="tnav">
-        <button className="hamburger" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle menu">
-          <span /><span /><span />
+      <nav className="tnav" style={{ background: '#ffffff', borderBottom: '1.5px solid rgba(212,160,23,0.15)' }}>
+        <button className="hamburger" onClick={() => setSidebarOpen(o => !o)} aria-label="Toggle menu" style={{ background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <IconMenu size={22} color="#F0C040" />
         </button>
         <div className="logo" onClick={() => navigate("/")}>
           <div className="logo-icon">🕉️</div>
@@ -57,23 +58,27 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
           )}
           {isUser && (
             <div className="icon-btn" onClick={() => setShowCart(true)}>
-              🛒{cartCount > 0 && <span className="badge">{cartCount}</span>}
+              <IconShoppingBag size={20} color="#FF6B00" />
+              {cartCount > 0 && <span className="badge">{cartCount}</span>}
             </div>
           )}
           <NotificationBell />
           {/* User pill — compact on mobile */}
           <div className="nav-user-pill"
-            style={{ display: "flex", alignItems: "center", gap: 6, marginLeft: 4, background: "rgba(255,255,255,.07)", padding: "4px 10px", borderRadius: 20, cursor: "pointer", border: "1px solid rgba(212,160,23,.3)", maxWidth: 130, overflow: 'hidden' }}
+            style={{ display: "flex", alignItems: "center", gap: 6, marginLeft: 4, background: "#FFFDFB", padding: "6px 14px", borderRadius: 20, cursor: "pointer", border: "1.5px solid rgba(255,107,0,0.2)", boxShadow: '0 2px 8px rgba(255,107,0,0.06)', maxWidth: 140, overflow: 'hidden' }}
             onClick={() => isUser && !devoteeId && setShowLogin(true)}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: "#F0C040", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {devoteeId && isUser ? `👤 ${devoteeName.split(' ')[0]}` : isPandit ? '🪔 Pandit' : isUser ? '👤 Login' : '⚙️ Admin'}
+            <div style={{ fontSize: 12, fontWeight: 900, color: "#2C1A0E", whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: 4 }}>
+              {devoteeId && isUser ? <><IconUser size={14} color="#2C1A0E" /> {devoteeName.split(' ')[0]}</> : isPandit ? '🪔 Pandit' : isUser ? <><IconUser size={14} color="#2C1A0E" /> Login</> : '⚙️ Admin'}
             </div>
             {devoteeId && isUser && (
-              <div onClick={e => { e.stopPropagation(); logout(); }} style={{ fontSize: 9, color: "#FF6B00", fontWeight: 700, flexShrink: 0 }}>Out</div>
+              <div onClick={e => { e.stopPropagation(); logout(); }} style={{ fontSize: 10, color: "#FF6B00", fontWeight: 800, flexShrink: 0, padding: '2px 6px', background: 'rgba(255,107,0,0.08)', borderRadius: 8, marginLeft: 4, display: 'flex', alignItems: 'center', gap: 2 }}>
+                <IconLogout size={12} color="#FF6B00" /> Out
+              </div>
             )}
           </div>
         </div>
       </nav>
+
 
       {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
 

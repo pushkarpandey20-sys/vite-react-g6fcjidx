@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import notificationStore, { requestNotificationPermission } from '../services/notificationService';
+import { IconBell, IconX, IconOm } from './icons/Icons';
 
 export default function NotificationBell() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export default function NotificationBell() {
       <button onClick={handleOpen} style={{ position:'relative', background:'rgba(255,255,255,0.08)', border:'1px solid rgba(212,160,23,0.2)', borderRadius:'50%', width:40, height:40, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer', fontSize:18, transition:'all 0.2s' }}
         onMouseEnter={e=>e.currentTarget.style.background='rgba(255,107,0,0.15)'}
         onMouseLeave={e=>e.currentTarget.style.background='rgba(255,255,255,0.08)'}>
-        🔔
+        <IconBell size={20} color="#F0C040" />
         {unread > 0 && (
           <div style={{ position:'absolute', top:-4, right:-4, background:'#ef4444', color:'#fff', borderRadius:'50%', width:18, height:18, fontSize:10, fontWeight:800, display:'flex', alignItems:'center', justifyContent:'center', border:'2px solid #0d0700' }}>
             {unread > 9 ? '9+' : unread}
@@ -46,16 +47,23 @@ export default function NotificationBell() {
         <div style={{ position:'absolute', right:0, top:48, width:380, maxHeight:520, overflowY:'auto', background:'#1a0f07', border:'1px solid rgba(212,160,23,0.25)', borderRadius:16, boxShadow:'0 20px 60px rgba(0,0,0,0.6)', zIndex:1000 }}>
           <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'16px 20px', borderBottom:'1px solid rgba(212,160,23,0.1)', position:'sticky', top:0, background:'#1a0f07' }}>
             <div>
-              <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:15 }}>🔔 Sacred Alerts</div>
+              <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:15, display:'flex', alignItems:'center', gap:8 }}>
+                <IconBell size={18} color="#F0C040" /> Sacred Alerts
+              </div>
               <div style={{ color:'rgba(255,248,240,0.4)', fontSize:11, marginTop:2 }}>{unread} unread · Vedic calendar powered</div>
             </div>
-            <button onClick={()=>{ notificationStore.markAllRead(); }} style={{ background:'rgba(255,107,0,0.15)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.3)', borderRadius:8, padding:'4px 10px', fontSize:11, cursor:'pointer', fontWeight:600 }}>
-              Mark all read
-            </button>
+            <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+              <button onClick={()=>{ notificationStore.markAllRead(); }} style={{ background:'rgba(255,107,0,0.15)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.3)', borderRadius:8, padding:'4px 10px', fontSize:11, cursor:'pointer', fontWeight:600 }}>
+                Mark all read
+              </button>
+              <button onClick={()=>setOpen(false)} style={{ background:'transparent', border:'none', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+                <IconX size={18} color="rgba(255,248,240,0.7)" />
+              </button>
+            </div>
           </div>
           {notifications.length === 0 ? (
             <div style={{ textAlign:'center', padding:'32px 20px', color:'rgba(255,248,240,0.4)' }}>
-              <div style={{ fontSize:32, marginBottom:8 }}>🕉️</div>
+              <div style={{ fontSize:32, marginBottom:8 }}><IconOm size={40} color="rgba(212,160,23,0.3)" /></div>
               <div style={{ fontSize:13 }}>No alerts yet. We'll notify you of auspicious timings and recommended poojas.</div>
             </div>
           ) : notifications.map(n => (

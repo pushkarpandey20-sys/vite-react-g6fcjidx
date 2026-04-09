@@ -250,7 +250,7 @@ export function RatePanditModal({ booking, onClose, onSubmit }) {
   );
 }
 
-/* ─── LOGIN MODAL (OTP) ──────────────────────────────── */
+/* ─── LOGIN MODAL (OTP + Google) ────────────────────────── */
 export function LoginModal({ onClose }) {
   const { handleLogin, loginDevoteeDemo } = useApp();
   const [phone, setPhone] = React.useState('');
@@ -258,6 +258,20 @@ export function LoginModal({ onClose }) {
   const [step, setStep] = React.useState('phone');
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
+
+  const loginWithGoogle = async () => {
+    setLoading(true); setError('');
+    try {
+      const { error: e } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: { redirectTo: window.location.origin + '/user/home' },
+      });
+      if (e) throw e;
+    } catch(e) {
+      setError(e.message || 'Google login failed. Try phone OTP below.');
+      setLoading(false);
+    }
+  };
 
   // Universal demo login — works without OTP
   const handleDemoLogin = (name) => {
@@ -311,6 +325,27 @@ export function LoginModal({ onClose }) {
         <div className="modal-body">
           {step === 'phone' ? (
             <>
+              {/* Google Sign In */}
+              <button onClick={loginWithGoogle} disabled={loading}
+                style={{ width:'100%', display:'flex', alignItems:'center', justifyContent:'center', gap:12,
+                  padding:'13px 20px', borderRadius:12, background:'#fff', border:'none',
+                  cursor:'pointer', marginBottom:12, boxShadow:'0 2px 12px rgba(0,0,0,0.2)',
+                  fontFamily:'inherit', fontSize:15, fontWeight:700, color:'#1a1a1a',
+                  opacity: loading ? 0.7 : 1 }}>
+                <svg width="20" height="20" viewBox="0 0 48 48">
+                  <path fill="#FFC107" d="M43.6 20H24v8h11.3C33.7 33.1 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.1 7.9 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20c11 0 19.7-8 19.7-20 0-1.3-.1-2.7-.1-4z"/>
+                  <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.5 15.1 18.9 12 24 12c3.1 0 5.8 1.1 7.9 2.9l5.7-5.7C34.1 6.5 29.3 4 24 4 16.3 4 9.7 8.4 6.3 14.7z"/>
+                  <path fill="#4CAF50" d="M24 44c5.2 0 9.9-1.9 13.5-5l-6.2-5.2C29.4 35.6 26.8 36 24 36c-5.2 0-9.7-3-11.3-7.2l-6.5 5C9.7 39.6 16.3 44 24 44z"/>
+                  <path fill="#1565C0" d="M43.6 20H24v8h11.3c-.8 2.4-2.4 4.4-4.4 5.8l6.2 5.2C41 35.5 44 30.2 44 24c0-1.3-.1-2.7-.4-4z"/>
+                </svg>
+                {loading ? 'Redirecting...' : 'Continue with Google'}
+              </button>
+              {error && <div style={{ color: '#C0392B', fontSize: 12, marginBottom: 10 }}>{error}</div>}
+              <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:14 }}>
+                <div style={{ flex:1, height:1, background:'rgba(212,160,23,0.2)' }}/>
+                <span style={{ color:'#9a8070', fontSize:12 }}>or continue with phone</span>
+                <div style={{ flex:1, height:1, background:'rgba(212,160,23,0.2)' }}/>
+              </div>
               <div className="fg" style={{ marginBottom: 20 }}>
                 <label className="fl">Mobile Number</label>
                 <div style={{ display: 'flex', gap: 8 }}>
@@ -318,7 +353,6 @@ export function LoginModal({ onClose }) {
                   <input className="fi" placeholder="10-digit mobile" value={phone} onChange={e => setPhone(e.target.value)} maxLength={10} style={{ flex: 1 }} />
                 </div>
               </div>
-              {error && <div style={{ color: '#C0392B', fontSize: 12, marginBottom: 12 }}>{error}</div>}
               <button className="btn btn-primary" style={{ width: "100%", justifyContent: "center" }} onClick={handleSendOTP} disabled={loading}>
                 {loading ? "Logging in..." : "📱 Send OTP / Continue"}
               </button>

@@ -8,10 +8,10 @@ export default function MuhuratPage() {
     <div className="muhurat-page-container">
       <MuhuratFinder />
 
-      <div className="card card-p" style={{ marginTop: 40, background:'rgba(26,15,7,0.75)', border:'1px solid rgba(240,192,64,0.14)', backdropFilter:'blur(14px)', borderRadius:16 }}>
+      <div className="card card-p" style={{ marginTop: 40, background:'#FFFFFF', border:'1.5px solid rgba(255,107,0,0.15)', borderRadius:18, boxShadow: '0 8px 30px rgba(255,107,0,0.06)' }}>
         <div className="sh">
-          <div className="sh-title" style={{ color:'#F0C040' }}>Traditional Panchang (General)</div>
-          <div className="sh-sub" style={{ color:'rgba(255,248,240,0.5)' }}>Daily auspicious and inauspicious timings at a glance.</div>
+          <div className="sh-title" style={{ color:'#2C1A0E', fontWeight: 900 }}>Traditional Panchang (General)</div>
+          <div className="sh-sub" style={{ color:'#8B6347', fontWeight: 600 }}>Daily auspicious and inauspicious timings at a glance.</div>
         </div>
         <div className="dtable" style={{ marginBottom: 0 }}>
           <div className="thead" style={{ gridTemplateColumns: ".8fr 1.2fr 1.2fr 1fr 1.5fr" }}>

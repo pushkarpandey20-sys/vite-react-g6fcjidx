@@ -96,14 +96,14 @@ export default function Landing() {
   });
 
   return (
-    <div style={{ minHeight: '100vh', background: 'radial-gradient(ellipse at top,#2c1a0e 0%,#0d0700 60%)', fontFamily: 'Nunito,sans-serif', color: '#fff8f0' }}>
+    <div style={{ minHeight: '100vh', background: '#FFFDFB', fontFamily: 'Nunito,sans-serif', color: '#2C1A0E' }}>
       {/* Sticky Nav */}
       <nav className={`landing-nav ${menuOpen ? 'menu-open' : ''}`}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', flexShrink: 0 }} onClick={() => navigate('/')}>
-          <span style={{ fontSize: 26 }}>🕉️</span>
+          <span style={{ fontSize: 28 }}>🕉️</span>
           <div>
-            <div style={{ fontFamily: 'Cinzel,serif', color: '#F0C040', fontWeight: 900, fontSize: 16, lineHeight: 1 }}>DevSetu</div>
-            <div style={{ color: 'rgba(255,248,240,0.4)', fontSize: 9, letterSpacing: 1 }}>BRIDGING YOU TO DIVINE SERVICES</div>
+            <div style={{ fontFamily: 'Cinzel,serif', color: '#2C1A0E', fontWeight: 900, fontSize: 18, lineHeight: 1 }}>DevSetu</div>
+            <div style={{ color: '#8B6347', fontSize: 10, letterSpacing: 1.5, fontWeight: 600 }}>BRIDGING YOU TO DIVINE SERVICES</div>
           </div>
         </div>
 
@@ -140,37 +140,37 @@ export default function Landing() {
               }}
             />
           ))}
-          {/* Lighter Gradient Overlay so the temple is clearly visible */}
-          <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to bottom, rgba(13,7,0,0.6), rgba(13,7,0,0.1), #0d0700)' }}></div>
+        {/* Safe, warm overlay instead of dark */}
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to bottom, rgba(255,253,251,0.4), rgba(255,253,251,0.2), #FFFDFB)' }}></div>
         </div>
 
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 1100, margin: '0 auto' }}>
           
-          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,107,0,0.15)', border: '1px solid rgba(255,107,0,0.4)', padding: '8px 20px', borderRadius: 30, marginBottom: 30, fontSize: 13, fontWeight: 800, color: '#F0C040', letterSpacing: 1, backdropFilter: 'blur(4px)' }}>
-            <span style={{ display:'inline-block', width:8, height:8, borderRadius:'50%', background:'#4ade80', boxShadow:'0 0 10px #4ade80', animation:'pulse 1.5s infinite' }}></span>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, background: 'rgba(255,107,0,0.08)', border: '1.5px solid rgba(255,107,0,0.3)', padding: '10px 24px', borderRadius: 30, marginBottom: 30, fontSize: 13, fontWeight: 900, color: '#FF6B00', letterSpacing: 1.2 }}>
+            <span style={{ display:'inline-block', width:10, height:10, borderRadius:'50%', background:'#27AE60', boxShadow:'0 0 10px rgba(39,174,96,0.3)', animation:'pulse 1.5s infinite' }}></span>
             LIVE: BOOKINGS OPEN FOR NAVRATRI 2026
           </div>
           
-          <h1 style={{ fontFamily:'Cinzel,serif', fontSize: 'clamp(40px, 6vw, 76px)', fontWeight:900, color: '#fff', textShadow: '0 4px 30px rgba(0,0,0,0.8)', margin:'0 0 24px', lineHeight: 1.1, letterSpacing: 1 }}>
+          <h1 style={{ fontFamily:'Cinzel,serif', fontSize: 'clamp(42px, 6.5vw, 84px)', fontWeight:900, color: '#2C1A0E', margin:'0 0 24px', lineHeight: 1.1, letterSpacing: 0.5 }}>
             India's Most Trusted<br />
-            <span style={{ background:'linear-gradient(135deg,#FF6B00,#F0C040,#FF6B00)', backgroundSize: '200% auto', animation: 'pulse 3s infinite', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>Spiritual Platform</span>
+            <span style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>Spiritual Platform</span>
           </h1>
           
-          <p style={{ color:'rgba(255,248,240,0.85)', fontSize: 'clamp(16px, 2vw, 22px)', fontFamily:'Crimson Pro,serif', fontStyle:'italic', marginBottom:48, maxWidth: 650, margin: '0 auto 48px', textShadow: '0 2px 10px rgba(0,0,0,0.9)', lineHeight: 1.5 }}>
+          <p style={{ color:'#5C3317', fontSize: 'clamp(18px, 2vw, 24px)', fontFamily:'Crimson Pro,serif', fontStyle:'italic', marginBottom:48, maxWidth: 680, margin: '0 auto 48px', fontWeight: 600, lineHeight: 1.6 }}>
             Experience authentic Vedic rituals at your doorstep. From finding the right Pandit to sacred Pooja Samagri — we arrange everything.
           </p>
           
-          <div style={{ display:'flex', justifyContent:'center', gap:24, marginBottom:70, flexWrap:'wrap' }}>
-            <button style={{...btn(), padding: '16px 36px', fontSize: 16, boxShadow: '0 8px 30px rgba(255,107,0,0.5)', display:'flex', alignItems:'center', gap:8 }} onClick={()=>navigate('/user/booking')}>
-              <span style={{ fontSize: 20 }}>⚡</span> Book a Pandit Now
+          <div style={{ display:'flex', justifyContent:'center', gap:24, marginBottom:80, flexWrap:'wrap' }}>
+            <button style={{...btn(), padding: '18px 42px', fontSize: 16, boxShadow: '0 10px 35px rgba(255,107,0,0.3)', display:'flex', alignItems:'center', gap:10 }} onClick={()=>navigate('/user/booking')}>
+              <span style={{ fontSize: 22 }}>⚡</span> Book a Pandit Now
             </button>
-            <button style={{...btn('rgba(255,255,255,0.05)', {border:'1px solid rgba(255,255,255,0.2)', backdropFilter: 'blur(10px)'}), padding: '16px 36px', fontSize: 16, color: '#fff'}} onClick={()=>navigate('/user/home')}>
+            <button style={{...btn('#FDF9F4', {border:'2px solid rgba(255,107,0,0.2)', color: '#FF6B00'}), padding: '18px 42px', fontSize: 16 }} onClick={()=>navigate('/user/home')}>
               Explore Services →
             </button>
           </div>
           
           {/* Prominent Stats Banner (Glassmorphism) */}
-          <div style={{ display:'flex', justifyContent:'center', gap: 'clamp(20px, 4vw, 60px)', flexWrap:'wrap', background: 'rgba(255,255,255,0.03)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', border: '1px solid rgba(212,160,23,0.2)', borderBottom: '1px solid rgba(255,107,0,0.3)', padding: '30px 40px', borderRadius: 24, boxShadow: '0 20px 40px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1)' }}>
+          <div style={{ display:'flex', justifyContent:'center', gap: 'clamp(20px, 4vw, 60px)', flexWrap:'wrap', background: '#FFFFFF', border: '1.5px solid rgba(255,107,0,0.15)', padding: '40px', borderRadius: 28, boxShadow: '0 20px 50px rgba(255,107,0,0.08)' }}>
             {[
               ['180+','Verified Pandits','🙏'],
               ['80+','Sacred Rituals','🔥'],
@@ -178,9 +178,9 @@ export default function Landing() {
               ['4.9★','Average Rating','⭐']
             ].map(([v,l,icon])=>(
               <div key={l} style={{ textAlign:'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                <div style={{ fontSize: 28, marginBottom: 12, filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.4))' }}>{icon}</div>
-                <div style={{ fontFamily:'Cinzel,serif', fontSize:36, fontWeight:900, color:'#F0C040', textShadow: '0 2px 15px rgba(240,192,64,0.3)', lineHeight: 1 }}>{v}</div>
-                <div style={{ color:'rgba(255,248,240,0.6)', fontSize:13, fontWeight: 700, letterSpacing: 1, marginTop: 6, textTransform: 'uppercase' }}>{l}</div>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>{icon}</div>
+                <div style={{ fontFamily:'Cinzel,serif', fontSize:42, fontWeight:900, color:'#FF6B00', lineHeight: 1 }}>{v}</div>
+                <div style={{ color:'#8B6347', fontSize:14, fontWeight: 800, letterSpacing: 1.5, marginTop: 8, textTransform: 'uppercase' }}>{l}</div>
               </div>
             ))}
           </div>
@@ -190,12 +190,12 @@ export default function Landing() {
       {/* 6 Service Tabs */}
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'0 5% 80px' }}>
         {/* Tab Bar */}
-        <div style={{ display:'flex', gap:4, background:'rgba(255,255,255,0.04)', borderRadius:16, padding:6, marginBottom:32, flexWrap:'wrap' }}>
+        <div style={{ display:'flex', gap:6, background:'#FDF9F4', borderRadius:20, padding:6, marginBottom:32, flexWrap:'wrap', border:'1.5px solid rgba(255,107,0,0.1)' }}>
           {TABS.map((t,i)=>(
             <button key={t} onClick={()=>setActiveTab(i)}
-              style={{ flex:1, padding:'10px 16px', borderRadius:12, border:'none', cursor:'pointer', fontWeight:700, fontSize:13, transition:'all 0.2s', minWidth:120,
-                background:activeTab===i?'linear-gradient(135deg,#FF6B00,#D4A017)':'transparent',
-                color:activeTab===i?'#fff':'rgba(255,248,240,0.5)' }}>
+              style={{ flex:1, padding:'12px 20px', borderRadius:16, border:'none', cursor:'pointer', fontWeight:800, fontSize:14, transition:'all 0.24s', minWidth:130,
+                background:activeTab===i?'#FF6B00':'transparent',
+                color:activeTab===i?'#fff':'#8B6347' }}>
               {t}
             </button>
           ))}
@@ -467,15 +467,15 @@ export default function Landing() {
           position: sticky;
           top: 0;
           z-index: 100;
-          background: rgba(13,7,0,0.92);
-          backdrop-filter: blur(12px);
-          border-bottom: 1px solid rgba(212,160,23,0.15);
+          background: #FFFFFF;
+          border-bottom: 1.5px solid rgba(255,107,0,0.15);
           padding: 0 5%;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          height: 70px;
+          height: 80px;
           transition: all 0.3s;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.03);
         }
 
         .landing-nav-links {
@@ -485,15 +485,15 @@ export default function Landing() {
         }
 
         .nav-link {
-          color: rgba(255,248,240,0.6);
-          font-size: 13px;
+          color: #5C3317;
+          font-size: 14px;
           cursor: pointer;
-          font-weight: 600;
+          font-weight: 700;
           transition: color 0.2s;
         }
 
         .nav-link:hover {
-          color: #F0C040;
+          color: #FF6B00;
         }
 
         .landing-hamburger {

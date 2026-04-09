@@ -1,11 +1,26 @@
 import React from 'react';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../store/AppCtx';
-import { PremiumIcon, IconCalendar, IconBook, IconSearch, IconBadge } from './Icons';
+import {
+  IconHome, IconCalendar, IconSearch, IconBook,
+  IconShoppingBag, IconHeart, IconTemple
+} from './icons/Icons';
+
+const NAV_ITEMS = [
+  { path:'/user/home',        Icon:IconHome,        label:'Dashboard' },
+  { path:'/user/muhurta',     Icon:IconCalendar,    label:'Panchang' },
+  { path:'/user/marketplace', Icon:IconSearch,      label:'Find Pandits' },
+  { path:'/user/rituals',     Icon:IconBook,        label:'Book Now' },
+  { path:'/user/history',     Icon:IconBook,        label:'My Bookings' },
+  { path:'/user/temples',     Icon:IconTemple,      label:'Temples' },
+  { path:'/user/samagri',     Icon:IconShoppingBag, label:'Buy Samagri' },
+  { path:'/user/donations',   Icon:IconHeart,       label:'Seva/Donations' },
+];
 
 export function UserSidebar({ onNavClick }) {
   const { devoteeId, setShowLogin } = useApp();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   const handleProtectedNav = (e, path) => {
     const isProtected = path.includes('booking') || path.includes('history');
@@ -16,43 +31,45 @@ export function UserSidebar({ onNavClick }) {
     onNavClick?.();
   };
 
-  const handleNav = () => onNavClick?.();
-
   return (
-    <div className="sidebar">
-      <div className="s-section-title">SACRED SERVICES</div>
-      <NavLink to="/user/home" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
-        <span className="s-icon"><PremiumIcon src="/icons/om.png" size={20} /></span>Dashboard
-      </NavLink>
-      <NavLink to="/user/muhurta" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
-        <span className="s-icon"><PremiumIcon src="/icons/diya.png" size={20} /></span>Panchang
-      </NavLink>
-      <NavLink to="/user/rituals" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
-        <span className="s-icon"><IconBook size={18} /></span>Explore Rituals
-      </NavLink>
-      <NavLink to="/user/marketplace" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
-        <span className="s-icon"><IconSearch size={18} /></span>Find Pandits
-      </NavLink>
-      <NavLink to="/user/booking" onClick={(e) => handleProtectedNav(e, '/user/booking')} className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`}>
-        <span className="s-icon"><PremiumIcon src="/icons/lotus.png" size={20} /></span>Book Now
-      </NavLink>
-      <NavLink to="/user/history" onClick={(e) => handleProtectedNav(e, '/user/history')} className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`}>
-        <span className="s-icon"><IconBadge size={18} /></span>My Bookings
-      </NavLink>
-      <div className="s-div" />
-      <div className="s-section-title">COMMUNITY</div>
-      <NavLink to="/user/temples" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
-        <span className="s-icon">🛕</span>Temples
-      </NavLink>
-      <NavLink to="/user/samagri" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
-        <span className="s-icon"><PremiumIcon src="/icons/havan.png" size={20} /></span>Buy Samagri
-      </NavLink>
-      <NavLink to="/user/donations" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
-        <span className="s-icon">🙏</span>Seva/Donations
-      </NavLink>
+    <div className="sidebar" style={{ background: '#3d1f00', borderRight: '1px solid rgba(255,255,255,0.1)' }}>
+      <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: 12 }}>
+        <div onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
+          <div style={{ fontFamily: 'Cinzel,serif', color: '#F0C040', fontSize: 16, fontWeight: 900 }}>🕉️ DevSetu</div>
+          <div style={{ fontSize: 10, color: 'rgba(255,248,240,0.5)', letterSpacing: 2, marginTop: 2 }}>DEVOTEE PORTAL</div>
+        </div>
+      </div>
+      
+      <nav style={{ flex: 1, padding: '8px 0' }}>
+        {NAV_ITEMS.map(({ path, Icon, label }) => {
+          const active = pathname === path;
+          return (
+            <div key={path} onClick={(e) => {
+              if (path.includes('booking') || path.includes('history')) {
+                handleProtectedNav(e, path);
+              } else {
+                onNavClick?.();
+              }
+              navigate(path);
+            }} style={{
+              display:'flex', alignItems:'center', gap:10,
+              padding:'9px 16px', cursor:'pointer', borderRadius:8,
+              margin:'2px 8px',
+              background: active ? 'rgba(255,107,0,0.15)' : 'transparent',
+              color: active ? '#FF6B00' : 'rgba(255,248,240,0.7)',
+              fontWeight: active ? 700 : 500,
+              transition:'all 0.18s',
+            }}>
+              <Icon size={17} color={active ? '#FF6B00' : 'rgba(255,248,240,0.6)'} />
+              <span style={{ fontSize:14 }}>{label}</span>
+            </div>
+          );
+        })}
+      </nav>
     </div>
   );
 }
+
 
 export function PanditSidebar({ onNavClick }) {
   const { panditId, panditName, setShowPanditOnboarding } = useApp();
