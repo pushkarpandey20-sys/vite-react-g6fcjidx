@@ -306,7 +306,7 @@ body {
 }
 
 .sidebar-wrap {
-  background: #FFFDFB;
+  background: #1a0a00;
   flex-shrink: 0;
   height: 100%;
   overflow-y: auto;
@@ -318,8 +318,8 @@ body {
 
 .sidebar {
   width: 232px;
-  background: #FFFDFB;
-  border-right: 1.5px solid rgba(255, 107, 0, 0.12);
+  background: #1a0a00;
+  border-right: 1.5px solid rgba(255, 107, 0, 0.18);
   padding: 24px 0;
   flex-shrink: 0;
   min-height: 100%;
@@ -344,15 +344,15 @@ body {
   cursor: pointer;
   transition: all .24s;
   border-left: 3px solid transparent;
-  color: #5C3317;
+  color: rgba(255, 248, 240, 0.72);
   font-size: 13.5px;
   font-weight: 700;
 }
 
 .s-item:hover {
-  background: rgba(255, 107, 0, 0.06);
+  background: rgba(255, 107, 0, 0.10);
   color: #FF6B00;
-  border-left-color: rgba(255, 107, 0, 0.2);
+  border-left-color: rgba(255, 107, 0, 0.3);
 }
 
 .s-item.active {
@@ -379,15 +379,15 @@ body {
 .content {
   flex: 1;
   overflow-y: auto;
-  background: #FDF9F4;
+  background: #120500;
 }
 
 .ph {
-  background: linear-gradient(135deg, #FFFDFB 0%, #FFF5E6 100%);
+  background: linear-gradient(135deg, rgba(61,31,0,0.95) 0%, rgba(26,10,0,0.9) 100%);
   padding: 32px 30px 28px;
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid rgba(255, 107, 0, 0.1);
+  border-bottom: 1px solid rgba(255, 107, 0, 0.2);
 }
 
 .ph::after {
@@ -404,7 +404,7 @@ body {
 
 .ph-title {
   font-family: 'Cinzel', serif;
-  color: #2C1A0E;
+  color: #F0C040;
   font-size: 26px;
   font-weight: 900;
   margin-bottom: 6px;
@@ -412,7 +412,7 @@ body {
 
 .ph-sub {
   font-family: 'Crimson Pro', serif;
-  color: #8B6347;
+  color: rgba(255, 248, 240, 0.65);
   font-size: 15px;
   font-style: italic;
   font-weight: 500;
@@ -3824,89 +3824,89 @@ body {
    Cascades dark styles to all .card, .fi, .dtable etc.
    ============================================= */
 
-/* Content area background — light cream */
+/* Content area background — dark sacred */
 .ds-user-content {
-  background: #FFFDFB;
+  background: #120500;
   min-height: 100%;
 }
 
-/* Cards go light cream */
+/* Cards — dark with gold border */
 .ds-user-content .card,
 .ds-user-content .stat-card,
 .ds-user-content .filter-card {
-  background: #FFFFFF !important;
-  border-color: rgba(255,107,0,0.15) !important;
-  box-shadow: 0 4px 15px rgba(255,107,0,0.06) !important;
-  color: #2C1A0E !important;
+  background: rgba(26,15,7,0.85) !important;
+  border-color: rgba(212,160,23,0.18) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.35) !important;
+  color: rgba(255,248,240,0.85) !important;
 }
 
 .ds-user-content h1,
 .ds-user-content h2,
-.ds-user-content h3 { color: #2C1A0E !important; }
+.ds-user-content h3 { color: #F0C040 !important; }
 
-/* Form inputs light */
+/* Form inputs dark */
 .ds-user-content .fi,
 .ds-user-content .fs,
 .ds-user-content .fta {
-  background: #FFFFFF !important;
-  border-color: rgba(255,107,0,0.2) !important;
-  color: #2C1A0E !important;
+  background: rgba(61,31,0,0.5) !important;
+  border-color: rgba(212,160,23,0.25) !important;
+  color: rgba(255,248,240,0.9) !important;
 }
 .ds-user-content .fi::placeholder,
 .ds-user-content .fs::placeholder,
 .ds-user-content .fta::placeholder {
-  color: #8B6347 !important;
+  color: rgba(255,248,240,0.35) !important;
 }
 .ds-user-content .fi:focus,
 .ds-user-content .fs:focus,
 .ds-user-content .fta:focus {
   border-color: #FF6B00 !important;
-  box-shadow: 0 0 0 3px rgba(255,107,0,0.1) !important;
+  box-shadow: 0 0 0 3px rgba(255,107,0,0.15) !important;
 }
 
 /* Labels */
 .ds-user-content .fl {
-  color: #2C1A0E !important;
+  color: #D4A017 !important;
 }
 
 /* Section headers */
 .ds-user-content .sh-title {
-  color: #2C1A0E !important;
+  color: #F0C040 !important;
 }
 
-/* Data table light */
+/* Data table dark */
 .ds-user-content .dtable {
-  background: #FFFFFF !important;
-  border: 1px solid rgba(255,107,0,0.1) !important;
+  background: rgba(26,15,7,0.85) !important;
+  border: 1px solid rgba(212,160,23,0.15) !important;
   border-radius: 14px !important;
   overflow: hidden !important;
 }
 .ds-user-content .thead {
-  background: rgba(255,107,0,0.06) !important;
-  border-bottom: 2px solid rgba(255,107,0,0.1) !important;
+  background: rgba(61,31,0,0.6) !important;
+  border-bottom: 2px solid rgba(212,160,23,0.2) !important;
 }
 .ds-user-content .th {
-  color: #2C1A0E !important;
+  color: #D4A017 !important;
   font-weight: 800 !important;
   text-transform: uppercase !important;
   letter-spacing: 0.5px !important;
 }
 .ds-user-content .tr {
-  border-bottom: 1px solid rgba(255,107,0,0.08) !important;
+  border-bottom: 1px solid rgba(212,160,23,0.08) !important;
 }
 .ds-user-content .tr:hover {
-  background: rgba(255,107,0,0.03) !important;
+  background: rgba(255,107,0,0.05) !important;
 }
 .ds-user-content .td {
-  color: #5C3317 !important;
+  color: rgba(255,248,240,0.8) !important;
   font-weight: 600 !important;
 }
 
-/* Chips light */
+/* Chips dark */
 .ds-user-content .chip {
-  background: #FFFFFF !important;
-  border: 1px solid rgba(255,107,0,0.2) !important;
-  color: #8B6347 !important;
+  background: rgba(61,31,0,0.6) !important;
+  border: 1px solid rgba(212,160,23,0.25) !important;
+  color: rgba(255,248,240,0.75) !important;
   font-weight: 700 !important;
 }
 .ds-user-content .chip:hover,

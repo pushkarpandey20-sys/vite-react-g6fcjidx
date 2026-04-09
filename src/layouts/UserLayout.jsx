@@ -27,12 +27,12 @@ export default function UserLayout() {
   return (
     <MainLayout sidebar={<UserSidebar />} portalLabel="🙏 Devotee Portal" portalColor="#FF6B00">
       <header className="ph" style={{
-        background: '#ffffff',
-        borderBottom: '1px solid rgba(212,160,23,0.15)',
-        padding: '12px 20px',
+        background: 'linear-gradient(135deg, rgba(61,31,0,0.95) 0%, rgba(26,10,0,0.9) 100%)',
+        borderBottom: '1px solid rgba(255,107,0,0.2)',
+        padding: '16px 24px',
       }}>
-        <h1 className="ph-title" style={{ color: '#3d1f00', fontSize: 24 }}>{title}</h1>
-        <p className="ph-sub" style={{ color: '#9a8070' }}>{sub}</p>
+        <h1 className="ph-title">{title}</h1>
+        <p className="ph-sub">{sub}</p>
       </header>
       <main className="cb ds-user-content" style={{ paddingBottom: 80 }}>
         <Outlet />

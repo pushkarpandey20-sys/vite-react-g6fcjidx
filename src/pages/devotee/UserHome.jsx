@@ -9,7 +9,7 @@ import SmartRecommendations from '../../components/SmartRecommendations';
 import { PremiumIcon } from '../../components/Icons';
 
 /* ── Static data ──────────────────────────────────────────── */
-import { IconBook, IconShoppingBag, IconPhone, IconTemple, IconHeart, IconCalendar, IconTrendingUp, IconMapPin, IconStar } from '../../components/icons/Icons';
+import { IconBook, IconShoppingBag, IconPhone, IconTemple, IconHeart, IconCalendar, IconTrendingUp, IconMapPin, IconStar, IconOm } from '../../components/icons/Icons';
 
 /* ── Static data ──────────────────────────────────────────── */
 const SERVICES = [
@@ -43,7 +43,7 @@ const SAMPLE_PANDITS = [
 ];
 
 /* ── Shared card styles ───────────────────────────────────── */
-const dk = { background:'#FFFFFF', border:'1px solid rgba(255,107,0,0.15)', borderRadius:14, boxShadow:'0 4px 12px rgba(255,107,0,0.06)' };
+const dk = { background:'rgba(26,15,7,0.85)', border:'1px solid rgba(212,160,23,0.18)', borderRadius:14, boxShadow:'0 4px 20px rgba(0,0,0,0.3)' };
 
 /* ── Horizontal scroll container ─────────────────────────── */
 const hscroll = {
@@ -55,10 +55,10 @@ const hscroll = {
 /* ── Section wrapper ──────────────────────────────────────── */
 function Section({ title, onViewAll, viewLabel, children, style }) {
   return (
-    <div style={{ background:'#FFFFFF', border:'1px solid rgba(255,107,0,0.15)',
-      borderRadius:18, padding:'16px 16px 12px', boxShadow:'0 4px 15px rgba(255,107,0,0.05)', ...style }}>
+    <div style={{ background:'rgba(26,15,7,0.85)', border:'1px solid rgba(212,160,23,0.18)',
+      borderRadius:18, padding:'16px 16px 12px', boxShadow:'0 4px 20px rgba(0,0,0,0.3)', ...style }}>
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
-        <div style={{ fontFamily:'Cinzel,serif', color:'#2C1A0E', fontWeight:900, fontSize:16 }}>{title}</div>
+        <div style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontWeight:900, fontSize:16 }}>{title}</div>
         {onViewAll && (
           <button onClick={onViewAll}
             style={{ background:'rgba(255,107,0,0.06)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.2)',
@@ -107,7 +107,7 @@ export default function UserHome() {
   const ritualList = (festivals?.length > 0 ? festivals[0].recommended_rituals : RITUALS.map(r => r.name)).slice(0, 6);
 
   return (
-    <div style={{ color:'#2C1A0E', display:'flex', flexDirection:'column', gap:14 }}>
+    <div style={{ color:'rgba(255,248,240,0.9)', display:'flex', flexDirection:'column', gap:14 }}>
 
       {/* ── Hero ──────────────────────────────────────────── */}
       {/* ── Hero with Dynamic Banner ──────────────────── */}
@@ -117,7 +117,7 @@ export default function UserHome() {
         boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
       }}>
         {/* Background Image Slider guarantees full height coverage and no blocked video loads */}
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, backgroundColor: '#FFFDFB' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, backgroundColor: '#1a0a00' }}>
           {BG_IMAGES.map((img, idx) => (
             <img 
               key={img}
@@ -131,8 +131,8 @@ export default function UserHome() {
               }}
             />
           ))}
-          {/* Lighter Gradient Overlay so the temple is clearly visible */}
-          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(255,107,0,0.1) 0%, rgba(253,249,244,0.9) 80%)' }} />
+          {/* Dark gradient overlay for sacred feel */}
+          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(26,10,0,0.3) 0%, rgba(26,10,0,0.85) 80%)' }} />
         </div>
 
         <div style={{ position:'relative', zIndex:1, paddingTop: 60 }}>
@@ -145,13 +145,13 @@ export default function UserHome() {
           </div>
 
           <h1 style={{
-            fontFamily:'Cinzel,serif', color:'#3d1f00', fontSize:'clamp(22px,6.5vw,34px)',
+            fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:'clamp(22px,6.5vw,34px)',
             margin:'0 0 8px', fontWeight:900, lineHeight:1.1
           }}>
             {devoteeName ? `Namaste, ${devoteeName.split(' ')[0]} 🙏` : 'Namaste, Devotee 🙏'}
           </h1>
 
-          <p style={{ color:'#7a5c3a', margin:'0 0 20px', fontSize:14, maxWidth:300, lineHeight:1.6, fontWeight:600 }}>
+          <p style={{ color:'rgba(255,248,240,0.75)', margin:'0 0 20px', fontSize:14, maxWidth:300, lineHeight:1.6, fontWeight:600 }}>
             Ancient Vedic traditions, delivered with <strong style={{ color:'#FF6B00' }}>modern precision</strong>.
           </p>
 
@@ -184,12 +184,11 @@ export default function UserHome() {
                 className="clickable-stat"
                 style={{
                   ...dk, padding:'12px 4px', textAlign:'center', borderRadius:16,
-                  background:'#ffffff', border:'1px solid rgba(212,160,23,0.2)'
                 }}
               >
                 <div style={{ marginBottom:4, display: 'flex', justifyContent: 'center' }}><s.Icon size={22} color={s.color} /></div>
                 <div style={{ color: s.color, fontFamily:'Cinzel,serif', fontWeight:900, fontSize:18, lineHeight:1 }}>{s.val}</div>
-                <div style={{ color:'#9a8070', fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'1px', marginTop:3 }}>{s.lbl}</div>
+                <div style={{ color:'rgba(255,248,240,0.55)', fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'1px', marginTop:3 }}>{s.lbl}</div>
               </div>
             ))}
           </div>
@@ -201,21 +200,21 @@ export default function UserHome() {
         {SERVICES.map((s) => (
           <div key={s.label} onClick={()=>navigate(s.path)} style={{
             display:'flex', flexDirection:'column', alignItems:'center',
-            gap:10, padding:'18px 12px', background:'#ffffff',
-            border:'1px solid rgba(212,160,23,0.2)', borderRadius:14,
+            gap:10, padding:'18px 12px', background:'rgba(26,15,7,0.85)',
+            border:'1px solid rgba(212,160,23,0.18)', borderRadius:14,
             cursor:'pointer', transition:'all 0.2s',
-            boxShadow:'0 2px 8px rgba(0,0,0,0.05)',
+            boxShadow:'0 4px 16px rgba(0,0,0,0.3)',
           }}
           onMouseEnter={e=>e.currentTarget.style.transform='translateY(-2px)'}
           onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
             <div style={{
               width:52, height:52, borderRadius:14,
-              background:`${s.bg}18`,
+              background:`${s.bg}22`,
               display:'flex', alignItems:'center', justifyContent:'center',
             }}>
               <s.Icon size={26} color={s.bg} />
             </div>
-            <span style={{ color:'#3d1f00', fontWeight:700, fontSize:13, textAlign:'center' }}>
+            <span style={{ color:'rgba(255,248,240,0.85)', fontWeight:700, fontSize:13, textAlign:'center' }}>
               {s.label}
             </span>
           </div>
@@ -255,14 +254,14 @@ export default function UserHome() {
                 <div style={{ fontSize:26, marginBottom:7 }}>
                   {r.icon.startsWith('/') ? <PremiumIcon src={r.icon} size={32} /> : r.icon}
                 </div>
-                <div style={{ color:'#2C1A0E', fontSize:11, fontWeight:800, marginBottom:4, lineHeight:1.3 }}>{r.name}</div>
+                <div style={{ color:'rgba(255,248,240,0.9)', fontSize:11, fontWeight:800, marginBottom:4, lineHeight:1.3 }}>{r.name}</div>
                 <div style={{ color:'#FF9F40', fontSize:11, fontWeight:800, fontFamily:'Cinzel,serif' }}>from {r.price}</div>
               </div>
             );
           })}
         </div>
         <div style={{ textAlign:'center', marginTop:8 }}>
-          <span style={{ fontSize:10, color:'#8B6347', opacity:0.6 }}>← swipe to see more →</span>
+          <span style={{ fontSize:10, color:'rgba(255,248,240,0.4)', opacity:0.8 }}>← swipe to see more →</span>
         </div>
       </Section>
 
@@ -283,8 +282,8 @@ export default function UserHome() {
               <div style={{ fontSize:26, marginBottom:5 }}>
                 {s.icon.startsWith('/') ? <PremiumIcon src={s.icon} size={32} /> : s.icon}
               </div>
-              <div style={{ color:'#2C1A0E', fontSize:11, fontWeight:800, marginBottom:2 }}>{s.name}</div>
-              <div style={{ color:'#8B6347', fontSize:10, marginBottom:5 }}>{s.items}</div>
+              <div style={{ color:'rgba(255,248,240,0.9)', fontSize:11, fontWeight:800, marginBottom:2 }}>{s.name}</div>
+              <div style={{ color:'rgba(255,248,240,0.55)', fontSize:10, marginBottom:5 }}>{s.items}</div>
               <div style={{ color:'#FF9F40', fontSize:13, fontWeight:800, fontFamily:'Cinzel,serif' }}>{s.price}</div>
             </div>
           ))}
@@ -295,7 +294,7 @@ export default function UserHome() {
               display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:6 }}>
             <div style={{ fontSize:22 }}>🛒</div>
             <div style={{ color:'#FF6B00', fontSize:10, fontWeight:800 }}>Shop All</div>
-            <div style={{ color:'#8B6347', fontSize:9 }}>40+ items</div>
+            <div style={{ color:'rgba(255,248,240,0.5)', fontSize:9 }}>40+ items</div>
           </div>
         </div>
       </Section>
@@ -358,13 +357,13 @@ export default function UserHome() {
                 }}>🙏</div>
                 <div style={{ minWidth:0 }}>
                   <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                    <div style={{ color:'#2C1A0E', fontWeight:900, fontSize:15, fontFamily:'Cinzel,serif',
+                    <div style={{ color:'#F0C040', fontWeight:900, fontSize:15, fontFamily:'Cinzel,serif',
                       whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:140 }}>{p.name}</div>
                     {p.rating >= 4.9 && (
                       <span style={{ background:'#FFD700', color:'#1a0f07', fontSize:8, fontWeight:900, padding:'2px 6px', borderRadius:4, letterSpacing:0.5 }}>PREMIUM</span>
                     )}
                   </div>
-                  <div style={{ color:'#8B6347', fontSize:11, marginTop:2, fontWeight:700 }}>
+                  <div style={{ color:'rgba(255,248,240,0.55)', fontSize:11, marginTop:2, fontWeight:700 }}>
                     📍 {p.city} · {p.experience_years||p.years_of_experience}yr Exp · ⭐ {p.rating||'New'}
                   </div>
                 </div>
@@ -402,7 +401,7 @@ export default function UserHome() {
         ) : bookings.length === 0 ? (
           <div style={{ textAlign:'center', padding:'12px 0' }}>
             <div style={{ fontSize:24, marginBottom:6 }}>🙏</div>
-            <div style={{ color:'#8B6347', fontSize:12, marginBottom:10, fontWeight:700 }}>No rituals booked yet</div>
+            <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12, marginBottom:10, fontWeight:700 }}>No rituals booked yet</div>
             <button className="btn btn-primary btn-sm" onClick={() => navigate('/user/booking')}>Book First Ritual</button>
           </div>
         ) : (
@@ -410,11 +409,11 @@ export default function UserHome() {
             {bookings.slice(0,3).map(b => (
               <div key={b.id} style={{ ...dk, borderRadius:10, padding:'10px 12px' }}>
                 <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <div style={{ color:'#2C1A0E', fontWeight:800, fontSize:13 }}>{b.ritual_name||'Pooja'}</div>
+                  <div style={{ color:'rgba(255,248,240,0.9)', fontWeight:800, fontSize:13 }}>{b.ritual_name||'Pooja'}</div>
                   <div style={{ fontSize:11, color:b.status==='confirmed'?'#27AE60':'#FF6B00',
                     fontWeight:800, textTransform:'capitalize' }}>{b.status||'pending'}</div>
                 </div>
-                <div style={{ color:'#8B6347', fontSize:11, marginTop:2, fontWeight:600 }}>
+                <div style={{ color:'rgba(255,248,240,0.55)', fontSize:11, marginTop:2, fontWeight:600 }}>
                   {b.booking_date ? new Date(b.booking_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : 'TBD'}
                   {' · '}₹{(b.total_amount||0).toLocaleString()}
                 </div>
@@ -425,11 +424,11 @@ export default function UserHome() {
       </Section>
 
       {/* ── Pandit CTA ────────────────────────────────────── */}
-      <div style={{ background:'linear-gradient(135deg,#FFFDFB,#FFF5E6)',
-        border:'1.5px solid rgba(255,107,0,0.2)', borderRadius:18, padding:'20px', boxShadow:'0 6px 20px rgba(255,107,0,0.06)' }}>
+      <div style={{ background:'linear-gradient(135deg,rgba(61,31,0,0.9),rgba(26,10,0,0.95))',
+        border:'1.5px solid rgba(255,107,0,0.25)', borderRadius:18, padding:'20px', boxShadow:'0 6px 25px rgba(0,0,0,0.4)' }}>
         <div style={{ color:'#FF6B00', fontSize:11, fontWeight:900, letterSpacing:1.5, marginBottom:8 }}>🪔 JOIN OUR PANDIT NETWORK</div>
-        <div style={{ color:'#2C1A0E', fontFamily:'Cinzel,serif', fontSize:18, fontWeight:900, marginBottom:8 }}>Are You a Verified Pandit?</div>
-        <div style={{ color:'#5C3317', fontSize:13, marginBottom:12, lineHeight:1.6, fontWeight:600 }}>
+        <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontSize:18, fontWeight:900, marginBottom:8 }}>Are You a Verified Pandit?</div>
+        <div style={{ color:'rgba(255,248,240,0.75)', fontSize:13, marginBottom:12, lineHeight:1.6, fontWeight:600 }}>
           Join 500+ pandits earning <strong style={{ color:'#FF6B00' }}>₹30K–₹80K/month</strong> on DevSetu.
         </div>
         <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
@@ -472,8 +471,8 @@ export default function UserHome() {
       <div style={{ background:'linear-gradient(135deg,rgba(233,30,140,0.08),rgba(255,107,0,0.05))',
         border:'1.5px solid rgba(233,30,140,0.15)', borderRadius:18, padding:'20px', textAlign:'center', marginBottom:8 }}>
         <div style={{ fontSize:28, marginBottom:8 }}>❤️</div>
-        <div style={{ color:'#2C1A0E', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:18, marginBottom:4 }}>Seva & Donations</div>
-        <div style={{ color:'#8B6347', fontSize:13, marginBottom:16, fontWeight:600 }}>Support temples & sacred traditions</div>
+        <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:18, marginBottom:4 }}>Seva & Donations</div>
+        <div style={{ color:'rgba(255,248,240,0.65)', fontSize:13, marginBottom:16, fontWeight:600 }}>Support temples & sacred traditions</div>
         <button className="btn btn-primary" style={{ width:'100%', justifyContent:'center' }}
           onClick={() => navigate('/user/donations')}>Donate Now ❤️</button>
       </div>
