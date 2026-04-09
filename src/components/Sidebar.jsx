@@ -117,7 +117,7 @@ export function PanditSidebar({ onNavClick }) {
         <div className="s-div" />
         <div style={{ padding: '8px 16px' }}>
           <div style={{ fontSize: 11, color: 'rgba(240,192,64,0.5)', fontWeight: 700, marginBottom: 6, letterSpacing: 0.5 }}>LOGGED IN AS</div>
-          <div style={{ fontSize: 12, color: 'rgba(255,248,240,0.75)', fontWeight: 700, marginBottom: 10, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}><PremiumIcon src="/icons/diya.png" size={14} /> {panditName || 'Pandit'}</div>
+          <div style={{ fontSize: 12, color: 'rgba(255,248,240,0.75)', fontWeight: 700, marginBottom: 10, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>🪔 {panditName || 'Pandit'}</div>
           <button onClick={logoutPandit}
             style={{ width: '100%', background: 'rgba(255,107,0,0.1)', color: '#FF6B00', border: '1px solid rgba(255,107,0,0.3)', borderRadius: 10, padding: '8px 12px', fontWeight: 700, cursor: 'pointer', fontSize: 12, fontFamily: 'Nunito,sans-serif', textAlign: 'left' }}>
             🚪 Logout
@@ -139,7 +139,7 @@ export function AdminSidebar({ onNavClick }) {
         <span className="s-icon">📊</span>Platform Overview
       </NavLink>
       <NavLink to="/admin/pandits" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
-        <span className="s-icon"><PremiumIcon src="/icons/om.png" size={18} /></span>Manage Pandits
+        <span className="s-icon">🕉️</span>Manage Pandits
       </NavLink>
       <NavLink to="/admin/bookings" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
         <span className="s-icon"><IconBadge size={18} /></span>Booking Log
@@ -150,7 +150,7 @@ export function AdminSidebar({ onNavClick }) {
         <span className="s-icon">📿</span>Rituals Catalog
       </NavLink>
       <NavLink to="/admin/samagri" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
-        <span className="s-icon"><PremiumIcon src="/icons/havan.png" size={18} /></span>Pooja Samagri
+        <span className="s-icon">🔥</span>Pooja Samagri
       </NavLink>
       <NavLink to="/admin/temples" className={({ isActive }) => `s-item ${isActive ? 'active' : ''}`} onClick={handleNav}>
         <span className="s-icon">🛕</span>Temple Mgmt

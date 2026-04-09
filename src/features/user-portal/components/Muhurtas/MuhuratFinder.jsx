@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import MuhuratResultCard from './MuhuratResultCard';
 import { useApp } from '../../../../store/AppCtx';
 import { useNavigate } from 'react-router-dom';
-import { PremiumIcon } from '../../../../components/Icons';
 
 export default function MuhuratFinder() {
   const { MUHURTAS } = useApp();
@@ -64,8 +63,8 @@ export default function MuhuratFinder() {
     <div className="muhurat-finder">
       <div style={{ background:'#ffffff', border:'1px solid rgba(212,160,23,0.2)', borderRadius:12, padding:'14px 16px', marginBottom:20, boxShadow:'0 2px 8px rgba(0,0,0,0.04)' }}>
         <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:12 }}>
-          <PremiumIcon src="/icons/muhurta.png" size={24} />
-          <h3 style={{ color:'#1a0f07', fontFamily:'Cinzel,serif', margin:0, fontSize:16, fontWeight:700 }}>Find Your Shubh Muhurta</h3>
+          <span style={{ fontSize: 24 }}>🗓️</span>
+          <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:0, fontSize:16, fontWeight:700 }}>Find Your Shubh Muhurta</h3>
         </div>
         <form onSubmit={handleSearch} className="compact-filter">
           <div style={{ display:'flex', gap:8, flexWrap:'wrap', alignItems:'flex-end' }}>
