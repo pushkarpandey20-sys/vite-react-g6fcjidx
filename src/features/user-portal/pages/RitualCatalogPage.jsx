@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../../store/AppCtx';
 import { bookingApi } from '../../../api/bookingApi';
 import { Spinner } from '../../../components/common/UIElements';
+import { ALL_RITUALS } from '../../../data/ritualsData';
 
 /* ── Category inference ─────────────────────────────────── */
 function inferCategory(r) {
@@ -34,27 +35,6 @@ const PRICE_OPTIONS = [
   { label:'₹5K – ₹10K', max:10000 },
 ];
 
-/* ── Seed ritual data ──────────────────────────────────────── */
-const SEED = [
-  { id:'r1',  name:'Griha Pravesh',        icon:'🏠', price:5100,  description:'Sacred house warming with Vastu puja and havan.', samagriRequired:true,  category:'Home'       },
-  { id:'r2',  name:'Satyanarayan Katha',   icon:'🌟', price:2100,  description:'Vishnu puja for blessings, peace and prosperity.', samagriRequired:true,  category:'Wellness'   },
-  { id:'r3',  name:'Vivah Puja',           icon:'💍', price:11000, description:'Complete Vedic wedding ceremony with all rituals.', samagriRequired:true,  category:'Life Event' },
-  { id:'r4',  name:'Namkaran Ceremony',    icon:'👶', price:3100,  description:'Baby naming ceremony as per Vedic tradition.',      samagriRequired:false, category:'Life Event' },
-  { id:'r5',  name:'Rudrabhishek',         icon:'🔱', price:2500,  description:'Shivalinga abhishek for removing doshas.',         samagriRequired:true,  category:'Wellness'   },
-  { id:'r6',  name:'Navgrah Shanti',       icon:'⭐', price:4500,  description:'Nine-planet ritual to reduce malefic effects.',    samagriRequired:true,  category:'General'    },
-  { id:'r7',  name:'Kaal Sarp Dosh Niv.', icon:'🐍', price:5500,  description:'Neutralize Kaal Sarp dosh in the birth chart.',    samagriRequired:true,  category:'General'    },
-  { id:'r8',  name:'Ganesh Puja',          icon:'🐘', price:1500,  description:'Remove obstacles before any new venture.',         samagriRequired:false, category:'Wellness'   },
-  { id:'r9',  name:'Temple Abhishek Seva', icon:'🛕', price:2200,  description:'Personal abhishek seva at a nearby temple.',       samagriRequired:false, category:'Temple'     },
-  { id:'r10', name:'Vastu Shanti Puja',    icon:'🧿', price:6500,  description:'Full Vastu correction puja for home or office.',   samagriRequired:true,  category:'Home'       },
-  { id:'r11', name:'Pitru Shraddha',       icon:'🙏', price:3500,  description:'Ancestor appeasement rituals by Vedic scholars.',  samagriRequired:true,  category:'General'    },
-  { id:'r12', name:'Mundan Ceremony',      icon:'✂️', price:2100,  description:'First hair cutting ceremony (chuda karma).',       samagriRequired:false, category:'Life Event' },
-  { id:'r13', name:'Laxmi Puja',           icon:'🪷', price:1800,  description:'Goddess of wealth puja for prosperity.',           samagriRequired:true,  category:'Wellness'   },
-  { id:'r14', name:'Bhoomi Puja',          icon:'🌱', price:4200,  description:'Land consecration before home construction.',      samagriRequired:true,  category:'Home'       },
-  { id:'r15', name:'Durga Saptashati',     icon:'🌸', price:5500,  description:'Complete Durga Saptashati for protection.',        samagriRequired:false, category:'Wellness'   },
-  { id:'r16', name:'Annaprasan',           icon:'🍚', price:2500,  description:'First rice feeding ceremony for your baby.',        samagriRequired:false, category:'Life Event' },
-  { id:'r17', name:'Upanayan Ceremony',    icon:'🎓', price:8500,  description:'Sacred thread ceremony for young boys.',           samagriRequired:true,  category:'Life Event' },
-  { id:'r18', name:'Ram Navami Puja',      icon:'🏹', price:1800,  description:'Special puja for Lord Ram\'s blessings.',          samagriRequired:false, category:'Wellness'   },
-];
 
 /* ─────────────────────────────────────────────────────────── */
 export default function RitualCatalogPage() {
@@ -69,10 +49,19 @@ export default function RitualCatalogPage() {
 
   useEffect(() => {
     (async () => {
+      const localMapped = ALL_RITUALS.map(r => ({
+        ...r, description: r.desc || r.description,
+        _cat: inferCategory({ name: r.name, description: r.desc })
+      }));
       const { data } = await bookingApi.getRituals();
-      const list = (data?.length > 0)
-        ? data.map(r => ({ ...r, _cat: inferCategory(r) }))
-        : SEED.map(r  => ({ ...r, _cat: r.category }));
+      let list;
+      if (data?.length > 0) {
+        const dbMapped = data.map(r => ({ ...r, _cat: inferCategory(r) }));
+        const dbIds = new Set(dbMapped.map(r => r.id));
+        list = [...dbMapped, ...localMapped.filter(r => !dbIds.has(r.id))];
+      } else {
+        list = localMapped;
+      }
       setRituals(list);
       const c = { All: list.length };
       list.forEach(r => { c[r._cat] = (c[r._cat] || 0) + 1; });
