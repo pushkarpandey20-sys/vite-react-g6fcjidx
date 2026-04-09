@@ -96,14 +96,14 @@ export default function Landing() {
   });
 
   return (
-    <div style={{ minHeight: '100vh', background: '#FFFDFB', fontFamily: 'Nunito,sans-serif', color: '#2C1A0E' }}>
+    <div style={{ minHeight: '100vh', background: '#0d0700', fontFamily: 'Nunito,sans-serif', color: 'rgba(255,248,240,0.85)' }}>
       {/* Sticky Nav */}
       <nav className={`landing-nav ${menuOpen ? 'menu-open' : ''}`}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', flexShrink: 0 }} onClick={() => navigate('/')}>
           <span style={{ fontSize: 28 }}>🕉️</span>
           <div>
-            <div style={{ fontFamily: 'Cinzel,serif', color: '#2C1A0E', fontWeight: 900, fontSize: 18, lineHeight: 1 }}>DevSetu</div>
-            <div style={{ color: '#8B6347', fontSize: 10, letterSpacing: 1.5, fontWeight: 600 }}>BRIDGING YOU TO DIVINE SERVICES</div>
+            <div style={{ fontFamily: 'Cinzel,serif', color: '#F0C040', fontWeight: 900, fontSize: 18, lineHeight: 1 }}>DevSetu</div>
+            <div style={{ color: 'rgba(255,248,240,0.5)', fontSize: 10, letterSpacing: 1.5, fontWeight: 600 }}>BRIDGING YOU TO DIVINE SERVICES</div>
           </div>
         </div>
 
@@ -141,7 +141,7 @@ export default function Landing() {
             />
           ))}
         {/* Safe, warm overlay instead of dark */}
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to bottom, rgba(255,253,251,0.4), rgba(255,253,251,0.2), #FFFDFB)' }}></div>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to bottom, rgba(13,7,0,0.25), rgba(13,7,0,0.55), #0d0700)' }}></div>
         </div>
 
         <div style={{ position: 'relative', zIndex: 2, maxWidth: 1100, margin: '0 auto' }}>
@@ -151,12 +151,12 @@ export default function Landing() {
             LIVE: BOOKINGS OPEN FOR NAVRATRI 2026
           </div>
           
-          <h1 style={{ fontFamily:'Cinzel,serif', fontSize: 'clamp(42px, 6.5vw, 84px)', fontWeight:900, color: '#2C1A0E', margin:'0 0 24px', lineHeight: 1.1, letterSpacing: 0.5 }}>
+          <h1 style={{ fontFamily:'Cinzel,serif', fontSize: 'clamp(42px, 6.5vw, 84px)', fontWeight:900, color: '#F0C040', margin:'0 0 24px', lineHeight: 1.1, letterSpacing: 0.5 }}>
             India's Most Trusted<br />
             <span style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent', backgroundClip:'text' }}>Spiritual Platform</span>
           </h1>
           
-          <p style={{ color:'#5C3317', fontSize: 'clamp(18px, 2vw, 24px)', fontFamily:'Crimson Pro,serif', fontStyle:'italic', marginBottom:48, maxWidth: 680, margin: '0 auto 48px', fontWeight: 600, lineHeight: 1.6 }}>
+          <p style={{ color:'rgba(255,248,240,0.78)', fontSize: 'clamp(18px, 2vw, 24px)', fontFamily:'Crimson Pro,serif', fontStyle:'italic', marginBottom:48, maxWidth: 680, margin: '0 auto 48px', fontWeight: 600, lineHeight: 1.6 }}>
             Experience authentic Vedic rituals at your doorstep. From finding the right Pandit to sacred Pooja Samagri — we arrange everything.
           </p>
           
@@ -164,13 +164,13 @@ export default function Landing() {
             <button style={{...btn(), padding: '18px 42px', fontSize: 16, boxShadow: '0 10px 35px rgba(255,107,0,0.3)', display:'flex', alignItems:'center', gap:10 }} onClick={()=>navigate('/user/booking')}>
               <span style={{ fontSize: 22 }}>⚡</span> Book a Pandit Now
             </button>
-            <button style={{...btn('#FDF9F4', {border:'2px solid rgba(255,107,0,0.2)', color: '#FF6B00'}), padding: '18px 42px', fontSize: 16 }} onClick={()=>navigate('/user/home')}>
+            <button style={{...btn('rgba(255,107,0,0.1)', {border:'2px solid rgba(255,107,0,0.4)', color: '#FF6B00'}), padding: '18px 42px', fontSize: 16 }} onClick={()=>navigate('/user/home')}>
               Explore Services →
             </button>
           </div>
           
           {/* Prominent Stats Banner (Glassmorphism) */}
-          <div style={{ display:'flex', justifyContent:'center', gap: 'clamp(20px, 4vw, 60px)', flexWrap:'wrap', background: '#FFFFFF', border: '1.5px solid rgba(255,107,0,0.15)', padding: '40px', borderRadius: 28, boxShadow: '0 20px 50px rgba(255,107,0,0.08)' }}>
+          <div style={{ display:'flex', justifyContent:'center', gap: 'clamp(20px, 4vw, 60px)', flexWrap:'wrap', background: 'rgba(26,15,7,0.85)', border: '1.5px solid rgba(212,160,23,0.2)', padding: '40px', borderRadius: 28, boxShadow: '0 20px 50px rgba(0,0,0,0.5)' }}>
             {[
               ['180+','Verified Pandits','🙏'],
               ['80+','Sacred Rituals','🔥'],
@@ -180,7 +180,7 @@ export default function Landing() {
               <div key={l} style={{ textAlign:'center', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
                 <div style={{ fontSize: 32, marginBottom: 12 }}>{icon}</div>
                 <div style={{ fontFamily:'Cinzel,serif', fontSize:42, fontWeight:900, color:'#FF6B00', lineHeight: 1 }}>{v}</div>
-                <div style={{ color:'#8B6347', fontSize:14, fontWeight: 800, letterSpacing: 1.5, marginTop: 8, textTransform: 'uppercase' }}>{l}</div>
+                <div style={{ color:'rgba(255,248,240,0.6)', fontSize:14, fontWeight: 800, letterSpacing: 1.5, marginTop: 8, textTransform: 'uppercase' }}>{l}</div>
               </div>
             ))}
           </div>
@@ -190,12 +190,12 @@ export default function Landing() {
       {/* 6 Service Tabs */}
       <div style={{ maxWidth:1100, margin:'0 auto', padding:'0 5% 80px' }}>
         {/* Tab Bar */}
-        <div style={{ display:'flex', gap:6, background:'#FDF9F4', borderRadius:20, padding:6, marginBottom:32, flexWrap:'wrap', border:'1.5px solid rgba(255,107,0,0.1)' }}>
+        <div style={{ display:'flex', gap:6, background:'rgba(26,15,7,0.85)', borderRadius:20, padding:6, marginBottom:32, flexWrap:'wrap', border:'1.5px solid rgba(212,160,23,0.15)' }}>
           {TABS.map((t,i)=>(
             <button key={t} onClick={()=>setActiveTab(i)}
               style={{ flex:1, padding:'12px 20px', borderRadius:16, border:'none', cursor:'pointer', fontWeight:800, fontSize:14, transition:'all 0.24s', minWidth:130,
                 background:activeTab===i?'#FF6B00':'transparent',
-                color:activeTab===i?'#fff':'#8B6347' }}>
+                color:activeTab===i?'#fff':'rgba(255,248,240,0.6)' }}>
               {t}
             </button>
           ))}
@@ -467,15 +467,15 @@ export default function Landing() {
           position: sticky;
           top: 0;
           z-index: 100;
-          background: #FFFFFF;
-          border-bottom: 1.5px solid rgba(255,107,0,0.15);
+          background: #1a0a00;
+          border-bottom: 1.5px solid rgba(255,107,0,0.2);
           padding: 0 5%;
           display: flex;
           align-items: center;
           justify-content: space-between;
           height: 80px;
           transition: all 0.3s;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+          box-shadow: 0 4px 20px rgba(0,0,0,0.4);
         }
 
         .landing-nav-links {
@@ -485,7 +485,7 @@ export default function Landing() {
         }
 
         .nav-link {
-          color: #5C3317;
+          color: rgba(255,248,240,0.75);
           font-size: 14px;
           cursor: pointer;
           font-weight: 700;
