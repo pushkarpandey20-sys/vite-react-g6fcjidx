@@ -80,6 +80,7 @@ export default function UserHome() {
   const [bookings, setBookings] = useState([]);
   const [activeBooking, setActiveBooking] = useState(null);
   const [bgIndex, setBgIndex] = useState(0);
+  const [homeSearch, setHomeSearch] = useState('');
   const BG_IMAGES = ['/temple-bg.png', '/temple-bg-2.png', '/temple-bg-3.png'];
 
   useEffect(() => {
@@ -168,6 +169,57 @@ export default function UserHome() {
               }}>
               🕉️ View Rituals
             </button>
+          </div>
+
+          <div style={{ marginTop:16, marginBottom:4 }}>
+            <div style={{
+              display:'flex', alignItems:'center',
+              background:'rgba(255,255,255,0.1)',
+              border:'1.5px solid rgba(212,160,23,0.3)',
+              borderRadius:50, padding:'10px 18px',
+              backdropFilter:'blur(8px)',
+            }}>
+              <span style={{ fontSize:18, marginRight:10, opacity:0.7 }}>🔍</span>
+              <input
+                value={homeSearch}
+                onChange={e => setHomeSearch(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && homeSearch.trim()) {
+                    navigate(`/user/marketplace?q=${encodeURIComponent(homeSearch.trim())}`);
+                  }
+                }}
+                placeholder="Search pandits, rituals, samagri..."
+                style={{
+                  flex:1, background:'transparent', border:'none', outline:'none',
+                  color:'#fff8f0', fontSize:14, fontFamily:'inherit',
+                }}
+              />
+              {homeSearch.trim() && (
+                <div style={{ display:'flex', gap:6, marginLeft:8 }}>
+                  <button
+                    onClick={() => navigate(`/user/marketplace?q=${encodeURIComponent(homeSearch.trim())}`)}
+                    style={{
+                      background:'#FF6B00', color:'#fff', border:'none',
+                      borderRadius:24, padding:'5px 12px', fontSize:12,
+                      fontWeight:700, cursor:'pointer', whiteSpace:'nowrap',
+                    }}>
+                    Find Pandit
+                  </button>
+                  <button
+                    onClick={() => navigate(`/user/rituals?q=${encodeURIComponent(homeSearch.trim())}`)}
+                    style={{
+                      background:'rgba(212,160,23,0.2)', color:'#F0C040', border:'none',
+                      borderRadius:24, padding:'5px 12px', fontSize:12,
+                      fontWeight:700, cursor:'pointer', whiteSpace:'nowrap',
+                    }}>
+                    Find Ritual
+                  </button>
+                </div>
+              )}
+            </div>
+            <div style={{ color:'rgba(255,248,240,0.3)', fontSize:11, marginTop:5, paddingLeft:8 }}>
+              Try: "Griha Pravesh" · "Rudrabhishek" · "Kaal Sarp" · "Pt. Ram Sharma"
+            </div>
           </div>
 
           {/* Interactive Stats Row */}

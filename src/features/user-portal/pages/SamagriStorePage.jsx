@@ -5,12 +5,14 @@ import { useApp } from '../../../store/AppCtx';
 import { PremiumIcon, IconVerified, IconSearch } from '../../../components/Icons';
 
 const CATEGORIES = [
-  { id:'All',             label:'All',              icon:'🕉️' },
-  { id:'festival',        label:'Festival Kits',    icon:'🎊' },
-  { id:'daily',           label:'Daily Worship',    icon:'🙏' },
-  { id:'abhishek',        label:'Abhishek',         icon:'🔱' },
-  { id:'havan',           label:'Havan',            icon:'🔥' },
-  { id:'incense',         label:'Incense & Diyas',  icon:'🕯️' },
+  { id:'All',       label:'All Kits',          icon:'🕉️',  color:'#FF6B00' },
+  { id:'festival',  label:'Festival Kits',     icon:'🪔',  color:'#D4A017' },
+  { id:'daily',     label:'Daily Worship',     icon:'🌸',  color:'#e91e63' },
+  { id:'abhishek',  label:'Abhishek',          icon:'🔱',  color:'#2196f3' },
+  { id:'havan',     label:'Havan & Yagna',     icon:'🔥',  color:'#ff5722' },
+  { id:'incense',   label:'Incense & Diyas',   icon:'🕯️',  color:'#9c27b0' },
+  { id:'flowers',   label:'Flowers & Garlands',icon:'🌺',  color:'#4caf50' },
+  { id:'grains',    label:'Grains & Offerings',icon:'🌾',  color:'#795548' },
 ];
 
 const PRODUCTS = [
@@ -29,7 +31,7 @@ const PRODUCTS = [
     items: ['Durva Grass', 'Red Flowers', 'Modak (6 pcs)', 'Sindoor', 'Akshat', 'Moli', 'Agarbatti'],
   },
   {
-    id: 'griha-pravesh-kit', name: 'Griha Pravesh Kit', category: 'daily', icon: '🏠',
+    id: 'griha-pravesh-kit', name: 'Griha Pravesh Kit', category: 'daily', icon: '🏡',
     price: 1299, mrp: 1699,
     badge: null, rating: 4.7, reviews: 156, weight: '1.8kg',
     desc: 'Premium Griha Pravesh kit with all items for home-entry ceremony havan and puja.',
@@ -43,7 +45,7 @@ const PRODUCTS = [
     items: ['Red Chunri', 'Jowar Seeds', 'Earthen Pot', 'Sindoor', 'Bangles', 'Coconut', 'Agarbatti', 'Camphor'],
   },
   {
-    id: 'satyanarayan-kit', name: 'Satyanarayan Puja Kit', category: 'daily', icon: '🍌',
+    id: 'satyanarayan-kit', name: 'Satyanarayan Puja Kit', category: 'daily', icon: '🌟',
     price: 549, mrp: 699,
     badge: 'POPULAR', rating: 4.9, reviews: 321, weight: '780g',
     desc: 'Complete Satyanarayan Katha kit with panchamrit ingredients, tulsi, yellow cloth and all essentials.',
@@ -57,35 +59,35 @@ const PRODUCTS = [
     items: ['Bel Patra (x21)', 'Gangajal (250ml)', 'Milk', 'Honey', 'Curd', 'Camphor', 'Dhatura Flower', 'White Sandal'],
   },
   {
-    id: 'havan-kit', name: 'Havan Samagri Kit', category: 'havan', icon: '🪵',
+    id: 'havan-kit', name: 'Havan Samagri Kit', category: 'havan', icon: '🔥',
     price: 399, mrp: 499,
     badge: null, rating: 4.6, reviews: 203, weight: '1.2kg',
     desc: 'Pure Vedic havan samagri with 51 herbs, ghee, sesame, barley and sacred wood.',
     items: ['Havan Samagri (500g)', 'Pure Ghee (200ml)', 'Til (Sesame)', 'Barley', 'Mango Wood', 'Camphor', 'Kesar'],
   },
   {
-    id: 'daily-puja-kit', name: 'Daily Puja Kit', category: 'daily', icon: '🪔',
+    id: 'daily-puja-kit', name: 'Daily Puja Kit', category: 'daily', icon: '🌸',
     price: 299, mrp: 399,
     badge: 'BESTSELLER', rating: 4.7, reviews: 567, weight: '450g',
     desc: 'Everything for your daily puja — agarbatti, roli, akshat, moli, camphor and flowers.',
     items: ['Agarbatti (40 sticks)', 'Roli', 'Akshat', 'Moli', 'Camphor', 'Matchbox', 'Puja Thali'],
   },
   {
-    id: 'incense-set', name: 'Premium Incense Collection', category: 'incense', icon: '🌿',
+    id: 'incense-set', name: 'Premium Incense Collection', category: 'incense', icon: '🥢',
     price: 349, mrp: 449,
     badge: null, rating: 4.8, reviews: 145, weight: '350g',
     desc: 'Premium dhoop, agarbatti and sambrani collection with 10 sacred fragrances.',
     items: ['Chandan Agarbatti', 'Rose Agarbatti', 'Loban Dhoop', 'Sambrani Cups', 'Guggal', 'Camphor Cubes'],
   },
   {
-    id: 'diya-lamp-set', name: 'Diya & Lamp Set', category: 'incense', icon: '🕯️',
+    id: 'diya-lamp-set', name: 'Diya & Lamp Set', category: 'incense', icon: '🪔',
     price: 249, mrp: 349,
     badge: null, rating: 4.6, reviews: 98, weight: '600g',
     desc: 'Hand-crafted clay diyas and brass deepak for daily aarti and festival decorations.',
     items: ['Clay Diyas (24 pcs)', 'Brass Deepak', 'Cotton Wicks', 'Mustard Oil (100ml)'],
   },
   {
-    id: 'navgrah-kit', name: 'Navgrah Shanti Kit', category: 'abhishek', icon: '🌐',
+    id: 'navgrah-kit', name: 'Navgrah Shanti Kit', category: 'abhishek', icon: '⭐',
     price: 899, mrp: 1199,
     badge: null, rating: 4.7, reviews: 112, weight: '1.4kg',
     desc: 'Complete Navgrah shanti kit with 9 grain offerings, cloth pieces, and puja items.',
@@ -103,26 +105,76 @@ const PRODUCTS = [
 const BADGE_COLORS = { BESTSELLER:'#FF6B00', POPULAR:'#22c55e', PREMIUM:'#9B59B6', COMPLETE:'#3498DB' };
 
 const CUSTOM_ITEMS = [
-  { id:'c1', name:'Aggarbatti', icon:'🪔', img:'/samagri/aggarbatti.jpg', price:49, unit:'1 pack (20 sticks)', cat:'Basic' },
-  { id:'c2', name:'Camphor Tablets', icon:'🧊', img:'/samagri/camphor.jpg', price:39, unit:'10 tablets', cat:'Basic' },
-  { id:'c3', name:'Roli (Vermilion)', icon:'🔴', price:29, unit:'50g packet', cat:'Basic' },
-  { id:'c4', name:'Moli (Sacred Thread)', icon:'🧶', price:19, unit:'1 roll', cat:'Basic' },
-  { id:'c5', name:'Akshat (Rice)', icon:'🍚', price:25, unit:'250g packet', cat:'Basic' },
-  { id:'c6', name:'Supari (Betel Nut)', icon:'🌰', img:'/samagri/supari.jpg', price:35, unit:'100g', cat:'Basic' },
-  { id:'c7', name:'Ghee (Pure Cow)', icon:'🧈', img:'/icons/ghee.png', price:299, unit:'500ml', cat:'Premium' },
-  { id:'c8', name:'Panchamrit', icon:'🍯', price:149, unit:'Complete set', cat:'Premium' },
-  { id:'c9', name:'Gangajal', icon:'💧', price:89, unit:'500ml bottle', cat:'Premium' },
-  { id:'c10', name:'Copper Kalash', icon:'🏺', price:199, unit:'1 piece', cat:'Premium' },
-  { id:'c11', name:'Bel Patra', icon:'🍃', price:49, unit:'Fresh pack', cat:'Flowers' },
-  { id:'c12', name:'Lotus Flowers', icon:'🪷', price:99, unit:'5 flowers', cat:'Flowers' },
-  { id:'c13', name:'Yellow Flowers', icon:'🌼', price:69, unit:'1 bunch', cat:'Flowers' },
-  { id:'c14', name:'Rose Petals', icon:'🌹', price:59, unit:'1 packet', cat:'Flowers' },
-  { id:'c15', name:'Coconut', icon:'🥥', price:45, unit:'1 piece', cat:'Fruits' },
-  { id:'c16', name:'Banana Bunch', icon:'🍌', img:'/samagri/banana.png', price:79, unit:'1 bunch', cat:'Fruits' },
-  { id:'c17', name:'Havan Kund', icon:'🪵', img:'/icons/havan.png', price:599, unit:'Small size', cat:'Special' },
-  { id:'c18', name:'Rudraksha Mala', icon:'📿', price:299, unit:'108 beads', cat:'Special' },
+  { id:'c01', name:'Agarbatti (Incense Sticks)', icon:'🥢', price:49,  unit:'1 pack · 20 sticks',  cat:'Basic',    desc:'Chandan, rose or mogra fragrance' },
+  { id:'c02', name:'Camphor (Kapoor)',            icon:'⬜', price:39,  unit:'10 tablets',           cat:'Basic',    desc:'Pure camphor for aarti and purification' },
+  { id:'c03', name:'Roli / Kumkum',              icon:'🔴', price:29,  unit:'50g pack',             cat:'Basic',    desc:'Vermilion for tilak and puja marking' },
+  { id:'c04', name:'Moli / Kalava (Sacred Thread)',icon:'🧵',price:19, unit:'1 roll · 10m',         cat:'Basic',    desc:'Red-yellow sacred thread for wrist and kalash' },
+  { id:'c05', name:'Akshat (Unbroken Rice)',      icon:'🍚', price:25,  unit:'200g pack',            cat:'Basic',    desc:'Whole unbroken rice for puja offering' },
+  { id:'c06', name:'Matchbox',                   icon:'🔥', price:10,  unit:'1 box',                cat:'Basic',    desc:'For lighting diya and agarbatti' },
+  { id:'c07', name:'Puja Thali (Brass)',          icon:'🫓', price:199, unit:'1 piece',              cat:'Utensil',  desc:'Engraved brass plate for offerings' },
+  { id:'c08', name:'Copper Kalash',              icon:'🏺', price:149, unit:'1 piece',              cat:'Utensil',  desc:'Sacred water pot with lid and coconut' },
+  { id:'c09', name:'Clay Diyas (Matke)',          icon:'🪔', price:49,  unit:'12 pieces',            cat:'Diya',     desc:'Hand-crafted traditional clay diyas' },
+  { id:'c10', name:'Brass Deepak (Oil Lamp)',    icon:'🪔', price:249, unit:'1 piece',              cat:'Diya',     desc:'Panch-mukhi brass oil lamp' },
+  { id:'c11', name:'Cotton Wicks (Baati)',        icon:'🌾', price:15,  unit:'50 wicks',             cat:'Diya',     desc:'Pure cotton wicks for diyas and deepak' },
+  { id:'c12', name:'Pure Mustard Oil',           icon:'🫙', price:79,  unit:'500ml bottle',          cat:'Diya',     desc:'Cold-pressed mustard oil for diya lighting' },
+  { id:'c13', name:'Marigold (Genda) Flowers',   icon:'🌼', price:39,  unit:'250g fresh',            cat:'Flowers',  desc:'Auspicious yellow-orange marigold for puja' },
+  { id:'c14', name:'Rose Petals',                icon:'🌹', price:29,  unit:'100g fresh',            cat:'Flowers',  desc:'Fresh red rose petals for offering' },
+  { id:'c15', name:'Lotus Flower',               icon:'🪷', price:49,  unit:'2 pieces',              cat:'Flowers',  desc:'Fresh lotus for Lakshmi and Vishnu puja' },
+  { id:'c16', name:'Bel Patra Leaves',            icon:'🍃', price:29,  unit:'21 leaves',            cat:'Flowers',  desc:'Sacred bilva leaves for Shiva puja' },
+  { id:'c17', name:'Durva Grass',                icon:'🌱', price:19,  unit:'1 bunch',               cat:'Flowers',  desc:'21-bladed grass for Ganesh puja' },
+  { id:'c18', name:'Tulsi Leaves',               icon:'🌿', price:15,  unit:'1 bunch',               cat:'Flowers',  desc:'Holy basil leaves for Vishnu puja' },
+  { id:'c19', name:'Marigold Garland (1m)',       icon:'💐', price:59,  unit:'1 garland',            cat:'Flowers',  desc:'Fresh marigold flower garland' },
+  { id:'c20', name:'Gangajal (Holy Water)',       icon:'💧', price:69,  unit:'250ml bottle',          cat:'Liquid',   desc:'Pure Ganga water sourced from Haridwar' },
+  { id:'c21', name:'Pure Cow Ghee',              icon:'🫙', price:199, unit:'200ml jar',             cat:'Liquid',   desc:'Pure desi cow ghee for havan and abhishek' },
+  { id:'c22', name:'Panchamrit Set',             icon:'🥛', price:149, unit:'5 sacred liquids',      cat:'Liquid',   desc:'Milk, curd, honey, ghee, sugar for abhishek' },
+  { id:'c23', name:'Raw Cow Milk',               icon:'🥛', price:49,  unit:'500ml',                 cat:'Liquid',   desc:'Fresh pure cow milk for abhishek' },
+  { id:'c24', name:'Honey (Pure)',               icon:'🍯', price:89,  unit:'100ml bottle',           cat:'Liquid',   desc:'Pure wild honey for panchamrit' },
+  { id:'c25', name:'Curd / Dahi',                icon:'🥣', price:29,  unit:'200g',                  cat:'Liquid',   desc:'Fresh curd for panchamrit and abhishek' },
+  { id:'c26', name:'Sugar / Mishri',             icon:'🍚', price:29,  unit:'100g',                  cat:'Liquid',   desc:'Crystal sugar for panchamrit' },
+  { id:'c27', name:'Supari (Betel Nut)',          icon:'🌰', price:35,  unit:'50g pack',              cat:'Grain',    desc:'Whole betel nut for puja offering' },
+  { id:'c28', name:'Betel Leaves (Pan Patta)',    icon:'🍃', price:25,  unit:'11 leaves',             cat:'Grain',    desc:'Fresh betel leaves for puja and offering' },
+  { id:'c29', name:'Coconut (Nariyal)',           icon:'🥥', price:45,  unit:'1 whole coconut',       cat:'Grain',    desc:'Fresh whole coconut for puja' },
+  { id:'c30', name:'Banana (Kela)',              icon:'🍌', price:25,  unit:'6 pieces',               cat:'Grain',    desc:'Ripe bananas for bhog and prasad' },
+  { id:'c31', name:'Haldi (Turmeric)',           icon:'🟡', price:29,  unit:'50g pack',               cat:'Grain',    desc:'Turmeric powder for puja' },
+  { id:'c32', name:'Sindoor',                    icon:'🔴', price:39,  unit:'10g box',                cat:'Grain',    desc:'Red sindoor for Devi puja and Vivah' },
+  { id:'c33', name:'Jowar Seeds',               icon:'🌾', price:19,  unit:'100g',                   cat:'Grain',    desc:'Sorghum seeds for Navratri pot sowing' },
+  { id:'c34', name:'Wheat Flour (Atta)',         icon:'🌾', price:29,  unit:'250g',                   cat:'Grain',    desc:'Whole wheat flour for Satyanarayan prasad' },
+  { id:'c35', name:'Sesame Seeds (Til)',         icon:'⚫', price:25,  unit:'100g',                   cat:'Grain',    desc:'Black sesame seeds for havan and tarpan' },
+  { id:'c36', name:'Barley (Jau)',              icon:'🌾', price:19,  unit:'100g',                   cat:'Grain',    desc:'Barley grains for havan ahuti offering' },
+  { id:'c37', name:'Havan Samagri (51 Herbs)',   icon:'🌿', price:249, unit:'500g pack',              cat:'Havan',    desc:'Blend of 51 Vedic herbs, roots and resins' },
+  { id:'c38', name:'Mango Wood (Aam Lakdi)',     icon:'🪵', price:99,  unit:'1kg bundle',             cat:'Havan',    desc:'Dry mango wood sticks for havan kund fire' },
+  { id:'c39', name:'Havan Kund (Copper)',         icon:'🏺', price:399, unit:'1 piece',               cat:'Havan',    desc:'Square copper havan kund for fire ritual' },
+  { id:'c40', name:'Lobaan / Guggal Resin',      icon:'💨', price:79,  unit:'50g pack',              cat:'Havan',    desc:'Sacred resin for dhoop smoke and havan' },
+  { id:'c41', name:'Rudraksha Mala (108 beads)', icon:'📿', price:299, unit:'1 mala',                cat:'Abhishek', desc:'5-mukhi Rudraksha mala for Shiva puja' },
+  { id:'c42', name:'White Sandal Powder (Chandan)',icon:'🌿',price:99, unit:'50g pack',              cat:'Abhishek', desc:'Pure white chandan for abhishek and tilak' },
+  { id:'c43', name:'Dhatura Flower',             icon:'🌸', price:29,  unit:'5 pieces',              cat:'Abhishek', desc:'Sacred white Dhatura for Shiva puja' },
+  { id:'c44', name:'Kesar (Saffron)',            icon:'🟠', price:149, unit:'0.5g sachet',            cat:'Abhishek', desc:'Pure Kashmir kesar for puja tilak' },
+  { id:'c45', name:'Mango Leaves Torana (12)',   icon:'🍃', price:19,  unit:'12 leaves',             cat:'Decor',    desc:'Auspicious mango leaves for door decoration' },
+  { id:'c46', name:'Red Cloth / Chunri (1m)',    icon:'🟥', price:99,  unit:'1 yard',                cat:'Decor',    desc:'Red cloth for Devi covering and chunri' },
+  { id:'c47', name:'Yellow Cloth (1m)',          icon:'🟨', price:79,  unit:'1 yard',                cat:'Decor',    desc:'Yellow cloth for Vishnu puja and altar' },
+  { id:'c48', name:'Puja Bell (Ghanta)',         icon:'🔔', price:149, unit:'1 brass piece',         cat:'Utensil',  desc:'Brass bell for aarti and puja' },
+  { id:'c49', name:'Puja Chowki (Wooden Platform)',icon:'🟫',price:199,unit:'1 piece',               cat:'Utensil',  desc:'Wooden platform for idol and kalash' },
+  { id:'c50', name:'Panchamrit Copper Spoon',   icon:'🥄', price:49,  unit:'1 copper piece',        cat:'Utensil',  desc:'Copper spoon for panchamrit abhishek' },
+  { id:'c51', name:'Sambrani Cup (Dhoop)',       icon:'💨', price:49,  unit:'10 cups',               cat:'Incense',  desc:'Sambrani resin cups for home purification' },
+  { id:'c52', name:'Karpoor (Large Camphor Block)',icon:'⬜',price:29, unit:'5g block',              cat:'Incense',  desc:'Large camphor block for aarti plate' },
 ];
-const CUSTOM_CATS = ['All', 'Basic', 'Premium', 'Flowers', 'Fruits', 'Special'];
+const CUSTOM_CATS = ['All', 'Basic', 'Diya', 'Flowers', 'Liquid', 'Grain', 'Havan', 'Abhishek', 'Decor', 'Utensil', 'Incense'];
+const RITUAL_SAMAGRI = {
+  'griha-pravesh':   ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c11','c12','c13','c19','c20','c21','c29','c37','c38','c39','c45','c48','c49'],
+  'satyanarayan':    ['c01','c02','c03','c04','c05','c06','c07','c09','c11','c12','c13','c18','c20','c22','c23','c24','c25','c26','c29','c30','c34','c47','c48'],
+  'rudrabhishek':    ['c01','c02','c04','c06','c09','c11','c12','c16','c20','c21','c23','c24','c25','c40','c41','c42','c43','c44','c48','c51','c50'],
+  'vivah':           ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c11','c12','c13','c14','c19','c20','c21','c29','c32','c45','c46','c48','c49'],
+  'navgrah-shanti':  ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c13','c20','c21','c23','c29','c35','c36','c37','c47','c48'],
+  'kaal-sarp':       ['c01','c02','c04','c06','c09','c11','c12','c16','c20','c21','c37','c40','c41','c48'],
+  'lakshmi-puja':    ['c01','c02','c03','c04','c05','c06','c07','c09','c11','c12','c14','c15','c20','c22','c26','c29','c32','c44','c47','c48','c49'],
+  'ganesh-puja':     ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c17','c20','c29','c30','c48'],
+  'havan':           ['c01','c02','c04','c06','c08','c09','c11','c12','c20','c21','c35','c36','c37','c38','c39','c40','c48'],
+  'namkaran':        ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c13','c20','c22','c29','c48'],
+  'mundan':          ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c13','c20','c29','c48'],
+  'navratri-puja':   ['c01','c02','c03','c04','c05','c06','c08','c09','c11','c12','c13','c20','c29','c33','c46','c48'],
+  'diwali-puja':     ['c01','c02','c03','c04','c05','c06','c09','c10','c11','c12','c13','c14','c20','c26','c29','c48','c49'],
+  'custom':          ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c20','c29'],
+};
 
 export default function SamagriStorePage() {
   const navigate = useNavigate();
@@ -137,7 +189,13 @@ export default function SamagriStorePage() {
   const [sortBy, setSortBy] = useState('popular');
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [checkoutDone, setCheckoutDone] = useState(false);
-  const [customCart, setCustomCart] = useState({});
+  const [selectedRitual, setSelectedRitual] = useState('custom');
+  const [customCart, setCustomCart] = useState(() => {
+    const ids = RITUAL_SAMAGRI['custom'];
+    const cart = {};
+    ids.forEach(id => { cart[id] = 1; });
+    return cart;
+  });
   const [customCat, setCustomCat] = useState('All');
   const [bookingKit, setBookingKit] = useState(null); // kit selected for booking flow
 
@@ -249,9 +307,45 @@ export default function SamagriStorePage() {
 
       {activeTab === 'custom' ? (
         <div style={{ paddingBottom:20 }}>
-          <div style={{ background:'#FDF9F4', border:'1.5px solid rgba(255,107,0,0.15)', borderRadius:16, padding:'20px 24px', marginBottom:20 }}>
-            <div style={{ color:'#2C1A0E', fontWeight:900, fontSize:15, marginBottom:6 }}>🛠️ Build Your Perfect Pooja Kit</div>
-            <div style={{ color:'#8B6347', fontSize:13, fontWeight:600, lineHeight:1.5 }}>Select individual items for your specific ritual. Perfect for experienced devotees who know exactly what they need.</div>
+          <div style={{ background:'rgba(61,31,0,0.6)', border:'1.5px solid rgba(255,107,0,0.2)', borderRadius:16, padding:'20px 24px', marginBottom:20 }}>
+            <div style={{ color:'#F0C040', fontWeight:900, fontSize:15, marginBottom:6 }}>🛠️ Build Your Perfect Pooja Kit</div>
+            <div style={{ color:'rgba(255,248,240,0.65)', fontSize:13, fontWeight:600, lineHeight:1.5, marginBottom:14 }}>Select your ritual — items auto-fill. Add or remove below as needed.</div>
+            <label style={{ color:'#D4A017', fontSize:12, fontWeight:700, letterSpacing:0.8, display:'block', marginBottom:6 }}>
+              🕉️ SELECT YOUR RITUAL — Auto-fills the required items
+            </label>
+            <select value={selectedRitual}
+              onChange={e => {
+                const val = e.target.value;
+                setSelectedRitual(val);
+                const ids = RITUAL_SAMAGRI[val] || RITUAL_SAMAGRI['custom'];
+                const newCart = {};
+                ids.forEach(id => { newCart[id] = 1; });
+                setCustomCart(newCart);
+              }}
+              style={{
+                width:'100%', padding:'11px 14px', borderRadius:10,
+                border:'1.5px solid rgba(212,160,23,0.4)',
+                background:'rgba(255,255,255,0.06)', color:'rgba(255,248,240,0.9)',
+                fontSize:14, fontFamily:'inherit', cursor:'pointer', outline:'none',
+              }}>
+              <option value="custom">🕉️ Custom — Pick items manually</option>
+              <option value="griha-pravesh">🏡 Griha Pravesh (22 items)</option>
+              <option value="satyanarayan">🌟 Satyanarayan Katha (23 items)</option>
+              <option value="rudrabhishek">🔱 Rudrabhishek (21 items)</option>
+              <option value="vivah">💍 Vivah Ceremony (22 items)</option>
+              <option value="navgrah-shanti">⭐ Navgrah Shanti (19 items)</option>
+              <option value="kaal-sarp">🐍 Kaal Sarp Dosh (14 items)</option>
+              <option value="lakshmi-puja">🪷 Lakshmi Puja (21 items)</option>
+              <option value="ganesh-puja">🐘 Ganesh Puja (14 items)</option>
+              <option value="havan">🔥 Havan / Homam (17 items)</option>
+              <option value="namkaran">🍼 Namkaran Ceremony (14 items)</option>
+              <option value="mundan">✂️ Mundan Ceremony (14 items)</option>
+              <option value="navratri-puja">🌺 Navratri Puja (16 items)</option>
+              <option value="diwali-puja">🪔 Diwali Pooja (17 items)</option>
+            </select>
+            <div style={{ color:'rgba(255,248,240,0.35)', fontSize:11, marginTop:5 }}>
+              Selecting a ritual auto-fills all Vedic-required items. Add or remove below.
+            </div>
           </div>
           <div style={{ display:'flex', gap:8, marginBottom:16, flexWrap:'wrap' }}>
             {CUSTOM_CATS.map(c => (
@@ -347,20 +441,27 @@ export default function SamagriStorePage() {
             {filtered.length} kits found
           </div>
         </div>
-        <div style={{ display:'flex', gap:8, overflowX:'auto', scrollbarWidth:'none', paddingBottom:2 }}>
-          {CATEGORIES.map(c => (
-            <button key={c.id} onClick={()=>setCategory(c.id)}
-              style={{ display:'inline-flex', alignItems:'center', gap:5, padding:'8px 18px', borderRadius:40,
-                border:`1.5px solid ${category===c.id ? '#FF6B00' : 'rgba(255,107,0,0.15)'}`,
-                background: category===c.id ? '#FF6B00' : 'rgba(255,255,255,0.08)',
-                color: category===c.id ? '#fff' : 'rgba(255,248,240,0.7)',
-                fontWeight:800, fontSize:12, cursor:'pointer', whiteSpace:'nowrap', flexShrink:0,
-                fontFamily:'Nunito,sans-serif', transition:'all 0.24s',
-                boxShadow: category===c.id ? '0 4px 12px rgba(255,107,0,0.15)' : 'none' }}>
-              <span style={{ fontSize:16 }}>{c.icon}</span> {c.label}
-            </button>
-          ))}
-        </div>
+          <div style={{ display:'flex', gap:8, flexWrap:'wrap', margin:'12px 0' }}>
+            {CATEGORIES.map(cat => {
+              const active = category === cat.id;
+              return (
+                <button key={cat.id} onClick={() => setCategory(cat.id)}
+                  style={{
+                    display:'flex', alignItems:'center', gap:6,
+                    padding:'8px 16px', borderRadius:24, cursor:'pointer',
+                    fontFamily:'inherit', fontWeight:700, fontSize:13,
+                    transition:'all 0.2s', whiteSpace:'nowrap',
+                    border: active ? `1.5px solid ${cat.color}` : '1.5px solid rgba(212,160,23,0.25)',
+                    background: active ? cat.color : 'rgba(255,255,255,0.05)',
+                    color: active ? '#ffffff' : 'rgba(255,248,240,0.75)',
+                    boxShadow: active ? `0 2px 12px ${cat.color}44` : 'none',
+                  }}>
+                  <span style={{ fontSize:16 }}>{cat.icon}</span>
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
       </div>
 
       {/* Product Grid */}
