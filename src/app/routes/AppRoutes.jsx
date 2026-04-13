@@ -80,6 +80,7 @@ export default function AppRoutes() {
             <Route index element={<Navigate to="/user/home" replace />} />
             <Route path="home" element={<UserHome />} />
             <Route path="muhurta" element={<MuhuratPage />} />
+            <Route path="panchang" element={<MuhuratPage />} />
             <Route path="rituals" element={<RitualCatalogPage />} />
             <Route path="rituals-correct" element={<RitualCatalogPage />} />
             <Route path="instant-booking" element={<InstantPanditBooking />} />

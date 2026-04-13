@@ -31,15 +31,14 @@ export default function RitualCatalogPage() {
   const [samagri,        setSamagri]        = useState(false);
 
   const displayed = ALL_RITUALS
-    .filter(r => activeCategory === 'All' || r.category === activeCategory)
+    .filter(r =>
+      activeCategory === 'All' || r.category === activeCategory
+    )
     .filter(r => {
       if (!searchQuery) return true;
       const q = searchQuery.toLowerCase();
-      return (
-        r.name.toLowerCase().includes(q) ||
-        r.desc?.toLowerCase().includes(q) ||
-        r.category?.toLowerCase().includes(q)
-      );
+      return r.name.toLowerCase().includes(q)
+          || r.desc?.toLowerCase().includes(q);
     })
     .filter(r => {
       if (!budget || budget === 'Any Budget') return true;
@@ -48,10 +47,7 @@ export default function RitualCatalogPage() {
       if (budget === '₹5K – ₹10K') return r.price > 5000 && r.price <= 10000;
       return true;
     })
-    .filter(r => {
-      if (samagri && !r.samagriRequired) return false;
-      return true;
-    });
+    .filter(r => !samagri || r.samagriRequired);
 
   return (
     <div style={{ background: C.bg, minHeight:'100%', margin:'-20px', padding:'20px', color: C.text, fontFamily:'"Inter", sans-serif' }}>
@@ -105,18 +101,16 @@ export default function RitualCatalogPage() {
               return (
                 <button key={cat} onClick={() => setActiveCategory(cat)}
                   style={{
-                    display:'flex', alignItems:'center', gap:6,
                     padding:'8px 18px', borderRadius:24, cursor:'pointer',
                     fontFamily:'inherit', fontWeight: active ? 700 : 500,
-                    fontSize:13, transition:'all 0.18s', whiteSpace:'nowrap',
-                    border: active ? '2px solid #FF6B00' : '1px solid rgba(212,160,23,0.2)',
+                    fontSize:13, whiteSpace:'nowrap', transition:'all 0.18s',
+                    border: active
+                      ? '2px solid #FF6B00'
+                      : '1px solid rgba(212,160,23,0.2)',
                     background: active ? '#FF6B00' : 'rgba(255,255,255,0.05)',
-                    color: active ? '#ffffff' : 'rgba(255,248,240,0.85)',
+                    color: active ? '#fff' : 'rgba(255,248,240,0.85)',
                   }}>
-                  {cat}
-                  <span style={{ opacity:0.65, fontSize:11, marginLeft:2 }}>
-                    {count}
-                  </span>
+                  {cat} <span style={{ opacity:0.6, fontSize:11 }}>{count}</span>
                 </button>
               );
             })}
@@ -156,7 +150,6 @@ export default function RitualCatalogPage() {
                 color:'#D4A017',
                 fontSize:10, padding:'3px 10px',
                 borderRadius:20, fontWeight:600,
-                whiteSpace:'nowrap',
               }}>
                 {r.category}
               </span>

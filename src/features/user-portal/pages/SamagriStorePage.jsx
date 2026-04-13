@@ -365,7 +365,7 @@ export default function SamagriStorePage() {
                 style={{ padding:'8px 18px', borderRadius:20, cursor:'pointer', fontWeight:800, fontSize:13, fontFamily:'Nunito,sans-serif',
                   background: customCat===c ? '#FF6B00' : 'rgba(61,31,0,0.6)',
                   border: customCat===c ? 'none' : '1px solid rgba(255,107,0,0.2)',
-                  color: customCat===c ? '#fff' : 'rgba(255,248,240,0.6)' }}>
+                  color: customCat===c ? '#fff' : 'rgba(255,248,240,0.85)' }}>
                 {c}
               </button>
             ))}
