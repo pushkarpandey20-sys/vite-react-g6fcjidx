@@ -3,28 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useApp } from '../../../store/AppCtx';
 import { bookingApi } from '../../../api/bookingApi';
 import { Spinner } from '../../../components/common/UIElements';
-import { ALL_RITUALS } from '../../../data/ritualsData';
-
-/* ── Category inference ─────────────────────────────────── */
-function inferCategory(r) {
-  if (r.category) return r.category;
-  const t = ((r.name || '') + ' ' + (r.description || '')).toLowerCase();
-  if (/vivah|wedding|marriage|shaadi|mundan|namkaran|annaprasan|upanayan|birthday/.test(t)) return 'Life Event';
-  if (/griha pravesh|vastu|home|ghar|house|bhoomi/.test(t)) return 'Home';
-  if (/temple|mandir|seva/.test(t)) return 'Temple';
-  if (/rudrabhishek|shiva|lakshmi|saraswati|durga|navratri|devi|vishnu|krishna|ram|hanuman|ganesh|satyanarayan/.test(t)) return 'Wellness';
-  return 'General';
-}
-
-const CATS = [
-  { key:'All',        icon:'🕉️', color:'#FF6B00' },
-  { key:'General',    icon:'✨',  color:'#D4A017' },
-  { key:'Home',       icon:'🏠',  color:'#27AE60' },
-  { key:'Temple',     icon:'🛕',  color:'#E67E22' },
-  { key:'Life Event', icon:'💍',  color:'#9B59B6' },
-  { key:'Wellness',   icon:'🪔',  color:'#C0392B' },
-  { key:'Special',    icon:'⭐',  color:'#2980B9' },
-];
+import { ALL_RITUALS, RITUAL_CATEGORIES } from '../../../data/ritualsData';
 
 const PRICE_OPTIONS = [
   { label:'Any Budget', max:99999 },
@@ -46,46 +25,38 @@ const C = {
 
 export default function RitualCatalogPage() {
   const navigate = useNavigate();
-  const [rituals,   setRituals]   = useState([]);
-  const [loading,   setLoading]   = useState(true);
   const [activeCat, setActiveCat] = useState('All');
   const [activePri, setActivePri] = useState(0); 
   const [search,    setSearch]    = useState('');
   const [samagri,   setSamagri]   = useState(false);
-  const [counts,    setCounts]    = useState({});
 
-  useEffect(() => {
-    (async () => {
-      const localMapped = ALL_RITUALS.map(r => ({ ...r, _cat: inferCategory(r) }));
-      const { data } = await bookingApi.getRituals();
-      let list = data?.length > 0 ? [...data.map(r => ({ ...r, _cat: inferCategory(r) })), ...localMapped] : localMapped;
-      
-      const unique = Array.from(new Map(list.map(item => [item.id || item.name, item])).values());
-      setRituals(unique);
+  const filtered = ALL_RITUALS.filter(r => {
+    // Category filter
+    if (activeCat !== 'All' && r.category !== activeCat) return false;
+    
+    // Budget filter
+    const maxP = PRICE_OPTIONS[activePri].max;
+    if ((r.price || 0) > maxP) return false;
+    if (activePri === 1 && r.price >= 2000) return false;
+    if (activePri === 2 && (r.price < 2000 || r.price > 5000)) return false;
+    if (activePri === 3 && (r.price < 5000 || r.price > 10000)) return false;
 
-      const ct = { All: unique.length };
-      unique.forEach(r => { ct[r._cat] = (ct[r._cat] || 0) + 1; });
-      ct['Special'] = unique.filter(r => r.samagriRequired).length;
-      setCounts(ct);
-      setLoading(false);
-    })();
-  }, []);
-
-  const maxP = PRICE_OPTIONS[activePri].max;
-  const filtered = rituals.filter(r => {
-    if (activeCat !== 'All') {
-      if (activeCat === 'Special' && !r.samagriRequired) return false;
-      else if (activeCat !== 'Special' && r._cat !== activeCat) return false;
+    // Search filter
+    if (search) {
+      const q = search.toLowerCase();
+      if (!((r.name||'').toLowerCase().includes(q) || (r.desc||'').toLowerCase().includes(q))) return false;
     }
-    if ((r.price || 1500) > maxP) return false;
-    if (search && !((r.name||'').toLowerCase().includes(search.toLowerCase()))) return false;
+
+    // Samagri filter
+    if (samagri && !r.samagriRequired) return false;
+
     return true;
   });
 
   return (
     <div style={{ background: C.bg, minHeight:'100%', margin:'-20px', padding:'20px', color: C.text, fontFamily:'"Inter", sans-serif' }}>
       
-      {/* ── 1. Premium Instant Strip (Matches Screenshot) ── */}
+      {/* ── 1. Premium Instant Strip ── */}
       <div style={{
         background: 'rgba(26,15,7,0.9)', border: `1.5px solid ${C.accent}44`, borderRadius: 32,
         padding: '24px 32px', marginBottom: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -106,14 +77,14 @@ export default function RitualCatalogPage() {
         </button>
       </div>
 
-      {/* ── 2. Header & Search (Matches Screenshot) ── */}
+      {/* ── 2. Header & Search ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 40 }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
             <span style={{ fontSize: 28 }}>🕉️</span>
             <h1 style={{ fontFamily: 'Cinzel, serif', color: C.gold, fontSize: 36, margin: 0, fontWeight: 900 }}>Sacred Ritual Catalog</h1>
           </div>
-          <div style={{ fontSize: 14, fontWeight: 700, opacity: 0.6 }}>{rituals.length} Authentic Rituals · 120+ Verified Acharyas</div>
+          <div style={{ fontSize: 14, fontWeight: 700, opacity: 0.6 }}>{ALL_RITUALS.length} Authentic Rituals · 120+ Verified Acharyas</div>
         </div>
         <div style={{ background: '#fff', border: `1px solid ${C.border}`, borderRadius: 12, display: 'flex', alignItems: 'center', padding: '0 20px', width: 400, height: 56 }}>
           <span style={{ fontSize: 20, marginRight: 12, opacity: 0.4, color: '#000' }}>🔍</span>
@@ -121,21 +92,25 @@ export default function RitualCatalogPage() {
         </div>
       </div>
 
-      {/* ── 3. Filter Section (Matches Screenshot) ── */}
+      {/* ── 3. Filter Section ── */}
       <div style={{ background: 'rgba(26,15,7,0.5)', border: `1px solid ${C.border}`, borderRadius: 24, padding: '32px', marginBottom: 40 }}>
         <div style={{ marginBottom: 24 }}>
           <div style={{ color: C.gold, fontSize: 12, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 20 }}>Explore by Category</div>
-          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-            {CATS.map(cat => {
-              const isOn = activeCat === cat.key;
+          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+            {RITUAL_CATEGORIES.map(cat => {
+              const isOn = activeCat === cat;
+              const count = cat === 'All' 
+                ? ALL_RITUALS.length 
+                : ALL_RITUALS.filter(r => r.category === cat).length;
+
               return (
-                <button key={cat.key} onClick={() => setActiveCat(cat.key)} style={{
-                  display: 'flex', alignItems: 'center', gap: 10, padding: '14px 24px', borderRadius: 40, border: `1.5px solid ${isOn ? C.accent : C.border}`,
-                  background: isOn ? C.accent : 'rgba(30,15,5,0.7)', color: isOn ? '#fff' : C.text, fontSize: 14, fontWeight: 800, cursor: 'pointer', transition: '0.2s',
+                <button key={cat} onClick={() => setActiveCat(cat)} style={{
+                  display: 'flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 40, border: `1.5px solid ${isOn ? C.accent : C.border}`,
+                  background: isOn ? C.accent : 'rgba(30,15,5,0.7)', color: isOn ? '#fff' : C.text, fontSize: 13, fontWeight: 800, cursor: 'pointer', transition: '0.2s',
                   boxShadow: isOn ? `0 10px 20px ${C.accent}33` : 'none'
                 }}>
-                  <span>{cat.icon}</span> {cat.key} 
-                  <span style={{ fontSize: 11, opacity: 0.5 }}>{counts[cat.key] || 0}</span>
+                  {cat} 
+                  <span style={{ fontSize: 11, opacity: 0.6 }}>{count}</span>
                 </button>
               );
             })}
@@ -147,13 +122,13 @@ export default function RitualCatalogPage() {
              <span style={{ color: C.gold, fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1.5 }}>Budget</span>
              <div style={{ display: 'flex', gap: 8 }}>
                {PRICE_OPTIONS.map((pr, i) => (
-                 <button key={i} onClick={() => setActivePri(i)} style={{ padding: '10px 20px', borderRadius: 30, border: `1.5px solid ${activePri === i ? C.accent : C.border}`, background: activePri === i ? C.accent : 'rgba(40,15,5,0.6)', color: '#fff', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{pr.label}</button>
+                 <button key={i} onClick={() => setActivePri(i)} style={{ padding: '8px 16px', borderRadius: 30, border: `1.5px solid ${activePri === i ? C.accent : C.border}`, background: activePri === i ? C.accent : 'rgba(40,15,5,0.6)', color: '#fff', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{pr.label}</button>
                ))}
              </div>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div style={{ width: 44, height: 24, background: 'rgba(139,99,71,0.2)', borderRadius: 20, position: 'relative' }}>
-              <div style={{ width: 18, height: 18, background: '#fff', borderRadius: '50%', position: 'absolute', top: 3, left: 3 }} />
+            <div onClick={() => setSamagri(s => !s)} style={{ width: 44, height: 24, background: samagri ? '#27AE60' : 'rgba(139,99,71,0.2)', borderRadius: 20, position: 'relative', cursor: 'pointer', transition: '0.3s' }}>
+              <div style={{ width: 18, height: 18, background: '#fff', borderRadius: '50%', position: 'absolute', top: 3, left: samagri ? 23 : 3, transition: '0.2s' }} />
             </div>
             <span style={{ fontSize: 14, fontWeight: 700, color: '#1389cb' }}>📦 Include Samagri</span>
           </div>
@@ -164,20 +139,23 @@ export default function RitualCatalogPage() {
         Showing <span style={{ color: '#1389cb', fontWeight: 900 }}>{filtered.length}</span> divine options
       </div>
 
-      {/* ── 4. Grid (Matches Screenshot) ── */}
-      {loading ? <Spinner /> : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 32 }}>
-          {filtered.map(r => (
-            <div key={r.id || r.name} onClick={() => navigate('/user/booking', { state:{ selectedRitual:r } })} style={{ background: 'rgba(26,15,7,0.7)', border: `1.5px solid ${C.border}`, borderRadius: 24, padding: '24px', cursor: 'pointer', transition: '0.3s' }} onMouseEnter={e=>e.currentTarget.style.borderColor=C.accent} onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
-                <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(50,25,5,0.8)', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>{r.icon || '🕉️'}</div>
-                <div style={{ background: 'rgba(10,5,0,0.5)', color: '#27AE60', fontSize: 11, fontWeight: 900, padding: '4px 12px', borderRadius: 8, height: 'fit-content', border: '1px solid rgba(39,174,96,0.3)' }}>HOME</div>
-              </div>
-              <h3 style={{ fontFamily: 'Cinzel, serif', color: C.gold, margin: '0 0 10px', fontSize: 18, fontWeight: 900, textTransform: 'uppercase' }}>{r.name}</h3>
+      {/* ── 4. Grid ── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 32 }}>
+        {filtered.map(r => (
+          <div key={r.id || r.name} onClick={() => navigate('/user/booking', { state:{ selectedRitual:r } })} style={{ background: 'rgba(26,15,7,0.7)', border: `1.5px solid ${C.border}`, borderRadius: 24, padding: '24px', cursor: 'pointer', transition: '0.3s' }} onMouseEnter={e=>e.currentTarget.style.borderColor=C.accent} onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
+              <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(50,25,5,0.8)', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>{r.icon || '🕉️'}</div>
+              <div style={{ background: 'rgba(10,5,0,0.5)', color: '#D4A017', fontSize: 10, fontWeight: 900, padding: '4px 12px', borderRadius: 20, height: 'fit-content', border: '1px solid rgba(212,160,23,0.3)', textTransform: 'uppercase' }}>{r.category}</div>
             </div>
-          ))}
-        </div>
-      )}
+            <h3 style={{ fontFamily: 'Cinzel, serif', color: C.gold, margin: '0 0 10px', fontSize: 18, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 0.5 }}>{r.name}</h3>
+            <p style={{ fontSize: 13, color: 'rgba(255,248,240,0.6)', lineHeight: 1.6, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{r.desc}</p>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20, paddingTop: 16, borderTop: `1px solid ${C.border}` }}>
+               <div style={{ fontSize: 12, fontWeight: 800, color: C.accent }}>⏱️ {r.duration || '2 hrs'}</div>
+               <div style={{ fontSize: 18, fontWeight: 900, color: C.gold, fontFamily: 'Cinzel,serif' }}>₹{(r.price || 0).toLocaleString('en-IN')}</div>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
