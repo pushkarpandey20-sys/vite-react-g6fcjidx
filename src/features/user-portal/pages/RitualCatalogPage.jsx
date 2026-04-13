@@ -25,33 +25,33 @@ const C = {
 
 export default function RitualCatalogPage() {
   const navigate = useNavigate();
-  const [activeCat, setActiveCat] = useState('All');
-  const [activePri, setActivePri] = useState(0); 
-  const [search,    setSearch]    = useState('');
-  const [samagri,   setSamagri]   = useState(false);
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [budget,         setBudget]         = useState('Any Budget'); 
+  const [searchQuery,    setSearchQuery]    = useState('');
+  const [samagri,        setSamagri]        = useState(false);
 
-  const filtered = ALL_RITUALS.filter(r => {
-    // Category filter
-    if (activeCat !== 'All' && r.category !== activeCat) return false;
-    
-    // Budget filter
-    const maxP = PRICE_OPTIONS[activePri].max;
-    if ((r.price || 0) > maxP) return false;
-    if (activePri === 1 && r.price >= 2000) return false;
-    if (activePri === 2 && (r.price < 2000 || r.price > 5000)) return false;
-    if (activePri === 3 && (r.price < 5000 || r.price > 10000)) return false;
-
-    // Search filter
-    if (search) {
-      const q = search.toLowerCase();
-      if (!((r.name||'').toLowerCase().includes(q) || (r.desc||'').toLowerCase().includes(q))) return false;
-    }
-
-    // Samagri filter
-    if (samagri && !r.samagriRequired) return false;
-
-    return true;
-  });
+  const displayed = ALL_RITUALS
+    .filter(r => activeCategory === 'All' || r.category === activeCategory)
+    .filter(r => {
+      if (!searchQuery) return true;
+      const q = searchQuery.toLowerCase();
+      return (
+        r.name.toLowerCase().includes(q) ||
+        r.desc?.toLowerCase().includes(q) ||
+        r.category?.toLowerCase().includes(q)
+      );
+    })
+    .filter(r => {
+      if (!budget || budget === 'Any Budget') return true;
+      if (budget === 'Under ₹2K') return r.price < 2000;
+      if (budget === '₹2K – ₹5K') return r.price >= 2000 && r.price <= 5000;
+      if (budget === '₹5K – ₹10K') return r.price > 5000 && r.price <= 10000;
+      return true;
+    })
+    .filter(r => {
+      if (samagri && !r.samagriRequired) return false;
+      return true;
+    });
 
   return (
     <div style={{ background: C.bg, minHeight:'100%', margin:'-20px', padding:'20px', color: C.text, fontFamily:'"Inter", sans-serif' }}>
@@ -88,7 +88,7 @@ export default function RitualCatalogPage() {
         </div>
         <div style={{ background: '#fff', border: `1px solid ${C.border}`, borderRadius: 12, display: 'flex', alignItems: 'center', padding: '0 20px', width: 400, height: 56 }}>
           <span style={{ fontSize: 20, marginRight: 12, opacity: 0.4, color: '#000' }}>🔍</span>
-          <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search for a Pooja or Ceremony..." style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 16, color: '#000', fontWeight: 500 }} />
+          <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search for a Pooja or Ceremony..." style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 16, color: '#000', fontWeight: 500 }} />
         </div>
       </div>
 
@@ -98,19 +98,25 @@ export default function RitualCatalogPage() {
           <div style={{ color: C.gold, fontSize: 12, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 20 }}>Explore by Category</div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             {RITUAL_CATEGORIES.map(cat => {
-              const isOn = activeCat === cat;
-              const count = cat === 'All' 
-                ? ALL_RITUALS.length 
+              const count = cat === 'All'
+                ? ALL_RITUALS.length
                 : ALL_RITUALS.filter(r => r.category === cat).length;
-
+              const active = activeCategory === cat;
               return (
-                <button key={cat} onClick={() => setActiveCat(cat)} style={{
-                  display: 'flex', alignItems: 'center', gap: 8, padding: '10px 18px', borderRadius: 40, border: `1.5px solid ${isOn ? C.accent : C.border}`,
-                  background: isOn ? C.accent : 'rgba(30,15,5,0.7)', color: isOn ? '#fff' : C.text, fontSize: 13, fontWeight: 800, cursor: 'pointer', transition: '0.2s',
-                  boxShadow: isOn ? `0 10px 20px ${C.accent}33` : 'none'
-                }}>
-                  {cat} 
-                  <span style={{ fontSize: 11, opacity: 0.6 }}>{count}</span>
+                <button key={cat} onClick={() => setActiveCategory(cat)}
+                  style={{
+                    display:'flex', alignItems:'center', gap:6,
+                    padding:'8px 18px', borderRadius:24, cursor:'pointer',
+                    fontFamily:'inherit', fontWeight: active ? 700 : 500,
+                    fontSize:13, transition:'all 0.18s', whiteSpace:'nowrap',
+                    border: active ? '2px solid #FF6B00' : '1px solid rgba(212,160,23,0.2)',
+                    background: active ? '#FF6B00' : 'rgba(255,255,255,0.05)',
+                    color: active ? '#ffffff' : 'rgba(255,248,240,0.85)',
+                  }}>
+                  {cat}
+                  <span style={{ opacity:0.65, fontSize:11, marginLeft:2 }}>
+                    {count}
+                  </span>
                 </button>
               );
             })}
@@ -122,7 +128,7 @@ export default function RitualCatalogPage() {
              <span style={{ color: C.gold, fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1.5 }}>Budget</span>
              <div style={{ display: 'flex', gap: 8 }}>
                {PRICE_OPTIONS.map((pr, i) => (
-                 <button key={i} onClick={() => setActivePri(i)} style={{ padding: '8px 16px', borderRadius: 30, border: `1.5px solid ${activePri === i ? C.accent : C.border}`, background: activePri === i ? C.accent : 'rgba(40,15,5,0.6)', color: '#fff', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{pr.label}</button>
+                 <button key={i} onClick={() => setBudget(pr.label)} style={{ padding: '8px 16px', borderRadius: 30, border: `1.5px solid ${budget === pr.label ? C.accent : C.border}`, background: budget === pr.label ? C.accent : 'rgba(40,15,5,0.6)', color: '#fff', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{pr.label}</button>
                ))}
              </div>
           </div>
@@ -136,16 +142,24 @@ export default function RitualCatalogPage() {
       </div>
 
       <div style={{ marginBottom: 24, fontSize: 15, fontWeight: 600, color: C.text }}>
-        Showing <span style={{ color: '#1389cb', fontWeight: 900 }}>{filtered.length}</span> divine options
+        Showing <span style={{ color: '#1389cb', fontWeight: 900 }}>{displayed.length}</span> divine options
       </div>
 
       {/* ── 4. Grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 32 }}>
-        {filtered.map(r => (
+        {displayed.map(r => (
           <div key={r.id || r.name} onClick={() => navigate('/user/booking', { state:{ selectedRitual:r } })} style={{ background: 'rgba(26,15,7,0.7)', border: `1.5px solid ${C.border}`, borderRadius: 24, padding: '24px', cursor: 'pointer', transition: '0.3s' }} onMouseEnter={e=>e.currentTarget.style.borderColor=C.accent} onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
               <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(50,25,5,0.8)', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>{r.icon || '🕉️'}</div>
-              <div style={{ background: 'rgba(10,5,0,0.5)', color: '#D4A017', fontSize: 10, fontWeight: 900, padding: '4px 12px', borderRadius: 20, height: 'fit-content', border: '1px solid rgba(212,160,23,0.3)', textTransform: 'uppercase' }}>{r.category}</div>
+              <span style={{
+                background:'rgba(212,160,23,0.15)',
+                color:'#D4A017',
+                fontSize:10, padding:'3px 10px',
+                borderRadius:20, fontWeight:600,
+                whiteSpace:'nowrap',
+              }}>
+                {r.category}
+              </span>
             </div>
             <h3 style={{ fontFamily: 'Cinzel, serif', color: C.gold, margin: '0 0 10px', fontSize: 18, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 0.5 }}>{r.name}</h3>
             <p style={{ fontSize: 13, color: 'rgba(255,248,240,0.6)', lineHeight: 1.6, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{r.desc}</p>

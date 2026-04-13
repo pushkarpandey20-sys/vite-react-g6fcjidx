@@ -18,6 +18,7 @@ const CATEGORIES = [
 const PRODUCTS = [
   {
     id: 'diwali-kit', name: 'Diwali Pooja Kit', category: 'festival', icon: '🪔',
+    image: 'https://picsum.photos/seed/diwali/400/260',
     price: 599, mrp: 799,
     badge: 'POPULAR', rating: 4.8, reviews: 234, weight: '850g',
     desc: 'Complete Diwali puja kit with diyas, incense, roli, akshat, moli, camphor, agarbatti and sweets offering tray.',
@@ -25,6 +26,7 @@ const PRODUCTS = [
   },
   {
     id: 'ganesh-kit', name: 'Ganesh Puja Kit', category: 'festival', icon: '🐘',
+    image: 'https://picsum.photos/seed/ganesh/400/260',
     price: 449, mrp: 599,
     badge: 'BESTSELLER', rating: 4.9, reviews: 412, weight: '620g',
     desc: 'All items for Ganesh puja including modak, durva grass, red flowers, sindoor and more.',
@@ -32,6 +34,7 @@ const PRODUCTS = [
   },
   {
     id: 'griha-pravesh-kit', name: 'Griha Pravesh Kit', category: 'daily', icon: '🏡',
+    image: 'https://picsum.photos/seed/griha/400/260',
     price: 1299, mrp: 1699,
     badge: null, rating: 4.7, reviews: 156, weight: '1.8kg',
     desc: 'Premium Griha Pravesh kit with all items for home-entry ceremony havan and puja.',
@@ -39,6 +42,7 @@ const PRODUCTS = [
   },
   {
     id: 'navratri-kit', name: 'Navratri Pooja Kit', category: 'festival', icon: '🚩',
+    image: 'https://picsum.photos/seed/navra/400/260',
     price: 799, mrp: 999,
     badge: 'NEW', rating: 4.8, reviews: 89, weight: '1.1kg',
     desc: 'Complete 9-day Navratri puja kit with Durga idol, red chunri, jowar and all essentials.',
@@ -46,6 +50,7 @@ const PRODUCTS = [
   },
   {
     id: 'satyanarayan-kit', name: 'Satyanarayan Puja Kit', category: 'daily', icon: '🌟',
+    image: 'https://picsum.photos/seed/satya/400/260',
     price: 549, mrp: 699,
     badge: 'POPULAR', rating: 4.9, reviews: 321, weight: '780g',
     desc: 'Complete Satyanarayan Katha kit with panchamrit ingredients, tulsi, yellow cloth and all essentials.',
@@ -53,6 +58,7 @@ const PRODUCTS = [
   },
   {
     id: 'rudrabhishek-kit', name: 'Rudrabhishek Kit', category: 'abhishek', icon: '🔱',
+    image: 'https://picsum.photos/seed/rudra/400/260',
     price: 699, mrp: 899,
     badge: null, rating: 4.8, reviews: 178, weight: '950g',
     desc: 'Premium Rudrabhishek kit with bel patra, gangajal, milk, honey and all abhishek items.',
@@ -60,6 +66,7 @@ const PRODUCTS = [
   },
   {
     id: 'havan-kit', name: 'Havan Samagri Kit', category: 'havan', icon: '🔥',
+    image: 'https://picsum.photos/seed/havan/400/260',
     price: 399, mrp: 499,
     badge: null, rating: 4.6, reviews: 203, weight: '1.2kg',
     desc: 'Pure Vedic havan samagri with 51 herbs, ghee, sesame, barley and sacred wood.',
@@ -67,6 +74,7 @@ const PRODUCTS = [
   },
   {
     id: 'daily-puja-kit', name: 'Daily Puja Kit', category: 'daily', icon: '🌸',
+    image: 'https://picsum.photos/seed/puja/400/260',
     price: 299, mrp: 399,
     badge: 'BESTSELLER', rating: 4.7, reviews: 567, weight: '450g',
     desc: 'Everything for your daily puja — agarbatti, roli, akshat, moli, camphor and flowers.',
@@ -74,6 +82,7 @@ const PRODUCTS = [
   },
   {
     id: 'incense-set', name: 'Premium Incense Collection', category: 'incense', icon: '🥢',
+    image: 'https://picsum.photos/seed/incen/400/260',
     price: 349, mrp: 449,
     badge: null, rating: 4.8, reviews: 145, weight: '350g',
     desc: 'Premium dhoop, agarbatti and sambrani collection with 10 sacred fragrances.',
@@ -81,6 +90,7 @@ const PRODUCTS = [
   },
   {
     id: 'diya-lamp-set', name: 'Diya & Lamp Set', category: 'incense', icon: '🪔',
+    image: 'https://picsum.photos/seed/diyaa/400/260',
     price: 249, mrp: 349,
     badge: null, rating: 4.6, reviews: 98, weight: '600g',
     desc: 'Hand-crafted clay diyas and brass deepak for daily aarti and festival decorations.',
@@ -88,6 +98,7 @@ const PRODUCTS = [
   },
   {
     id: 'navgrah-kit', name: 'Navgrah Shanti Kit', category: 'abhishek', icon: '⭐',
+    image: 'https://picsum.photos/seed/navgr/400/260',
     price: 899, mrp: 1199,
     badge: null, rating: 4.7, reviews: 112, weight: '1.4kg',
     desc: 'Complete Navgrah shanti kit with 9 grain offerings, cloth pieces, and puja items.',
@@ -95,6 +106,7 @@ const PRODUCTS = [
   },
   {
     id: 'lakshmi-kit', name: 'Lakshmi Puja Kit', category: 'festival', icon: '🪷',
+    image: 'https://picsum.photos/seed/laksh/400/260',
     price: 499, mrp: 649,
     badge: 'NEW', rating: 4.9, reviews: 203, weight: '720g',
     desc: 'Complete Lakshmi puja kit with lotus, coins, red cloth, kumkum and all essentials.',
@@ -453,7 +465,7 @@ export default function SamagriStorePage() {
                     transition:'all 0.2s', whiteSpace:'nowrap',
                     border: active ? `1.5px solid ${cat.color}` : '1.5px solid rgba(212,160,23,0.25)',
                     background: active ? cat.color : 'rgba(255,255,255,0.05)',
-                    color: active ? '#ffffff' : 'rgba(255,248,240,0.75)',
+                    color: active ? '#ffffff' : 'rgba(255,248,240,0.85)',
                     boxShadow: active ? `0 2px 12px ${cat.color}44` : 'none',
                   }}>
                   <span style={{ fontSize:16 }}>{cat.icon}</span>
@@ -488,11 +500,15 @@ export default function SamagriStorePage() {
                 color:'#fff', fontSize:10, fontWeight:800, padding:'3px 10px',
                 borderRadius:'16px 0 10px 0' }}>✓ In Basket ({qty})</div>}
 
-              <div style={{ display:'flex', fontSize:64, alignItems:'center',
+              <div style={{ display:'flex', alignItems:'center',
                 justifyContent:'center', height:110, background:'rgba(212,160,23,0.06)',
                 marginBottom:12, marginTop: qty>0||p.badge ? 10 : 0, borderRadius:12,
-                filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>
-                {p.icon}
+                overflow: 'hidden', filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>
+                {p.image ? (
+                  <img src={p.image} alt={p.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
+                ) : (
+                  <span style={{ fontSize: 64 }}>{p.icon}</span>
+                )}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(39,174,96,0.08)', border: '1px solid rgba(34,197,94,0.2)', padding: '5px 12px', borderRadius: 20, width: 'fit-content', margin: '0 auto 12px' }}>
                 <IconVerified size={10} color="#27AE60" />
