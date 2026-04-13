@@ -105,7 +105,7 @@ const PRODUCTS = [
     items: ['9 Grains Set', '9 Color Cloths', 'Nav Dhanya', 'Coconut', 'Flowers', 'Akshat', 'Roli', 'Camphor'],
   },
   {
-    id: 'lakshmi-kit', name: 'Lakshmi Puja Kit', category: 'festival', icon: '🪷',
+    id: 'lakshmi-kit', name: 'Lakshmi Puja Kit', category: 'festival', icon: '🪔',
     image: 'https://picsum.photos/seed/laksh/400/260',
     price: 499, mrp: 649,
     badge: 'NEW', rating: 4.9, reviews: 203, weight: '720g',
@@ -160,32 +160,26 @@ const CUSTOM_ITEMS = [
   { id:'c41', name:'Rudraksha Mala (108 beads)', icon:'📿', price:299, unit:'1 mala',                cat:'Abhishek', desc:'5-mukhi Rudraksha mala for Shiva puja' },
   { id:'c42', name:'White Sandal Powder (Chandan)',icon:'🌿',price:99, unit:'50g pack',              cat:'Abhishek', desc:'Pure white chandan for abhishek and tilak' },
   { id:'c43', name:'Dhatura Flower',             icon:'🌸', price:29,  unit:'5 pieces',              cat:'Abhishek', desc:'Sacred white Dhatura for Shiva puja' },
-  { id:'c44', name:'Kesar (Saffron)',            icon:'🟠', price:149, unit:'0.5g sachet',            cat:'Abhishek', desc:'Pure Kashmir kesar for puja tilak' },
-  { id:'c45', name:'Mango Leaves Torana (12)',   icon:'🍃', price:19,  unit:'12 leaves',             cat:'Decor',    desc:'Auspicious mango leaves for door decoration' },
-  { id:'c46', name:'Red Cloth / Chunri (1m)',    icon:'🟥', price:99,  unit:'1 yard',                cat:'Decor',    desc:'Red cloth for Devi covering and chunri' },
-  { id:'c47', name:'Yellow Cloth (1m)',          icon:'🟨', price:79,  unit:'1 yard',                cat:'Decor',    desc:'Yellow cloth for Vishnu puja and altar' },
-  { id:'c48', name:'Puja Bell (Ghanta)',         icon:'🔔', price:149, unit:'1 brass piece',         cat:'Utensil',  desc:'Brass bell for aarti and puja' },
-  { id:'c49', name:'Puja Chowki (Wooden Platform)',icon:'🟫',price:199,unit:'1 piece',               cat:'Utensil',  desc:'Wooden platform for idol and kalash' },
-  { id:'c50', name:'Panchamrit Copper Spoon',   icon:'🥄', price:49,  unit:'1 copper piece',        cat:'Utensil',  desc:'Copper spoon for panchamrit abhishek' },
-  { id:'c51', name:'Sambrani Cup (Dhoop)',       icon:'💨', price:49,  unit:'10 cups',               cat:'Incense',  desc:'Sambrani resin cups for home purification' },
-  { id:'c52', name:'Karpoor (Large Camphor Block)',icon:'⬜',price:29, unit:'5g block',              cat:'Incense',  desc:'Large camphor block for aarti plate' },
+  { id:'c44', name:'Kesar (Saffron)',            icon:'🟠', price:149, unit:'0.5g sachet',            cat:'Abhishek', desc:'Pure Saffron for tilak' },
 ];
-const CUSTOM_CATS = ['All', 'Basic', 'Diya', 'Flowers', 'Liquid', 'Grain', 'Havan', 'Abhishek', 'Decor', 'Utensil', 'Incense'];
+
+const CUSTOM_CATS = ['All', 'Basic', 'Utensil', 'Diya', 'Flowers', 'Liquid', 'Grain', 'Havan', 'Abhishek', 'Decor', 'Incense'];
+
 const RITUAL_SAMAGRI = {
-  'griha-pravesh':   ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c11','c12','c13','c19','c20','c21','c29','c37','c38','c39','c45','c48','c49'],
-  'satyanarayan':    ['c01','c02','c03','c04','c05','c06','c07','c09','c11','c12','c13','c18','c20','c22','c23','c24','c25','c26','c29','c30','c34','c47','c48'],
-  'rudrabhishek':    ['c01','c02','c04','c06','c09','c11','c12','c16','c20','c21','c23','c24','c25','c40','c41','c42','c43','c44','c48','c51','c50'],
-  'vivah':           ['c01','c02','c03','c04','c05','c06','c07','c08','c09','c11','c12','c13','c14','c19','c20','c21','c29','c32','c45','c46','c48','c49'],
-  'navgrah-shanti':  ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c13','c20','c21','c23','c29','c35','c36','c37','c47','c48'],
-  'kaal-sarp':       ['c01','c02','c04','c06','c09','c11','c12','c16','c20','c21','c37','c40','c41','c48'],
-  'lakshmi-puja':    ['c01','c02','c03','c04','c05','c06','c07','c09','c11','c12','c14','c15','c20','c22','c26','c29','c32','c44','c47','c48','c49'],
-  'ganesh-puja':     ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c17','c20','c29','c30','c48'],
-  'havan':           ['c01','c02','c04','c06','c08','c09','c11','c12','c20','c21','c35','c36','c37','c38','c39','c40','c48'],
-  'namkaran':        ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c13','c20','c22','c29','c48'],
-  'mundan':          ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c13','c20','c29','c48'],
-  'navratri-puja':   ['c01','c02','c03','c04','c05','c06','c08','c09','c11','c12','c13','c20','c29','c33','c46','c48'],
-  'diwali-puja':     ['c01','c02','c03','c04','c05','c06','c09','c10','c11','c12','c13','c14','c20','c26','c29','c48','c49'],
-  'custom':          ['c01','c02','c03','c04','c05','c06','c09','c11','c12','c20','c29'],
+  'griha-pravesh':   ['c01','c02','c03','c04','c05','c06', 'c07','c08','c09','c11','c12','c13','c19','c20','c21','c29','c37','c38','c39','c48'],
+  'satyanarayan':    ['c01','c02','c03','c04','c05','c06', 'c07','c09','c11','c12','c13','c18','c20','c22','c23','c24','c25','c26','c29','c30','c34','c48'],
+  'rudrabhishek':    ['c01','c02','c04','c06', 'c09','c11','c12','c16','c20','c21','c23','c24','c25','c40','c41','c42','c43','c44','c48'],
+  'vivah':           ['c01','c02','c03','c04','c05','c06', 'c07','c08','c09','c11','c12','c13','c14','c19','c20','c21','c29','c32','c48'],
+  'navgrah-shanti':  ['c01','c02','c03','c04','c05','c06', 'c09','c11','c12','c13','c20','c21','c23','c29','c35','c36','c37','c48'],
+  'kaal-sarp':       ['c01','c02','c04', 'c06', 'c09','c11','c12','c16','c20','c21','c37','c40','c41','c48'],
+  'lakshmi-puja':    ['c01','c02','c03','c04','c05','c06', 'c07','c09','c11','c12','c14','c15','c20','c22','c26','c29','c32','c44','c48'],
+  'ganesh-puja':     ['c01','c02','c03','c04','c05','c06', 'c09','c11','c12','c17','c20','c29','c30','c48'],
+  'havan':           ['c01','c02','c04', 'c06', 'c08','c09','c11','c12','c20','c21','c35','c36','c37','c38','c39','c40','c48'],
+  'namkaran':        ['c01','c02','c03','c04','c05','c06', 'c09','c11','c12','c13','c20','c22','c29','c48'],
+  'mundan':          ['c01','c02','c03','c04','c05','c06', 'c09','c11','c12','c13','c20','c29','c48'],
+  'navratri-puja':   ['c01','c02','c03','c04','c05','c06', 'c08','c09','c11','c12','c13','c20','c29','c33','c48'],
+  'diwali-puja':     ['c01','c02','c03','c04','c05','c06', 'c09','c10','c11','c12','c13','c14','c20','c26','c29','c48'],
+  'custom':          ['c01','c02','c03','c04','c05','c06', 'c09','c11','c12','c20','c29'],
 };
 
 export default function SamagriStorePage() {
@@ -209,19 +203,21 @@ export default function SamagriStorePage() {
     return cart;
   });
   const [customCat, setCustomCat] = useState('All');
-  const [bookingKit, setBookingKit] = useState(null); // kit selected for booking flow
 
   const filtered = PRODUCTS
     .filter(p => category === 'All' || p.category === category)
     .filter(p => !search || p.name.toLowerCase().includes(search.toLowerCase()) || p.desc.toLowerCase().includes(search.toLowerCase()))
-    .sort((a,b) => sortBy==='price_low' ? a.price-b.price : sortBy==='price_high' ? b.price-a.price : sortBy==='rating' ? b.rating-a.rating : b.reviews-a.reviews);
+    .sort((a,b) => {
+      if (sortBy === 'price_low') return a.price - b.price;
+      if (sortBy === 'price_high') return b.price - a.price;
+      if (sortBy === 'rating') return b.rating - a.rating;
+      return b.reviews - a.reviews;
+    });
 
   const addToCart = (product, e) => {
     if(e) { e.stopPropagation(); e.preventDefault(); }
     setCart(prev => ({ ...prev, [product.id]: (prev[product.id]||0)+1 }));
-    // Also add to global cart so header badge updates
-    try { globalAddToCart({ id: `samagri_${product.id}`, name: product.name, price: product.price, icon: product.icon, qty: 1 }); } catch(_) {}
-    if(notificationStore) notificationStore.recordSearch(product.name);
+    globalAddToCart({ id: `samagri_${product.id}`, name: product.name, price: product.price, icon: product.icon, qty: 1 });
   };
   const removeFromCart = (productId, e) => {
     if(e) e.stopPropagation();
@@ -237,8 +233,8 @@ export default function SamagriStorePage() {
   };
 
   const totalItems = Object.values(cart).reduce((s,q)=>s+q,0);
-  const totalPrice = Object.entries(cart).reduce((s,[id,q])=>{ const p=PRODUCTS.find(p=>String(p.id)===String(id)); return s+(p?p.price*q:0); },0);
-  const totalSavings = Object.entries(cart).reduce((s,[id,q])=>{ const p=PRODUCTS.find(p=>String(p.id)===String(id)); return s+(p?(p.mrp-p.price)*q:0); },0);
+  const totalPrice = Object.entries(cart).reduce((s,[id,q])=>{ const p=PRODUCTS.find(p=>p.id===id); return s+(p?p.price*q:0); },0);
+  const totalSavings = Object.entries(cart).reduce((s,[id,q])=>{ const p=PRODUCTS.find(p=>p.id===id); return s+(p?(p.mrp-p.price)*q:0); },0);
 
   const customFiltered = CUSTOM_ITEMS.filter(i => customCat === 'All' || i.cat === customCat);
   const customTotal = Object.entries(customCart).reduce((s,[id,q]) => { const item = CUSTOM_ITEMS.find(i=>i.id===id); return s + (item ? item.price * q : 0); }, 0);
@@ -250,8 +246,7 @@ export default function SamagriStorePage() {
 
   const handleAddToBooking = (product, e) => {
     if (e) { e.stopPropagation(); e.preventDefault(); }
-    const kit = { id: `samagri_${product.id}`, name: product.name, price: product.price, icon: product.icon, deliveryTime: '2 Days', itemsIncluded: [] };
-    setBookingKit(kit);
+    const kit = { id: `samagri_${product.id}`, name: product.name, price: product.price, icon: product.icon, deliveryTime: '2 Days' };
     navigate('/user/booking', { state: { resumeFromSamagri: true, selectedKit: kit, bookingDraft } });
   };
 
@@ -271,15 +266,13 @@ export default function SamagriStorePage() {
           </button>
         </div>
       )}
+
       {/* Hero */}
       <div style={{ position:'relative', overflow:'hidden', ...dkCard, padding:'28px 26px', marginBottom:20, borderRadius:20 }}>
-        <div style={{ position:'absolute', top:-50, right:-30, width:240, height:240,
-          background:'radial-gradient(ellipse,rgba(240,192,64,0.12) 0%,transparent 70%)', pointerEvents:'none' }} />
+        <div style={{ position:'absolute', top:-50, right:-30, width:240, height:240, background:'radial-gradient(ellipse,rgba(240,192,64,0.12) 0%,transparent 70%)', pointerEvents:'none' }} />
         <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:16, flexWrap:'wrap' }}>
           <div>
-            <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:'rgba(255,107,0,0.08)',
-              border:'1px solid rgba(255,107,0,0.25)', color:'#FF6B00', fontSize:10, fontWeight:900,
-              letterSpacing:'1.2px', textTransform:'uppercase', padding:'4px 12px', borderRadius:20, marginBottom:10 }}>
+            <div style={{ display:'inline-flex', alignItems:'center', gap:6, background:'rgba(255,107,0,0.08)', border:'1px solid rgba(255,107,0,0.25)', color:'#FF6B00', fontSize:10, fontWeight:900, letterSpacing:'1.2px', textTransform:'uppercase', padding:'4px 12px', borderRadius:20, marginBottom:10 }}>
               📦 Purity Certified · Same-day Delivery
             </div>
             <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:'clamp(20px,3.5vw,28px)', margin:'0 0 6px', fontWeight:900 }}>🛍️ Pooja Samagri Store</h2>
@@ -287,21 +280,10 @@ export default function SamagriStorePage() {
           </div>
           {totalItems > 0 && (
             <button onClick={() => { setCheckoutDone(true); setTimeout(()=>{ setCart({}); setCheckoutDone(false); },3000); }}
-              style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none',
-                borderRadius:20, padding:'12px 22px', fontWeight:800, cursor:'pointer', fontSize:14,
-                boxShadow:'0 4px 14px rgba(255,107,0,0.35)', flexShrink:0 }}>
+              style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:20, padding:'12px 22px', fontWeight:800, cursor:'pointer', fontSize:14, boxShadow:'0 4px 14px rgba(255,107,0,0.35)', flexShrink:0 }}>
               🧺 Basket ({totalItems}) · ₹{totalPrice.toLocaleString()}
             </button>
           )}
-        </div>
-        {/* Trust badges */}
-        <div style={{ display:'flex', gap:16, marginTop:16, flexWrap:'wrap' }}>
-          {[['🚚','Same-day Delivery'],['✅','100% Authentic'],['🔄','Easy Returns'],['🆓','Free over ₹999']].map(([ic,tx])=>(
-            <div key={tx} style={{ display:'flex', alignItems:'center', gap:5 }}>
-              <span>{ic}</span>
-              <span style={{ color:'rgba(255,248,240,0.55)', fontSize:11, fontWeight:800 }}>{tx}</span>
-            </div>
-          ))}
         </div>
       </div>
 
@@ -322,42 +304,19 @@ export default function SamagriStorePage() {
           <div style={{ background:'rgba(61,31,0,0.6)', border:'1.5px solid rgba(255,107,0,0.2)', borderRadius:16, padding:'20px 24px', marginBottom:20 }}>
             <div style={{ color:'#F0C040', fontWeight:900, fontSize:15, marginBottom:6 }}>🛠️ Build Your Perfect Pooja Kit</div>
             <div style={{ color:'rgba(255,248,240,0.65)', fontSize:13, fontWeight:600, lineHeight:1.5, marginBottom:14 }}>Select your ritual — items auto-fill. Add or remove below as needed.</div>
-            <label style={{ color:'#D4A017', fontSize:12, fontWeight:700, letterSpacing:0.8, display:'block', marginBottom:6 }}>
-              🕉️ SELECT YOUR RITUAL — Auto-fills the required items
-            </label>
-            <select value={selectedRitual}
-              onChange={e => {
+            <select value={selectedRitual} onChange={e => {
                 const val = e.target.value;
                 setSelectedRitual(val);
                 const ids = RITUAL_SAMAGRI[val] || RITUAL_SAMAGRI['custom'];
                 const newCart = {};
                 ids.forEach(id => { newCart[id] = 1; });
                 setCustomCart(newCart);
-              }}
-              style={{
-                width:'100%', padding:'11px 14px', borderRadius:10,
-                border:'1.5px solid rgba(212,160,23,0.4)',
-                background:'rgba(255,255,255,0.06)', color:'rgba(255,248,240,0.9)',
-                fontSize:14, fontFamily:'inherit', cursor:'pointer', outline:'none',
-              }}>
+              }} style={{ width:'100%', padding:'11px 14px', borderRadius:10, border:'1.5px solid rgba(212,160,23,0.4)', background:'rgba(255,255,255,0.06)', color:'rgba(255,248,240,0.9)', fontSize:14, fontFamily:'inherit', cursor:'pointer', outline:'none' }}>
               <option value="custom">🕉️ Custom — Pick items manually</option>
-              <option value="griha-pravesh">🏡 Griha Pravesh (22 items)</option>
-              <option value="satyanarayan">🌟 Satyanarayan Katha (23 items)</option>
-              <option value="rudrabhishek">🔱 Rudrabhishek (21 items)</option>
-              <option value="vivah">💍 Vivah Ceremony (22 items)</option>
-              <option value="navgrah-shanti">⭐ Navgrah Shanti (19 items)</option>
-              <option value="kaal-sarp">🐍 Kaal Sarp Dosh (14 items)</option>
-              <option value="lakshmi-puja">🪷 Lakshmi Puja (21 items)</option>
-              <option value="ganesh-puja">🐘 Ganesh Puja (14 items)</option>
-              <option value="havan">🔥 Havan / Homam (17 items)</option>
-              <option value="namkaran">🍼 Namkaran Ceremony (14 items)</option>
-              <option value="mundan">✂️ Mundan Ceremony (14 items)</option>
-              <option value="navratri-puja">🌺 Navratri Puja (16 items)</option>
-              <option value="diwali-puja">🪔 Diwali Pooja (17 items)</option>
+              {Object.keys(RITUAL_SAMAGRI).filter(k=>k!=='custom').map(k=>(
+                <option key={k} value={k}>{k.split('-').map(w=>w[0].toUpperCase()+w.slice(1)).join(' ')}</option>
+              ))}
             </select>
-            <div style={{ color:'rgba(255,248,240,0.35)', fontSize:11, marginTop:5 }}>
-              Selecting a ritual auto-fills all Vedic-required items. Add or remove below.
-            </div>
           </div>
           <div style={{ display:'flex', gap:8, marginBottom:16, flexWrap:'wrap' }}>
             {CUSTOM_CATS.map(c => (
@@ -370,272 +329,110 @@ export default function SamagriStorePage() {
               </button>
             ))}
           </div>
-
-          {/* Custom Kit Quick Commerce Progress Bar */}
-          <div style={{ background: 'rgba(26,15,7,0.85)', padding: '16px 20px', borderRadius: 16, marginBottom: 20, border: '1.5px solid rgba(255,107,0,0.12)', boxShadow: '0 4px 12px rgba(255,107,0,0.04)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-              <span style={{ color: '#FF6B00', fontSize: 13, fontWeight: 900 }}>🚚 Free Delivery Milestone</span>
-              <span style={{ color: customTotal >= 500 ? '#27AE60' : 'rgba(255,248,240,0.55)', fontSize: 12, fontWeight: 900 }}>
-                {customTotal >= 500 ? '🎉 Unlocked!' : `₹${500 - customTotal} away`}
-              </span>
-            </div>
-            <div style={{ background: 'rgba(255,107,0,0.08)', height: 8, borderRadius: 10, overflow: 'hidden' }}>
-              <div style={{ background: customTotal >= 500 ? '#4ade80' : 'linear-gradient(90deg, #FF6B00, #F0C040)', height: '100%', width: `${Math.min((customTotal/500)*100, 100)}%`, transition: 'width 0.4s cubic-bezier(0.4, 0, 0.2, 1)' }} />
-            </div>
-          </div>
-
           <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(180px,1fr))', gap:12, marginBottom:24 }}>
             {customFiltered.map(item => {
               const qty = customCart[item.id] || 0;
               return (
-                <div key={item.id} style={{ background:'rgba(26,15,7,0.88)', border:`1.5px solid ${qty>0?'rgba(255,107,0,0.5)':'rgba(255,107,0,0.1)'}`, borderRadius:12, padding:'14px',
-                  boxShadow: qty>0?'0 4px 15px rgba(255,107,0,0.1)':'0 2px 8px rgba(0,0,0,0.03)' }}>
-                  {item.img ? (
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 8, height: 60 }}>
-                      <img src={item.img} alt={item.name} style={{ height: '100%', objectFit: 'contain', filter: 'drop-shadow(0 4px 6px rgba(0,0,0,0.5))' }} />
-                    </div>
-                  ) : (
-                    <div style={{ fontSize:40, marginBottom:8, textAlign:'center', filter:'drop-shadow(0 4px 6px rgba(0,0,0,0.4))' }}>{item.icon}</div>
-                  )}
+                <div key={item.id} style={{ ...dkCard, padding:'14px', border:`1.5px solid ${qty>0?'rgba(255,107,0,0.5)':'rgba(255,107,0,0.1)'}` }}>
+                  <div style={{ fontSize:40, marginBottom:8, textAlign:'center' }}>{item.icon}</div>
                   <div style={{ color:'#F0C040', fontWeight:900, fontSize:14, marginBottom:2, textAlign:'center' }}>{item.name}</div>
-                  <div style={{ color:'rgba(255,248,240,0.55)', fontSize:11, textAlign:'center', marginBottom:8, fontWeight:600 }}>{item.unit}</div>
-                  <div style={{ color:'#FF6B00', fontWeight:900, fontSize:19, textAlign:'center', marginBottom:12, fontFamily:'Cinzel,sans-serif' }}>₹{item.price}</div>
+                  <div style={{ color:'#FF6B00', fontWeight:900, fontSize:19, textAlign:'center', marginBottom:12 }}>₹{item.price}</div>
                   {qty === 0 ? (
                     <button onClick={()=>setCustomCart(c=>({...c,[item.id]:1}))}
-                      style={{ width:'100%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:8, padding:'8px', fontWeight:700, cursor:'pointer', fontSize:13 }}>
-                      + Add
-                    </button>
+                      style={{ width:'100%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:8, padding:'8px', fontWeight:700, cursor:'pointer' }}>+ Add</button>
                   ) : (
                     <div style={{ display:'flex', alignItems:'center', gap:6 }}>
                       <button onClick={()=>setCustomCart(c=>{const n={...c};if(n[item.id]<=1)delete n[item.id];else n[item.id]--;return n;})}
-                        style={{ width:32,height:32,borderRadius:'50%',background:'rgba(255,107,0,0.08)',color:'#FF6B00',border:'1.5px solid rgba(255,107,0,0.3)',cursor:'pointer',fontWeight:900,fontSize:18,display:'flex',alignItems:'center',justifyContent:'center' }}>−</button>
-                      <span style={{ flex:1,textAlign:'center',fontWeight:900,color:'rgba(255,248,240,0.9)',fontSize:16 }}>{qty}</span>
+                        style={{ width:32,height:32,borderRadius:'50%',background:'rgba(255,107,0,0.1)',color:'#FF6B00',border:'none',cursor:'pointer' }}>−</button>
+                      <span style={{ flex:1,textAlign:'center',fontWeight:900,color:'#fff' }}>{qty}</span>
                       <button onClick={()=>setCustomCart(c=>({...c,[item.id]:(c[item.id]||0)+1}))}
-                        style={{ width:32,height:32,borderRadius:'50%',background:'#FF6B00',color:'#fff',border:'none',cursor:'pointer',fontWeight:900,fontSize:18,display:'flex',alignItems:'center',justifyContent:'center' }}>+</button>
+                        style={{ width:32,height:32,borderRadius:'50%',background:'#FF6B00',color:'#fff',border:'none',cursor:'pointer' }}>+</button>
                     </div>
                   )}
                 </div>
               );
             })}
           </div>
-          {customCount > 0 && (
-            <div style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', borderRadius:14, padding:'18px 22px', display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-              <div>
-                <div style={{ color:'#fff', fontWeight:700, fontSize:15 }}>🛠️ Custom Built Kit ({customCount} items)</div>
-                <div style={{ color:'rgba(255,255,255,0.95)', fontSize:12, marginTop:4, display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden', maxWidth: '60vw', fontWeight: 600 }}>
-                  {Object.entries(customCart).map(([id, q]) => { const i = CUSTOM_ITEMS.find(x=>x.id===id); return i ? `${i.icon} ${i.name} (x${q})` : ''; }).join(', ')}
-                </div>
-              </div>
-              <div style={{ display:'flex', gap:12, alignItems:'center' }}>
-                <div style={{ color:'#fff', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:22 }}>₹{customTotal.toLocaleString()}</div>
-                <button onClick={()=>{ alert('Custom kit order placed! ✅ We will contact you to confirm.'); setCustomCart({}); }}
-                  style={{ background:'rgba(255,107,0,0.1)', color:'#FF6B00', border:'none', borderRadius:20, padding:'10px 22px', fontWeight:800, cursor:'pointer', fontSize:14 }}>
-                  Order Custom Kit →
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       ) : (
         <>
-
-      {/* Filters */}
-      <div className="compact-filter" style={{ ...dkCard, padding:'14px 18px', marginBottom:18, borderRadius:16 }}>
-        <div style={{ display:'flex', gap:12, marginBottom:16, flexWrap:'wrap', alignItems: 'center' }}>
-          <input style={{ flex: 1, background: 'rgba(40,15,5,0.8)', color: 'rgba(255,248,240,0.85)', border: '1.5px solid rgba(255,107,0,0.2)', borderRadius: 10, padding: '10px 14px' }} value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Search samagri kits..." />
-          <select style={selStyle} value={sortBy} onChange={e=>setSortBy(e.target.value)}>
-            <option value="popular">Most Popular</option>
-            <option value="rating">Highest Rated</option>
-            <option value="price_low">Price: Low → High</option>
-            <option value="price_high">Price: High → Low</option>
-          </select>
-          <div style={{ color:'rgba(255,248,240,0.55)', fontSize:13, fontWeight:900, padding: '0 8px' }}>
-            {filtered.length} kits found
+          {/* Filters */}
+          <div style={{ ...dkCard, padding:'14px 18px', marginBottom:18 }}>
+            <div style={{ display:'flex', gap:12, marginBottom:16, flexWrap:'wrap', alignItems: 'center' }}>
+              <input style={{ flex: 1, background: 'rgba(40,15,5,0.8)', color: 'rgba(255,248,240,0.85)', border: '1.5px solid rgba(255,107,0,0.2)', borderRadius: 10, padding: '10px 14px' }} value={search} onChange={e=>setSearch(e.target.value)} placeholder="🔍 Search samagri kits..." />
+              <select style={selStyle} value={sortBy} onChange={e=>setSortBy(e.target.value)}>
+                <option value="popular">Most Popular</option>
+                <option value="rating">Highest Rated</option>
+                <option value="price_low">Price: Low → High</option>
+                <option value="price_high">Price: High → Low</option>
+              </select>
+              <div style={{ color:'rgba(255,248,240,0.55)', fontSize:13, fontWeight:900 }}>{filtered.length} kits found</div>
+            </div>
+            <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
+              {CATEGORIES.map(cat => {
+                const active = category === cat.id;
+                return (
+                  <button key={cat.id} onClick={() => setCategory(cat.id)}
+                    style={{ display:'flex', alignItems:'center', gap:6, padding:'8px 16px', borderRadius:24, cursor:'pointer', fontFamily:'inherit', fontWeight:700, fontSize:13, transition:'0.2s', whiteSpace:'nowrap',
+                      border: active ? `1.5px solid ${cat.color}` : '1.5px solid rgba(212,160,23,0.25)',
+                      background: active ? cat.color : 'rgba(255,255,255,0.05)',
+                      color: active ? '#ffffff' : 'rgba(255,248,240,0.85)' }}>
+                    <span style={{ fontSize:16 }}>{cat.icon}</span>
+                    <span>{cat.label}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
-          <div style={{ display:'flex', gap:8, flexWrap:'wrap', margin:'12px 0' }}>
-            {CATEGORIES.map(cat => {
-              const active = category === cat.id;
+
+          {/* Product Grid */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))', gap:16 }}>
+            {filtered.map(p => {
+              const qty = cart[p.id]||0;
               return (
-                <button key={cat.id} onClick={() => setCategory(cat.id)}
-                  style={{
-                    display:'flex', alignItems:'center', gap:6,
-                    padding:'8px 16px', borderRadius:24, cursor:'pointer',
-                    fontFamily:'inherit', fontWeight:700, fontSize:13,
-                    transition:'all 0.2s', whiteSpace:'nowrap',
-                    border: active ? `1.5px solid ${cat.color}` : '1.5px solid rgba(212,160,23,0.25)',
-                    background: active ? cat.color : 'rgba(255,255,255,0.05)',
-                    color: active ? '#ffffff' : 'rgba(255,248,240,0.85)',
-                    boxShadow: active ? `0 2px 12px ${cat.color}44` : 'none',
-                  }}>
-                  <span style={{ fontSize:16 }}>{cat.icon}</span>
-                  <span>{cat.label}</span>
-                </button>
+                <div key={p.id} onClick={()=>setSelectedProduct(p)} style={{ ...dkCard, padding:18, cursor:'pointer', border: qty>0 ? '1.5px solid #FF6B00' : '1px solid rgba(212,160,23,0.18)' }}>
+                  {p.badge && <div style={{ position:'absolute', top:0, right:0, background:BADGE_COLORS[p.badge]||'#FF6B00', color:'#fff', fontSize:9, fontWeight:800, padding:'3px 10px', borderRadius:'0 16px 0 10px' }}>{p.badge}</div>}
+                  <div style={{ height:110, background:'rgba(212,160,23,0.06)', marginBottom:12, borderRadius:12, display:'flex', alignItems:'center', justifyContent:'center' }}>
+                    <img src={p.image} alt={p.name} style={{ width:'100%', height:'100%', objectFit:'cover', borderRadius:12 }} />
+                  </div>
+                  <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:'0 0 6px', fontSize:16, fontWeight:900 }}>{p.name}</h3>
+                  <div style={{ color:'#FF6B00', fontWeight:900, fontSize:22, marginBottom:14 }}>₹{p.price} <span style={{ color:'rgba(255,248,240,0.45)', fontSize:14, textDecoration:'line-through' }}>₹{p.mrp}</span></div>
+                  {qty===0 ? (
+                    <button onClick={e=>fromBooking ? handleAddToBooking(p,e) : addToCart(p,e)} style={{ width:'100%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:10, padding:'10px', fontWeight:800, cursor:'pointer' }}>{fromBooking ? '✅ Add to Booking' : '🧺 Add to Basket'}</button>
+                  ) : (
+                    <div onClick={e=>e.stopPropagation()} style={{ display:'flex', alignItems:'center', gap:8 }}>
+                      <button onClick={e=>removeFromCart(p.id,e)} style={{ width:36, height:36, borderRadius:'50%', background:'rgba(255,107,0,0.1)', color:'#FF6B00', border:'none', cursor:'pointer' }}>−</button>
+                      <span style={{ color:'#fff', fontWeight:900, fontSize:18, flex:1, textAlign:'center' }}>{qty}</span>
+                      <button onClick={e=>addToCart(p,e)} style={{ width:36, height:36, borderRadius:'50%', background:'#FF6B00', color:'#fff', border:'none', cursor:'pointer' }}>+</button>
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>
-      </div>
-
-      {/* Product Grid */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(220px,1fr))', gap:16 }}>
-        {filtered.map(p => {
-          const qty = cart[p.id]||0;
-          const discount = Math.round((1-p.price/p.mrp)*100);
-          return (
-            <div key={p.id} onClick={()=>setSelectedProduct(p)}
-              style={{ background:'rgba(26,15,7,0.88)', padding:18, cursor:'pointer', position:'relative',
-                border: qty>0 ? '1.5px solid #FF6B00' : '1.5px solid rgba(255,107,0,0.12)',
-                borderRadius: 20,
-                transition:'all 0.3s',
-                boxShadow: qty>0 ? '0 8px 24px rgba(255,107,0,0.1)' : '0 4px 12px rgba(0,0,0,0.03)',
-                overflow:'hidden' }}
-              onMouseEnter={e=>{ e.currentTarget.style.transform='translateY(-6px)'; e.currentTarget.style.boxShadow='0 20px 40px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor='#FF6B00'; }}
-              onMouseLeave={e=>{ e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow=qty>0 ? '0 8px 24px rgba(255,107,0,0.1)' : '0 4px 12px rgba(0,0,0,0.03)'; e.currentTarget.style.borderColor=qty>0 ? '#FF6B00' : 'rgba(255,107,0,0.12)'; }}>
-
-              {p.badge && <div style={{ position:'absolute', top:0, right:0,
-                background:`linear-gradient(135deg,${BADGE_COLORS[p.badge]||'#FF6B00'},${BADGE_COLORS[p.badge]||'#D4A017'})`,
-                color:'#fff', fontSize:'9px', fontWeight:800, padding:'3px 10px',
-                borderRadius:'0 16px 0 10px', letterSpacing:'0.8px' }}>{p.badge}</div>}
-              {qty>0 && <div style={{ position:'absolute', top:0, left:0, background:'rgba(255,107,0,0.9)',
-                color:'#fff', fontSize:10, fontWeight:800, padding:'3px 10px',
-                borderRadius:'16px 0 10px 0' }}>✓ In Basket ({qty})</div>}
-
-              <div style={{ display:'flex', alignItems:'center',
-                justifyContent:'center', height:110, background:'rgba(212,160,23,0.06)',
-                marginBottom:12, marginTop: qty>0||p.badge ? 10 : 0, borderRadius:12,
-                overflow: 'hidden', filter:'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}>
-                {p.image ? (
-                  <img src={p.image} alt={p.name} style={{ width:'100%', height:'100%', objectFit:'cover' }} />
-                ) : (
-                  <span style={{ fontSize: 64 }}>{p.icon}</span>
-                )}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'rgba(39,174,96,0.08)', border: '1px solid rgba(34,197,94,0.2)', padding: '5px 12px', borderRadius: 20, width: 'fit-content', margin: '0 auto 12px' }}>
-                <IconVerified size={10} color="#27AE60" />
-                <span style={{ fontSize: 10, color: '#27AE60', fontWeight: 900, letterSpacing: 0.5, textTransform: 'uppercase' }}>100% Vedic Verified</span>
-              </div>
-              <h3 style={{ color:'#F0C040', fontFamily:'Cinzel,serif', margin:'0 0 6px', fontSize:16, fontWeight:900, textAlign: 'center' }}>{p.name}</h3>
-              <div style={{ color:'rgba(255,248,240,0.55)', fontSize:11, marginBottom:10, textAlign: 'center', fontWeight:700 }}>
-                🧺 {Array.isArray(p.items) ? p.items.length : p.items} items · ⭐ {p.rating} ({p.reviews})
-              </div>
-              <p style={{ color:'rgba(255,248,240,0.6)', fontSize:13, lineHeight:1.6, margin:'0 0 14px', fontWeight:500,
-                display:'-webkit-box', WebkitLineClamp:3, WebkitBoxOrient:'vertical', overflow:'hidden', textAlign: 'center' }}>{p.desc}</p>
-              <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:8, marginBottom:6 }}>
-                <span style={{ color:'#FF6B00', fontWeight:900, fontSize:22, fontFamily:'Cinzel,serif' }}>₹{p.price}</span>
-                <span style={{ color:'rgba(255,248,240,0.45)', fontSize:14, textDecoration:'line-through', opacity:0.6 }}>₹{p.mrp}</span>
-                <span style={{ background:'rgba(39,174,96,0.1)', color:'#27AE60',
-                  fontSize:11, padding:'2px 10px', borderRadius:20, fontWeight:900 }}>{discount}% OFF</span>
-              </div>
-              <div style={{ color:'#27AE60', fontSize:11, fontWeight:800, marginBottom:14, textAlign: 'center' }}>Save ₹{(p.mrp-p.price).toLocaleString()}</div>
-
-              {qty===0 ? (
-                fromBooking ? (
-                  <button onClick={e=>handleAddToBooking(p,e)}
-                    style={{ width:'100%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff',
-                      border:'none', borderRadius:10, padding:'10px', fontWeight:800, cursor:'pointer', fontSize:13,
-                      boxShadow:'0 4px 12px rgba(255,107,0,0.3)' }}>
-                    ✅ Add to My Booking
-                  </button>
-                ) : (
-                <button onClick={e=>addToCart(p,e)}
-                  style={{ width:'100%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff',
-                    border:'none', borderRadius:10, padding:'10px', fontWeight:800, cursor:'pointer', fontSize:13,
-                    boxShadow:'0 4px 12px rgba(255,107,0,0.3)' }}>
-                  🧺 Add to Basket
-                </button>
-                )
-              ) : (
-                <div onClick={e=>e.stopPropagation()} style={{ display:'flex', alignItems:'center', gap:8 }}>
-                  <button onClick={e=>removeFromCart(p.id,e)} style={{ width:36, height:36, borderRadius:'50%',
-                    background:'rgba(255,107,0,0.08)', color:'#FF6B00', border:'1.5px solid rgba(255,107,0,0.3)',
-                    cursor:'pointer', fontWeight:900, fontSize:18, display:'flex', alignItems:'center', justifyContent:'center' }}>−</button>
-                  <span style={{ color:'rgba(255,248,240,0.9)', fontWeight:900, fontSize:18, flex:1, textAlign:'center' }}>{qty}</span>
-                  <button onClick={e=>addToCart(p,e)} style={{ width:36, height:36, borderRadius:'50%',
-                    background:'#FF6B00', color:'#fff', border:'none', cursor:'pointer',
-                    fontWeight:900, fontSize:18, display:'flex', alignItems:'center', justifyContent:'center' }}>+</button>
-                  <button onClick={e=>clearItem(p.id,e)} style={{ background:'none', border:'none',
-                    color:'#8B6347', cursor:'pointer', fontSize:16, padding:'0 4px', opacity:0.6 }}>🗑️</button>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
         </>
       )}
 
-      {/* Product Detail Modal */}
+      {/* Detail Modal */}
       {selectedProduct && (
-        <div onClick={()=>setSelectedProduct(null)}
-          style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.75)', zIndex:1000,
-            display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
-          <div onClick={e=>e.stopPropagation()}
-            style={{ background:'rgba(20,8,2,0.98)',
-              border:'2px solid #FF6B00', borderRadius:24, padding:32,
-              maxWidth:480, width:'100%', maxHeight:'90vh', overflowY:'auto',
-              boxShadow:'0 30px 70px rgba(0,0,0,0.15)' }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:20 }}>
-              <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', margin:0, fontSize:22, fontWeight:900 }}>{selectedProduct.name}</h2>
-              <button onClick={()=>setSelectedProduct(null)}
-                style={{ background:'rgba(255,107,0,0.1)', border:'none', color:'#F0C040',
-                  borderRadius:'50%', width:32, height:32, cursor:'pointer', fontSize:14,
-                  display:'flex', alignItems:'center', justifyContent:'center', fontWeight:800 }}>✕</button>
-            </div>
-            <div style={{ textAlign:'center', marginBottom:16 }}>
-              <div style={{ fontSize:56 }}>
-                {selectedProduct.icon.startsWith('/') ? <PremiumIcon src={selectedProduct.icon} size={80} /> : selectedProduct.icon}
-              </div>
-            </div>
-            <p style={{ color:'rgba(255,248,240,0.6)', fontSize:15, lineHeight:1.7, marginBottom:24, fontWeight:500 }}>{selectedProduct.desc}</p>
-            <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:12 }}>
-              <span style={{ color:'#FF6B00', fontWeight:900, fontSize:32, fontFamily:'Cinzel,serif' }}>₹{selectedProduct.price}</span>
-              <span style={{ color:'rgba(255,248,240,0.45)', fontSize:18, textDecoration:'line-through', opacity:0.5 }}>₹{selectedProduct.mrp}</span>
-              <span style={{ background:'rgba(39,174,96,0.1)', color:'#27AE60', padding:'4px 12px', borderRadius:20, fontSize:14, fontWeight:900 }}>
-                {Math.round((1-selectedProduct.price/selectedProduct.mrp)*100)}% OFF
-              </span>
-            </div>
-            <div style={{ display:'flex', gap:12, marginTop:24 }}>
-              {(cart[selectedProduct.id]||0)===0 ? (
-                <button onClick={e=>{ addToCart(selectedProduct,e); setSelectedProduct(null); }}
-                  style={{ flex:1, background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff',
-                    border:'none', borderRadius:14, padding:15, fontWeight:900, cursor:'pointer', fontSize:15, boxShadow:'0 8px 20px rgba(255,107,0,0.25)' }}>🧺 Add to Basket</button>
-              ) : (
-                <div style={{ flex:1, display:'flex', alignItems:'center', gap:12 }}>
-                  <button onClick={e=>removeFromCart(selectedProduct.id,e)} style={{ width:40, height:40, borderRadius:'50%',
-                    background:'rgba(255,107,0,0.1)', color:'#FF6B00', border:'2px solid rgba(255,107,0,0.3)',
-                    cursor:'pointer', fontWeight:900, fontSize:20, display:'flex', alignItems:'center', justifyContent:'center' }}>−</button>
-                  <span style={{ flex:1, textAlign:'center', fontWeight:900, fontSize:20, color:'rgba(255,248,240,0.9)' }}>{cart[selectedProduct.id]}</span>
-                  <button onClick={e=>addToCart(selectedProduct,e)} style={{ width:40, height:40, borderRadius:'50%',
-                    background:'#FF6B00', color:'#fff', border:'none', cursor:'pointer',
-                    fontWeight:900, fontSize:20, display:'flex', alignItems:'center', justifyContent:'center' }}>+</button>
-                </div>
-              )}
-              <button onClick={()=>setSelectedProduct(null)}
-                style={{ background:'rgba(26,15,7,0.85)', color:'rgba(255,248,240,0.6)',
-                  border:'1.5px solid rgba(255,107,0,0.15)', borderRadius:14, padding:'12px 24px', fontWeight:800, cursor:'pointer' }}>Close</button>
-            </div>
+        <div onClick={()=>setSelectedProduct(null)} style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.85)', zIndex:1000, display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
+          <div onClick={e=>e.stopPropagation()} style={{ ...dkCard, padding:32, maxWidth:480, width:'100%' }}>
+            <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', margin:'0 0 10px' }}>{selectedProduct.name}</h2>
+            <p style={{ color:'rgba(255,248,240,0.6)', fontSize:15, lineHeight:1.7, marginBottom:24 }}>{selectedProduct.desc}</p>
+            <div style={{ fontSize:32, color:'#FF6B00', fontWeight:900, marginBottom:24 }}>₹{selectedProduct.price}</div>
+            <button onClick={()=>setSelectedProduct(null)} style={{ width:'100%', background:'rgba(255,255,255,0.05)', color:'#fff', border:'1px solid rgba(255,255,255,0.2)', borderRadius:12, padding:12, fontWeight:800, cursor:'pointer' }}>Close</button>
           </div>
         </div>
       )}
 
-      {/* Sticky Cart Bar */}
+      {/* Sticky Cart */}
       {totalItems > 0 && (
-        <div style={{ position:'sticky', bottom:0, background:'linear-gradient(135deg,#FF6B00,#D4A017)',
-          padding:'14px 24px', display:'flex', justifyContent:'space-between', alignItems:'center',
-          boxShadow:'0 -4px 24px rgba(255,107,0,0.4)', zIndex:100, marginTop:20, borderRadius:'14px 14px 0 0' }}>
-          <div>
-            <div style={{ color:'#fff', fontWeight:700, fontSize:15 }}>🧺 {totalItems} items · Save ₹{totalSavings.toLocaleString()}</div>
-            <div style={{ color:'rgba(255,255,255,0.75)', fontSize:12 }}>Free delivery included!</div>
-          </div>
-          <div style={{ display:'flex', alignItems:'center', gap:12 }}>
-            <div style={{ color:'#fff', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:22 }}>₹{totalPrice.toLocaleString()}</div>
-            <button onClick={()=>{ setCheckoutDone(true); setTimeout(()=>{ setCart({}); setCheckoutDone(false); },3000); }}
-              style={{ background:'rgba(255,107,0,0.1)', color:'#FF6B00', border:'none', borderRadius:24,
-                padding:'10px 24px', fontWeight:800, cursor:'pointer', fontSize:14 }}>
-              {checkoutDone ? '✅ Order Placed!' : 'Checkout →'}
-            </button>
-          </div>
+        <div style={{ position:'sticky', bottom:0, background:'linear-gradient(135deg,#FF6B00,#D4A017)', padding:'14px 24px', display:'flex', justifyContent:'space-between', alignItems:'center', boxShadow:'0 -4px 24px rgba(0,0,0,0.5)', zIndex:100, marginTop:20, borderRadius:'16px 16px 0 0' }}>
+          <div style={{ color:'#fff', fontWeight:700 }}>🧺 {totalItems} items · ₹{totalPrice.toLocaleString()}</div>
+          <button onClick={()=>{ setCheckoutDone(true); setTimeout(()=>{ setCart({}); setCheckoutDone(false); },3000); }}
+            style={{ background:'#fff', color:'#FF6B00', border:'none', borderRadius:20, padding:'8px 24px', fontWeight:800, cursor:'pointer' }}>
+            {checkoutDone ? '✅ Order Placed!' : 'Checkout →'}
+          </button>
         </div>
       )}
     </div>

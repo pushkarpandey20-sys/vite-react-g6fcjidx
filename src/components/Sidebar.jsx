@@ -8,7 +8,7 @@ import {
 
 const NAV_ITEMS = [
   { path:'/user/home',        Icon:IconHome,        label:'Dashboard' },
-  { path:'/user/muhurta',     Icon:IconCalendar,    label:'Panchang' },
+  { path:'/user/panchang',    Icon:IconCalendar,    label:'Panchang' },
   { path:'/user/marketplace', Icon:IconSearch,      label:'Find Pandits' },
   { path:'/user/rituals',     Icon:IconBook,        label:'Book Now' },
   { path:'/user/history',     Icon:IconBook,        label:'My Bookings' },

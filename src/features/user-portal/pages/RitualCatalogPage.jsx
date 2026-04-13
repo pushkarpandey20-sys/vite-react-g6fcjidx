@@ -12,7 +12,6 @@ const PRICE_OPTIONS = [
   { label:'₹5K – ₹10K', max:10000 },
 ];
 
-/* ── Theme Constants ────────────────────────────────────── */
 const C = {
   bg: '#0a0500',
   dk: '#160d05',
@@ -42,12 +41,11 @@ export default function RitualCatalogPage() {
     })
     .filter(r => {
       if (!budget || budget === 'Any Budget') return true;
-      if (budget === 'Under ₹2K') return r.price < 2000;
+      if (budget === 'Under ₹2K')   return r.price < 2000;
       if (budget === '₹2K – ₹5K') return r.price >= 2000 && r.price <= 5000;
       if (budget === '₹5K – ₹10K') return r.price > 5000 && r.price <= 10000;
       return true;
-    })
-    .filter(r => !samagri || r.samagriRequired);
+    });
 
   return (
     <div style={{ background: C.bg, minHeight:'100%', margin:'-20px', padding:'20px', color: C.text, fontFamily:'"Inter", sans-serif' }}>
@@ -94,23 +92,26 @@ export default function RitualCatalogPage() {
           <div style={{ color: C.gold, fontSize: 12, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 20 }}>Explore by Category</div>
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             {RITUAL_CATEGORIES.map(cat => {
-              const count = cat === 'All'
-                ? ALL_RITUALS.length
+              const count = cat === 'All' ? ALL_RITUALS.length
                 : ALL_RITUALS.filter(r => r.category === cat).length;
               const active = activeCategory === cat;
               return (
                 <button key={cat} onClick={() => setActiveCategory(cat)}
                   style={{
                     padding:'8px 18px', borderRadius:24, cursor:'pointer',
-                    fontFamily:'inherit', fontWeight: active ? 700 : 500,
-                    fontSize:13, whiteSpace:'nowrap', transition:'all 0.18s',
-                    border: active
-                      ? '2px solid #FF6B00'
-                      : '1px solid rgba(212,160,23,0.2)',
+                    fontFamily:'inherit', fontSize:13, fontWeight: active?700:500,
+                    whiteSpace:'nowrap', transition:'all 0.18s',
+                    border: active ? '2px solid #FF6B00'
+                                   : '1px solid rgba(212,160,23,0.2)',
                     background: active ? '#FF6B00' : 'rgba(255,255,255,0.05)',
-                    color: active ? '#fff' : 'rgba(255,248,240,0.85)',
+                    color:       active ? '#fff'    : 'rgba(255,248,240,0.85)',
                   }}>
-                  {cat} <span style={{ opacity:0.6, fontSize:11 }}>{count}</span>
+                  {cat}
+                  {count > 0 &&
+                    <span style={{opacity:0.6,fontSize:11,marginLeft:4}}>
+                      {count}
+                    </span>
+                  }
                 </button>
               );
             })}
@@ -146,10 +147,9 @@ export default function RitualCatalogPage() {
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
               <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(50,25,5,0.8)', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>{r.icon || '🕉️'}</div>
               <span style={{
-                background:'rgba(212,160,23,0.15)',
-                color:'#D4A017',
-                fontSize:10, padding:'3px 10px',
-                borderRadius:20, fontWeight:600,
+                background:'rgba(212,160,23,0.15)', color:'#D4A017',
+                fontSize:10, padding:'3px 10px', borderRadius:20,
+                fontWeight:600, whiteSpace:'nowrap',
               }}>
                 {r.category}
               </span>
