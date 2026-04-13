@@ -29,10 +29,12 @@ export default function UserLayout() {
       <header className="ph" style={{
         background: 'linear-gradient(135deg, rgba(61,31,0,0.95) 0%, rgba(26,10,0,0.9) 100%)',
         borderBottom: '1px solid rgba(255,107,0,0.2)',
-        padding: '16px 24px',
+        padding: '20px 24px',
+        position: 'relative',
+        zIndex: 5
       }}>
-        <h1 className="ph-title">{title}</h1>
-        <p className="ph-sub">{sub}</p>
+        <h1 className="ph-title" style={{ fontFamily:'Cinzel, serif', color:'#F0C040', fontWeight:900, fontSize:24, marginBottom:4 }}>{title}</h1>
+        <p className="ph-sub" style={{ color:'rgba(255,248,240,0.6)', fontSize:14, fontWeight:600, margin:0 }}>{sub}</p>
       </header>
       <main className="cb ds-user-content" style={{ paddingBottom: 80 }}>
         <Outlet />

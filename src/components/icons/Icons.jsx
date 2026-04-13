@@ -66,3 +66,8 @@ export const IconOm = ({ size=20, color='currentColor', style={} }) => (
     <text x="50" y="72" fontFamily="serif" fontSize="72" textAnchor="middle" fill={color}>&#x950;</text>
   </svg>
 );
+
+export const IconShield    = icon(<><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></>);
+export const IconZap       = icon(<><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></>);
+export const IconAward     = icon(<><path d="M12 15l-2 5 2-1 2 1-2-5z"/><circle cx="12" cy="8" r="7"/></>);
+export const IconUserCheck = icon(<><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></>);

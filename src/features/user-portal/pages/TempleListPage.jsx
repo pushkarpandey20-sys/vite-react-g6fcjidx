@@ -22,10 +22,18 @@ export default function TempleListPage() {
   const [liveOnly, setLiveOnly] = useState(false);
 
   useEffect(() => {
-    db.temples().select('*').then(({ data }) => {
-      setTemples(data?.length ? data : SAMPLE_TEMPLES);
-      setLoading(false);
-    });
+    (async () => {
+      try {
+        const { data, error } = await db.temples().select('*');
+        if (error) throw error;
+        setTemples(data?.length ? data : SAMPLE_TEMPLES);
+      } catch (e) {
+        console.warn("Temple Fetch Error (using fallbacks):", e);
+        setTemples(SAMPLE_TEMPLES);
+      } finally {
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const filtered = temples
@@ -37,99 +45,116 @@ export default function TempleListPage() {
     navigate(`/user/temples/book/${temple.id}`, { state: { temple } });
   };
 
-  const dkCard = { background:'rgba(26,15,7,0.72)', border:'1px solid rgba(240,192,64,0.14)', borderRadius:20, backdropFilter:'blur(16px)', overflow:'hidden', display:'flex', flexDirection:'column' };
+  const C = {
+    bg: '#fff8f0',
+    card: '#ffffff',
+    text: '#3d1f00',
+    soft: '#9a8070',
+    accent: '#FF6B00',
+    gold: '#D4A017',
+    border: 'rgba(212,160,23,0.15)'
+  };
+
+  const cardStyle = { 
+    background: C.card, 
+    border: `1px solid ${C.border}`, 
+    borderRadius: 24, 
+    overflow: 'hidden', 
+    display: 'flex', 
+    flexDirection: 'column',
+    boxShadow: '0 4px 20px rgba(0,0,0,0.03)'
+  };
 
   return (
-    <div>
+    <div style={{ color: C.text, fontFamily: '"Inter", sans-serif' }}>
       {/* Hero */}
-      <div style={{ position:'relative', overflow:'hidden', ...dkCard, padding:'28px 26px', marginBottom:20, borderRadius:20 }}>
-        <div style={{ position:'absolute', top:-50, right:-30, width:240, height:240,
-          background:'radial-gradient(ellipse,rgba(255,107,0,0.1) 0%,transparent 70%)', pointerEvents:'none' }} />
-        <div style={{ display:'inline-flex', alignItems:'center', gap:5, background:'rgba(240,192,64,0.1)',
-          border:'1px solid rgba(240,192,64,0.25)', color:'#F0C040', fontSize:10, fontWeight:800,
-          letterSpacing:'1.2px', textTransform:'uppercase', padding:'4px 12px', borderRadius:20, marginBottom:12 }}>
-          🛕 Sacred Temples Across Bharat
+      <div style={{ ...cardStyle, padding: '32px', marginBottom: 24, background: 'linear-gradient(135deg, #fff5eb, #fff)' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: 'rgba(255,107,0,0.08)',
+          border: '1px solid rgba(255,107,0,0.15)', color: C.accent, fontSize: 10, fontWeight: 800,
+          letterSpacing: '1.2px', textTransform: 'uppercase', padding: '5px 14px', borderRadius: 20, marginBottom: 12 }}>
+          🛕 Sacred Sites of Bharat
         </div>
-        <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:'clamp(18px,3vw,26px)', margin:'0 0 6px', fontWeight:900 }}>Sacred Temples & Shrines</h2>
-        <p style={{ color:'rgba(255,248,240,0.5)', margin:0, fontSize:13 }}>Book temple services, remote aarti darshan, and special poojas — from anywhere.</p>
+        <h2 style={{ fontFamily: 'Cinzel, serif', color: C.text, fontSize: 28, margin: '0 0 8px', fontWeight: 900 }}>Sacred Temples & Shrines</h2>
+        <p style={{ color: C.soft, margin: 0, fontSize: 14, fontWeight: 500 }}>Book temple services, remote aarti darshan, and special poojas from across the subcontinent.</p>
       </div>
 
       {/* Filter bar */}
-      <div style={{ display:'flex', gap:12, marginBottom:20, alignItems:'center', flexWrap:'wrap' }}>
-        <div style={{ position:'relative', flex:1, minWidth:180 }}>
-          <span style={{ position:'absolute', left:13, top:'50%', transform:'translateY(-50%)', fontSize:14, pointerEvents:'none' }}>🔍</span>
-          <input value={filter} onChange={e=>setFilter(e.target.value)} placeholder="Search temple or city..."
-            style={{ width:'100%', padding:'10px 14px 10px 36px', background:'rgba(255,248,240,0.05)',
-              border:'1.5px solid rgba(240,192,64,0.2)', borderRadius:12, color:'rgba(255,248,240,0.88)',
-              fontSize:13, outline:'none', fontFamily:'Nunito,sans-serif', boxSizing:'border-box' }} />
+      <div style={{ display: 'flex', gap: 16, marginBottom: 24, alignItems: 'center', flexWrap: 'wrap' }}>
+        <div style={{ position: 'relative', flex: 1, minWidth: 260 }}>
+          <span style={{ position: 'absolute', left: 16, top: '50%', transform: 'translateY(-50%)', opacity: 0.5 }}>🔍</span>
+          <input value={filter} onChange={e => setFilter(e.target.value)} placeholder="Search temple, deity or city..."
+            style={{ width: '100%', padding: '12px 14px 12px 48px', background: '#fff',
+              border: `1px solid ${C.border}`, borderRadius: 16, color: C.text,
+              fontSize: 14, fontWeight: 600, outline: 'none' }} />
         </div>
-        <label style={{ display:'flex', alignItems:'center', gap:8, cursor:'pointer',
-          background:'rgba(255,0,0,0.08)', border:'1px solid rgba(255,0,0,0.25)',
-          borderRadius:20, padding:'8px 16px', whiteSpace:'nowrap' }}>
-          <input type="checkbox" checked={liveOnly} onChange={e=>setLiveOnly(e.target.checked)}
-            style={{ accentColor:'#FF4444', width:14, height:14 }} />
-          <span style={{ color:'#FF9999', fontWeight:700, fontSize:12 }}>🔴 LIVE Only</span>
+        <label style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer',
+          background: liveOnly ? 'rgba(239,68,68,0.08)' : '#fff', 
+          border: `1px solid ${liveOnly ? 'rgba(239,68,68,0.3)' : C.border}`,
+          borderRadius: 16, padding: '10px 20px', whiteSpace: 'nowrap' }}>
+          <input type="checkbox" checked={liveOnly} onChange={e => setLiveOnly(e.target.checked)}
+            style={{ accentColor: '#ef4444', width: 16, height: 16 }} />
+          <span style={{ color: liveOnly ? '#ef4444' : C.soft, fontWeight: 800, fontSize: 13 }}>🔴 LIVE DARSHAN</span>
         </label>
-        <div style={{ color:'rgba(255,248,240,0.35)', fontSize:12, fontWeight:600, whiteSpace:'nowrap' }}>
-          {loading ? '…' : `${filtered.length} temples`}
+        <div style={{ color: C.soft, fontSize: 13, fontWeight: 700 }}>
+          {loading ? '…' : `${filtered.length} temples active`}
         </div>
       </div>
 
       {loading ? (
-        <div style={{ textAlign:'center', padding:'60px 0' }}><Spinner /></div>
+        <div style={{ textAlign: 'center', padding: '80px 0' }}><Spinner /></div>
       ) : (
-        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(340px,1fr))', gap:20 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 24 }}>
           {filtered.map(t => (
-            <div key={t.id} style={{ ...dkCard, cursor:'pointer', transition:'transform 0.3s, box-shadow 0.3s, border-color 0.3s' }}
-              onMouseEnter={e=>{ e.currentTarget.style.transform='translateY(-5px)'; e.currentTarget.style.boxShadow='0 20px 48px rgba(0,0,0,0.5)'; e.currentTarget.style.borderColor='rgba(240,192,64,0.3)'; }}
-              onMouseLeave={e=>{ e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow=''; e.currentTarget.style.borderColor='rgba(240,192,64,0.14)'; }}>
+            <div key={t.id} style={{ ...cardStyle, transition: '0.3s' }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-6px)'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(0,0,0,0.08)'; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.03)'; }}>
 
-              {/* Temple image area */}
-              <div style={{ height:160, position:'relative', background:'linear-gradient(135deg,rgba(44,26,14,0.9),rgba(26,15,7,0.95))',
-                display:'flex', alignItems:'center', justifyContent:'center', overflow:'hidden' }}>
-                <div style={{ fontSize:72, filter:'drop-shadow(0 0 16px rgba(255,107,0,0.3))', lineHeight:1 }}>{t.icon||'🛕'}</div>
-                <div style={{ position:'absolute', inset:0, background:'radial-gradient(ellipse at center, rgba(240,192,64,0.06) 0%, transparent 70%)', pointerEvents:'none' }} />
+              {/* Decorative Area */}
+              <div style={{ height: 180, position: 'relative', background: 'linear-gradient(135deg, #fef2e0, #fff)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+                <div style={{ fontSize: 80, lineHeight: 1, filter: 'drop-shadow(0 4px 12px rgba(255,107,0,0.15))' }}>{t.icon || '🛕'}</div>
+                
                 {t.is_live && (
-                  <div style={{ position:'absolute', top:12, right:12, background:'rgba(255,0,0,0.9)',
-                    color:'#fff', fontSize:10, fontWeight:800, padding:'4px 10px', borderRadius:20,
-                    display:'flex', alignItems:'center', gap:5, boxShadow:'0 2px 8px rgba(255,0,0,0.4)' }}>
-                    <div style={{ width:6, height:6, background:'#fff', borderRadius:'50%', animation:'pulse 1s infinite' }} />
+                  <div style={{ position: 'absolute', top: 16, right: 16, background: '#ef4444',
+                    color: '#fff', fontSize: 10, fontWeight: 940, padding: '5px 12px', borderRadius: 20,
+                    display: 'flex', alignItems: 'center', gap: 6, boxShadow: '0 4px 12px rgba(239,68,68,0.3)' }}>
+                    <div style={{ width: 6, height: 6, background: '#fff', borderRadius: '50%' }} />
                     LIVE
                   </div>
                 )}
-                <div style={{ position:'absolute', bottom:12, left:12, background:'rgba(0,0,0,0.6)',
-                  backdropFilter:'blur(8px)', color:'#FF9F40', padding:'4px 12px',
-                  borderRadius:20, fontSize:12, fontWeight:700, border:'1px solid rgba(255,107,0,0.3)' }}>
+                <div style={{ position: 'absolute', bottom: 16, left: 16, background: 'rgba(255,255,255,0.85)',
+                  backdropFilter: 'blur(10px)', color: C.text, padding: '6px 14px',
+                  borderRadius: 20, fontSize: 12, fontWeight: 800, border: `1px solid ${C.border}` }}>
                   📍 {t.city}
                 </div>
               </div>
 
-              {/* Card body */}
-              <div style={{ padding:'18px 20px', flex:1, display:'flex', flexDirection:'column' }}>
-                <h3 style={{ margin:'0 0 8px', fontFamily:'Cinzel,serif', fontSize:17, color:'#F0C040', fontWeight:700 }}>{t.name}</h3>
-                <p style={{ color:'rgba(255,248,240,0.45)', fontSize:13, fontStyle:'italic', marginBottom:14, lineHeight:1.55, margin:'0 0 14px' }}>
-                  {t.description||'Ancient shrine of divine grace and spiritual wisdom.'}
+              {/* Info Area */}
+              <div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                <h3 style={{ margin: '0 0 10px', fontFamily: 'Cinzel, serif', fontSize: 19, color: C.text, fontWeight: 900 }}>{t.name}</h3>
+                <p style={{ color: C.soft, fontSize: 14, fontStyle: 'italic', lineHeight: 1.6, margin: '0 0 20px' }}>
+                  {t.description || 'Ancient shrine of divine grace and spiritual wisdom.'}
                 </p>
 
-                <div style={{ borderTop:'1px solid rgba(240,192,64,0.08)', paddingTop:14, marginTop:'auto' }}>
-                  {/* Pooja tags */}
-                  <div style={{ display:'flex', flexWrap:'wrap', gap:6, marginBottom:14 }}>
-                    {(t.poojas||[]).slice(0,3).map((p,i)=>(
-                      <span key={i} style={{ fontSize:10, background:'rgba(240,192,64,0.08)',
-                        color:'rgba(240,192,64,0.7)', padding:'3px 9px', borderRadius:6,
-                        border:'1px solid rgba(240,192,64,0.15)', fontWeight:700 }}>{p}</span>
+                <div style={{ borderTop: `1px solid ${C.border}`, paddingTop: 20, marginTop: 'auto' }}>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 20 }}>
+                    {(t.poojas || []).slice(0, 3).map((p, i) => (
+                      <span key={i} style={{ fontSize: 10, background: 'rgba(212,160,23,0.06)',
+                        color: C.gold, padding: '4px 10px', borderRadius: 8,
+                        border: `1px solid rgba(212,160,23,0.15)`, fontWeight: 800 }}>{p}</span>
                     ))}
-                    {t.poojas?.length>3 && (
-                      <span style={{ fontSize:10, color:'rgba(255,248,240,0.3)', padding:'3px 6px' }}>+{t.poojas.length-3} more</span>
+                    {t.poojas?.length > 3 && (
+                      <span style={{ fontSize: 10, color: C.soft, padding: '4px 6px', fontWeight: 600 }}>+{t.poojas.length - 3} more</span>
                     )}
                   </div>
 
-                  <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                    <div style={{ fontSize:12, color:'rgba(255,248,240,0.4)' }}>
-                      Next Aarti: <span style={{ color:'#FF9F40', fontWeight:800 }}>{t.next_aarti||'Noon'}</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ fontSize: 12, color: C.soft, fontWeight: 600 }}>
+                      Next Aarti: <span style={{ color: C.accent, fontWeight: 900 }}>{t.next_aarti || 'Noon'}</span>
                     </div>
-                    <button onClick={()=>handleBook(t)} className="btn btn-primary btn-sm"
-                      style={{ fontSize:12, padding:'7px 16px' }}>
+                    <button onClick={() => handleBook(t)}
+                      style={{ background: C.accent, color: '#fff', border: 'none', borderRadius: 12, 
+                        padding: '10px 20px', fontSize: 13, fontWeight: 840, cursor: 'pointer', boxShadow: '0 4px 12px rgba(255,107,0,0.2)' }}>
                       View Services →
                     </button>
                   </div>
@@ -141,12 +166,14 @@ export default function TempleListPage() {
       )}
 
       {!loading && filtered.length === 0 && (
-        <div style={{ textAlign:'center', padding:'60px 20px',
-          background:'rgba(26,15,7,0.5)', borderRadius:18, border:'1px solid rgba(240,192,64,0.1)' }}>
-          <div style={{ fontSize:48, marginBottom:14 }}>🛕</div>
-          <h3 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', marginBottom:8 }}>No Temples Found</h3>
-          <p style={{ color:'rgba(255,248,240,0.4)' }}>Try a different search term or remove the Live filter.</p>
-          <button onClick={()=>{ setFilter(''); setLiveOnly(false); }} className="btn btn-primary" style={{ marginTop:16 }}>Reset Filters</button>
+        <div style={{ textAlign: 'center', padding: '80px 20px', background: '#fff', borderRadius: 24, border: `1px solid ${C.border}` }}>
+          <div style={{ fontSize: 56, marginBottom: 16 }}>🛕</div>
+          <h3 style={{ fontFamily: 'Cinzel, serif', color: C.text, fontSize: 24, marginBottom: 8, fontWeight: 900 }}>Shrine Not Found</h3>
+          <p style={{ color: C.soft, fontSize: 15, fontWeight: 500 }}>We couldn't find any temples matching your search. Please try a broader term.</p>
+          <button onClick={() => { setFilter(''); setLiveOnly(false); }} 
+            style={{ marginTop: 20, background: 'rgba(255,107,0,0.1)', color: C.accent, border: `1px solid ${C.accent}`, borderRadius: 12, padding: '10px 24px', fontWeight: 800, cursor: 'pointer' }}>
+            Reset Exploration
+          </button>
         </div>
       )}
     </div>

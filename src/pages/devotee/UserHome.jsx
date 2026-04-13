@@ -9,9 +9,8 @@ import SmartRecommendations from '../../components/SmartRecommendations';
 import { PremiumIcon } from '../../components/Icons';
 
 /* ── Static data ──────────────────────────────────────────── */
-import { IconBook, IconShoppingBag, IconPhone, IconTemple, IconHeart, IconCalendar, IconTrendingUp, IconMapPin, IconStar, IconOm } from '../../components/icons/Icons';
+import { IconBook, IconShoppingBag, IconPhone, IconTemple, IconHeart, IconCalendar, IconTrendingUp, IconMapPin, IconStar, IconOm, IconUserCheck, IconAward } from '../../components/icons/Icons';
 
-/* ── Static data ──────────────────────────────────────────── */
 const SERVICES = [
   { Icon: IconBook,        label: 'Book Pandit',  path: '/user/booking',      bg: '#FF6B00' },
   { Icon: IconShoppingBag, label: 'Buy Samagri',  path: '/user/samagri',      bg: '#D4A017' },
@@ -22,32 +21,58 @@ const SERVICES = [
 ];
 
 const RITUALS = [
-  { name:'Griha Pravesh', icon:'🏠', price:'₹2,100', numPrice:2100, path:'/user/booking' },
-  { name:'Satyanarayan',  icon:'🌟', price:'₹1,500', numPrice:1500, path:'/user/booking' },
-  { name:'Rudrabhishek',  icon:'🔱', price:'₹2,500', numPrice:2500, path:'/user/booking' },
-  { name:'Navgrah Puja',  icon:'⭐', price:'₹1,800', numPrice:1800, path:'/user/booking' },
-  { name:'Vivah',         icon:'💍', price:'₹8,000', numPrice:8000, path:'/user/booking' },
-  { name:'Custom Pooja',  icon:'✨', price:'Custom',  numPrice:1500, path:'/user/rituals' },
+  { name:'Satyanarayan Katha', icon:'🌟', price:'₹1,500', desc: 'Sacred storytelling for health, wealth & prosperity.', dur:'2-3 hrs' },
+  { name:'Rudrabhishek',  icon:'🔱', price:'₹2,500', desc: 'Divine Shiva ritual for liberation and inner power.', dur:'1.5 hrs' },
+  { name:'Griha Pravesh', icon:'🏠', price:'₹3,101', desc: 'Auspicious housewarming to invite divine energies.', dur:'3-4 hrs' },
+  { name:'Navgraha Shanti', icon:'⭐', price:'₹2,100', desc: 'Harmonize the nine planets for a balanced life.', dur:'2 hrs' },
+  { name:'Pitru Dosh Puja', icon:'🙏', price:'₹5,100', desc: 'Ancestral blessings for lineage and family peace.', dur:'4 hrs' },
+  { name:'Vastu Shanti',  icon:'📐', price:'₹4,500', desc: 'Rectify energy imbalances in your living space.', dur:'3 hrs' },
 ];
 
-const SAMAGRI_HIGHLIGHTS = [
-  { name:'Diwali Kit',    icon:'🪔', price:'₹899', items:'61 items', badge:'BESTSELLER', color:'#FF6B00' },
-  { name:'Griha Kit',     icon:'🏡', price:'₹599', items:'52 items', badge:'POPULAR',    color:'#D4A017' },
-  { name:'Satyanarayan',  icon:'🌟', price:'₹299', items:'24 items', badge:null,         color:'#9B59B6' },
+const SAMAGRI_KITS = [
+  { name:'Satyanarayan Kit', icon:'📦', price:'₹899', items:'61 items', badge:'COMPLETE' },
+  { name:'Rudrabhishek Kit', icon:'📦', price:'₹1,299', items:'45 items', badge:'PREMIUM' },
+  { name:'Navgraha Kit',    icon:'📦', price:'₹1,001', items:'52 items', badge:'ESSENTIAL' },
+  { name:'Griha Pravesh Kit',icon:'📦', price:'₹2,100', items:'108 items', badge:'FULL' },
+];
+
+const TESTIMONIALS = [
+  { name: 'Rahul Sharma', city: 'Delhi', text: 'DevSetu made my griha pravesh booking so easy. The pandit was highly professional.', rating: 5 },
+  { name: 'Priya Verma', city: 'Mumbai', text: 'Amazing experience with the Rudrabhishek puja. The real-time updates were helpful.', rating: 5 },
+  { name: 'Sanjay Gupta', city: 'Bangalore', text: 'High quality samagri kit. Saved me hours of shopping in the market.', rating: 5 },
+];
+
+const SANKALPS = [
+  { name: 'Amit K.', ritual: 'Satyanarayan', intent: 'Health & Long life of Parents' },
+  { name: 'Deepa S.', ritual: 'Rudrabhishek', intent: 'Success in new venture' },
+  { name: 'Vijay R.', ritual: 'Navgraha Shanti', intent: 'Family harmony' },
 ];
 
 const SAMPLE_PANDITS = [
-  { id:'1', name:'Pt. Ram Sharma',    city:'Delhi',   specialization:['Satyanarayan','Griha Pravesh'], experience_years:15, min_fee:1800, rating:4.9 },
-  { id:'2', name:'Pt. Anil Mishra',   city:'Noida',   specialization:['Rudrabhishek','Navgrah'],       experience_years:12, min_fee:1500, rating:4.8 },
-  { id:'3', name:'Pt. Suresh Tiwari', city:'Gurgaon', specialization:['Vivah','Mundan'],               experience_years:20, min_fee:2500, rating:4.7 },
+  { id:'1', name:'Pt. Ram Sharma',    city:'Varanasi', exp:15, lang: ['Sanskrit','Hindi'], rating:4.9, spec:'Vedic Mantras' },
+  { id:'2', name:'Pt. Anil Mishra',   city:'Ayodhya',  exp:12, lang: ['Hindi','English'],  rating:4.8, spec:'Karmakand' },
+  { id:'3', name:'Pt. Suresh Tiwari', city:'Haridwar', exp:20, lang: ['Sanskrit','Hindi'], rating:5.0, spec:'Astrology' },
+  { id:'4', name:'Pt. Alok Nath',     city:'Ujjain',   exp:10, lang: ['Hindi'],            rating:4.7, spec:'Mahakal Seva' },
+  { id:'5', name:'Pt. Rajesh Jha',    city:'Mathura',  exp:18, lang: ['Braij','Hindi'],    rating:4.9, spec:'Krishna Bhakti' },
+  { id:'6', name:'Pt. Sunil Shastri', city:'Prayagraj',exp:22, lang: ['Sanskrit','Hindi'], rating:4.9, spec:'Pitru Rituals' },
 ];
 
-/* ── Shared card styles ───────────────────────────────────── */
-const dk = { background:'rgba(26,15,7,0.85)', border:'1px solid rgba(212,160,23,0.18)', borderRadius:14, boxShadow:'0 4px 20px rgba(0,0,0,0.3)' };
+/* ── Contextual Theme Constants ─────────────────────────── */
+const C = {
+  bg: '#0a0400',
+  dk: 'rgba(26,15,7,0.85)',
+  border: 'rgba(212,160,23,0.18)',
+  text: 'rgba(255,248,240,0.9)',
+  textMuted: 'rgba(255,248,240,0.6)',
+  accent: '#FF6B00',
+  gold: '#F0C040'
+};
+
+const dkStyle = { background: C.dk, border: `1px solid ${C.border}`, borderRadius: 18, boxShadow: '0 4px 20px rgba(0,0,0,0.4)', padding: '20px' };
 
 /* ── Horizontal scroll container ─────────────────────────── */
 const hscroll = {
-  display:'flex', overflowX:'auto', gap:10,
+  display:'flex', overflowX:'auto', gap:12,
   paddingBottom:6, WebkitOverflowScrolling:'touch',
   scrollbarWidth:'none', msOverflowStyle:'none',
 };
@@ -55,14 +80,13 @@ const hscroll = {
 /* ── Section wrapper ──────────────────────────────────────── */
 function Section({ title, onViewAll, viewLabel, children, style }) {
   return (
-    <div style={{ background:'rgba(26,15,7,0.85)', border:'1px solid rgba(212,160,23,0.18)',
-      borderRadius:18, padding:'16px 16px 12px', boxShadow:'0 4px 20px rgba(0,0,0,0.3)', ...style }}>
-      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:14 }}>
-        <div style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontWeight:900, fontSize:16 }}>{title}</div>
+    <div style={{ ...dkStyle, ...style }}>
+      <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:18 }}>
+        <div style={{ fontFamily:'Cinzel,serif', color:C.gold, fontWeight:900, fontSize:17 }}>{title}</div>
         {onViewAll && (
           <button onClick={onViewAll}
-            style={{ background:'rgba(255,107,0,0.06)', color:'#FF6B00', border:'1px solid rgba(255,107,0,0.2)',
-              borderRadius:16, padding:'4px 12px', fontWeight:800, cursor:'pointer', fontSize:11, fontFamily:'Nunito,sans-serif', flexShrink:0 }}>
+            style={{ background:'rgba(255,107,0,0.1)', color:C.accent, border:`1px solid ${C.accent}44`,
+              borderRadius:16, padding:'4px 12px', fontWeight:800, cursor:'pointer', fontSize:11, fontFamily:'Nunito,sans-serif' }}>
             {viewLabel || 'View All →'}
           </button>
         )}
@@ -72,7 +96,6 @@ function Section({ title, onViewAll, viewLabel, children, style }) {
   );
 }
 
-/* ─────────────────────────────────────────────────────────── */
 export default function UserHome() {
   const navigate = useNavigate();
   const { devoteeName, devoteeId, festivals } = useApp();
@@ -92,7 +115,7 @@ export default function UserHome() {
 
   useEffect(() => {
     supabase.from('pandits').select('id,name,city,experience_years,rating,specialization,min_fee')
-      .eq('status','verified').order('rating',{ascending:false}).limit(3)
+      .eq('status','verified').order('rating',{ascending:false}).limit(6)
       .then(({data}) => { if (data?.length) setPandits(data); });
     if (devoteeId) {
       supabase.from('bookings')
@@ -105,428 +128,176 @@ export default function UserHome() {
     }
   }, [devoteeId]);
 
-  const ritualList = (festivals?.length > 0 ? festivals[0].recommended_rituals : RITUALS.map(r => r.name)).slice(0, 6);
-
   return (
-    <div style={{ color:'rgba(255,248,240,0.9)', display:'flex', flexDirection:'column', gap:14 }}>
-
-      {/* ── Hero ──────────────────────────────────────────── */}
-      {/* ── Hero with Dynamic Banner ──────────────────── */}
-      <div className="hero-glass" style={{
-        position:'relative', overflow:'hidden', borderRadius:24, padding:'40px 20px 24px',
-        display:'flex', flexDirection:'column', justifyContent:'flex-end',
-        boxShadow: '0 10px 40px rgba(0,0,0,0.5)'
+    <div style={{ background: C.bg, minHeight:'100%', margin:'-20px', padding:'20px 20px 80px', color: C.text, display: 'flex', flexDirection: 'column', gap: 24 }}>
+      
+      {/* ── 1. Hero Section ─────────────────────────────────── */}
+      <div className="hero-section" style={{
+        position:'relative', overflow:'hidden', borderRadius:28, minHeight:420,
+        display:'flex', flexDirection:'column', justifyContent:'center',
+        padding:'60px 24px', textAlign:'center',
+        boxShadow: '0 20px 50px rgba(0,0,0,0.6)',
+        background: '#1a0a00'
       }}>
-        {/* Background Image Slider guarantees full height coverage and no blocked video loads */}
-        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, backgroundColor: '#1a0a00' }}>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0 }}>
           {BG_IMAGES.map((img, idx) => (
-            <img 
-              key={img}
-              src={img} 
-              alt="Sacred Background"
-              style={{ 
-                position: 'absolute', top: 0, left: 0, 
-                width: '100%', height: '100%', objectFit: 'cover', 
-                opacity: bgIndex === idx ? 0.6 : 0,
-                transition: 'opacity 1.5s ease-in-out'
-              }}
-            />
+            <img key={img} src={img} alt="Heritage" style={{ position:'absolute', top:0, left:0, width:'100%', height:'100%', objectFit:'cover', opacity: bgIndex === idx ? 0.6 : 0, transition:'opacity 1.5s' }} />
           ))}
-          {/* Dark gradient overlay for sacred feel */}
-          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(26,10,0,0.3) 0%, rgba(26,10,0,0.85) 80%)' }} />
+          <div style={{ position:'absolute', inset:0, background:'linear-gradient(to bottom, rgba(26,10,0,0.2) 0%, rgba(26,10,0,0.95) 90%)' }} />
         </div>
 
-        <div style={{ position:'relative', zIndex:1, paddingTop: 60 }}>
-          <div className="banner-glow" style={{
-            display:'inline-flex', alignItems:'center', gap:6, background:'rgba(255,107,0,0.1)',
-            border:'1.5px solid rgba(255,107,0,0.25)', color:'#FF6B00', fontSize:10, fontWeight:900,
-            letterSpacing:'1.5px', textTransform:'uppercase', padding:'4px 12px', borderRadius:25, marginBottom:12
-          }}>
-            <span className="float-anim">✨</span> DEVSETU — BRIDGING YOU TO THE DIVINE
+        <div style={{ position:'relative', zIndex:1 }}>
+          <div style={{ display:'inline-block', background:'rgba(255,107,0,0.15)', border:`1.5px solid ${C.accent}44`, color:C.accent, fontSize:11, fontWeight:900, textTransform:'uppercase', padding:'5px 16px', borderRadius:50, marginBottom:20, letterSpacing:1.5 }}>
+            ✨ Transcending Rituals into Digital Era
           </div>
-
-          <h1 style={{
-            fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:'clamp(22px,6.5vw,34px)',
-            margin:'0 0 8px', fontWeight:900, lineHeight:1.1
-          }}>
-            {devoteeName ? `Namaste, ${devoteeName.split(' ')[0]} 🙏` : 'Namaste, Devotee 🙏'}
+          <h1 style={{ fontFamily:'Cinzel,serif', color:C.gold, fontSize:'clamp(36px,8vw,56px)', margin:'0 0 12px', fontWeight:900, lineHeight:1.1, textShadow: '0 4px 20px rgba(0,0,0,0.5)' }}>
+             Bridge to Divine Services
           </h1>
-
-          <p style={{ color:'rgba(255,248,240,0.75)', margin:'0 0 20px', fontSize:14, maxWidth:300, lineHeight:1.6, fontWeight:600 }}>
-            Ancient Vedic traditions, delivered with <strong style={{ color:'#FF6B00' }}>modern precision</strong>.
+          <p style={{ color:C.text, fontSize:19, maxWidth:600, margin:'0 auto 36px', fontWeight:600, lineHeight:1.5 }}>
+             Book Verified Pandits & Sacred Rituals Across Bharat
           </p>
 
-          <div style={{ display:'flex', gap:10, flexWrap:'wrap' }}>
-            <button onClick={() => navigate('/user/booking')}
-              className="btn btn-primary" style={{ flex:'1 1 150px', justifyContent:'center', fontSize:14, padding:'12px 20px', borderRadius:30, border:'1px solid rgba(255,255,255,0.2)' }}>
-              ⚡ Book Pandit Now
-            </button>
-            <button onClick={() => navigate('/user/rituals')}
-              style={{
-                flex:'1 1 120px', background:'rgba(255,107,0,0.1)', color:'#FF6B00',
-                border:'1.5px solid rgba(255,107,0,0.3)', borderRadius:30,
-                padding:'12px 20px', fontWeight:800, cursor:'pointer', fontSize:13, fontFamily:'Nunito,sans-serif'
-              }}>
-              🕉️ View Rituals
-            </button>
+          <div style={{ display:'flex', gap:16, justifyContent:'center', flexWrap:'wrap', marginBottom:32 }}>
+            <button onClick={() => navigate('/user/booking')} className="btn btn-primary" style={{ padding:'16px 36px', borderRadius:50, fontSize:16, boxShadow:`0 10px 25px ${C.accent}44` }}>⚡ Book Pandit Now</button>
+            <button onClick={() => navigate('/user/rituals')} style={{ background:'rgba(255,255,255,0.08)', color:'#fff', border:'1px solid rgba(255,255,255,0.25)', borderRadius:50, padding:'16px 36px', fontWeight:800, cursor:'pointer', fontSize:15 }}>🕉️ View Rituals</button>
           </div>
 
-          <div style={{ marginTop:16, marginBottom:4 }}>
-            <div style={{
-              display:'flex', alignItems:'center',
-              background:'rgba(255,255,255,0.1)',
-              border:'1.5px solid rgba(212,160,23,0.3)',
-              borderRadius:50, padding:'10px 18px',
-              backdropFilter:'blur(8px)',
-            }}>
-              <span style={{ fontSize:18, marginRight:10, opacity:0.7 }}>🔍</span>
-              <input
-                value={homeSearch}
-                onChange={e => setHomeSearch(e.target.value)}
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && homeSearch.trim()) {
-                    navigate(`/user/marketplace?q=${encodeURIComponent(homeSearch.trim())}`);
-                  }
-                }}
-                placeholder="Search pandits, rituals, samagri..."
-                style={{
-                  flex:1, background:'transparent', border:'none', outline:'none',
-                  color:'#fff8f0', fontSize:14, fontFamily:'inherit',
-                }}
-              />
+          <div style={{ maxWidth:540, margin:'0 auto', position:'relative' }}>
+            <div style={{ display:'flex', alignItems:'center', background:'rgba(255,255,255,0.08)', border:`1.5px solid ${C.border}`, borderRadius:50, padding:'12px 24px', backdropFilter:'blur(20px)', boxShadow:'0 10px 30px rgba(0,0,0,0.4)' }}>
+              <span style={{ fontSize:22, marginRight:12, opacity:0.8 }}>🔍</span>
+              <input value={homeSearch} onChange={e => setHomeSearch(e.target.value)} onKeyDown={e => { 
+                if (e.key === 'Enter' && homeSearch.trim()) {
+                  navigate(`/user/marketplace?q=${encodeURIComponent(homeSearch.trim())}`);
+                  setHomeSearch('');
+                }
+              }} placeholder="Search for rituals, pandits or temples..." style={{ flex:1, background:'transparent', border:'none', outline:'none', color:'#fff8f0', fontSize:16, fontFamily:'inherit' }} />
               {homeSearch.trim() && (
-                <div style={{ display:'flex', gap:6, marginLeft:8 }}>
-                  <button
-                    onClick={() => navigate(`/user/marketplace?q=${encodeURIComponent(homeSearch.trim())}`)}
-                    style={{
-                      background:'#FF6B00', color:'#fff', border:'none',
-                      borderRadius:24, padding:'5px 12px', fontSize:12,
-                      fontWeight:700, cursor:'pointer', whiteSpace:'nowrap',
-                    }}>
-                    Find Pandit
-                  </button>
-                  <button
-                    onClick={() => navigate(`/user/rituals?q=${encodeURIComponent(homeSearch.trim())}`)}
-                    style={{
-                      background:'rgba(212,160,23,0.2)', color:'#F0C040', border:'none',
-                      borderRadius:24, padding:'5px 12px', fontSize:12,
-                      fontWeight:700, cursor:'pointer', whiteSpace:'nowrap',
-                    }}>
-                    Find Ritual
-                  </button>
-                </div>
+                <button onClick={() => {
+                  navigate(`/user/marketplace?q=${encodeURIComponent(homeSearch.trim())}`);
+                  setHomeSearch('');
+                }} style={{ background:C.accent, color:'#fff', border:'none', borderRadius:24, padding:'8px 20px', fontWeight:900, cursor:'pointer', fontSize:13 }}>Search</button>
               )}
             </div>
-            <div style={{ color:'rgba(255,248,240,0.3)', fontSize:11, marginTop:5, paddingLeft:8 }}>
-              Try: "Griha Pravesh" · "Rudrabhishek" · "Kaal Sarp" · "Pt. Ram Sharma"
+            <div style={{ color:'rgba(255,255,255,0.3)', fontSize:12, marginTop:10, display:'flex', gap:16, justifyContent:'center', fontWeight:700 }}>
+              <span style={{ cursor:'pointer' }} onClick={() => { navigate(`/user/rituals?q=Rudrabhishek`); setHomeSearch(''); }}>"Rudrabhishek"</span>
+              <span style={{ cursor:'pointer' }} onClick={() => { navigate(`/user/rituals?q=Griha+Pravesh`); setHomeSearch(''); }}>"Griha Pravesh"</span>
+              <span style={{ cursor:'pointer' }} onClick={() => { navigate(`/user/marketplace?q=Pandit`); setHomeSearch(''); }}>"Pandit"</span>
             </div>
-          </div>
-
-          {/* Interactive Stats Row */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(4,1fr)', gap:10, marginTop:24 }}>
-            {[
-              { Icon:IconTrendingUp, val:'180+', lbl:'Pandits', path:'/user/marketplace', color: '#FF6B00' },
-              { Icon:IconOm,         val:'80+',  lbl:'Rituals', path:'/user/rituals',     color: '#D4A017' },
-              { Icon:IconMapPin,     val:'50+',  lbl:'Cities',  path:'/user/marketplace', color: '#27AE60' },
-              { Icon:IconStar,       val:'4.9',  lbl:'Rating',  path:'/user/history',     color: '#FF6B00' }
-            ].map((s) => (
-              <div
-                key={s.lbl}
-                onClick={() => navigate(s.path)}
-                className="clickable-stat"
-                style={{
-                  ...dk, padding:'12px 4px', textAlign:'center', borderRadius:16,
-                }}
-              >
-                <div style={{ marginBottom:4, display: 'flex', justifyContent: 'center' }}><s.Icon size={22} color={s.color} /></div>
-                <div style={{ color: s.color, fontFamily:'Cinzel,serif', fontWeight:900, fontSize:18, lineHeight:1 }}>{s.val}</div>
-                <div style={{ color:'rgba(255,248,240,0.55)', fontSize:10, fontWeight:800, textTransform:'uppercase', letterSpacing:'1px', marginTop:3 }}>{s.lbl}</div>
-              </div>
-            ))}
           </div>
         </div>
       </div>
 
-      {/* ── Service icons ─────────────────────────────────── */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:8 }}>
+      {/* ── 2. Trust Metrics Section ────────────────────────── */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:16, marginTop:-10 }}>
+         {[
+           { val:'180+', lbl:'EXPERTS', sub:'Verified Pandits', icon:IconUserCheck, color:C.accent },
+           { val:'80+', lbl:'VARIETIES', sub:'Sacred Rituals', icon:IconOm, color:C.gold },
+           { val:'25+', lbl:'LOCATIONS', sub:'Cities Covered', icon:IconMapPin, color:'#7c3aed' },
+           { val:'5000+', lbl:'SUCCESS', sub:'Rituals Completed', icon:IconAward, color:'#16a34a' }
+         ].map(s => (
+           <div key={s.lbl} style={{ ...dkStyle, textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center', background: 'linear-gradient(135deg, #1a0f07 0%, #0a0400 100%)' }}>
+              <div style={{ marginBottom:10 }}><s.icon size={32} color={s.color} /></div>
+              <div style={{ color:s.color, fontSize:22, fontWeight:900, fontFamily:'Cinzel,serif' }}>{s.val}</div>
+              <div style={{ fontSize:11, fontWeight:900, letterSpacing:1.5, color:C.gold, margin:'4px 0' }}>{s.lbl}</div>
+              <div style={{ fontSize:10, color:C.textMuted, fontWeight:700 }}>{s.sub}</div>
+           </div>
+         ))}
+      </div>
+
+      {/* ── 2b. Primary Services Grid ─────────────────────── */}
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:16 }}>
         {SERVICES.map((s) => (
-          <div key={s.label} onClick={()=>navigate(s.path)} style={{
-            display:'flex', flexDirection:'column', alignItems:'center',
-            gap:10, padding:'18px 12px', background:'rgba(26,15,7,0.85)',
-            border:'1px solid rgba(212,160,23,0.18)', borderRadius:14,
-            cursor:'pointer', transition:'all 0.2s',
-            boxShadow:'0 4px 16px rgba(0,0,0,0.3)',
-          }}
-          onMouseEnter={e=>e.currentTarget.style.transform='translateY(-2px)'}
-          onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
-            <div style={{
-              width:52, height:52, borderRadius:14,
-              background:`${s.bg}22`,
-              display:'flex', alignItems:'center', justifyContent:'center',
-            }}>
-              <s.Icon size={26} color={s.bg} />
+          <div key={s.label} onClick={() => navigate(s.path)} style={{ ...dkStyle, display:'flex', flexDirection:'column', alignItems:'center', gap:12, cursor:'pointer', transition:'all 0.3s', background: 'rgba(30,15,5,0.7)' }} onMouseEnter={e=>e.currentTarget.style.transform='translateY(-6px)'} onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
+            <div style={{ width:64, height:64, borderRadius:20, background:`${s.bg}15`, display:'flex', alignItems:'center', justifyContent:'center', border:`1px solid ${s.bg}33`, boxShadow: `0 8px 16px ${s.bg}10` }}>
+              <s.Icon size={32} color={s.bg} />
             </div>
-            <span style={{ color:'rgba(255,248,240,0.85)', fontWeight:700, fontSize:13, textAlign:'center' }}>
-              {s.label}
-            </span>
+            <span style={{ color:C.text, fontWeight:900, fontSize:15, textAlign:'center', fontFamily:'Cinzel,serif' }}>{s.label}</span>
           </div>
         ))}
       </div>
 
-      {/* ── Active booking timeline ────────────────────────── */}
-      {activeBooking && <RitualTimeline booking={activeBooking} />}
-
-      {/* ── Smart Recommendations ─────────────────────────── */}
-      <SmartRecommendations bookingHistory={bookings} />
-
-      {/* ── Most Booked Rituals ───────────────────────────── */}
-      <Section
-        title={`🕉️ ${festivals?.length > 0 ? `${festivals[0].festival_name} Rituals` : 'Most Booked Rituals'}`}
-        onViewAll={() => navigate('/user/rituals')}>
-        <div style={hscroll}>
-          {ritualList.map(name => {
-            const r = RITUALS.find(x => x.name === name) || { name, icon:'🕉️', price:'₹1,500', numPrice:1500, path:'/user/booking' };
-            return (
-              <div key={r.name}
-                onClick={() => {
-                  notificationStore.recordSearch(r.name);
-                  navigate(r.path || '/user/booking', {
-                    state:{ selectedRitual:{ id:r.name.toLowerCase().replace(/\s+/g,'-'), name:r.name, icon:r.icon, price:r.numPrice||1500 } }
-                  });
-                }}
-                style={{ ...dk, borderRadius:14, padding:'14px 10px', textAlign:'center',
-                  cursor:'pointer', transition:'all 0.2s', flexShrink:0,
-                  minWidth:120, maxWidth:130, position:'relative' }}>
-                {festivals?.length > 0 && (
-                  <div style={{ position:'absolute', top:0, right:0, background:'#FF6B00', color:'#fff',
-                    fontSize:7, fontWeight:900, padding:'2px 5px', borderRadius:'0 14px 0 8px', letterSpacing:'0.5px' }}>
-                    FESTIVAL
-                  </div>
-                )}
-                <div style={{ fontSize:26, marginBottom:7 }}>
-                  {r.icon.startsWith('/') ? <PremiumIcon src={r.icon} size={32} /> : r.icon}
-                </div>
-                <div style={{ color:'rgba(255,248,240,0.9)', fontSize:11, fontWeight:800, marginBottom:4, lineHeight:1.3 }}>{r.name}</div>
-                <div style={{ color:'#FF9F40', fontSize:11, fontWeight:800, fontFamily:'Cinzel,serif' }}>from {r.price}</div>
-              </div>
-            );
-          })}
-        </div>
-        <div style={{ textAlign:'center', marginTop:8 }}>
-          <span style={{ fontSize:10, color:'rgba(255,248,240,0.4)', opacity:0.8 }}>← swipe to see more →</span>
-        </div>
-      </Section>
-
-      {/* ── Pooja Samagri Store ───────────────────────────── */}
-      <Section title="🛍️ Pooja Samagri Store" onViewAll={() => navigate('/user/samagri')} viewLabel="Shop All →">
-        <div style={hscroll}>
-          {SAMAGRI_HIGHLIGHTS.map(s => (
-            <div key={s.name} onClick={() => navigate('/user/samagri')}
-              style={{ ...dk, borderRadius:14, padding:'14px 10px', textAlign:'center',
-                cursor:'pointer', transition:'all 0.2s', flexShrink:0,
-                minWidth:130, maxWidth:145, position:'relative', overflow:'hidden' }}>
-              {s.badge && (
-                <div style={{ position:'absolute', top:0, right:0,
-                  background:`linear-gradient(135deg,${s.color},${s.color}cc)`,
-                  color:'#fff', fontSize:7, fontWeight:800, padding:'2px 7px',
-                  borderRadius:'0 14px 0 8px', letterSpacing:'0.5px' }}>{s.badge}</div>
-              )}
-              <div style={{ fontSize:26, marginBottom:5 }}>
-                {s.icon.startsWith('/') ? <PremiumIcon src={s.icon} size={32} /> : s.icon}
-              </div>
-              <div style={{ color:'rgba(255,248,240,0.9)', fontSize:11, fontWeight:800, marginBottom:2 }}>{s.name}</div>
-              <div style={{ color:'rgba(255,248,240,0.55)', fontSize:10, marginBottom:5 }}>{s.items}</div>
-              <div style={{ color:'#FF9F40', fontSize:13, fontWeight:800, fontFamily:'Cinzel,serif' }}>{s.price}</div>
-            </div>
-          ))}
-          {/* Shop all card */}
-          <div onClick={() => navigate('/user/samagri')}
-            style={{ ...dk, borderRadius:14, padding:'14px 10px', textAlign:'center',
-              cursor:'pointer', flexShrink:0, minWidth:100, maxWidth:110,
-              display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', gap:6 }}>
-            <div style={{ fontSize:22 }}>🛒</div>
-            <div style={{ color:'#FF6B00', fontSize:10, fontWeight:800 }}>Shop All</div>
-            <div style={{ color:'rgba(255,248,240,0.5)', fontSize:9 }}>40+ items</div>
-          </div>
-        </div>
-      </Section>
-
-      {/* ── Virtual Pooja ─────────────────────────────────── */}
-      {/* ── Premium Virtual Pooja Feature ────────────────── */}
-      <div onClick={() => navigate('/user/virtual-pooja')}
-        className="banner-glow vibrant-gradient-2"
-        style={{
-          borderRadius:24, padding:'20px 24px', position:'relative', overflow:'hidden',
-          cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'space-between', gap:12,
-          boxShadow:'0 15px 35px -5px rgba(124,58,237,0.4)', transition:'transform 0.3s ease'
-        }}>
-        {/* Subtle geometric particles */}
-        <div style={{ position:'absolute', top:-20, right:-20, fontSize:100, opacity:0.1, color:'#fff' }}>🕉️</div>
-
-        <div style={{ position:'relative', zIndex:1 }}>
-          <div style={{
-            background:'rgba(255,255,255,0.2)', color:'#fff', padding:'3px 10px',
-            borderRadius:20, fontSize:9, fontWeight:900, marginBottom:8, display:'inline-block',
-            letterSpacing:1.5
-          }}>
-            🚀 FUTURE OF WORSHIP
-          </div>
-          <div style={{ color:'#fff', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:22, marginBottom:4, display:'flex', alignItems:'center', gap:8 }}>
-            📱 Virtual Pooja <span className="float-anim" style={{ fontSize:14 }}>✨</span>
-          </div>
-          <div style={{ color:'rgba(255,255,255,0.95)', fontSize:13, fontWeight:700 }}>
-            Live HD Streaming · Direct Connection · Prasad 🚚
-          </div>
-        </div>
-        <div style={{
-          width:50, height:50, borderRadius:'50%', background:'rgba(255,255,255,0.25)',
-          display:'flex', alignItems:'center', justifyContent:'center', fontSize:20, color:'#fff',
-          border:'2px solid rgba(255,255,255,0.5)', flexShrink:0
-        }}>
-          ➔
-        </div>
-      </div>
-
-      {/* ── Verified Pandits ──────────────────────────────── */}
-      {/* ── Verified Scholars with Premium Accents ────────── */}
-      <Section title="🙏 Vedic Scholars & Acharyas" onViewAll={() => navigate('/user/marketplace')} viewLabel="Meet All Scholars →">
-        <div style={{ display:'flex', flexDirection:'column', gap:10 }}>
-          {pandits.slice(0,3).map((p, idx) => (
-            <div key={p.id} onClick={() => navigate('/user/marketplace')}
-              style={{
-                ...dk, borderRadius:18, padding:'14px 16px',
-                background: idx === 0 ? 'rgba(255,107,0,0.06)' : 'rgba(255,248,240,0.04)',
-                border: idx === 0 ? '1px solid rgba(255,107,0,0.3)' : '1px solid rgba(240,192,64,0.12)',
-                cursor:'pointer', display:'flex', justifyContent:'space-between', alignItems:'center', transition:'all 0.3s'
-              }}>
-              <div style={{ display:'flex', gap:14, alignItems:'center', minWidth:0 }}>
-                <div style={{
-                  width:46, height:46, borderRadius:'50%',
-                  background:'linear-gradient(135deg,#FF6B00,#D4A017)',
-                  border:'2px solid rgba(255,255,255,0.2)',
-                  display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, flexShrink:0,
-                  boxShadow:'0 4px 12px rgba(255,107,0,0.2)'
-                }}>🙏</div>
-                <div style={{ minWidth:0 }}>
-                  <div style={{ display:'flex', alignItems:'center', gap:6 }}>
-                    <div style={{ color:'#F0C040', fontWeight:900, fontSize:15, fontFamily:'Cinzel,serif',
-                      whiteSpace:'nowrap', overflow:'hidden', textOverflow:'ellipsis', maxWidth:140 }}>{p.name}</div>
-                    {p.rating >= 4.9 && (
-                      <span style={{ background:'#FFD700', color:'#1a0f07', fontSize:8, fontWeight:900, padding:'2px 6px', borderRadius:4, letterSpacing:0.5 }}>PREMIUM</span>
-                    )}
-                  </div>
-                  <div style={{ color:'rgba(255,248,240,0.55)', fontSize:11, marginTop:2, fontWeight:700 }}>
-                    📍 {p.city} · {p.experience_years||p.years_of_experience}yr Exp · ⭐ {p.rating||'New'}
-                  </div>
-                </div>
-              </div>
-              <div style={{ textAlign:'right', flexShrink:0 }}>
-                <div style={{ color:'#FF6B00', fontWeight:900, fontFamily:'Cinzel,serif', fontSize:16 }}>₹{(p.min_fee||1500).toLocaleString()}</div>
-                <button onClick={idx === 0 ? e => { e.stopPropagation(); navigate('/user/booking'); } : undefined}
-                  style={{
-                    background: idx === 0 ? 'linear-gradient(135deg,#FF6B00,#D4A017)' : 'rgba(255,255,255,0.1)',
-                    color: idx === 0 ? '#fff' : 'rgba(255,248,240,0.6)',
-                    border: idx === 0 ? 'none' : '1px solid rgba(255,255,255,0.2)',
-                    borderRadius:10, padding:'6px 14px', fontWeight:800,
-                    cursor:'pointer', fontSize:11, marginTop:6
-                  }}>
-                  {idx === 0 ? '⚡ Book' : 'Details'}
-                </button>
+      {/* ── 3. Popular Rituals Section ──────────────────────── */}
+      <Section title="🕉️ Popular Sacred Rituals" onViewAll={() => navigate('/user/rituals')} viewLabel="View All Rituals">
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(280px, 1fr))', gap:20 }}>
+          {RITUALS.map(r => (
+            <div key={r.name} onClick={() => navigate(`/user/booking?ritual=${encodeURIComponent(r.name)}`)} style={{ ...dkStyle, padding:24, cursor:'pointer', background:'linear-gradient(135deg,rgba(40,15,5,0.8),rgba(20,5,0,0.9))', transition:'0.3s' }} onMouseEnter={e=>{e.currentTarget.style.borderColor=C.accent;e.currentTarget.style.background='rgba(50,20,5,0.95)';}} onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.background='linear-gradient(135deg,rgba(40,15,5,0.8),rgba(20,5,0,0.9))';}}>
+              <div style={{ fontSize:40, marginBottom:16 }}>{r.icon}</div>
+              <h3 style={{ fontFamily:'Cinzel,serif', fontSize:19, fontWeight:900, margin:'0 0 8px', color:C.gold }}>{r.name}</h3>
+              <p style={{ fontSize:14, color:C.textMuted, marginBottom:16, lineHeight:1.6, minHeight:44 }}>{r.desc}</p>
+              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', borderTop:`1px solid ${C.border}`, paddingTop:16 }}>
+                <div style={{ fontSize:13, fontWeight:800, color:C.accent }}>⏱️ {r.dur}</div>
+                <div style={{ fontSize:18, fontWeight:900, color:C.gold, fontFamily:'Cinzel,serif' }}>{r.price}</div>
               </div>
             </div>
           ))}
         </div>
       </Section>
 
-      {/* ── Today's Muhurat (compact) ─────────────────────── */}
-      <Section title="🕐 Today's Muhurat" onViewAll={() => navigate('/user/muhurta')} viewLabel="Full Panchang →">
-        <MuhuratWidget compact={true} />
+      {/* ── 4. Pandit Marketplace Preview ───────────────────── */}
+      <Section title="🙏 Featured Vedic Scholars" onViewAll={() => navigate('/user/marketplace')} viewLabel="View All Scholars">
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(240px, 1fr))', gap:16 }}>
+          {SAMPLE_PANDITS.slice(0, 6).map(p => (
+            <div key={p.id} onClick={() => navigate('/user/marketplace')} style={{ ...dkStyle, padding:20, cursor:'pointer', background:'rgba(30,15,5,0.5)' }}>
+               <div style={{ display:'flex', gap:16, alignItems:'center', marginBottom:14 }}>
+                  <div style={{ width:52, height:52, borderRadius:'50%', background:'linear-gradient(135deg,#FF6B00,#D4A017)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:26, boxShadow:'0 4px 15px rgba(0,0,0,0.3)' }}>🙏</div>
+                  <div>
+                    <div style={{ fontWeight:900, fontSize:17, color:C.gold }}>{p.name}</div>
+                    <div style={{ fontSize:12, color:C.textMuted }}>⭐ {p.rating} · {p.exp}y Exp</div>
+                  </div>
+               </div>
+               <div style={{ fontSize:13, color:C.text, fontWeight:800, borderTop:`1px solid ${C.border}`, paddingTop:10 }}>Specialization: <span style={{ color:C.accent }}>{p.spec}</span></div>
+               <div style={{ fontSize:12, color:C.textMuted, marginTop:6 }}>Languages: {p.lang.join(', ')}</div>
+            </div>
+          ))}
+        </div>
       </Section>
 
-      {/* ── My Bookings ───────────────────────────────────── */}
-      <Section title="📋 My Bookings" onViewAll={() => navigate('/user/history')} viewLabel="All →">
-        {!devoteeId ? (
-          <div style={{ textAlign:'center', padding:'12px 0' }}>
-            <div style={{ color:'rgba(255,248,240,0.4)', fontSize:12, marginBottom:10 }}>Login to see your bookings</div>
-            <button className="btn btn-primary btn-sm" onClick={() => navigate('/user/booking')}>Book Now</button>
-          </div>
-        ) : bookings.length === 0 ? (
-          <div style={{ textAlign:'center', padding:'12px 0' }}>
-            <div style={{ fontSize:24, marginBottom:6 }}>🙏</div>
-            <div style={{ color:'rgba(255,248,240,0.5)', fontSize:12, marginBottom:10, fontWeight:700 }}>No rituals booked yet</div>
-            <button className="btn btn-primary btn-sm" onClick={() => navigate('/user/booking')}>Book First Ritual</button>
-          </div>
-        ) : (
-          <div style={{ display:'flex', flexDirection:'column', gap:7 }}>
-            {bookings.slice(0,3).map(b => (
-              <div key={b.id} style={{ ...dk, borderRadius:10, padding:'10px 12px' }}>
-                <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                  <div style={{ color:'rgba(255,248,240,0.9)', fontWeight:800, fontSize:13 }}>{b.ritual_name||'Pooja'}</div>
-                  <div style={{ fontSize:11, color:b.status==='confirmed'?'#27AE60':'#FF6B00',
-                    fontWeight:800, textTransform:'capitalize' }}>{b.status||'pending'}</div>
-                </div>
-                <div style={{ color:'rgba(255,248,240,0.55)', fontSize:11, marginTop:2, fontWeight:600 }}>
-                  {b.booking_date ? new Date(b.booking_date).toLocaleDateString('en-IN',{day:'numeric',month:'short'}) : 'TBD'}
-                  {' · '}₹{(b.total_amount||0).toLocaleString()}
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+      {/* ── 5. Festival Pujas ───────────────────────────────── */}
+      <Section title="🪔 Divine Festival Celebrations">
+        <div style={hscroll}>
+          {['Navratri Durga Puja', 'Deepavali Lakshmi Puja', 'Mahashivratri Abhishek', 'Ganesh Chaturthi Seva'].map(f => (
+            <div key={f} style={{ ...dkStyle, padding:24, minWidth:260, textAlign:'center', background:'linear-gradient(135deg,#2a1505,#0a0400)', position:'relative', overflow:'hidden' }}>
+               <div style={{ position:'absolute', top:-20, right:-20, fontSize:100, opacity:0.05, color:C.accent }}>🕉️</div>
+               <div style={{ fontSize:44, marginBottom:16 }}>🕉️</div>
+               <div style={{ fontWeight:900, fontSize:18, fontFamily:'Cinzel,serif', color:C.gold, marginBottom:8 }}>{f}</div>
+               <div style={{ display:'flex', justifyContent:'center', gap:4, marginBottom:16 }}>
+                  {[1,2,3,4,5].map(i=><span key={i} style={{ color:C.accent }}>⭐</span>)}
+               </div>
+               <button className="btn btn-outline" style={{ width:'100%', justifyContent:'center', border:`1.5px solid ${C.accent}`, color:C.accent, fontWeight:900 }}>Check Schedule</button>
+            </div>
+          ))}
+        </div>
       </Section>
 
-      {/* ── Pandit CTA ────────────────────────────────────── */}
-      <div style={{ background:'linear-gradient(135deg,rgba(61,31,0,0.9),rgba(26,10,0,0.95))',
-        border:'1.5px solid rgba(255,107,0,0.25)', borderRadius:18, padding:'20px', boxShadow:'0 6px 25px rgba(0,0,0,0.4)' }}>
-        <div style={{ color:'#FF6B00', fontSize:11, fontWeight:900, letterSpacing:1.5, marginBottom:8 }}>🪔 JOIN OUR PANDIT NETWORK</div>
-        <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontSize:18, fontWeight:900, marginBottom:8 }}>Are You a Verified Pandit?</div>
-        <div style={{ color:'rgba(255,248,240,0.75)', fontSize:13, marginBottom:12, lineHeight:1.6, fontWeight:600 }}>
-          Join 500+ pandits earning <strong style={{ color:'#FF6B00' }}>₹30K–₹80K/month</strong> on DevSetu.
+      {/* ── How DevSetu Works ───────────────────────────── */}
+      <Section title="🛠️ Your Path to Spiritual Fulfillment">
+        <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:24, padding:'20px 0' }}>
+           {[
+             { step:1, label:'Select Ritual', desc:'Browse our sacred catalog of 80+ ceremonies.', icon:'✨' },
+             { step:2, label:'Verified Pandit', desc:'Choose a scholar who resonates with your journey.', icon:'🎓' },
+             { step:3, label:'Experience Divine', desc:'Perform pooja in the comforts of your home.', icon:'🙏' }
+           ].map(s => (
+             <div key={s.step} style={{ textAlign:'center' }}>
+                <div style={{ position:'relative', display:'inline-block' }}>
+                  <div style={{ width:64, height:64, borderRadius:'50%', background:C.accent, color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', margin:'0 auto 16px', fontSize:24, fontWeight:900, boxShadow:`0 10px 20px ${C.accent}44` }}>{s.icon}</div>
+                  <div style={{ position:'absolute', top:0, right:-8, width:24, height:24, borderRadius:'50%', background:C.gold, color:'#0a0400', display:'flex', alignItems:'center', justifyContent:'center', fontSize:12, fontWeight:900 }}>{s.step}</div>
+                </div>
+                <div style={{ fontWeight:900, fontSize:18, marginBottom:8, color:C.gold, fontFamily:'Cinzel,serif' }}>{s.label}</div>
+                <div style={{ fontSize:13, color:C.textMuted, lineHeight:1.5 }}>{s.desc}</div>
+             </div>
+           ))}
         </div>
-        <div style={{ display:'flex', gap:8, flexWrap:'wrap' }}>
-          <button onClick={() => navigate('/pandit/onboard')}
-            style={{ flex:'1 1 140px', background:'linear-gradient(135deg,#FF6B00,#e55a00)', color:'#fff',
-              border:'none', borderRadius:20, padding:'10px 16px', fontWeight:800, cursor:'pointer', fontSize:13 }}>
-            ✨ Register as Pandit
-          </button>
-          <button onClick={() => navigate('/pandit/dashboard')}
-            style={{ flex:'1 1 120px', background:'rgba(255,255,255,0.08)', color:'rgba(255,248,240,0.75)',
-              border:'1px solid rgba(255,255,255,0.15)', borderRadius:20, padding:'10px 16px',
-              fontWeight:700, cursor:'pointer', fontSize:12 }}>
-            🔐 Pandit Login
-          </button>
-        </div>
-      </div>
+      </Section>
 
-      {/* ── Refer & Earn ──────────────────────────────────── */}
-      <div style={{ background:'linear-gradient(135deg,rgba(124,58,237,0.12),rgba(99,102,241,0.08))',
-        border:'1px solid rgba(124,58,237,0.25)', borderRadius:16, padding:'16px', textAlign:'center' }}>
-        <div style={{ fontSize:24, marginBottom:6 }}>🎁</div>
-        <div style={{ color:'#a78bfa', fontWeight:700, fontSize:14, marginBottom:4 }}>Refer & Earn ₹50</div>
-        <div style={{ color:'rgba(167,139,250,0.7)', fontSize:12, marginBottom:10 }}>Invite friends · Earn ₹50 per booking</div>
-        <div style={{ background:'rgba(255,255,255,0.05)', padding:'7px 12px', borderRadius:8,
-          border:'1px dashed rgba(124,58,237,0.3)', display:'flex', justifyContent:'space-between',
-          alignItems:'center', marginBottom:10 }}>
-          <span style={{ fontFamily:'monospace', fontWeight:800, color:'#F0C040', fontSize:13 }}>
-            DEVSETU{devoteeId?.slice(-4).toUpperCase() || 'XXXX'}
-          </span>
-          <button className="btn btn-ghost btn-sm" style={{ fontSize:10, padding:'2px 8px' }}>Copy</button>
-        </div>
-        <button onClick={() => navigate('/user/referral')}
-          style={{ background:'linear-gradient(135deg,#7c3aed,#6d28d9)', color:'#fff',
-            border:'none', borderRadius:20, padding:'8px 20px', fontWeight:700, cursor:'pointer', fontSize:12 }}>
-          Share & Earn →
-        </button>
-      </div>
-
-      {/* ── Seva & Donations ──────────────────────────────── */}
-      <div style={{ background:'linear-gradient(135deg,rgba(233,30,140,0.08),rgba(255,107,0,0.05))',
-        border:'1.5px solid rgba(233,30,140,0.15)', borderRadius:18, padding:'20px', textAlign:'center', marginBottom:8 }}>
-        <div style={{ fontSize:28, marginBottom:8 }}>❤️</div>
-        <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:900, fontSize:18, marginBottom:4 }}>Seva & Donations</div>
-        <div style={{ color:'rgba(255,248,240,0.65)', fontSize:13, marginBottom:16, fontWeight:600 }}>Support temples & sacred traditions</div>
-        <button className="btn btn-primary" style={{ width:'100%', justifyContent:'center' }}
-          onClick={() => navigate('/user/donations')}>Donate Now ❤️</button>
+      {/* ── Final Call To Action ────────────────────────── */}
+      <div style={{ background:'linear-gradient(135deg,#3d1f00,#111)', borderRadius:32, padding:'60px 40px', textAlign:'center', color:'#fff', boxShadow:'0 25px 60px rgba(0,0,0,0.5)', border:`1px solid ${C.accent}33`, position:'relative', overflow:'hidden' }}>
+         <div style={{ position:'absolute', left:-40, bottom:-40, fontSize:200, opacity:0.03, transform:'rotate(20deg)' }}>🕉️</div>
+         <h2 style={{ fontFamily:'Cinzel,serif', fontSize:38, color:C.gold, marginBottom:16, fontWeight:900 }}>Ready to Elevate Your Spiritual Journey?</h2>
+         <p style={{ color:C.textMuted, fontSize:18, marginBottom:40, maxWidth:550, margin:'0 auto 40px', fontWeight:600 }}>Join thousands of devotees establishing their direct connection with the divine through DevSetu.</p>
+         <div style={{ display:'flex', gap:20, justifyContent:'center', flexWrap:'wrap' }}>
+            <button className="btn btn-primary" onClick={() => navigate('/user/booking')} style={{ padding:'18px 40px', fontSize:18, fontWeight:900, borderRadius:50 }}>Book Your First Ritual 🙏</button>
+            <button className="btn btn-outline" style={{ color:'#fff', borderColor:'#fff', padding:'18px 40px', fontSize:17, fontWeight:800, borderRadius:50 }}>Download DevSetu App 📱</button>
+         </div>
       </div>
 
     </div>

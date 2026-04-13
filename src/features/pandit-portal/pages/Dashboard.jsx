@@ -181,12 +181,19 @@ export default function Dashboard() {
     const today = new Date().toISOString().split('T')[0];
     const next7 = new Date(); next7.setDate(next7.getDate() + 7);
     const next7str = next7.toISOString().split('T')[0];
+    
+    // Financial Intelligence
+    const inEscrow = bookings.filter(b => b.payment_status === 'paid' && b.settlement_status !== 'settled');
+    const settled = bookings.filter(b => b.settlement_status === 'settled');
+    
+    const escrowAmt = inEscrow.reduce((acc, b) => acc + ((b.total_amount || 0) * 0.82), 0);
+    const settledAmt = settled.reduce((acc, b) => acc + ((b.total_amount || 0) * 0.82), 0);
+
     const pending = bookings.filter(b => b.status === 'pending');
     const todayBks = bookings.filter(b => b.booking_date === today && b.status === 'accepted');
-    const accepted = bookings.filter(b => b.status === 'accepted' || b.status === 'completed');
-    const monthEarnings = accepted.reduce((acc, b) => acc + ((b.total_amount || b.amount || 0) * 0.82), 0);
     const upcoming = bookings.filter(b => b.booking_date > today && b.booking_date <= next7str && b.status === 'accepted');
-    return { pending, today: todayBks, monthEarnings, upcoming };
+    
+    return { pending, today: todayBks, escrowAmt, settledAmt, upcoming };
   }, [bookings]);
 
   const handleAction = async (id, status) => {
@@ -261,10 +268,10 @@ export default function Dashboard() {
       {/* Stats */}
       <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(140px,1fr))', gap:12, marginBottom:20 }}>
         {[
-          { label:'This Month', value:`₹${Math.round(stats.monthEarnings).toLocaleString()}`, sub:'After 18% commission', color:'#F0C040' },
-          { label:"Today's Rituals", value:stats.today.length, sub:'Accepted bookings', color:'#22c55e' },
-          { label:'Pending Requests', value:stats.pending.length, sub:'Awaiting response', color:'#FF6B00' },
-          { label:'Next 7 Days', value:stats.upcoming.length, sub:'Upcoming bookings', color:'#c084fc' },
+          { label:'Total Settled', value:`₹${Math.round(stats.settledAmt).toLocaleString()}`, sub:'Transferred to Bank', color:'#22c55e' },
+          { label:'In Escrow', value:`₹${Math.round(stats.escrowAmt).toLocaleString()}`, sub:'Awaiting Release', color:'#FF6B00' },
+          { label:'Pending Requests', value:stats.pending.length, sub:'Response needed', color:'#D4A017' },
+          { label:'Next 7 Days', value:stats.upcoming.length, sub:'Confirmed bookings', color:'#c084fc' },
         ].map(s=>(
           <div key={s.label} style={{ ...card, textAlign:'center' }}>
             <div style={{ color:s.color, fontWeight:800, fontSize:28, marginBottom:4 }}>{s.value}</div>

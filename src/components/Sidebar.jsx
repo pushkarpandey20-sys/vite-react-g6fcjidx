@@ -45,12 +45,13 @@ export function UserSidebar({ onNavClick }) {
           const active = pathname === path;
           return (
             <div key={path} onClick={(e) => {
-              if (path.includes('booking') || path.includes('history')) {
+              const isProtected = path.includes('booking') || path.includes('history');
+              if (isProtected && !devoteeId) {
                 handleProtectedNav(e, path);
               } else {
                 onNavClick?.();
+                navigate(path);
               }
-              navigate(path);
             }} style={{
               display:'flex', alignItems:'center', gap:10,
               padding:'9px 16px', cursor:'pointer', borderRadius:8,

@@ -30,6 +30,8 @@ const AdminBookingList = lazy(() => import('../../pages/admin/AdminBookingList')
 const AdminTempleList = lazy(() => import('../../pages/admin/AdminTempleList'));
 const AdminSamagriList = lazy(() => import('../../pages/admin/AdminSamagriList'));
 const AdminPermissionPage = lazy(() => import('../../pages/admin/AdminPermissionPage'));
+const AdminFinances = lazy(() => import('../../pages/admin/AdminFinances'));
+const AdminWarRoom = lazy(() => import('../../pages/admin/AdminWarRoom'));
 const SuperAdminLogin = lazy(() => import('../../pages/admin/SuperAdminLogin'));
 
 // Feature Pages
@@ -117,6 +119,8 @@ export default function AppRoutes() {
             <Route path="bookings" element={<AdminBookingList />} />
             <Route path="temples" element={<AdminTempleList />} />
             <Route path="samagri" element={<AdminSamagriList />} />
+            <Route path="finances" element={<AdminFinances />} />
+            <Route path="war-room" element={<AdminWarRoom />} />
             <Route path="settings" element={<AdminPermissionPage />} />
           </Route>
 
