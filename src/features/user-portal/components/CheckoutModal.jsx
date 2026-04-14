@@ -13,7 +13,7 @@ export default function CheckoutModal({ subtotal, onComplete, onClose }) {
         amount: subtotal,
         name: formData.name,
         contact: formData.phone,
-        description: "DevSetu Samagri Order"
+        description: "BhaktiGo Samagri Order"
       });
       if (payment.success) {
         onComplete({ ...formData, payment_id: payment.payment_id });

@@ -141,7 +141,7 @@ export function ConfirmModal({ draft, onCancel, onConfirm, loading }) {
 
 /* ─── SUCCESS MODAL ──────────────────────────────────── */
 export function BookingSuccessModal({ booking, onClose }) {
-  const bookingRef = booking?.id ? String(booking.id).slice(0, 10).toUpperCase() : 'DS' + Date.now().toString().slice(-6);
+  const bookingRef = booking?.id ? String(booking.id).slice(0, 10).toUpperCase() : 'BG' + Date.now().toString().slice(-6);
   return (
     <div className="overlay" style={{ zIndex: 9999 }}>
       <div className="modal" style={{ maxWidth: 460, textAlign: "center", border: '2px solid #22c55e' }} onClick={e => e.stopPropagation()}>
@@ -275,8 +275,8 @@ export function LoginModal({ onClose }) {
 
   // Universal demo login — works without OTP
   const handleDemoLogin = (name) => {
-    if (loginDevoteeDemo) loginDevoteeDemo(name || 'DevSetu Devotee');
-    else handleLogin(phone || '9999999999', name || 'DevSetu Devotee', 'Delhi');
+    if (loginDevoteeDemo) loginDevoteeDemo(name || 'BhaktiGo Devotee');
+    else handleLogin(phone || '9999999999', name || 'BhaktiGo Devotee', 'Delhi');
     onClose();
   };
 
@@ -291,7 +291,7 @@ export function LoginModal({ onClose }) {
       setError('');
     } catch (e) {
       // Any OTP failure → auto fallback to demo login (phone auth not configured)
-      handleDemoLogin('DevSetu User');
+      handleDemoLogin('BhaktiGo User');
     } finally { setLoading(false); }
   };
 
@@ -299,7 +299,7 @@ export function LoginModal({ onClose }) {
     if (otp.length !== 6) return setError('Enter the 6-digit OTP');
     // Universal test OTP — always works
     if (otp === '000000') {
-      handleDemoLogin('DevSetu User');
+      handleDemoLogin('BhaktiGo User');
       return;
     }
     setLoading(true); setError('');
@@ -310,7 +310,7 @@ export function LoginModal({ onClose }) {
       onClose();
     } catch (e) {
       // OTP verify failed → also fall back to demo login
-      handleDemoLogin('DevSetu User');
+      handleDemoLogin('BhaktiGo User');
     } finally { setLoading(false); }
   };
 
@@ -318,7 +318,7 @@ export function LoginModal({ onClose }) {
     <div className="overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-head">
-          <div className="modal-title">🕉️ Welcome to DevSetu</div>
+          <div className="modal-title">🕉️ Welcome to BhaktiGo</div>
           <div className="modal-sub">Your digital bridge to Vedic services</div>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
@@ -400,7 +400,7 @@ export function LoginModal({ onClose }) {
                 {loading ? "Verifying..." : "✓ Verify & Continue"}
               </button>
               <button style={{ width:'100%', background:'linear-gradient(135deg,#7c3aed,#5b21b6)', color:'#fff', border:'none', borderRadius:28, padding:'9px', fontWeight:800, cursor:'pointer', fontSize:13, fontFamily:'Nunito,sans-serif', marginTop:8 }}
-                onClick={() => handleDemoLogin('DevSetu User')}>
+                onClick={() => handleDemoLogin('BhaktiGo User')}>
                 ⚡ Skip OTP — Use Test Login
               </button>
               <button className="btn btn-ghost" style={{ width: "100%", justifyContent: "center", marginTop: 8 }} onClick={() => { setStep('phone'); setOtp(''); setError(''); }}>
@@ -437,13 +437,13 @@ export function AdminLoginModal({ onClose, loginAdmin, loginAdminDemo }) {
       <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 420 }}>
         <div className="modal-head">
           <div className="modal-title">🛡️ Admin Login</div>
-          <div className="modal-sub">DevSetu Platform Management</div>
+          <div className="modal-sub">BhaktiGo Platform Management</div>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
         <div className="modal-body">
           <div className="fg" style={{ marginBottom: 14 }}>
             <label className="fl">Email</label>
-            <input className="fi" type="email" placeholder="admin@devsetu.app" value={email} onChange={e => setEmail(e.target.value)} />
+            <input className="fi" type="email" placeholder="admin@bhaktigo.com" value={email} onChange={e => setEmail(e.target.value)} />
           </div>
           <div className="fg" style={{ marginBottom: 20 }}>
             <label className="fl">Password</label>
@@ -477,7 +477,7 @@ export function UserOnboardingModal({ onClose, name }) {
         <div className="modal-body" style={{ textAlign: "center", padding: "40px 30px" }}>
           <div style={{ fontSize: 64, marginBottom: 16 }}>✨</div>
           <div style={{ fontFamily: "'Cinzel',serif", fontSize: 24, fontWeight: 700, color: "#2C1A0E", marginBottom: 8 }}>Vande Mataram!</div>
-          <div style={{ color: "#8B6347", lineHeight: 1.6, marginBottom: 24 }}>Welcome <b>{name}</b>! Your spiritual journey with DevSetu begins now. Access verified pandits, sacred rituals, and auspicious timings in one place.</div>
+          <div style={{ color: "#8B6347", lineHeight: 1.6, marginBottom: 24 }}>Welcome <b>{name}</b>! Your spiritual journey with BhaktiGo begins now. Access verified pandits, sacred rituals, and auspicious timings in one place.</div>
           <button className="btn btn-primary" onClick={onClose} style={{ width: "100%", justifyContent: "center" }}>Let's Start 🙏</button>
         </div>
       </div>

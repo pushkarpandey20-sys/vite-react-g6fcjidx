@@ -35,7 +35,7 @@ export function UserSidebar({ onNavClick }) {
     <div className="sidebar" style={{ background: '#3d1f00', borderRight: '1px solid rgba(255,255,255,0.1)' }}>
       <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: 12 }}>
         <div onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-          <div style={{ fontFamily: 'Cinzel,serif', color: '#F0C040', fontSize: 16, fontWeight: 900 }}>🕉️ DevSetu</div>
+          <div style={{ fontFamily: 'Cinzel,serif', color: '#F0C040', fontSize: 16, fontWeight: 900 }}>🕉️ BhaktiGo</div>
           <div style={{ fontSize: 10, color: 'rgba(255,248,240,0.5)', letterSpacing: 2, marginTop: 2 }}>DEVOTEE PORTAL</div>
         </div>
       </div>

@@ -50,7 +50,7 @@ function RouteLoader() {
   return (
     <div style={{ minHeight: '100vh', display: 'grid', placeItems: 'center', background: '#120B08', color: 'rgba(255,248,240,0.82)' }}>
       <div style={{ textAlign: 'center' }}>
-        <div style={{ fontSize: 14, letterSpacing: 1.2, textTransform: 'uppercase', color: '#F0C040', marginBottom: 10 }}>DevSetu</div>
+        <div style={{ fontSize: 14, letterSpacing: 1.2, textTransform: 'uppercase', color: '#F0C040', marginBottom: 10 }}>BhaktiGo</div>
         <div style={{ fontSize: 15 }}>Loading experience...</div>
       </div>
     </div>

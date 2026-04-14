@@ -29,7 +29,7 @@ export default function AdminPermissionPage() {
     <div style={{ fontFamily:'Nunito,sans-serif' }}>
       <div style={{ marginBottom:24 }}>
         <h2 style={{ fontFamily:'Cinzel,serif', color:C.dark, fontSize:20, margin:0 }}>⚙️ Platform Settings</h2>
-        <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>Configure DevSetu platform behavior</p>
+        <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>Configure BhaktiGo platform behavior</p>
       </div>
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:18 }}>
@@ -52,7 +52,7 @@ export default function AdminPermissionPage() {
           <h3 style={{ color:C.dark, fontFamily:'Cinzel,serif', margin:'0 0 2px', fontSize:15 }}>Payments</h3>
           <p style={{ color:C.soft, fontSize:12, margin:'0 0 8px' }}>Razorpay & fee config</p>
           <Row label="Razorpay Live Mode" desc="Switch test → live gateway"><Toggle k="razorpayLive"/></Row>
-          <Row label="Platform Fee %" desc="DevSetu's cut per booking"><NumInput k="platformFee"/></Row>
+          <Row label="Platform Fee %" desc="BhaktiGo's cut per booking"><NumInput k="platformFee"/></Row>
         </div>
 
         <div style={{ background:C.card, border:`1px solid ${C.border}`, borderRadius:14, padding:'20px 22px' }}>

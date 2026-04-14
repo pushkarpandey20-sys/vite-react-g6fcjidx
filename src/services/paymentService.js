@@ -23,7 +23,7 @@ export const paymentService = {
         key: rzpKey,
         amount: amount * 100, // paise
         currency: "INR",
-        name: "DevSetu",
+        name: "BhaktiGo",
         description: description || "Sacred Ritual Dakshina",
         image: "/favicon.svg",
         prefill: { name: name || "", contact: contact || "" },

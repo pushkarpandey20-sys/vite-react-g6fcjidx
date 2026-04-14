@@ -13,7 +13,7 @@ export const handleGlobalError = (error, context = 'App') => {
   if (error.code === '23505') return "You already have a similar ritual booked!";
   if (error.message?.includes("Failed to fetch")) return "Poor connectivity detected. Retrying sacred connection...";
   
-  return "An unexpected disruption occurred in our spiritual network. Please try again or contact support at support@devsetu.com.";
+  return "An unexpected disruption occurred in our spiritual network. Please try again or contact support at support@bhaktigo.com.";
 };
 
 export const withRetry = async (fn, retries = 3, delay = 1000) => {

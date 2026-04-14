@@ -224,7 +224,7 @@ function BookingActionCard({ b, onAction, isToday = false, mini = false }) {
           <div style={{ fontSize: 10, color: '#4ade80', fontWeight: 800, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 4 }}>Devotee Intelligence</div>
           <div style={{ fontSize: 12, color: '#fff', fontWeight: 500 }}>
             {b.id && b.id.charCodeAt(0) % 2 === 0 
-              ? "🌟 First-time user on DevSetu. Make a lasting spiritual impression!" 
+              ? "🌟 First-time user on BhaktiGo. Make a lasting spiritual impression!" 
               : "👑 Loyal Devotee (3rd booking overall). Highly values authentic samagri."}
           </div>
         </div>

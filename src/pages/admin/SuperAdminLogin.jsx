@@ -69,7 +69,7 @@ export default function SuperAdminLogin() {
             borderRadius:22, display:'flex', alignItems:'center', justifyContent:'center',
             fontSize:34, boxShadow:'0 8px 32px rgba(52,152,219,0.2)' }}>🛡️</div>
           <div style={{ fontFamily:'Cinzel,serif', color:'#3498db', fontSize:22, fontWeight:900, marginBottom:4 }}>
-            DevSetu Admin
+            BhaktiGo Admin
           </div>
           <div style={{ color:'rgba(255,255,255,0.35)', fontSize:13 }}>
             Command Centre · Secure Access
@@ -93,7 +93,7 @@ export default function SuperAdminLogin() {
                 type="email"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                placeholder="admin@devsetu.com"
+                placeholder="admin@bhaktigo.com"
                 style={{ width:'100%', padding:'13px 16px', borderRadius:12,
                   background:'rgba(255,255,255,0.04)', border:'1.5px solid rgba(52,152,219,0.25)',
                   color:'rgba(255,255,255,0.88)', fontSize:14, outline:'none', boxSizing:'border-box',
@@ -180,14 +180,14 @@ export default function SuperAdminLogin() {
             <button onClick={() => navigate('/')}
               style={{ background:'none', border:'none', color:'rgba(255,255,255,0.35)',
                 cursor:'pointer', fontSize:13, fontFamily:'Nunito,sans-serif' }}>
-              ← Back to DevSetu
+              ← Back to BhaktiGo
             </button>
           </div>
         </div>
 
         {/* Footer note */}
         <div style={{ textAlign:'center', marginTop:20, color:'rgba(255,255,255,0.2)', fontSize:11 }}>
-          🔒 Secured access — DevSetu Platform v2.0
+          🔒 Secured access — BhaktiGo Platform v2.0
         </div>
       </div>
     </div>

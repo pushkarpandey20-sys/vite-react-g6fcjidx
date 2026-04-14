@@ -1,7 +1,7 @@
 {
-  "name": "DevSetu – Connecting the Divine",
-  "short_name": "DevSetu",
-  "description": "Book verified Pandits, find Muhurtas, shop Pooja Samagri — your complete spiritual companion.",
+  "name": "BhaktiGo",
+  "short_name": "BhaktiGo",
+  "description": "BhaktiGo – Bridging You to Divine Services",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

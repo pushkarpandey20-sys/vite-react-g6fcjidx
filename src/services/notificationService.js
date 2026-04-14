@@ -209,7 +209,7 @@ export function sendBrowserNotification(title, body, options = {}) {
     body,
     icon: '/favicon.svg',
     badge: '/favicon.svg',
-    tag: options.tag || 'devsetu',
+    tag: options.tag || 'bhaktigo',
     requireInteraction: options.urgent || false,
     data: options.data || {},
   });
@@ -311,7 +311,7 @@ async function runDailyNotifications(devoteeId) {
       muhurat: tithiInfo.muhurat, cta: 'Book Recommended Pooja', url: '/user/booking', urgency: 'high',
     });
     sendBrowserNotification(
-      `🕉️ ${tithiInfo.name} Today — DevSetu`,
+      `🕉️ ${tithiInfo.name} Today — BhaktiGo`,
       `${tithiInfo.message}. Next muhurat: ${nextMuhurat.time}`,
       { tag: 'tithi', urgent: true, url: '/user/booking' }
     );

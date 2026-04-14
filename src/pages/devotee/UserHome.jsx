@@ -37,7 +37,7 @@ const SAMAGRI_KITS = [
 ];
 
 const TESTIMONIALS = [
-  { name: 'Rahul Sharma', city: 'Delhi', text: 'DevSetu made my griha pravesh booking so easy. The pandit was highly professional.', rating: 5 },
+  { name: 'Rahul Sharma', city: 'Delhi', text: 'BhaktiGo made my griha pravesh booking so easy. The pandit was highly professional.', rating: 5 },
   { name: 'Priya Verma', city: 'Mumbai', text: 'Amazing experience with the Rudrabhishek puja. The real-time updates were helpful.', rating: 5 },
   { name: 'Sanjay Gupta', city: 'Bangalore', text: 'High quality samagri kit. Saved me hours of shopping in the market.', rating: 5 },
 ];
@@ -269,7 +269,7 @@ export default function UserHome() {
         </div>
       </Section>
 
-      {/* ── How DevSetu Works ───────────────────────────── */}
+      {/* ── How BhaktiGo Works ───────────────────────────── */}
       <Section title="🛠️ Your Path to Spiritual Fulfillment">
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3, 1fr)', gap:24, padding:'20px 0' }}>
            {[
@@ -293,10 +293,10 @@ export default function UserHome() {
       <div style={{ background:'linear-gradient(135deg,#3d1f00,#111)', borderRadius:32, padding:'60px 40px', textAlign:'center', color:'#fff', boxShadow:'0 25px 60px rgba(0,0,0,0.5)', border:`1px solid ${C.accent}33`, position:'relative', overflow:'hidden' }}>
          <div style={{ position:'absolute', left:-40, bottom:-40, fontSize:200, opacity:0.03, transform:'rotate(20deg)' }}>🕉️</div>
          <h2 style={{ fontFamily:'Cinzel,serif', fontSize:38, color:C.gold, marginBottom:16, fontWeight:900 }}>Ready to Elevate Your Spiritual Journey?</h2>
-         <p style={{ color:C.textMuted, fontSize:18, marginBottom:40, maxWidth:550, margin:'0 auto 40px', fontWeight:600 }}>Join thousands of devotees establishing their direct connection with the divine through DevSetu.</p>
+         <p style={{ color:C.textMuted, fontSize:18, marginBottom:40, maxWidth:550, margin:'0 auto 40px', fontWeight:600 }}>Join thousands of devotees establishing their direct connection with the divine through BhaktiGo.</p>
          <div style={{ display:'flex', gap:20, justifyContent:'center', flexWrap:'wrap' }}>
             <button className="btn btn-primary" onClick={() => navigate('/user/booking')} style={{ padding:'18px 40px', fontSize:18, fontWeight:900, borderRadius:50 }}>Book Your First Ritual 🙏</button>
-            <button className="btn btn-outline" style={{ color:'#fff', borderColor:'#fff', padding:'18px 40px', fontSize:17, fontWeight:800, borderRadius:50 }}>Download DevSetu App 📱</button>
+            <button className="btn btn-outline" style={{ color:'#fff', borderColor:'#fff', padding:'18px 40px', fontSize:17, fontWeight:800, borderRadius:50 }}>Download BhaktiGo App 📱</button>
          </div>
       </div>
 

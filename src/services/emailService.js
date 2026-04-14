@@ -1,6 +1,6 @@
 export function sendBookingConfirmation({ devoteeName, devoteeEmail, ritualName, bookingDate, panditName, amount, bookingId }) {
   // Log for debugging
-  console.log('[DevSetu Email]', { to: devoteeEmail, ritual: ritualName, bookingId });
+  console.log('[BhaktiGo Email]', { to: devoteeEmail, ritual: ritualName, bookingId });
   // Store in queue for future email provider integration (Resend/SendGrid)
   try {
     const queue = JSON.parse(localStorage.getItem('ds_email_queue') || '[]');

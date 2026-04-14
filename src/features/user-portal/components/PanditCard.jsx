@@ -43,7 +43,7 @@ export default function PanditCard({ p, onView }) {
           </div>
           {p.show_whatsapp && p.phone && (
             <a
-              href={`https://wa.me/91${p.phone}?text=Namaste%20Pt.%20${encodeURIComponent(p.name)}%2C%20I%20found%20you%20on%20DevSetu%20and%20want%20to%20book%20a%20pooja.`}
+              href={`https://wa.me/91${p.phone}?text=Namaste%20Pt.%20${encodeURIComponent(p.name)}%2C%20I%20found%20you%20on%20BhaktiGo%20and%20want%20to%20book%20a%20pooja.`}
               target="_blank"
               rel="noopener noreferrer"
               onClick={e => e.stopPropagation()}

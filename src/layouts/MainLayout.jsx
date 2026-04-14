@@ -37,7 +37,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
         <div className="logo" onClick={() => navigate("/")}>
           <div className="logo-icon">🕉️</div>
           <div>
-            <div className="logo-name">DevSetu</div>
+            <div className="logo-name">BhaktiGo</div>
             <div className="logo-tagline">Bridging You to Divine Services</div>
           </div>
         </div>

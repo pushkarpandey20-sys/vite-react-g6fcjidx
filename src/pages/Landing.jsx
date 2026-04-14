@@ -102,7 +102,7 @@ export default function Landing() {
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', flexShrink: 0 }} onClick={() => navigate('/')}>
           <span style={{ fontSize: 28 }}>🕉️</span>
           <div>
-            <div style={{ fontFamily: 'Cinzel,serif', color: '#F0C040', fontWeight: 900, fontSize: 18, lineHeight: 1 }}>DevSetu</div>
+            <div style={{ fontFamily: 'Cinzel,serif', color: '#F0C040', fontWeight: 900, fontSize: 18, lineHeight: 1 }}>BhaktiGo</div>
             <div style={{ color: 'rgba(255,248,240,0.5)', fontSize: 10, letterSpacing: 1.5, fontWeight: 600 }}>BRIDGING YOU TO DIVINE SERVICES</div>
           </div>
         </div>
@@ -353,7 +353,7 @@ export default function Landing() {
 
       {/* How It Works */}
       <div style={{ background:'rgba(255,255,255,0.02)', borderTop:'1px solid rgba(212,160,23,0.1)', borderBottom:'1px solid rgba(212,160,23,0.1)', padding:'60px 5%' }}>
-        <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', textAlign:'center', marginBottom:48, fontSize:28 }}>How DevSetu Works</h2>
+        <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', textAlign:'center', marginBottom:48, fontSize:28 }}>How BhaktiGo Works</h2>
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(200px,1fr))', gap:32, maxWidth:900, margin:'0 auto' }}>
           {[
             { step:1, icon:'🔍', title:'Choose Ritual', desc:'Browse 100+ Vedic rituals or let us recommend based on muhurat' },
@@ -372,7 +372,7 @@ export default function Landing() {
 
       {/* Trust & Verification Section */}
       <div style={{ padding:'80px 5%', background:'linear-gradient(to bottom, rgba(13,7,0,1), rgba(255,107,0,0.03), rgba(13,7,0,1))' }}>
-        <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', textAlign:'center', marginBottom:12, fontSize:32 }}>Why Devotees Trust DevSetu</h2>
+        <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', textAlign:'center', marginBottom:12, fontSize:32 }}>Why Devotees Trust BhaktiGo</h2>
         <p style={{ textAlign:'center', color:'rgba(255,248,240,0.6)', marginBottom:48, fontSize:15, maxWidth:600, margin:'0 auto 48px' }}>We don't just connect you; we ensure a pure, uncompromising spiritual experience.</p>
         
         <div style={{ display:'flex', justifyContent:'center', gap:32, flexWrap:'wrap', maxWidth:1100, margin:'0 auto' }}>
@@ -396,7 +396,7 @@ export default function Landing() {
         <div style={{ fontSize:52, marginBottom:16 }}>🪔</div>
         <h2 style={{ fontFamily:'Cinzel,serif', color:'#D4A017', fontSize:28, marginBottom:12 }}>Are You a Pandit?</h2>
         <p style={{ color:'rgba(255,248,240,0.6)', fontSize:15, marginBottom:28, lineHeight:1.6 }}>
-          Join 500+ verified Vedic scholars earning on DevSetu. Get bookings, manage your schedule, and grow your sacred practice.
+          Join 500+ verified Vedic scholars earning on BhaktiGo. Get bookings, manage your schedule, and grow your sacred practice.
         </p>
         <div style={{ display:'flex', justifyContent:'center', gap:12, flexWrap:'wrap' }}>
           <button style={btn('linear-gradient(135deg,#D4A017,#F0C040)',{color:'#1a0f07'})} onClick={()=>navigate('/pandit/dashboard')}>Join as Pandit →</button>
@@ -409,11 +409,11 @@ export default function Landing() {
         <div style={{ display:'flex', alignItems:'center', gap:10 }}>
           <span style={{ fontSize:24 }}>🕉️</span>
           <div>
-            <div style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontWeight:700 }}>DevSetu</div>
+            <div style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontWeight:700 }}>BhaktiGo</div>
             <div style={{ color:'rgba(255,248,240,0.3)', fontSize:11 }}>India's Spiritual Super-App</div>
           </div>
         </div>
-        <div style={{ color:'rgba(255,248,240,0.3)', fontSize:12 }}>© 2025 DevSetu · Crafted with 🙏 for Bharat</div>
+        <div style={{ color:'rgba(255,248,240,0.3)', fontSize:12 }}>© 2025 BhaktiGo · Crafted with 🙏 for Bharat</div>
         <div style={{ display:'flex', gap:16 }}>
           {['Privacy','Terms','Contact'].map(l=>(
             <span key={l} style={{ color:'rgba(255,248,240,0.4)', fontSize:12, cursor:'pointer' }}>{l}</span>

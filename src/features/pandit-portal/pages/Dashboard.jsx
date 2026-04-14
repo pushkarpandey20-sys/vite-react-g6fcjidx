@@ -109,7 +109,7 @@ function PanditOnboardingForm({ onComplete }) {
             <input style={inp} placeholder="IFSC Code" value={form.ifsc} onChange={e=>set('ifsc',e.target.value)}/>
             <label style={{ display:'flex', gap:10, alignItems:'flex-start', color:'#5C3317', fontSize:13, marginTop:8, cursor:'pointer' }}>
               <input type="checkbox" checked={form.agreed} onChange={e=>set('agreed',e.target.checked)} style={{ marginTop:3 }}/>
-              I agree to DevSetu's Pandit Code of Conduct, terms of service, and commission structure (18% platform fee).
+              I agree to BhaktiGo's Pandit Code of Conduct, terms of service, and commission structure (18% platform fee).
             </label>
             {err && <div style={{ color:'#ef4444', fontSize:12, marginTop:8 }}>{err}</div>}
           </>
@@ -337,7 +337,7 @@ export default function Dashboard() {
                 <div style={{ fontSize: 10, color: '#166534', fontWeight: 800, letterSpacing: 0.5, textTransform: 'uppercase', marginBottom: 4 }}>Devotee Intelligence</div>
                 <div style={{ fontSize: 12, color: '#15803d', fontWeight: 600 }}>
                   {b.id && b.id.charCodeAt(0) % 2 === 0 
-                    ? "🌟 First-time user on DevSetu. Make a lasting spiritual impression!" 
+                    ? "🌟 First-time user on BhaktiGo. Make a lasting spiritual impression!" 
                     : "👑 Loyal Devotee (3rd booking overall). Highly values authentic samagri."}
                 </div>
               </div>

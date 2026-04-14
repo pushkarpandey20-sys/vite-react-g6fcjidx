@@ -90,7 +90,7 @@ export default function PanditEarningsPage() {
       <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:22 }}>
         <div>
           <h2 style={{ fontFamily:'Cinzel,serif', color:C.dark, fontSize:20, margin:0 }}>💰 Earnings Overview</h2>
-          <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>DevSetu takes 18% · payouts every Monday</p>
+          <p style={{ color:C.soft, margin:'4px 0 0', fontSize:13 }}>BhaktiGo takes 18% · payouts every Monday</p>
         </div>
         <div style={{ display:'flex', gap:6, flexWrap:'wrap' }}>
           {[['month','This Month'],['quarter','This Quarter'],['year','This Year'],['all','All Time']].map(([v,l]) => (

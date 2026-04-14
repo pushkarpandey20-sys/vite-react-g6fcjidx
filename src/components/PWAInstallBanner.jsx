@@ -78,7 +78,7 @@ export default function PWAInstallBanner() {
       {/* App icon */}
       <img
         src="/icons/icon-192.png"
-        alt="DevSetu"
+        alt="BhaktiGo"
         style={{ width: 48, height: 48, borderRadius: 12, flexShrink: 0 }}
         onError={e => { e.target.style.display = 'none'; }}
       />
@@ -86,7 +86,7 @@ export default function PWAInstallBanner() {
       {/* Text */}
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontWeight: 900, color: '#F0C040', fontSize: 14, fontFamily: 'Cinzel, serif' }}>
-          📱 Install DevSetu App
+          📱 Install BhaktiGo App
         </div>
         {isIOS ? (
           <div style={{ color: 'rgba(255,248,240,0.6)', fontSize: 12, marginTop: 2, lineHeight: 1.4 }}>

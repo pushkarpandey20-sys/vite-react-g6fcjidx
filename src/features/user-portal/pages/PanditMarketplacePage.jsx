@@ -187,7 +187,7 @@ export default function PanditMarketplacePage() {
       {/* ── Hero ── */}
       <div className="pm-hero">
         <div className="pm-hero-glow" />
-        <div className="pm-hero-badge">🙏 DevSetu Verified Pandits</div>
+        <div className="pm-hero-badge">🙏 BhaktiGo Verified Pandits</div>
         <h1 className="pm-hero-title">Find Your Pandit</h1>
         <p className="pm-hero-sub">
           Connect with learned Vedic scholars — verified, rated, and ready for any ceremony.

@@ -11,10 +11,10 @@ export default function ReferralPage() {
   const [copied, setCopied] = useState(false);
 
   const refCode = devoteeId
-    ? ('DS' + devoteeId.toString().toUpperCase().replace(/-/g,'').substring(0,6))
-    : 'DSLOGIN';
+    ? ('BG' + devoteeId.toString().toUpperCase().replace(/-/g,'').substring(0,6))
+    : 'BGLOGIN';
 
-  const refLink = `https://vite-react-g6fcjidx.vercel.app/?ref=${refCode}`;
+  const refLink = `https://bhaktigo.com/?ref=${refCode}`;
 
   useEffect(() => {
     if (!devoteeId) return;
@@ -39,9 +39,9 @@ export default function ReferralPage() {
   };
 
   const share = () => {
-    const text = `🕉️ Book verified pandits for Griha Pravesh, Satyanarayan & 100+ rituals on DevSetu!\nUse my code *${refCode}* to get ₹50 off your first booking.\n${refLink}`;
+    const text = `🕉️ Book verified pandits for Griha Pravesh, Satyanarayan & 100+ rituals on BhaktiGo!\nUse my code *${refCode}* to get ₹50 off your first booking.\n${refLink}`;
     if (navigator.share) {
-      navigator.share({ title:'DevSetu — Book Pandits Online', text, url:refLink });
+      navigator.share({ title:'BhaktiGo — Book Pandits Online', text, url:refLink });
     } else {
       window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
     }
@@ -57,7 +57,7 @@ export default function ReferralPage() {
         <div style={{ fontSize:48, marginBottom:10 }}>🎁</div>
         <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:22, margin:'0 0 8px' }}>Refer & Earn ₹50</h2>
         <p style={{ color:'rgba(255,248,240,0.8)', fontSize:14, margin:'0 0 20px', maxWidth:480, marginLeft:'auto', marginRight:'auto' }}>
-          Invite friends to DevSetu. They book a pandit, you earn ₹50 off your next booking. No limit on referrals!
+          Invite friends to BhaktiGo. They book a pandit, you earn ₹50 off your next booking. No limit on referrals!
         </p>
         <div style={{ display:'flex', justifyContent:'center', gap:16, flexWrap:'wrap' }}>
           {[[`₹${credits}`, 'Your Credits'],
@@ -99,7 +99,7 @@ export default function ReferralPage() {
         <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:14 }}>
           {[
             ['1️⃣', 'Share Your Link', 'Send your referral link or code to friends and family'],
-            ['2️⃣', 'They Book a Pandit', 'Your friend uses DevSetu and completes their first booking'],
+            ['2️⃣', 'They Book a Pandit', 'Your friend uses BhaktiGo and completes their first booking'],
             ['3️⃣', 'You Earn ₹50', 'Credited to your account for any future booking'],
           ].map(([icon,title,desc]) => (
             <div key={title} style={{ background:'rgba(255,107,0,0.05)', border:'1px solid rgba(255,107,0,0.15)', borderRadius:12, padding:'16px', textAlign:'center' }}>

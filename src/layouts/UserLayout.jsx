@@ -7,7 +7,7 @@ export default function UserLayout() {
   const location = useLocation();
   const path = location.pathname;
 
-  let title = "DevSetu Devotee";
+  let title = "BhaktiGo Devotee";
   let sub = "Your spiritual companion in the digital age";
 
   if (path.includes('muhurta')) { title = "Panchang & Muhurtas"; sub = "Auspicious timings for your sacred rituals"; }
@@ -22,7 +22,7 @@ export default function UserLayout() {
   else if (path.includes('sankalp')) { title = "Sankalp Profile"; sub = "Set your spiritual intentions and goals"; }
   else if (path.includes('referral')) { title = "Referral Program"; sub = "Invite friends and earn divine rewards"; }
   else if (path.includes('virtual-pooja')) { title = "Virtual Pooja"; sub = "Participate in sacred rituals from anywhere"; }
-  else if (path.includes('roadmap')) { title = "Product Roadmap"; sub = "See where DevSetu is headed"; }
+  else if (path.includes('roadmap')) { title = "Product Roadmap"; sub = "See where BhaktiGo is headed"; }
 
   return (
     <MainLayout sidebar={<UserSidebar />} portalLabel="🙏 Devotee Portal" portalColor="#FF6B00">

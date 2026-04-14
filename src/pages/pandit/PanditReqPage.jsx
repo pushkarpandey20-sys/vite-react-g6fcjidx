@@ -152,7 +152,7 @@ export default function PanditReqPage({ propFilter }) {
               <div style={{ marginTop:12, paddingTop:12, borderTop:'1px solid rgba(212,160,23,0.1)', display:'flex', gap:12, flexWrap:'wrap' }}>
                 <div style={{ background:'rgba(34,197,94,0.08)', border:'1px solid rgba(34,197,94,0.2)', borderRadius:8, padding:'8px 14px' }}>
                   <div style={{ color:'#4ade80', fontSize:11, fontWeight:700, marginBottom:2 }}>CONTACT DEVOTEE</div>
-                  <div style={{ color:'rgba(255,248,240,0.8)', fontSize:13, fontWeight:600 }}>{b.devotee_phone || 'Contact via DevSetu'}</div>
+                  <div style={{ color:'rgba(255,248,240,0.8)', fontSize:13, fontWeight:600 }}>{b.devotee_phone || 'Contact via BhaktiGo'}</div>
                 </div>
                 <div style={{ background:'rgba(59,130,246,0.08)', border:'1px solid rgba(59,130,246,0.25)', borderRadius:8, padding:'8px 14px' }}>
                   <div style={{ color:'#60a5fa', fontSize:11, fontWeight:700, marginBottom:2 }}>CEREMONY LOCATION</div>

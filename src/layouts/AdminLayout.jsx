@@ -32,7 +32,7 @@ function AdminLogin({ onLogin }) {
       if (authError) throw authError;
       onLogin(email);
     } catch (e) {
-      if (email === 'admin@devsetu.app' && pass === 'DevSetu@2025') {
+      if (email === 'admin@bhaktigo.com' && pass === 'BhaktiGo@2025') {
         onLogin(email);
       } else {
         setError('Encryption Mismatch: Invalid Credentials');
@@ -69,7 +69,7 @@ function AdminLogin({ onLogin }) {
         zIndex:1
       }}>
         <div style={{ width:72, height:72, background:'linear-gradient(135deg, #FF6B00, #FF3D00)', borderRadius:24, display:'flex', alignItems:'center', justifyContent:'center', fontSize:36, margin:'0 auto 32px', boxShadow:'0 12px 24px rgba(255,107,0,0.4)' }}>🕉️</div>
-        <h2 style={{ fontFamily:'Cinzel, serif', color:'#fff', fontSize:32, margin:'0 0 12px', fontWeight:900, letterSpacing:-0.5 }}>DevSetu Admin</h2>
+        <h2 style={{ fontFamily:'Cinzel, serif', color:'#fff', fontSize:32, margin:'0 0 12px', fontWeight:900, letterSpacing:-0.5 }}>BhaktiGo Admin</h2>
         <p style={{ color:'rgba(255,255,255,0.4)', fontSize:16, margin:'0 0 40px', fontWeight:500 }}>The Nexus of Vedic Operations</p>
 
         {error && (
@@ -163,7 +163,7 @@ export default function AdminLayout() {
           <div onClick={()=>navigate('/')} style={{ cursor:'pointer', display:'flex', alignItems:'center', gap:12 }}>
             <div style={{ width:40, height:40, background:'linear-gradient(135deg, #FF6B00, #D4A017)', borderRadius:10, display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, boxShadow:'0 4px 12px rgba(0,0,0,0.2)' }}>🕉️</div>
             <div>
-              <div style={{ fontFamily:'Cinzel, serif', color:'#fff', fontSize:20, fontWeight:900, letterSpacing:-0.5 }}>DevSetu</div>
+              <div style={{ fontFamily:'Cinzel, serif', color:'#fff', fontSize:20, fontWeight:900, letterSpacing:-0.5 }}>BhaktiGo</div>
               <div style={{ fontSize:9, color:C.gold, fontWeight:800, letterSpacing:2.5, opacity:0.8 }}>ADMIN PANEL</div>
             </div>
           </div>
@@ -181,7 +181,7 @@ export default function AdminLayout() {
             <div style={{ width:32, height:32, borderRadius:8, background:C.accent, color:'#fff', display:'flex', alignItems:'center', justifyContent:'center', fontSize:16, fontWeight:900 }}>S</div>
             <div>
               <div style={{ color:'#fff', fontSize:12, fontWeight:800 }}>Super Admin</div>
-              <div style={{ color:'rgba(255,255,255,0.4)', fontSize:10, fontWeight:600 }}>admin@devsetu.app</div>
+              <div style={{ color:'rgba(255,255,255,0.4)', fontSize:10, fontWeight:600 }}>admin@bhaktigo.com</div>
             </div>
           </div>
         </div>

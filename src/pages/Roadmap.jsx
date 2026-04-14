@@ -66,11 +66,11 @@ const PHASES = [
     features: [
       { icon: '🥽', name: 'AR/VR Temple Tours', desc: 'Immersive virtual darshan — experience sacred temples from home' },
       { icon: '🌍', name: 'Global Expansion', desc: 'Serving Hindu diaspora in USA, UK, Canada, Singapore, and UAE' },
-      { icon: '⚡', name: 'DevSetu App v2', desc: 'Native iOS & Android app with offline Panchang and ritual guides' },
+      { icon: '⚡', name: 'BhaktiGo App v2', desc: 'Native iOS & Android app with offline Panchang and ritual guides' },
       { icon: '🏛️', name: 'Temple OS', desc: 'Full management platform for temples — bookings, donations, prasad' },
       { icon: '🧬', name: 'Wellness Integration', desc: 'Ayurvedic consultations, yoga scheduling, and holistic health rituals' },
-      { icon: '🤖', name: 'DevSetu AI Guru', desc: 'Personal Vedic AI assistant for scripture queries, remedies, and guidance' },
-      { icon: '💳', name: 'DevSetu Wallet', desc: 'Unified spiritual wallet for bookings, donations, and ritual credits' },
+      { icon: '🤖', name: 'BhaktiGo AI Guru', desc: 'Personal Vedic AI assistant for scripture queries, remedies, and guidance' },
+      { icon: '💳', name: 'BhaktiGo Wallet', desc: 'Unified spiritual wallet for bookings, donations, and ritual credits' },
       { icon: '🕊️', name: 'Antyesti & Shraddha', desc: 'Dignified last rites and ancestral rituals with certified pandits' },
     ],
   },
@@ -87,7 +87,7 @@ export default function Roadmap() {
       {/* Hero */}
       <div style={{ background:'linear-gradient(135deg,rgba(212,160,23,0.15),rgba(255,107,0,0.1))', border:'1px solid rgba(212,160,23,0.2)', borderRadius:16, padding:'28px 32px', marginBottom:32, textAlign:'center' }}>
         <div style={{ fontSize:48, marginBottom:12 }}>🗺️</div>
-        <h1 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:28, margin:'0 0 10px' }}>DevSetu Product Roadmap</h1>
+        <h1 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:28, margin:'0 0 10px' }}>BhaktiGo Product Roadmap</h1>
         <p style={{ color:'rgba(255,248,240,0.6)', fontSize:15, maxWidth:560, margin:'0 auto 20px', lineHeight:1.6 }}>
           Our mission: make every spiritual need accessible to every devotee in Bharat and beyond.
         </p>
@@ -145,11 +145,11 @@ export default function Roadmap() {
         <div style={{ fontSize:40, marginBottom:12 }}>💬</div>
         <h3 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', margin:'0 0 10px', fontSize:18 }}>Shape the Roadmap</h3>
         <p style={{ color:'rgba(255,248,240,0.5)', fontSize:13, maxWidth:480, margin:'0 auto 20px', lineHeight:1.6 }}>
-          Have a feature request or feedback? We build DevSetu with our community. Your input directly shapes what we build next.
+          Have a feature request or feedback? We build BhaktiGo with our community. Your input directly shapes what we build next.
         </p>
         <div style={{ display:'flex', justifyContent:'center', gap:12, flexWrap:'wrap' }}>
           <button onClick={()=>navigate('/user/home')} style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none', borderRadius:24, padding:'11px 28px', fontWeight:800, cursor:'pointer', fontSize:14 }}>
-            Explore DevSetu →
+            Explore BhaktiGo →
           </button>
           <button onClick={()=>navigate('/user/donations')} style={{ background:'rgba(255,255,255,0.06)', color:'rgba(255,248,240,0.6)', border:'1px solid rgba(255,255,255,0.15)', borderRadius:24, padding:'11px 28px', fontWeight:700, cursor:'pointer', fontSize:14 }}>
             Support Our Mission 🙏
