@@ -158,7 +158,7 @@ export default function UserHome() {
           </p>
 
           <div style={{ display:'flex', gap:16, justifyContent:'center', flexWrap:'wrap', marginBottom:32 }}>
-            <button onClick={() => navigate('/user/booking')} className="btn btn-primary" style={{ padding:'16px 36px', borderRadius:50, fontSize:16, boxShadow:`0 10px 25px ${C.accent}44` }}>⚡ Book Pandit Now</button>
+            <button onClick={() => navigate('/user/rituals')} className="btn btn-primary" style={{ padding:'16px 36px', borderRadius:50, fontSize:16, boxShadow:`0 10px 25px ${C.accent}44` }}>⚡ Book Pandit Now</button>
             <button onClick={() => navigate('/user/rituals')} style={{ background:'rgba(255,255,255,0.08)', color:'#fff', border:'1px solid rgba(255,255,255,0.25)', borderRadius:50, padding:'16px 36px', fontWeight:800, cursor:'pointer', fontSize:15 }}>🕉️ View Rituals</button>
           </div>
 
@@ -167,13 +167,13 @@ export default function UserHome() {
               <span style={{ fontSize:22, marginRight:12, opacity:0.8 }}>🔍</span>
               <input value={homeSearch} onChange={e => setHomeSearch(e.target.value)} onKeyDown={e => { 
                 if (e.key === 'Enter' && homeSearch.trim()) {
-                  navigate(`/user/marketplace?q=${encodeURIComponent(homeSearch.trim())}`);
+                  navigate(`/user/rituals?q=${encodeURIComponent(homeSearch.trim())}`);
                   setHomeSearch('');
                 }
               }} placeholder="Search for rituals, pandits or temples..." style={{ flex:1, background:'transparent', border:'none', outline:'none', color:'#fff8f0', fontSize:16, fontFamily:'inherit' }} />
               {homeSearch.trim() && (
                 <button onClick={() => {
-                  navigate(`/user/marketplace?q=${encodeURIComponent(homeSearch.trim())}`);
+                  navigate(`/user/rituals?q=${encodeURIComponent(homeSearch.trim())}`);
                   setHomeSearch('');
                 }} style={{ background:C.accent, color:'#fff', border:'none', borderRadius:24, padding:'8px 20px', fontWeight:900, cursor:'pointer', fontSize:13 }}>Search</button>
               )}

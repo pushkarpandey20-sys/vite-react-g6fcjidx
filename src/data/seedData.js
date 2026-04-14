@@ -162,11 +162,11 @@ export const SEED_PANDITS = [
 ];
 
 export const SEED_TEMPLES = [
-  { id:'00000000-0000-0000-0001-000000000001', name:'Ram Janmabhoomi Temple',    city:'Ayodhya',  deity:'Lord Ram',          description:'Sacred birthplace of Lord Ram. New temple inaugurated January 2024.',       services:['Ram Puja','Aarti','Archana','Prasad'],    timing:'5:00 AM - 10:00 PM', is_live:false },
-  { id:'00000000-0000-0000-0001-000000000002', name:'Mahakaleshwar Jyotirlinga', city:'Ujjain',   deity:'Lord Shiva',        description:'Famous for Bhasma Aarti at 4 AM. One of 12 Jyotirlingas.',                   services:['Bhasma Aarti','Rudrabhishek','Darshan'], timing:'4:00 AM - 11:00 PM', is_live:true  },
-  { id:'00000000-0000-0000-0001-000000000003', name:'Kashi Vishwanath Temple',   city:'Varanasi', deity:'Lord Shiva',        description:'Most sacred Shiva temple. Kashi Vishwanath Corridor.',                       services:['Abhishek','Aarti','Darshan'],             timing:'3:00 AM - 11:00 PM', is_live:false },
-  { id:'00000000-0000-0000-0001-000000000004', name:'ISKCON Delhi Temple',       city:'Delhi',    deity:'Lord Krishna',      description:'Beautiful Krishna temple. Regular bhajans and Geeta lectures.',              services:['Darshan','Abhishek','Prasad'],            timing:'4:30 AM - 9:00 PM',  is_live:false },
-  { id:'00000000-0000-0000-0001-000000000005', name:'Vaishno Devi Shrine',       city:'Katra',    deity:'Mata Vaishno Devi', description:'Natural cave temple in Trikuta Mountains. 10M+ pilgrims annually.',         services:['Darshan','Helicopter','Prasad'],          timing:'24 hours',           is_live:false },
+  { id:'00000000-0000-0000-0001-000000000001', name:'Ram Janmabhoomi Temple',    city:'Ayodhya',  deity:'Lord Ram',          description:'Sacred birthplace of Lord Ram. New temple inaugurated January 2024.',       services:['Ram Puja','Aarti','Archana','Prasad'],    timing:'5:00 AM - 10:00 PM', is_live:false, icon:'🏛️' },
+  { id:'00000000-0000-0000-0001-000000000002', name:'Mahakaleshwar Jyotirlinga', city:'Ujjain',   deity:'Lord Shiva',        description:'Famous for Bhasma Aarti at 4 AM. One of 12 Jyotirlingas.',                   services:['Bhasma Aarti','Rudrabhishek','Darshan'], timing:'4:00 AM - 11:00 PM', is_live:true,  icon:'🔱'  },
+  { id:'00000000-0000-0000-0001-000000000003', name:'Kashi Vishwanath Temple',   city:'Varanasi', deity:'Lord Shiva',        description:'Most sacred Shiva temple. Kashi Vishwanath Corridor.',                       services:['Abhishek','Aarti','Darshan'],             timing:'3:00 AM - 11:00 PM', is_live:false, icon:'🔱' },
+  { id:'00000000-0000-0000-0001-000000000004', name:'ISKCON Delhi Temple',       city:'Delhi',    deity:'Lord Krishna',      description:'Beautiful Krishna temple. Regular bhajans and Geeta lectures.',              services:['Darshan','Abhishek','Prasad'],            timing:'4:30 AM - 9:00 PM',  is_live:false, icon:'🕉️' },
+  { id:'00000000-0000-0000-0001-000000000005', name:'Vaishno Devi Shrine',       city:'Katra',    deity:'Mata Vaishno Devi', description:'Natural cave temple in Trikuta Mountains. 10M+ pilgrims annually.',         services:['Darshan','Helicopter','Prasad'],          timing:'24 hours',           is_live:false, icon:'⛰️' },
 ];
 
 export const SEED_DEVOTEES = [

@@ -293,7 +293,7 @@ export default function SamagriStorePage() {
           <button key={id} onClick={()=>setActiveTab(id)}
             style={{ padding:'10px 22px', borderRadius:10, border:'none', cursor:'pointer', fontWeight:800, fontSize:14, transition:'all 0.24s',
               background: activeTab===id ? '#FF6B00' : 'transparent',
-              color: activeTab===id ? '#fff' : '#5C3317', fontFamily:'Nunito,sans-serif' }}>
+              color: activeTab===id ? '#fff' : 'rgba(255,248,240,0.6)', fontFamily:'Nunito,sans-serif' }}>
             {label}
           </button>
         ))}
