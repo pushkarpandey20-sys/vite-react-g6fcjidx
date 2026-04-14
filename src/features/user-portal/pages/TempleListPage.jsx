@@ -5,10 +5,10 @@ import { db } from '../../../services/supabase';
 import { Spinner } from '../../../components/common/UIElements';
 
 const SAMPLE_TEMPLES = [
-  { id:'t1', name:'Kashi Vishwanath', city:'Varanasi', icon:'🔱', is_live:true, next_aarti:'5:30 AM', poojas:['Rudrabhishek','Mangala Aarti','Shringar Bhog','Sapta Rishis'], description:'One of the most sacred Shiva temples on the banks of the Ganges.' },
+  { id:'t1', name:'Kashi Vishwanath', city:'Varanasi', icon:'🕉️', is_live:true, next_aarti:'5:30 AM', poojas:['Rudrabhishek','Mangala Aarti','Shringar Bhog','Sapta Rishis'], description:'One of the most sacred Shiva temples on the banks of the Ganges.' },
   { id:'t2', name:'Ram Janmabhoomi', city:'Ayodhya', icon:'🏛️', is_live:false, next_aarti:'6:00 AM', poojas:['Ramlala Darshan','Parikrama','Ram Katha','Special Bhog'], description:'Sacred birthplace of Lord Ram — the grand new temple complex.' },
-  { id:'t3', name:'Tirupati Balaji',  city:'Tirupati', icon:'🕉️', is_live:true, next_aarti:'7:00 AM', poojas:['Suprabhatam','Archana','Kalyanam','Sahasranama'], description:'Most visited Vishnu shrine in the world, atop the Tirumala hills.' },
-  { id:'t4', name:'Siddhivinayak',    city:'Mumbai',   icon:'🕉️', is_live:false, next_aarti:'12:00 PM', poojas:['Ganesh Puja','Modak Naivedya','Sankashti','Gauri Puja'], description:'Revered Ganesh temple in Prabhadevi, Mumbai — blessings before new ventures.' },
+  { id:'t3', name:'Tirupati Balaji',  city:'Tirupati', icon:'🙏', is_live:true, next_aarti:'7:00 AM', poojas:['Suprabhatam','Archana','Kalyanam','Sahasranama'], description:'Most visited Vishnu shrine in the world, atop the Tirumala hills.' },
+  { id:'t4', name:'Siddhivinayak',    city:'Mumbai',   icon:'🐘', is_live:false, next_aarti:'12:00 PM', poojas:['Ganesh Puja','Modak Naivedya','Sankashti','Gauri Puja'], description:'Revered Ganesh temple in Prabhadevi, Mumbai — blessings before new ventures.' },
   { id:'t5', name:'Mahakal Ujjain',   city:'Ujjain',   icon:'🔱', is_live:true, next_aarti:'4:00 AM', poojas:['Bhasma Aarti','Rudrabhishek','Mahashivratri','Panchakroshi'], description:'One of the 12 Jyotirlingas — ancient seat of Lord Shiva\'s divine light.' },
   { id:'t6', name:'Vaishno Devi',     city:'Katra',    icon:'⛰️', is_live:false, next_aarti:'4:00 AM', poojas:['Maa Darshan','Ardh Kuwari','Bhawan Puja','Aarti'], description:'Sacred cave shrine of Goddess Vaishnavi in the Trikuta mountains.' },
 ];

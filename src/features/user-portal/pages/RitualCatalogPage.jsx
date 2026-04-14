@@ -72,17 +72,59 @@ export default function RitualCatalogPage() {
       </div>
 
       {/* ── 2. Header & Search ── */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 40 }}>
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
-            <span style={{ fontSize: 28 }}>🕉️</span>
-            <h1 style={{ fontFamily: 'Cinzel, serif', color: C.gold, fontSize: 36, margin: 0, fontWeight: 900 }}>Sacred Ritual Catalog</h1>
+      <div style={{
+        display:'flex',
+        flexDirection: window.innerWidth < 640 ? 'column' : 'row',
+        alignItems: window.innerWidth < 640 ? 'flex-start' : 'center',
+        justifyContent:'space-between',
+        gap:12,
+        marginBottom:40,
+        flexWrap:'wrap',
+      }}>
+        {/* Om icon + title left side */}
+        <div style={{ display:'flex', alignItems:'center', gap:12, minWidth:0 }}>
+          <div style={{
+            width:48, height:48, borderRadius:16, flexShrink:0,
+            background:'linear-gradient(135deg, #FF6B00, #D4A017)',
+            display:'flex', alignItems:'center', justifyContent:'center',
+            fontSize:24,
+          }}>🕉️</div>
+          <div style={{ minWidth:0 }}>
+            <h2 style={{
+              fontFamily:'Cinzel, serif', color:C.gold,
+              margin:0, fontWeight:900,
+              fontSize: 'clamp(18px, 4vw, 28px)',
+              lineHeight:1.2, whiteSpace:'nowrap',
+              overflow:'hidden', textOverflow:'ellipsis',
+            }}>
+              Sacred Ritual Catalog
+            </h2>
+            <div style={{ color:'rgba(255,248,240,0.55)', fontSize:13, marginTop:2 }}>
+              {ALL_RITUALS.length} Authentic Rituals · 120+ Verified Acharyas
+            </div>
           </div>
-          <div style={{ fontSize: 14, fontWeight: 700, opacity: 0.6 }}>{ALL_RITUALS.length} Authentic Rituals · 120+ Verified Acharyas</div>
         </div>
-        <div style={{ background: '#fff', border: `1px solid ${C.border}`, borderRadius: 12, display: 'flex', alignItems: 'center', padding: '0 20px', width: 400, height: 56 }}>
-          <span style={{ fontSize: 20, marginRight: 12, opacity: 0.4, color: '#000' }}>🔍</span>
-          <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Search for a Pooja or Ceremony..." style={{ flex: 1, background: 'transparent', border: 'none', outline: 'none', fontSize: 16, color: '#000', fontWeight: 500 }} />
+
+        {/* Search bar right side */}
+        <div style={{
+          display:'flex', alignItems:'center', gap:10,
+          background:'rgba(255,255,255,0.07)',
+          border:'1px solid rgba(212,160,23,0.25)',
+          borderRadius:12, padding:'10px 14px',
+          width: window.innerWidth < 640 ? '100%' : 340,
+          flexShrink:0,
+        }}>
+          <span style={{ fontSize:16, opacity:0.5 }}>🔍</span>
+          <input
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            placeholder="Search for a Pooja or Ceremony..."
+            style={{
+              flex:1, background:'transparent', border:'none',
+              outline:'none', color:'rgba(255,248,240,0.85)',
+              fontSize:14, fontFamily:'inherit',
+            }}
+          />
         </div>
       </div>
 
