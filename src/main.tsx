@@ -26,8 +26,8 @@ initNotifications();
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('/sw.js')
-      .then((reg) => console.log('[DevSetu PWA] SW registered:', reg.scope))
-      .catch((err) => console.warn('[DevSetu PWA] SW registration failed:', err));
+      .then((reg) => console.log('[BhaktiGo PWA] SW registered:', reg.scope))
+      .catch((err) => console.warn('[BhaktiGo PWA] SW registration failed:', err));
   });
 }
 
