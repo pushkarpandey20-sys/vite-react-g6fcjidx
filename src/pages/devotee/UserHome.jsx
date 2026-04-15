@@ -188,30 +188,30 @@ export default function UserHome() {
       </div>
 
       {/* ── 2. Trust Metrics Section ────────────────────────── */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(4, 1fr)', gap:16, marginTop:-10 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(160px, 1fr))', gap:12, marginTop:-10 }}>
          {[
            { val:'180+', lbl:'EXPERTS', sub:'Verified Pandits', icon:IconUserCheck, color:C.accent },
            { val:'80+', lbl:'VARIETIES', sub:'Sacred Rituals', icon:IconOm, color:C.gold },
            { val:'25+', lbl:'LOCATIONS', sub:'Cities Covered', icon:IconMapPin, color:'#7c3aed' },
            { val:'5000+', lbl:'SUCCESS', sub:'Rituals Completed', icon:IconAward, color:'#16a34a' }
          ].map(s => (
-           <div key={s.lbl} style={{ ...dkStyle, textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center', background: 'linear-gradient(135deg, #1a0f07 0%, #0a0400 100%)' }}>
-              <div style={{ marginBottom:10 }}><s.icon size={32} color={s.color} /></div>
-              <div style={{ color:s.color, fontSize:22, fontWeight:900, fontFamily:'Cinzel,serif' }}>{s.val}</div>
-              <div style={{ fontSize:11, fontWeight:900, letterSpacing:1.5, color:C.gold, margin:'4px 0' }}>{s.lbl}</div>
-              <div style={{ fontSize:10, color:C.textMuted, fontWeight:700 }}>{s.sub}</div>
+           <div key={s.lbl} style={{ ...dkStyle, textAlign:'center', display:'flex', flexDirection:'column', alignItems:'center', background: 'linear-gradient(135deg, #1a0f07 0%, #0a0400 100%)', padding: '16px' }}>
+              <div style={{ marginBottom:8 }}><s.icon size={28} color={s.color} /></div>
+              <div style={{ color:s.color, fontSize:20, fontWeight:900, fontFamily:'Cinzel,serif' }}>{s.val}</div>
+              <div style={{ fontSize:10, fontWeight:900, letterSpacing:1.2, color:C.gold, margin:'4px 0' }}>{s.lbl}</div>
+              <div style={{ fontSize:9, color:C.textMuted, fontWeight:700 }}>{s.sub}</div>
            </div>
          ))}
       </div>
 
       {/* ── 2b. Primary Services Grid ─────────────────────── */}
-      <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:16 }}>
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(100px, 1fr))', gap:10 }}>
         {SERVICES.map((s) => (
-          <div key={s.label} onClick={() => navigate(s.path)} style={{ ...dkStyle, display:'flex', flexDirection:'column', alignItems:'center', gap:12, cursor:'pointer', transition:'all 0.3s', background: 'rgba(30,15,5,0.7)' }} onMouseEnter={e=>e.currentTarget.style.transform='translateY(-6px)'} onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
-            <div style={{ width:64, height:64, borderRadius:20, background:`${s.bg}15`, display:'flex', alignItems:'center', justifyContent:'center', border:`1px solid ${s.bg}33`, boxShadow: `0 8px 16px ${s.bg}10` }}>
-              <s.Icon size={32} color={s.bg} />
+          <div key={s.label} onClick={() => navigate(s.path)} style={{ ...dkStyle, display:'flex', flexDirection:'column', alignItems:'center', gap:8, cursor:'pointer', transition:'all 0.3s', background: 'rgba(30,15,5,0.7)', padding: '12px' }} onMouseEnter={e=>e.currentTarget.style.transform='translateY(-6px)'} onMouseLeave={e=>e.currentTarget.style.transform='translateY(0)'}>
+            <div style={{ width:48, height:48, borderRadius:16, background:`${s.bg}15`, display:'flex', alignItems:'center', justifyContent:'center', border:`1px solid ${s.bg}33`, boxShadow: `0 4px 12px ${s.bg}10` }}>
+              <s.Icon size={24} color={s.bg} />
             </div>
-            <span style={{ color:C.text, fontWeight:900, fontSize:15, textAlign:'center', fontFamily:'Cinzel,serif' }}>{s.label}</span>
+            <span style={{ color:C.text, fontWeight:900, fontSize:12, textAlign:'center', fontFamily:'Cinzel,serif', lineHeight: 1.2 }}>{s.label}</span>
           </div>
         ))}
       </div>

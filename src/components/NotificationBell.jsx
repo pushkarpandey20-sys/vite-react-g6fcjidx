@@ -44,8 +44,22 @@ export default function NotificationBell() {
         )}
       </button>
       {open && (
-        <div style={{ position:'absolute', right:0, top:48, width:380, maxHeight:520, overflowY:'auto', background:'#1a0f07', border:'1px solid rgba(212,160,23,0.25)', borderRadius:16, boxShadow:'0 20px 60px rgba(0,0,0,0.6)', zIndex:1000 }}>
-          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'16px 20px', borderBottom:'1px solid rgba(212,160,23,0.1)', position:'sticky', top:0, background:'#1a0f07' }}>
+        <div style={{ 
+          position: window.innerWidth < 640 ? 'fixed' : 'absolute', 
+          right: window.innerWidth < 640 ? 10 : 0, 
+          left: window.innerWidth < 640 ? 10 : 'auto',
+          top: window.innerWidth < 640 ? 70 : 48, 
+          width: window.innerWidth < 640 ? 'calc(100vw - 20px)' : 380, 
+          maxHeight: '70vh', 
+          overflowY: 'auto', 
+          background: '#1a0f07', 
+          border: '1px solid rgba(212,160,23,0.25)', 
+          borderRadius: 20, 
+          boxShadow: '0 20px 80px rgba(0,0,0,0.8)', 
+          zIndex: 10000,
+          animation: 'slideIn 0.3s ease-out'
+        }}>
+          <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', padding:'16px 20px', borderBottom:'1px solid rgba(212,160,23,0.1)', position:'sticky', top:0, background:'#1a0f07', zIndex:10 }}>
             <div>
               <div style={{ color:'#F0C040', fontFamily:'Cinzel,serif', fontWeight:700, fontSize:15, display:'flex', alignItems:'center', gap:8 }}>
                 <IconBell size={18} color="#F0C040" /> Sacred Alerts

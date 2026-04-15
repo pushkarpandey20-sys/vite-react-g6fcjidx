@@ -109,13 +109,18 @@ export default function TemplePoojaBookingPage() {
   };
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)', gap: '32px', alignItems: 'start', color: C.text, fontFamily: '"Inter", sans-serif' }}>
-      <div style={{ background: C.card, padding: '40px', borderRadius: 32, border: `1px solid ${C.border}`, boxShadow: '0 4px 30px rgba(0,0,0,0.03)' }}>
-        <div style={{ display: 'flex', gap: '24px', alignItems: 'center', marginBottom: '40px' }}>
-          <div style={{ width: '80px', height: '80px', background: 'linear-gradient(135deg, #fff5eb, #fff)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '44px', border: `1px solid ${C.border}` }}>{temple.icon}</div>
+    <div style={{ 
+      display: 'grid', 
+      gridTemplateColumns: window.innerWidth < 850 ? '1fr' : 'minmax(0, 2fr) minmax(0, 1fr)', 
+      gap: window.innerWidth < 850 ? '16px' : '32px', 
+      alignItems: 'start', color: C.text, fontFamily: '"Inter", sans-serif' 
+    }}>
+      <div style={{ background: C.card, padding: window.innerWidth < 480 ? '24px' : '40px', borderRadius: 32, border: `1px solid ${C.border}`, boxShadow: '0 4px 30px rgba(0,0,0,0.03)' }}>
+        <div style={{ display: 'flex', gap: window.innerWidth < 480 ? '16px' : '24px', alignItems: 'center', marginBottom: window.innerWidth < 480 ? '24px' : '40px', flexWrap: 'wrap' }}>
+          <div style={{ width: window.innerWidth < 480 ? '60px' : '80px', height: window.innerWidth < 480 ? '60px' : '80px', background: 'linear-gradient(135deg, #fff5eb, #fff)', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: window.innerWidth < 480 ? '32px' : '44px', border: `1px solid ${C.border}`, flexShrink: 0 }}>{temple.icon}</div>
           <div>
-            <h2 style={{ fontFamily: 'Cinzel, serif', color: C.text, marginBottom: '4px', fontSize: 26, fontWeight: 900 }}>Remote Pooja Offering</h2>
-            <p style={{ color: C.soft, margin: 0, fontSize: 15, fontWeight: 700 }}>📍 {temple.name}, {temple.city}</p>
+            <h2 style={{ fontFamily: 'Cinzel, serif', color: C.text, marginBottom: '4px', fontSize: window.innerWidth < 480 ? 20 : 26, fontWeight: 900 }}>Remote Pooja Offering</h2>
+            <p style={{ color: C.soft, margin: 0, fontSize: window.innerWidth < 480 ? 12 : 15, fontWeight: 700 }}>📍 {temple.name}, {temple.city}</p>
           </div>
         </div>
 

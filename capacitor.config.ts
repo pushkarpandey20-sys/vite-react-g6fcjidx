@@ -1,13 +1,11 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.devsetu.app',
-  appName: 'DevSetu',
+  appId: 'com.bhaktigo.app',
+  appName: 'BhaktiGo',
   webDir: 'dist',
   server: {
-    // Remove this block before submitting to stores —
-    // it points to the live Vercel URL so you can test without rebuilding.
-    url: 'https://vite-react-g6fcjidx.vercel.app',
+    // url: 'https://bhaktigo.com',
     cleartext: true,
   },
   android: {

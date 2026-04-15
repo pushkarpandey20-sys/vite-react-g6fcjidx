@@ -53,20 +53,23 @@ export default function RitualCatalogPage() {
       {/* ── 1. Premium Instant Strip ── */}
       <div style={{
         background: 'rgba(26,15,7,0.9)', border: `1.5px solid ${C.accent}44`, borderRadius: 32,
-        padding: '24px 32px', marginBottom: 40, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: window.innerWidth < 640 ? '20px' : '24px 32px', marginBottom: 40, 
+        display: 'flex', alignItems: window.innerWidth < 640 ? 'stretch' : 'center', 
+        flexDirection: window.innerWidth < 640 ? 'column' : 'row',
+        justifyContent: 'space-between', gap: window.innerWidth < 640 ? 20 : 32,
         boxShadow: `0 20px 40px rgba(0,0,0,0.5), inset 0 0 20px ${C.accent}15`
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
-          <div style={{ width: 64, height: 64, borderRadius: 20, background: 'linear-gradient(135deg, #FF6B00, #FF8C00)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 32, boxShadow: `0 8px 24px ${C.accent}44` }}>⚡</div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: window.innerWidth < 480 ? 16 : 24 }}>
+          <div style={{ width: window.innerWidth < 480 ? 50 : 64, height: window.innerWidth < 480 ? 50 : 64, borderRadius: window.innerWidth < 480 ? 16 : 20, background: 'linear-gradient(135deg, #FF6B00, #FF8C00)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: window.innerWidth < 480 ? 24 : 32, boxShadow: `0 8px 24px ${C.accent}44`, flexShrink: 0 }}>⚡</div>
           <div>
-            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:4 }}>
-              <h2 style={{ fontFamily: 'Cinzel, serif', color: C.gold, margin: 0, fontSize: 24, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1 }}>Instant Spiritual Guidance</h2>
-              <span style={{ background: C.accent, color: '#fff', fontSize: 10, fontWeight: 900, padding: '4px 12px', borderRadius: 20 }}>LIVE NOW</span>
+            <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:4, flexWrap:'wrap' }}>
+              <h2 style={{ fontFamily: 'Cinzel, serif', color: C.gold, margin: 0, fontSize: window.innerWidth < 480 ? 18 : 24, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1 }}>Instant Guidance</h2>
+              <span style={{ background: C.accent, color: '#fff', fontSize: 9, fontWeight: 900, padding: '3px 10px', borderRadius: 20 }}>LIVE</span>
             </div>
-            <p style={{ margin: 0, fontSize: 15, fontWeight: 600, opacity: 0.8 }}>Connect with a verified Pandit instantly for Sankalp or Special Puja.</p>
+            <p style={{ margin: 0, fontSize: window.innerWidth < 480 ? 12 : 14, fontWeight: 600, opacity: 0.7, lineHeight: 1.3 }}>Connect with a verified Pandit instantly for any urgent Sankalp.</p>
           </div>
         </div>
-        <button onClick={() => navigate('/user/instant-booking')} style={{ background: C.accent, color: '#fff', border: 'none', borderRadius: 50, padding: '16px 36px', fontSize: 16, fontWeight: 900, cursor: 'pointer', boxShadow: `0 10px 30px ${C.accent}44` }}>
+        <button onClick={() => navigate('/user/instant-booking')} style={{ background: C.accent, color: '#fff', border: 'none', borderRadius: 50, padding: window.innerWidth < 640 ? '14px' : '16px 36px', fontSize: 15, fontWeight: 900, cursor: 'pointer', boxShadow: `0 10px 30px ${C.accent}44`, width: window.innerWidth < 640 ? '100%' : 'auto' }}>
           Book Instantly →
         </button>
       </div>
@@ -129,10 +132,10 @@ export default function RitualCatalogPage() {
       </div>
 
       {/* ── 3. Filter Section ── */}
-      <div style={{ background: 'rgba(26,15,7,0.5)', border: `1px solid ${C.border}`, borderRadius: 24, padding: '32px', marginBottom: 40 }}>
+      <div style={{ background: 'rgba(26,15,7,0.5)', border: `1px solid ${C.border}`, borderRadius: 24, padding: window.innerWidth < 640 ? '20px' : '32px', marginBottom: 40 }}>
         <div style={{ marginBottom: 24 }}>
-          <div style={{ color: C.gold, fontSize: 12, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 20 }}>Explore by Category</div>
-          <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ color: C.gold, fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 2, marginBottom: 16 }}>Explore by Category</div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {RITUAL_CATEGORIES.map(cat => {
               const count = cat === 'All' ? ALL_RITUALS.length
                 : ALL_RITUALS.filter(r => r.category === cat).length;
@@ -140,40 +143,35 @@ export default function RitualCatalogPage() {
               return (
                 <button key={cat} onClick={() => setActiveCategory(cat)}
                   style={{
-                    padding:'8px 18px', borderRadius:24, cursor:'pointer',
-                    fontFamily:'inherit', fontSize:13, fontWeight: active?700:500,
+                    padding:'7px 14px', borderRadius:24, cursor:'pointer',
+                    fontFamily:'inherit', fontSize:12, fontWeight: active?700:500,
                     whiteSpace:'nowrap', transition:'all 0.18s',
                     border: active ? '2px solid #FF6B00'
                                    : '1px solid rgba(212,160,23,0.2)',
                     background: active ? '#FF6B00' : 'rgba(255,255,255,0.05)',
                     color:       active ? '#fff'    : 'rgba(255,248,240,0.85)',
                   }}>
-                  {cat}
-                  {count > 0 &&
-                    <span style={{opacity:0.6,fontSize:11,marginLeft:4}}>
-                      {count}
-                    </span>
-                  }
+                  {cat} {count > 0 && <span style={{opacity:0.6,fontSize:10}}>{count}</span>}
                 </button>
               );
             })}
           </div>
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 24, borderTop: `1px solid ${C.border}` }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-             <span style={{ color: C.gold, fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1.5 }}>Budget</span>
-             <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 20, borderTop: `1px solid ${C.border}`, flexWrap: 'wrap', gap: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+             <span style={{ color: C.gold, fontSize: 10, fontWeight: 900, textTransform: 'uppercase', letterSpacing: 1.5 }}>Budget</span>
+             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                {PRICE_OPTIONS.map((pr, i) => (
-                 <button key={i} onClick={() => setBudget(pr.label)} style={{ padding: '8px 16px', borderRadius: 30, border: `1.5px solid ${budget === pr.label ? C.accent : C.border}`, background: budget === pr.label ? C.accent : 'rgba(40,15,5,0.6)', color: '#fff', fontSize: 12, fontWeight: 800, cursor: 'pointer' }}>{pr.label}</button>
+                 <button key={i} onClick={() => setBudget(pr.label)} style={{ padding: '6px 14px', borderRadius: 30, border: `1.5px solid ${budget === pr.label ? C.accent : C.border}`, background: budget === pr.label ? C.accent : 'rgba(40,15,5,0.6)', color: '#fff', fontSize: 11, fontWeight: 800, cursor: 'pointer', whiteSpace: 'nowrap' }}>{pr.label}</button>
                ))}
              </div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div onClick={() => setSamagri(s => !s)} style={{ width: 44, height: 24, background: samagri ? '#27AE60' : 'rgba(139,99,71,0.2)', borderRadius: 20, position: 'relative', cursor: 'pointer', transition: '0.3s' }}>
-              <div style={{ width: 18, height: 18, background: '#fff', borderRadius: '50%', position: 'absolute', top: 3, left: samagri ? 23 : 3, transition: '0.2s' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div onClick={() => setSamagri(s => !s)} style={{ width: 40, height: 22, background: samagri ? '#27AE60' : 'rgba(139,99,71,0.2)', borderRadius: 20, position: 'relative', cursor: 'pointer', transition: '0.3s' }}>
+              <div style={{ width: 16, height: 16, background: '#fff', borderRadius: '50%', position: 'absolute', top: 3, left: samagri ? 21 : 3, transition: '0.2s' }} />
             </div>
-            <span style={{ fontSize: 14, fontWeight: 700, color: '#1389cb' }}>📦 Include Samagri</span>
+            <span style={{ fontSize: 13, fontWeight: 700, color: '#1389cb' }}>📦 Samagri Kit</span>
           </div>
         </div>
       </div>
@@ -186,12 +184,13 @@ export default function RitualCatalogPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 32 }}>
         {displayed.map(r => (
           <div key={r.id || r.name} onClick={() => navigate('/user/booking', { state:{ selectedRitual:r } })} style={{ background: 'rgba(26,15,7,0.7)', border: `1.5px solid ${C.border}`, borderRadius: 24, padding: '24px', cursor: 'pointer', transition: '0.3s' }} onMouseEnter={e=>e.currentTarget.style.borderColor=C.accent} onMouseLeave={e=>e.currentTarget.style.borderColor=C.border}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20 }}>
-              <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(50,25,5,0.8)', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 28 }}>{r.icon || '🕉️'}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 20 }}>
+              <div style={{ width: 52, height: 52, borderRadius: 16, background: 'rgba(50,25,5,0.8)', border: `1px solid ${C.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, boxShadow: '0 4px 12px rgba(0,0,0,0.2)' }}>{r.icon || '🕉️'}</div>
               <span style={{
-                background:'rgba(212,160,23,0.15)', color:'#D4A017',
-                fontSize:10, padding:'3px 10px', borderRadius:20,
-                fontWeight:600, whiteSpace:'nowrap',
+                background:'rgba(212,160,23,0.12)', color:'#D4A017',
+                fontSize:10, padding:'4px 12px', borderRadius:20,
+                border: '1px solid rgba(212,160,23,0.18)',
+                fontWeight:800, whiteSpace:'nowrap', textTransform: 'uppercase', letterSpacing: 0.5
               }}>
                 {r.category}
               </span>

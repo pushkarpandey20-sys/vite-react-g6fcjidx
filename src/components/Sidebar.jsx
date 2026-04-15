@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../store/AppCtx';
+import { BhaktiGoLogo } from './common/Logo';
 import {
   IconHome, IconCalendar, IconSearch, IconBook,
   IconShoppingBag, IconHeart, IconTemple
@@ -35,10 +36,11 @@ export function UserSidebar({ onNavClick }) {
     <div className="sidebar" style={{ background: '#3d1f00', borderRight: '1px solid rgba(255,255,255,0.1)' }}>
       <div style={{ padding: '20px 16px 16px', borderBottom: '1px solid rgba(255,255,255,0.1)', marginBottom: 12 }}>
         <div onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-          <div style={{ fontFamily: 'Cinzel,serif', color: '#F0C040', fontSize: 16, fontWeight: 900 }}>🕉️ BhaktiGo</div>
-          <div style={{ fontSize: 10, color: 'rgba(255,248,240,0.5)', letterSpacing: 2, marginTop: 2 }}>DEVOTEE PORTAL</div>
+          <BhaktiGoLogo size={24} />
+          <div style={{ fontSize: 9, color: 'rgba(255,248,240,0.4)', letterSpacing: 2, marginTop: 4, fontWeight: 700 }}>DEVOTEE PORTAL</div>
         </div>
       </div>
+
       
       <nav style={{ flex: 1, padding: '8px 0' }}>
         {NAV_ITEMS.map(({ path, Icon, label }) => {

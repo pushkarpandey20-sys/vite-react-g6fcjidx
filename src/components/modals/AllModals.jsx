@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../services/supabase';
 import { useApp } from '../../store/AppCtx';
+import { LogoIcon } from '../common/Logo';
 
 /* ─── CART MODAL ─────────────────────────────────────── */
 export function CartModal({ onClose, cart, updateCartQty, setShowConfirm, devoteeId, setShowLogin }) {
@@ -318,7 +319,9 @@ export function LoginModal({ onClose }) {
     <div className="overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()}>
         <div className="modal-head">
-          <div className="modal-title">🕉️ Welcome to BhaktiGo</div>
+          <div className="modal-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <LogoIcon size={24} /> Welcome to BhaktiGo
+          </div>
           <div className="modal-sub">Your digital bridge to Vedic services</div>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>
@@ -436,7 +439,9 @@ export function AdminLoginModal({ onClose, loginAdmin, loginAdminDemo }) {
     <div className="overlay" onClick={onClose}>
       <div className="modal" onClick={e => e.stopPropagation()} style={{ maxWidth: 420 }}>
         <div className="modal-head">
-          <div className="modal-title">🛡️ Admin Login</div>
+          <div className="modal-title" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <LogoIcon size={24} /> Admin Login
+          </div>
           <div className="modal-sub">BhaktiGo Platform Management</div>
           <button className="modal-close" onClick={onClose}>✕</button>
         </div>

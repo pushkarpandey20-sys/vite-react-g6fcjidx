@@ -651,38 +651,38 @@ export default function BookingWizard() {
 
         {step === 6 && (
           <div className="fade-in">
-            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: 28, marginBottom: 30 }}>Final Review</h2>
-            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 24, padding: 30, marginBottom: 40, border: '1px solid rgba(240,192,64,0.1)' }}>
-              <div style={{ display: 'grid', gap: 20 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ color: 'rgba(255,248,240,0.5)', fontSize: 14 }}>Ritual Service</span>
-                  <span style={{ fontWeight: 800, color: '#fff', textAlign: 'right' }}>{draft.ritualIcon} {draft.ritual}</span>
+            <h2 style={{ fontFamily: 'Cinzel', color: '#F0C040', textAlign: 'center', fontSize: window.innerWidth < 640 ? 22 : 28, marginBottom: 24 }}>Final Review</h2>
+            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: 24, padding: window.innerWidth < 640 ? '20px' : '32px', marginBottom: 32, border: '1px solid rgba(240,192,64,0.1)' }}>
+              <div style={{ display: 'grid', gap: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                   <span style={{ color: 'rgba(255,248,240,0.4)', fontSize: 13, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>Ritual</span>
+                   <span style={{ fontWeight: 800, color: '#fff', textAlign: 'right', fontSize: 15 }}>{draft.ritualIcon} {draft.ritual}</span>
                 </div>
                 {draft.samagriId && (
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                    <span style={{ color: 'rgba(255,248,240,0.5)', fontSize: 14 }}>Sacred Samagri Bundle</span>
-                    <span style={{ fontWeight: 800, color: '#FF6B00', textAlign: 'right' }}>📦 Doorstep Delivery (+₹{draft.samagriAmount})</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                    <span style={{ color: 'rgba(255,248,240,0.4)', fontSize: 13, fontWeight: 700, textTransform: 'uppercase' }}>Samagri</span>
+                    <span style={{ fontWeight: 800, color: '#FF6B00', textAlign: 'right', fontSize: 14 }}>📦 Kit Bundled</span>
                   </div>
                 )}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ color: 'rgba(255,248,240,0.5)', fontSize: 14 }}>Date & Time</span>
-                  <span style={{ fontWeight: 800, color: '#fff', textAlign: 'right' }}>📅 {draft.date} at 🕐 {draft.time}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span style={{ color: 'rgba(255,248,240,0.4)', fontSize: 13, fontWeight: 700, textTransform: 'uppercase' }}>Date & Time</span>
+                  <span style={{ fontWeight: 800, color: '#fff', textAlign: 'right', fontSize: 14 }}>{draft.date} @ {draft.time}</span>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 15, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
-                  <span style={{ color: 'rgba(255,248,240,0.5)', fontSize: 14 }}>Vedic Scholar</span>
-                  <span style={{ fontWeight: 800, color: '#F0C040', textAlign: 'right' }}>🕉️ {draft.panditName}</span>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 12, borderBottom: '1px solid rgba(255,255,255,0.05)' }}>
+                  <span style={{ color: 'rgba(255,248,240,0.4)', fontSize: 13, fontWeight: 700, textTransform: 'uppercase' }}>Scholar</span>
+                  <span style={{ fontWeight: 800, color: '#F0C040', textAlign: 'right', fontSize: 14 }}>🕉️ {draft.panditName || 'Pending'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 10 }}>
-                  <span style={{ fontWeight: 900, color: '#F0C040', fontSize: 22, fontFamily: 'Cinzel' }}>Total Amount</span>
+                  <span style={{ fontWeight: 900, color: '#F0C040', fontSize: 20, fontFamily: 'Cinzel' }}>Total</span>
                   <span style={{ fontWeight: 900, color: '#FF6B00', fontSize: 24, fontFamily: 'Cinzel' }}>₹{totalAmount.toLocaleString()}</span>
                 </div>
               </div>
             </div>
-            <div className="wz-btn-row">
-              <button className="btn btn-outline" onClick={prevStep}>← Back</button>
+            <div style={{ display: 'flex', flexDirection: window.innerWidth < 480 ? 'column-reverse' : 'row', gap: 12 }}>
+              <button className="btn btn-outline" onClick={prevStep} style={{ flex: 1, padding: '14px' }}>← Edit Details</button>
               <button className="btn btn-primary" disabled={submitting} onClick={confirmBooking}
-                style={{ background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', opacity: submitting ? 0.8 : 1 }}>
-                {submitting ? "⏳ Processing..." : "📿 Confirm & Pay"}
+                style={{ flex: 2, background: 'linear-gradient(135deg, #FF6B00, #D4A017)', border: 'none', padding: '16px', fontSize: 16, fontWeight: 900, boxShadow: '0 8px 24px rgba(255,107,0,0.3)' }}>
+                {submitting ? "Processing..." : "📿 Confirm & Pay"}
               </button>
             </div>
           </div>

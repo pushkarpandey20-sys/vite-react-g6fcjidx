@@ -194,13 +194,14 @@ export default function PanditMarketplacePage() {
         </p>
 
         {/* Quick booking strip */}
-        <div className="pm-quick-book">
+        <div className="pm-quick-book" style={{ padding: window.innerWidth < 640 ? '20px' : '28px 32px' }}>
           <div className="pm-qb-label">⚡ Book Any Available Pandit Instantly</div>
-          <div className="pm-qb-row">
+          <div className="pm-qb-row" style={{ flexDirection: window.innerWidth < 640 ? 'column' : 'row', gap: 12 }}>
             <select
               value={quickRitual}
               onChange={e => setQuickRitual(e.target.value)}
               className="pm-qb-select"
+              style={{ width: '100%' }}
             >
               <option value="">🕉️ Choose a Ritual / Package</option>
               {QUICK_RITUALS.map(r => <option key={r} value={r}>{r}</option>)}
@@ -211,6 +212,7 @@ export default function PanditMarketplacePage() {
               min={new Date().toISOString().split('T')[0]}
               onChange={e => setQuickDate(e.target.value)}
               className="pm-qb-date"
+              style={{ width: '100%' }}
             />
             <button
               className="pm-qb-btn"
@@ -218,6 +220,7 @@ export default function PanditMarketplacePage() {
                 if (!quickRitual) return;
                 navigate('/user/booking', { state: { prefilledRitual: quickRitual, prefilledDate: quickDate } });
               }}
+              style={{ width: '100%' }}
             >
               Book Now →
             </button>
@@ -241,63 +244,32 @@ export default function PanditMarketplacePage() {
         </div>
       )}
 
-      {/* ── FILTER BAR — single compact row ── */}
+      {/* ── FILTER BAR ── */}
       <div className="pm-filter-bar" style={{
-        background:'rgba(26,15,7,0.88)',
-        border:'1px solid rgba(212,160,23,0.25)',
-        borderRadius:12,
-        padding:'10px 16px',
-        marginBottom:16,
-        display:'flex',
-        alignItems:'center',
-        gap:10,
-        flexWrap:'wrap',
-        overflowX:'auto',
-        WebkitOverflowScrolling:'touch',
+        background:'rgba(26,15,7,0.88)', border:'1px solid rgba(212,160,23,0.25)', borderRadius:16,
+        padding: window.innerWidth < 640 ? '16px' : '10px 16px', marginBottom:16,
+        display:'grid', gridTemplateColumns: window.innerWidth < 640 ? '1fr' : 'repeat(auto-fit, minmax(140px, 1fr))',
+        gap:10, alignItems:'center'
       }}>
-        {/* Search */}
-        <input
-          value={searchName}
-          onChange={e => setSearchName(e.target.value)}
-          placeholder="🔍 Search pandit..."
-          style={{
-            flex:'1 1 140px', minWidth:120,
-            padding:'7px 12px', borderRadius:8,
-            border:'1.5px solid rgba(212,160,23,0.35)',
-            background:'rgba(40,15,5,0.8)', color:'rgba(255,248,240,0.85)',
-            fontSize:13, fontFamily:'inherit', outline:'none',
-          }}
+        <input value={searchName} onChange={e => setSearchName(e.target.value)} placeholder="🔍 Search pandit..."
+          style={{ padding:'10px 12px', borderRadius:10, border:'1.5px solid rgba(212,160,23,0.3)', background:'rgba(40,15,5,0.8)', color:'#fff', fontSize:13, fontFamily:'inherit', outline:'none' }}
         />
-        {/* Specialization */}
-        <select value={filterSpec} onChange={e => setFilterSpec(e.target.value)} style={{ flex:'1 1 140px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'rgba(40,15,5,0.8)', color:'rgba(255,248,240,0.85)', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
+        <select value={filterSpec} onChange={e => setFilterSpec(e.target.value)} style={{ padding:'10px 10px', borderRadius:10, border:'1.5px solid rgba(212,160,23,0.3)', background:'rgba(40,15,5,0.8)', color:'#fff', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
           <option value="All">📿 All Rituals</option>
           {['Vivah','Griha Pravesh','Satyanarayan','Rudrabhishek','Navgrah','Kaal Sarp','Mundan','Namkaran','Vastu Shastra','Antyesti'].map(s=><option key={s} value={s}>{s}</option>)}
         </select>
-        {/* City */}
-        <select value={filterCity} onChange={e => setFilterCity(e.target.value)} style={{ flex:'1 1 120px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'rgba(40,15,5,0.8)', color:'rgba(255,248,240,0.85)', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
+        <select value={filterCity} onChange={e => setFilterCity(e.target.value)} style={{ padding:'10px 10px', borderRadius:10, border:'1.5px solid rgba(212,160,23,0.3)', background:'rgba(40,15,5,0.8)', color:'#fff', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
           <option value="All">📍 All Cities</option>
           {['Delhi','Noida','Gurgaon','Mumbai','Bengaluru','Ayodhya','Faridabad','Ghaziabad'].map(c=><option key={c} value={c}>{c}</option>)}
         </select>
-        {/* Experience */}
-        <select value={filterMinExp} onChange={e => setFilterMinExp(Number(e.target.value))} style={{ flex:'1 1 120px', padding:'7px 10px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'rgba(40,15,5,0.8)', color:'rgba(255,248,240,0.85)', fontSize:13, cursor:'pointer', fontFamily:'inherit' }}>
-          <option value={0}>⏳ Any Exp</option>
-          <option value={5}>5+ Years</option>
-          <option value={10}>10+ Years</option>
-          <option value={20}>20+ Years</option>
-        </select>
-        {/* Online toggle */}
-        <label style={{ display:'flex', alignItems:'center', gap:6, cursor:'pointer', whiteSpace:'nowrap', padding:'7px 0' }}>
-          <input type="checkbox" checked={filterOnline} onChange={e => setFilterOnline(e.target.checked)} style={{ width:'auto', accentColor:'#FF6B00' }} />
-          <span style={{ color:'rgba(255,248,240,0.75)', fontSize:13 }}>🟢 Online Now</span>
+        <label style={{ display:'flex', alignItems:'center', gap:10, cursor:'pointer', padding:'5px 10px', background:'rgba(255,255,255,0.03)', borderRadius:10 }}>
+          <input type="checkbox" checked={filterOnline} onChange={e => setFilterOnline(e.target.checked)} style={{ transform:'scale(1.2)', accentColor:'#FF6B00' }} />
+          <span style={{ color:'rgba(255,248,240,0.8)', fontSize:13, fontWeight:600 }}>🟢 Online</span>
         </label>
-        {/* Result count */}
-        <span style={{ color:'#9a8070', fontSize:12, whiteSpace:'nowrap', marginLeft:'auto' }}>
-          {loading ? 'Loading...' : `${filtered.length} pandit${filtered.length !== 1 ? 's' : ''}`}
-        </span>
-        {/* Reset */}
-        <button onClick={resetFilters} style={{ padding:'7px 12px', borderRadius:8, border:'1px solid rgba(212,160,23,0.35)', background:'rgba(255,107,0,0.08)', color:'#FF6B00', fontSize:12, cursor:'pointer', fontWeight:700, whiteSpace:'nowrap', fontFamily:'inherit' }}>
-          Reset
-        </button>
+        <div style={{ display:'flex', gap:8, alignItems:'center' }}>
+          <span style={{ color:'#9a8070', fontSize:11, fontWeight:700 }}>{filtered.length} found</span>
+          <button onClick={resetFilters} style={{ flex:1, padding:'8px 12px', borderRadius:10, border:'1px solid rgba(255,107,0,0.3)', background:'rgba(255,107,0,0.1)', color:'#FF6B00', fontSize:12, cursor:'pointer', fontWeight:800, fontFamily:'inherit' }}>Reset</button>
+        </div>
       </div>
 
       {/* ── Grid ── */}

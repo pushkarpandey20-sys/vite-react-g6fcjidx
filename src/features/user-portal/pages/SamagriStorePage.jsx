@@ -18,7 +18,7 @@ const CATEGORIES = [
 const PRODUCTS = [
   {
     id: 'diwali-kit', name: 'Diwali Pooja Kit', category: 'festival', icon: '🪔',
-    image: 'https://picsum.photos/seed/diwali/400/260',
+    image: '/samagri/diwali-kit.png',
     price: 599, mrp: 799,
     badge: 'POPULAR', rating: 4.8, reviews: 234, weight: '850g',
     desc: 'Complete Diwali puja kit with diyas, incense, roli, akshat, moli, camphor, agarbatti and sweets offering tray.',
@@ -26,7 +26,7 @@ const PRODUCTS = [
   },
   {
     id: 'ganesh-kit', name: 'Ganesh Puja Kit', category: 'festival', icon: '🐘',
-    image: 'https://picsum.photos/seed/ganesh/400/260',
+    image: '/samagri/ganesh-kit.png',
     price: 449, mrp: 599,
     badge: 'BESTSELLER', rating: 4.9, reviews: 412, weight: '620g',
     desc: 'All items for Ganesh puja including modak, durva grass, red flowers, sindoor and more.',
@@ -34,7 +34,7 @@ const PRODUCTS = [
   },
   {
     id: 'griha-pravesh-kit', name: 'Griha Pravesh Kit', category: 'daily', icon: '🏡',
-    image: 'https://picsum.photos/seed/griha/400/260',
+    image: '/samagri/griha-pravesh-kit.png',
     price: 1299, mrp: 1699,
     badge: null, rating: 4.7, reviews: 156, weight: '1.8kg',
     desc: 'Premium Griha Pravesh kit with all items for home-entry ceremony havan and puja.',
@@ -42,7 +42,7 @@ const PRODUCTS = [
   },
   {
     id: 'navratri-kit', name: 'Navratri Pooja Kit', category: 'festival', icon: '🚩',
-    image: 'https://picsum.photos/seed/navra/400/260',
+    image: '/samagri/navratri-kit.png',
     price: 799, mrp: 999,
     badge: 'NEW', rating: 4.8, reviews: 89, weight: '1.1kg',
     desc: 'Complete 9-day Navratri puja kit with Durga idol, red chunri, jowar and all essentials.',
@@ -50,7 +50,7 @@ const PRODUCTS = [
   },
   {
     id: 'satyanarayan-kit', name: 'Satyanarayan Puja Kit', category: 'daily', icon: '🌟',
-    image: 'https://picsum.photos/seed/satya/400/260',
+    image: '/samagri/satyanarayan-kit.png',
     price: 549, mrp: 699,
     badge: 'POPULAR', rating: 4.9, reviews: 321, weight: '780g',
     desc: 'Complete Satyanarayan Katha kit with panchamrit ingredients, tulsi, yellow cloth and all essentials.',
@@ -58,7 +58,7 @@ const PRODUCTS = [
   },
   {
     id: 'rudrabhishek-kit', name: 'Rudrabhishek Kit', category: 'abhishek', icon: '🔱',
-    image: 'https://picsum.photos/seed/rudra/400/260',
+    image: '/samagri/rudrabhishek-kit.png',
     price: 699, mrp: 899,
     badge: null, rating: 4.8, reviews: 178, weight: '950g',
     desc: 'Premium Rudrabhishek kit with bel patra, gangajal, milk, honey and all abhishek items.',
@@ -66,7 +66,7 @@ const PRODUCTS = [
   },
   {
     id: 'havan-kit', name: 'Havan Samagri Kit', category: 'havan', icon: '🔥',
-    image: 'https://picsum.photos/seed/havan/400/260',
+    image: '/samagri/havan-kit.png',
     price: 399, mrp: 499,
     badge: null, rating: 4.6, reviews: 203, weight: '1.2kg',
     desc: 'Pure Vedic havan samagri with 51 herbs, ghee, sesame, barley and sacred wood.',
@@ -74,7 +74,7 @@ const PRODUCTS = [
   },
   {
     id: 'daily-puja-kit', name: 'Daily Puja Kit', category: 'daily', icon: '🌸',
-    image: 'https://picsum.photos/seed/puja/400/260',
+    image: '/samagri/daily-puja-kit.png',
     price: 299, mrp: 399,
     badge: 'BESTSELLER', rating: 4.7, reviews: 567, weight: '450g',
     desc: 'Everything for your daily puja — agarbatti, roli, akshat, moli, camphor and flowers.',
@@ -82,7 +82,7 @@ const PRODUCTS = [
   },
   {
     id: 'incense-set', name: 'Premium Incense Collection', category: 'incense', icon: '🥢',
-    image: 'https://picsum.photos/seed/incen/400/260',
+    image: '/samagri/incense-set.png',
     price: 349, mrp: 449,
     badge: null, rating: 4.8, reviews: 145, weight: '350g',
     desc: 'Premium dhoop, agarbatti and sambrani collection with 10 sacred fragrances.',
@@ -90,7 +90,7 @@ const PRODUCTS = [
   },
   {
     id: 'diya-lamp-set', name: 'Diya & Lamp Set', category: 'incense', icon: '🪔',
-    image: 'https://picsum.photos/seed/diyaa/400/260',
+    image: '/samagri/diya-lamp-set.png',
     price: 249, mrp: 349,
     badge: null, rating: 4.6, reviews: 98, weight: '600g',
     desc: 'Hand-crafted clay diyas and brass deepak for daily aarti and festival decorations.',
@@ -98,7 +98,7 @@ const PRODUCTS = [
   },
   {
     id: 'navgrah-kit', name: 'Navgrah Shanti Kit', category: 'abhishek', icon: '⭐',
-    image: 'https://picsum.photos/seed/navgr/400/260',
+    image: '/samagri/navgrah-kit.png',
     price: 899, mrp: 1199,
     badge: null, rating: 4.7, reviews: 112, weight: '1.4kg',
     desc: 'Complete Navgrah shanti kit with 9 grain offerings, cloth pieces, and puja items.',
@@ -106,7 +106,7 @@ const PRODUCTS = [
   },
   {
     id: 'lakshmi-kit', name: 'Lakshmi Puja Kit', category: 'festival', icon: '🪔',
-    image: 'https://picsum.photos/seed/laksh/400/260',
+    image: '/samagri/lakshmi-kit.png',
     price: 499, mrp: 649,
     badge: 'NEW', rating: 4.9, reviews: 203, weight: '720g',
     desc: 'Complete Lakshmi puja kit with lotus, coins, red cloth, kumkum and all essentials.',
