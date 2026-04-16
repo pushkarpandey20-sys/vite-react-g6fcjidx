@@ -19,7 +19,7 @@ export const BhaktiGoLogo = ({ size = 32, showText = true, textColor = "#F0C040"
         <div style={{ display: 'flex', flexDirection: 'column' }}>
           <span style={{ fontFamily: 'Cinzel, serif', color: textColor, fontSize: isSmall ? 14 : size * 0.6, fontWeight: 900, lineHeight: 1 }}>BhaktiGo</span>
           {!isSmall && (
-            <span style={{ fontSize: size * 0.25, color: taglineColor, letterSpacing: '1px', marginTop: '4px', fontWeight: 600, textTransform: 'uppercase' }}>Bridging to Divine</span>
+            <span style={{ fontSize: size * 0.22, color: taglineColor, letterSpacing: '0.3px', marginTop: '4px', fontWeight: 600, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Bridging You to Divine Services</span>
           )}
         </div>
       )}

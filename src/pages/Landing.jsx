@@ -117,6 +117,7 @@ export default function Landing() {
           {[['Find Pandits', '/user/marketplace'], ['Samagri Store', '/user/samagri'], ['Temples', '/user/temples'], ['Muhurta', '/user/muhurta'], ['Roadmap', '/user/roadmap']].map(([l, p]) => (
             <span key={l} onClick={() => { navigate(p); setMenuOpen(false); }} className="nav-link">{l}</span>
           ))}
+          <span onClick={() => { navigate('/pandit/onboard'); setMenuOpen(false); }} style={{ color: '#F0C040', fontSize: 13, fontWeight: 800, cursor: 'pointer', borderBottom: '1px solid rgba(240,192,64,0.4)', paddingBottom: 1 }}>Join as Pandit →</span>
           <span onClick={() => { navigate('/pandit/dashboard'); setMenuOpen(false); }} style={{ color: '#D4A017', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>Pandit Portal ↗</span>
           <span onClick={() => { navigate('/admin/overview'); setMenuOpen(false); }} style={{ color: '#F0C040', fontSize: 13, fontWeight: 700, cursor: 'pointer', marginLeft: '10px' }}>Admin Panel ⚙️</span>
           <button style={btn('linear-gradient(135deg,#FF6B00,#D4A017)', { padding: '8px 22px', fontSize: 13, marginLeft: '10px' })} onClick={() => { navigate('/user/home'); setMenuOpen(false); }}>Enter App →</button>

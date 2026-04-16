@@ -4,7 +4,7 @@ import { useApp } from '../store/AppCtx';
 import { Toast } from '../components/common/UIElements';
 import { CartModal, ConfirmModal, LoginModal, AdminLoginModal, UserOnboardingModal, PanditOnboardingModal, PanditModal, BookingSuccessModal } from '../components/modals/AllModals';
 import { BhaktiGoLogo } from '../components/common/Logo';
-import NotificationBell from '../components/NotificationBell';
+import { NotificationBell } from '../components/ui/NotificationBell';
 import PWAInstallBanner from '../components/PWAInstallBanner';
 import { IconMenu, IconShoppingBag, IconLogout, IconUser } from '../components/icons/Icons';
 
@@ -60,7 +60,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
               {cartCount > 0 && <span className="badge">{cartCount}</span>}
             </div>
           )}
-          <NotificationBell size={window.innerWidth < 480 ? 24 : 28} />
+          <NotificationBell userId={devoteeId || null} />
           {/* User pill — compact on mobile */}
           <div className="nav-user-pill"
             style={{ 

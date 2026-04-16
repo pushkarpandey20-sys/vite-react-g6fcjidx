@@ -55,7 +55,20 @@ export default function MuhuratFinder() {
     });
   };
 
-  const occasions = ["Mundan", "Griha Pravesh", "Wedding", "Vehicle Purchase", "Bhoomi Pujan", "Vidyarambha"];
+  const occasions = [
+    { value:'vivah',        label:'💍 Vivah (Wedding)' },
+    { value:'griha-pravesh',label:'🏡 Griha Pravesh' },
+    { value:'namkaran',     label:'🍼 Namkaran Ceremony' },
+    { value:'mundan',       label:'✂️ Mundan Sanskar' },
+    { value:'annaprashan',  label:'🍚 Annaprashan' },
+    { value:'janeu',        label:'🧵 Janeu / Upanayana' },
+    { value:'engagement',   label:'💒 Sagai / Engagement' },
+    { value:'business',     label:'🏢 Business Opening' },
+    { value:'vehicle',      label:'🚗 New Vehicle Puja' },
+    { value:'travel',       label:'✈️ Journey / Travel' },
+    { value:'investment',   label:'💰 Investment / Purchase' },
+    { value:'surgery',      label:'🏥 Medical / Surgery' },
+  ];
 
   const sel = { padding:'8px 12px', borderRadius:8, border:'1.5px solid rgba(212,160,23,0.35)', background:'#fff', color:'#1a0f07', fontSize:12, outline:'none', cursor:'pointer' };
 
@@ -71,8 +84,8 @@ export default function MuhuratFinder() {
             <div style={{ flex:'1 1 140px' }}>
               <div style={{ color:'#9a8070', fontSize:10, fontWeight:700, marginBottom:3, letterSpacing:0.5 }}>OCCASION</div>
               <select style={sel} required value={query.occasion} onChange={e => setQuery({...query, occasion: e.target.value})}>
-                <option value="">Select…</option>
-                {occasions.map(o => <option key={o} value={o}>{o}</option>)}
+                <option value="">Select occasion...</option>
+                {occasions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
               </select>
             </div>
             <div style={{ flex:'1 1 120px' }}>

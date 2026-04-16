@@ -21,6 +21,7 @@ const PanditProfilePage = lazy(() => import('../../pages/pandit/PanditProfilePag
 const PanditEarningsPage = lazy(() => import('../../pages/pandit/PanditEarningsPage'));
 const PanditAvailPage = lazy(() => import('../../pages/pandit/PanditAvailPage'));
 const PanditOnboardingPage = lazy(() => import('../../pages/pandit/PanditOnboardingPage'));
+const PanditOnboardPage    = lazy(() => import('../../pages/pandit/PanditOnboardPage'));
 
 // Admin Pages
 const AdminHome = lazy(() => import('../../pages/admin/AdminHome'));
@@ -97,8 +98,10 @@ export default function AppRoutes() {
             <Route path="roadmap" element={<Roadmap />} />
           </Route>
 
-          {/* Pandit Onboarding (standalone, no sidebar layout) */}
-          <Route path="/pandit/onboard" element={<PanditOnboardingPage />} />
+          {/* Pandit Onboarding — new clean 4-step form */}
+          <Route path="/pandit/onboard" element={<PanditOnboardPage />} />
+          {/* Legacy onboarding kept at alternate path */}
+          <Route path="/pandit/onboard-legacy" element={<PanditOnboardingPage />} />
 
           {/* Pandit Routes — public; dashboard shows login UI when not authed */}
           <Route path="/pandit" element={<PanditLayout />}>

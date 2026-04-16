@@ -78,11 +78,30 @@ export default function AdminPanditList() {
     }
   };
 
-  const handleApprove = (id) => updateStatus(id, 'verified', { is_verified: true });
+  const handleApprove = async (id) => {
+    await updateStatus(id, 'verified', { is_verified: true, approved_at: new Date().toISOString() });
+    // Notify pandit
+    supabase.from('notifications').insert({
+      pandit_id: id,
+      type:    'pandit_approved',
+      title:   '🎉 Profile Approved!',
+      message: 'Congratulations! Your BhaktiGo profile is now live. Devotees can book you.',
+      data:    { approved_at: new Date().toISOString() },
+    }).catch(() => {}); // non-critical
+  };
 
   const handleRejectConfirm = async () => {
     if (!rejectModal) return;
-    await updateStatus(rejectModal.id, 'rejected', { rejection_reason: rejectReason || 'No reason provided', is_verified: false });
+    const reason = rejectReason || 'No reason provided';
+    await updateStatus(rejectModal.id, 'rejected', { rejection_reason: reason, is_verified: false });
+    // Notify pandit
+    supabase.from('notifications').insert({
+      pandit_id: rejectModal.id,
+      type:    'pandit_rejected',
+      title:   'Profile Needs Update',
+      message: `Your profile needs revision: ${reason}. Please update and reapply.`,
+      data:    { reason },
+    }).catch(() => {}); // non-critical
     setRejectModal(null);
     setRejectReason('');
   };
