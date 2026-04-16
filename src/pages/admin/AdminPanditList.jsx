@@ -21,6 +21,8 @@ export default function AdminPanditList() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState(null);
+  const [rejectModal, setRejectModal] = useState(null); // { id, name }
+  const [rejectReason, setRejectReason] = useState('');
 
   useEffect(() => {
     fetchPandits();
@@ -51,29 +53,38 @@ export default function AdminPanditList() {
     setLoading(false);
   };
 
-  const updateStatus = async (id, status) => {
+  const updateStatus = async (id, status, extraFields = {}) => {
     const originalPandits = [...pandits];
     // Optimistic Update
-    setPandits(prev => prev.map(p => p.id===id ? {...p, status} : p));
-    
+    setPandits(prev => prev.map(p => p.id===id ? {...p, status, ...extraFields} : p));
+
     try {
       const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
-      
+
       if (!isUUID) {
         console.warn("Local/Seed ID detected. Update skipped in DB, but applied locally.");
         showToast(`Schema Update: ${status.replace(/_/g,' ')} (Local Mode)`);
         return;
       }
 
-      const { error } = await supabase.from('pandits').update({ status }).eq('id', id);
+      const { error } = await supabase.from('pandits').update({ status, ...extraFields }).eq('id', id);
       if (error) throw error;
-      
+
       showToast(`Protocol Updated: ${status.replace(/_/g,' ')}`);
     } catch(e) {
       console.error("Update Error:", e);
       setPandits(originalPandits);
       showToast("Security Exception: DB update failed", "error");
     }
+  };
+
+  const handleApprove = (id) => updateStatus(id, 'verified', { is_verified: true });
+
+  const handleRejectConfirm = async () => {
+    if (!rejectModal) return;
+    await updateStatus(rejectModal.id, 'rejected', { rejection_reason: rejectReason || 'No reason provided', is_verified: false });
+    setRejectModal(null);
+    setRejectReason('');
   };
 
   const counts = {
@@ -216,16 +227,22 @@ export default function AdminPanditList() {
                         <div style={{ color:C.soft, fontSize:11, fontWeight:700 }}>MIN FEE / SERVICE</div>
                       </div>
 
-                      <div style={{ display:'flex', gap:8, background:'#fdfaf5', padding:'8px', borderRadius:14, border:`1px solid ${C.border}` }}>
-                         {p.status !== 'verified' && p.status !== 'approved' && (
-                           <button onClick={()=>updateStatus(p.id, 'verified')} style={{ background:C.green, color:'#fff', border:'none', borderRadius:10, padding:'8px 16px', fontSize:12, fontWeight:800, cursor:'pointer' }}>Approve</button>
+                      <div style={{ display:'flex', gap:8, background:'#fdfaf5', padding:'8px', borderRadius:14, border:`1px solid ${C.border}`, flexWrap:'wrap' }}>
+                         {(p.status === 'pending_verification' || p.status === 'pending') && (
+                           <>
+                             <button onClick={()=>handleApprove(p.id)} style={{ background:C.green, color:'#fff', border:'none', borderRadius:10, padding:'8px 16px', fontSize:12, fontWeight:800, cursor:'pointer' }}>✅ Approve</button>
+                             <button onClick={()=>{ setRejectModal({id:p.id,name:p.name}); setRejectReason(''); }} style={{ background:'transparent', color:C.red, border:`1px solid ${C.red}`, borderRadius:10, padding:'8px 16px', fontSize:12, fontWeight:800, cursor:'pointer' }}>✗ Reject</button>
+                           </>
                          )}
-                         {p.status !== 'on_hold' ? (
+                         {(p.status === 'verified' || p.status === 'approved') && (
                            <button onClick={()=>updateStatus(p.id, 'on_hold')} style={{ background:'transparent', color:C.orange, border:`1px solid ${C.orange}30`, borderRadius:10, padding:'8px 16px', fontSize:12, fontWeight:800, cursor:'pointer' }}>Hold</button>
-                         ) : (
-                           <button onClick={()=>updateStatus(p.id, 'verified')} style={{ background:C.orange, color:'#fff', border:'none', borderRadius:10, padding:'8px 16px', fontSize:12, fontWeight:800, cursor:'pointer' }}>Unhold</button>
                          )}
-                         <button onClick={()=>updateStatus(p.id, 'deboarded')} style={{ background:'transparent', color:C.red, border:`1px solid ${C.red}30`, borderRadius:10, padding:'8px 16px', fontSize:12, fontWeight:800, cursor:'pointer' }}>Deboard</button>
+                         {p.status === 'on_hold' && (
+                           <button onClick={()=>handleApprove(p.id)} style={{ background:C.orange, color:'#fff', border:'none', borderRadius:10, padding:'8px 16px', fontSize:12, fontWeight:800, cursor:'pointer' }}>Unhold</button>
+                         )}
+                         {p.status !== 'pending_verification' && p.status !== 'pending' && p.status !== 'deboarded' && (
+                           <button onClick={()=>updateStatus(p.id, 'deboarded')} style={{ background:'transparent', color:C.red, border:`1px solid ${C.red}30`, borderRadius:10, padding:'8px 16px', fontSize:12, fontWeight:800, cursor:'pointer' }}>Deboard</button>
+                         )}
                          <button style={{ background:C.dark, color:'#fff', border:'none', borderRadius:10, width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center', cursor:'pointer' }}>⋮</button>
                       </div>
                    </div>
@@ -236,6 +253,42 @@ export default function AdminPanditList() {
         )
       }
       </div>
+
+      {/* Reject Modal */}
+      {rejectModal && (
+        <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.6)', zIndex:1100,
+          display:'flex', alignItems:'center', justifyContent:'center', padding:20 }}>
+          <div style={{ background:'#fff', borderRadius:20, padding:'32px', maxWidth:420, width:'100%',
+            boxShadow:'0 24px 60px rgba(0,0,0,0.3)' }}>
+            <h3 style={{ fontFamily:'Cinzel, serif', color:C.dark, fontSize:20, marginBottom:8, fontWeight:900 }}>
+              Reject Application
+            </h3>
+            <p style={{ color:C.soft, fontSize:14, marginBottom:20 }}>
+              Rejecting <strong style={{ color:C.dark }}>{rejectModal.name}</strong>. Please provide a reason so they can be notified.
+            </p>
+            <textarea
+              value={rejectReason}
+              onChange={e => setRejectReason(e.target.value)}
+              placeholder="Reason for rejection (e.g. Incomplete documents, Invalid Aadhaar...)"
+              style={{ width:'100%', minHeight:100, padding:'12px 14px', borderRadius:12,
+                border:`1.5px solid ${C.border}`, fontSize:13, color:C.dark, resize:'vertical',
+                fontFamily:'Inter, sans-serif', outline:'none', boxSizing:'border-box' }}
+            />
+            <div style={{ display:'flex', gap:12, marginTop:20 }}>
+              <button onClick={()=>setRejectModal(null)}
+                style={{ flex:1, background:'#f5f5f5', color:C.mid, border:`1px solid ${C.border}`,
+                  borderRadius:12, padding:'12px', fontWeight:700, cursor:'pointer', fontSize:14 }}>
+                Cancel
+              </button>
+              <button onClick={handleRejectConfirm}
+                style={{ flex:1, background:C.red, color:'#fff', border:'none',
+                  borderRadius:12, padding:'12px', fontWeight:800, cursor:'pointer', fontSize:14 }}>
+                ✗ Confirm Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Toast Notification */}
       {toast && (

@@ -10,7 +10,7 @@ const CATEGORIES = [
   { id:'daily',     label:'Daily Worship',     icon:'🌸',  color:'#e91e63' },
   { id:'abhishek',  label:'Abhishek',          icon:'🔱',  color:'#2196f3' },
   { id:'havan',     label:'Havan & Yagna',     icon:'🔥',  color:'#ff5722' },
-  { id:'incense',   label:'Incense & Diyas',   icon:'🕯️',  color:'#9c27b0' },
+  { id:'incense',   label:'Incense & Diyas',   icon:'🥢',  color:'#9c27b0' },
   { id:'flowers',   label:'Flowers & Garlands',icon:'🌺',  color:'#4caf50' },
   { id:'grains',    label:'Grains & Offerings',icon:'🌾',  color:'#795548' },
 ];
@@ -41,7 +41,7 @@ const PRODUCTS = [
     items: ['Havan Samagri', 'Mango Leaves', 'Kalash', 'Coconut', 'Red Cloth', 'Kumkum', 'Akshat', 'Diyas (x6)', 'Ghee (200ml)'],
   },
   {
-    id: 'navratri-kit', name: 'Navratri Pooja Kit', category: 'festival', icon: '🚩',
+    id: 'navratri-kit', name: 'Navratri Pooja Kit', category: 'festival', icon: '🌺',
     image: '/samagri/navratri-kit.png',
     price: 799, mrp: 999,
     badge: 'NEW', rating: 4.8, reviews: 89, weight: '1.1kg',
@@ -105,7 +105,7 @@ const PRODUCTS = [
     items: ['9 Grains Set', '9 Color Cloths', 'Nav Dhanya', 'Coconut', 'Flowers', 'Akshat', 'Roli', 'Camphor'],
   },
   {
-    id: 'lakshmi-kit', name: 'Lakshmi Puja Kit', category: 'festival', icon: '🪔',
+    id: 'lakshmi-kit', name: 'Lakshmi Puja Kit', category: 'festival', icon: '🪷',
     image: '/samagri/lakshmi-kit.png',
     price: 499, mrp: 649,
     badge: 'NEW', rating: 4.9, reviews: 203, weight: '720g',
@@ -161,6 +161,14 @@ const CUSTOM_ITEMS = [
   { id:'c42', name:'White Sandal Powder (Chandan)',icon:'🌿',price:99, unit:'50g pack',              cat:'Abhishek', desc:'Pure white chandan for abhishek and tilak' },
   { id:'c43', name:'Dhatura Flower',             icon:'🌸', price:29,  unit:'5 pieces',              cat:'Abhishek', desc:'Sacred white Dhatura for Shiva puja' },
   { id:'c44', name:'Kesar (Saffron)',            icon:'🟠', price:149, unit:'0.5g sachet',            cat:'Abhishek', desc:'Pure Saffron for tilak' },
+  { id:'c45', name:'Mango Leaves',              icon:'🍃', price:19,  unit:'1 bunch · 11 leaves',      cat:'Flowers',  desc:'Fresh mango leaves for torana and kalash' },
+  { id:'c46', name:'Red Cloth (Lal Vastram)',   icon:'🟥', price:49,  unit:'1 meter',                  cat:'Basic',    desc:'Auspicious red cloth for devi puja and altar' },
+  { id:'c47', name:'Yellow Cloth (Peetambari)', icon:'🟨', price:49,  unit:'1 meter',                  cat:'Basic',    desc:'Yellow cloth for Vishnu and Satyanarayan puja' },
+  { id:'c48', name:'Puja Bell (Ghanti)',         icon:'🔔', price:149, unit:'1 piece · brass',          cat:'Utensil',  desc:'Traditional brass bell for aarti and puja ritual' },
+  { id:'c49', name:'Puja Chowki (Bajot)',        icon:'🟫', price:299, unit:'1 piece · wooden',         cat:'Utensil',  desc:'Wooden low stool for placing deity or samagri' },
+  { id:'c50', name:'Panchamrit Spoon (Panchpatra)',icon:'🥄',price:99, unit:'1 piece · brass',         cat:'Utensil',  desc:'Brass spoon for panchamrit abhishek' },
+  { id:'c51', name:'Sambrani Cup (Dhoop Cup)',   icon:'💨', price:39,  unit:'6 cups',                   cat:'Havan',    desc:'Coconut shell sambrani dhoop cups for fumigation' },
+  { id:'c52', name:'Karpoor Block (Camphor)',    icon:'⬜', price:49,  unit:'1 block · 10g',            cat:'Basic',    desc:'Large camphor block for aarti and havan purification' },
 ];
 
 const CUSTOM_CATS = ['All', 'Basic', 'Utensil', 'Diya', 'Flowers', 'Liquid', 'Grain', 'Havan', 'Abhishek', 'Decor', 'Incense'];

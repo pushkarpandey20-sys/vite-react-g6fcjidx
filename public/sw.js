@@ -1,4 +1,4 @@
-/* ─── DevSetu Service Worker ─────────────────────────────
+/* ─── BhaktiGo Service Worker ────────────────────────────
    Strategy:
    - Static assets (JS/CSS/fonts) → Cache First
    - API calls (Supabase)         → Network First
@@ -21,7 +21,7 @@ const OFFLINE_PAGE = `<!DOCTYPE html>
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>DevSetu – Offline</title>
+  <title>BhaktiGo – Offline</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -151,9 +151,9 @@ async function networkFirst(request, cacheName, maxAgeSeconds) {
 // ── Push notifications ────────────────────────────────────
 self.addEventListener('push', (event) => {
   const data = event.data?.json() || {};
-  const title = data.title || '🕉️ DevSetu';
+  const title = data.title || '🕉️ BhaktiGo';
   const options = {
-    body: data.body || 'You have a new update from DevSetu',
+    body: data.body || 'You have a new update from BhaktiGo',
     icon: '/icons/icon-192.png',
     badge: '/icons/icon-192.png',
     data: { url: data.url || '/' },

@@ -103,11 +103,19 @@ function VideoUploadField({ file, onChange }) {
   );
 }
 
+const EXP_OPTIONS = [
+  { label:'1–2 years',  value:'1' },
+  { label:'3–5 years',  value:'3' },
+  { label:'6–10 years', value:'6' },
+  { label:'10+ years',  value:'10' },
+];
+
 export default function PanditOnboardingPage() {
   const navigate = useNavigate();
   const { toast, userPhone } = useApp();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
 
   const [form, setForm] = useState({
     name:'', phone:userPhone||'', city:'', years_of_experience:'', languages:[],
@@ -126,6 +134,8 @@ export default function PanditOnboardingPage() {
   const validateStep = () => {
     if (step===1) {
       if (!form.name||!form.phone||!form.city||!form.years_of_experience) { toast('Please fill all required fields.','⚠️'); return false; }
+      const digits = form.phone.replace(/\D/g,'');
+      if (digits.length < 10 || digits.length > 12) { toast('Enter a valid 10-digit phone number.','⚠️'); return false; }
       if (!form.languages.length) { toast('Select at least one language.','⚠️'); return false; }
     }
     if (step===2) {
@@ -163,8 +173,7 @@ export default function PanditOnboardingPage() {
         created_at:new Date().toISOString(),
       });
       if (error) throw error;
-      toast('Application submitted! Our team will verify you within 48 hours. 🙏','✅');
-      navigate('/pandit/dashboard');
+      setSubmitted(true);
     } catch(err) {
       console.error('[onboarding] error:', err);
       toast(err.message||'Submission failed. Please try again.','⚠️');
@@ -179,6 +188,46 @@ export default function PanditOnboardingPage() {
   const chip = (active) => ({ padding:'7px 14px', borderRadius:20, border:`1px solid ${active?'rgba(240,192,64,0.5)':'rgba(240,192,64,0.2)'}`,
     background:active?'rgba(240,192,64,0.15)':'transparent', color:active?'#F0C040':'rgba(255,248,240,0.45)',
     fontWeight:700, fontSize:12, cursor:'pointer', fontFamily:'Nunito,sans-serif', transition:'all 0.2s' });
+
+  /* ── Waiting screen shown after successful submit ── */
+  if (submitted) {
+    return (
+      <div style={{ minHeight:'100vh', background:'linear-gradient(135deg,#1a0f07,#0f0804)',
+        display:'flex', alignItems:'center', justifyContent:'center', padding:'40px 16px' }}>
+        <div style={{ width:'100%', maxWidth:520, textAlign:'center' }}>
+          <div style={{ fontSize:72, marginBottom:16 }}>🙏</div>
+          <h2 style={{ fontFamily:'Cinzel,serif', color:'#F0C040', fontSize:'1.6rem', marginBottom:12, fontWeight:900 }}>
+            Application Received!
+          </h2>
+          <p style={{ color:'rgba(255,248,240,0.75)', fontSize:15, lineHeight:1.7, marginBottom:28, fontFamily:'Nunito,sans-serif' }}>
+            Our team will verify your profile within <strong style={{ color:'#FF6B00' }}>24–48 hours</strong>.
+            You'll receive a WhatsApp confirmation once approved.
+          </p>
+          <div style={{ background:'rgba(37,211,102,0.08)', border:'1px solid rgba(37,211,102,0.25)',
+            borderRadius:16, padding:'20px 24px', marginBottom:28 }}>
+            {[
+              '📋 Application submitted successfully',
+              '🔍 Identity & KYC documents under review',
+              '📱 WhatsApp confirmation will be sent to ' + form.phone,
+              '⏳ Expected verification: 24–48 hours',
+            ].map((line, i) => (
+              <div key={i} style={{ color:'rgba(255,248,240,0.7)', fontSize:13, fontFamily:'Nunito,sans-serif',
+                padding:'6px 0', borderBottom: i < 3 ? '1px solid rgba(255,255,255,0.05)' : 'none',
+                display:'flex', alignItems:'center', gap:10 }}>
+                {line}
+              </div>
+            ))}
+          </div>
+          <button onClick={() => navigate('/pandit/dashboard')}
+            style={{ background:'linear-gradient(135deg,#FF6B00,#D4A017)', color:'#fff', border:'none',
+              borderRadius:30, padding:'14px 40px', fontSize:15, fontWeight:900, cursor:'pointer',
+              boxShadow:'0 8px 24px rgba(255,107,0,0.35)' }}>
+            Go to Dashboard →
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div style={{ minHeight:'100vh', background:'linear-gradient(135deg,#1a0f07,#0f0804)',
@@ -242,7 +291,10 @@ export default function PanditOnboardingPage() {
                     {CITIES.map(c=><option key={c} value={c}>{c}</option>)}
                   </select></div>
                 <div className="fg"><label style={labelStyle}>Years of Experience *</label>
-                  <input type="number" style={inputStyle} min="0" max="70" value={form.years_of_experience} onChange={e=>set('years_of_experience',e.target.value)} placeholder="e.g. 15" /></div>
+                  <select style={{ ...inputStyle, cursor:'pointer' }} value={form.years_of_experience} onChange={e=>set('years_of_experience',e.target.value)}>
+                    <option value="">Select Experience</option>
+                    {EXP_OPTIONS.map(o=><option key={o.value} value={o.value}>{o.label}</option>)}
+                  </select></div>
                 <div className="fg ffw">
                   <label style={labelStyle}>Languages You Chant In *</label>
                   <div style={{ display:'flex', flexWrap:'wrap', gap:8, marginTop:6 }}>
