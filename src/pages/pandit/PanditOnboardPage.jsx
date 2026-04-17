@@ -1,4 +1,14 @@
-import React, { useState } from 'react';
+// SETUP REQUIRED: In Supabase Dashboard → Storage:
+// 1. Create bucket: 'pandit-videos'
+// 2. Set bucket to PUBLIC (so videos can be streamed)
+// 3. Add Storage policy:
+//    - INSERT: allow all (authenticated or anon)
+//    - SELECT: allow all
+//
+// DB MIGRATION (run once in Supabase SQL editor):
+// ALTER TABLE pandits ADD COLUMN IF NOT EXISTS intro_video_url TEXT;
+
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../services/supabase';
 
@@ -26,31 +36,31 @@ const STEPS = [
 ];
 
 const C = {
-  bg:     '#1a0a00',
-  card:   '#2a1200',
-  gold:   '#F0C040',
-  accent: '#FF6B00',
-  text:   'rgba(255,248,240,0.88)',
-  sub:    'rgba(255,248,240,0.45)',
-  border: 'rgba(212,160,23,0.22)',
+  bg:        '#1a0a00',
+  card:      '#2a1200',
+  gold:      '#F0C040',
+  accent:    '#FF6B00',
+  text:      'rgba(255,248,240,0.88)',
+  sub:       'rgba(255,248,240,0.45)',
+  border:    'rgba(212,160,23,0.22)',
   errBorder: 'rgba(239,68,68,0.7)',
 };
 
 // ── Validators ────────────────────────────────────────────
 const VALIDATORS = {
-  name:          v => !v.trim()                                          ? 'Full name is required.'               : null,
-  phone:         v => !/^\d{10}$/.test(v.replace(/\D/g,''))             ? 'Enter a valid 10-digit phone number.' : null,
-  email:         v => v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)       ? 'Enter a valid email address.'         : null,
-  city:          v => !v.trim()                                          ? 'City is required.'                    : null,
-  pincode:       v => v && !/^\d{6}$/.test(v)                           ? 'Pincode must be 6 digits.'            : null,
-  experience:    v => !v                                                 ? 'Select your experience level.'        : null,
-  specializations: v => v.length === 0                                  ? 'Select at least one specialization.'  : null,
-  languages:     v => v.length === 0                                     ? 'Select at least one language.'        : null,
-  aadhar:        v => v && v.replace(/\D/g,'').length !== 12            ? 'Aadhaar must be 12 digits.'           : null,
-  pan:           v => v && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(v)         ? 'Enter a valid PAN (e.g. ABCDE1234F).' : null,
-  bankAccount:   v => !v.trim()                                          ? 'Bank account number is required.'     : null,
-  ifsc:          v => !v.trim()                                          ? 'IFSC code is required.'               : null,
-  accountHolder: v => null, // optional field
+  name:            v => !v.trim()                                        ? 'Full name is required.'               : null,
+  phone:           v => !/^\d{10}$/.test(v.replace(/\D/g,''))           ? 'Enter a valid 10-digit phone number.' : null,
+  email:           v => v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)     ? 'Enter a valid email address.'         : null,
+  city:            v => !v.trim()                                        ? 'City is required.'                    : null,
+  pincode:         v => v && !/^\d{6}$/.test(v)                         ? 'Pincode must be 6 digits.'            : null,
+  experience:      v => !v                                               ? 'Select your experience level.'        : null,
+  specializations: v => v.length === 0                                   ? 'Select at least one specialization.'  : null,
+  languages:       v => v.length === 0                                   ? 'Select at least one language.'        : null,
+  aadhar:          v => v && v.replace(/\D/g,'').length !== 12          ? 'Aadhaar must be 12 digits.'           : null,
+  pan:             v => v && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(v)       ? 'Enter a valid PAN (e.g. ABCDE1234F).' : null,
+  bankAccount:     v => !v.trim()                                        ? 'Bank account number is required.'     : null,
+  ifsc:            v => !v.trim()                                        ? 'IFSC code is required.'               : null,
+  accountHolder:   () => null, // optional
 };
 
 const STEP_FIELDS = {
@@ -131,7 +141,17 @@ export default function PanditOnboardPage() {
     experience: '', specializations: [], languages: [], bio: '',
     aadhar: '', pan: '',
     bankHolder: '', bankAccount: '', ifsc: '',
+    introVideoUrl: '',
   });
+
+  // ── Video upload state ────────────────────────────────────
+  const [videoFile, setVideoFile] = useState(null);
+  const [videoPreviewUrl, setVideoPreviewUrl] = useState('');
+  const [videoUploadProgress, setVideoUploadProgress] = useState(0);
+  const [videoUploading, setVideoUploading] = useState(false);
+  const [videoError, setVideoError] = useState('');
+  const [videoUploaded, setVideoUploaded] = useState(false);
+  const videoInputRef = useRef(null);
 
   const set = (k, v) => setForm(p => ({ ...p, [k]: v }));
   const toggle = (field, val) => setForm(p => {
@@ -141,7 +161,6 @@ export default function PanditOnboardPage() {
 
   // ── Per-field validation on blur ──────────────────────────
   const validateField = (key) => {
-    // map bankHolder → accountHolder for VALIDATORS key
     const validatorKey = key === 'bankHolder' ? 'accountHolder' : key;
     const validator = VALIDATORS[validatorKey];
     if (!validator) return;
@@ -178,6 +197,81 @@ export default function PanditOnboardPage() {
     setStep(s => Math.max(s - 1, 1));
   };
 
+  // ── Video handlers ────────────────────────────────────────
+  const handleVideoSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const allowed = ['video/mp4', 'video/quicktime', 'video/webm'];
+    if (!allowed.includes(file.type)) {
+      setVideoError('Only MP4, MOV or WebM videos are allowed.');
+      return;
+    }
+    if (file.size > 50 * 1024 * 1024) {
+      setVideoError('Video must be smaller than 50MB.');
+      return;
+    }
+
+    setVideoError('');
+    setVideoFile(file);
+    setVideoPreviewUrl(URL.createObjectURL(file));
+    setVideoUploaded(false);
+  };
+
+  const handleVideoUpload = async () => {
+    if (!videoFile) return;
+    setVideoUploading(true);
+    setVideoUploadProgress(0);
+    setVideoError('');
+
+    try {
+      const ext = videoFile.name.split('.').pop();
+      const fileName = 'intro_' + Date.now() + '_' + Math.random().toString(36).substring(2) + '.' + ext;
+      const filePath = 'pandits/' + fileName;
+
+      const { data, error: uploadError } = await supabase.storage
+        .from('pandit-videos')
+        .upload(filePath, videoFile, {
+          cacheControl: '3600',
+          upsert: false,
+          onUploadProgress: (progress) => {
+            const pct = Math.round((progress.loaded / progress.total) * 100);
+            setVideoUploadProgress(pct);
+          },
+        });
+
+      if (uploadError) {
+        console.error('[video-upload]', uploadError);
+        setVideoError('Upload failed: ' + (uploadError.message || 'Please try again.'));
+        setVideoUploading(false);
+        return;
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('pandit-videos')
+        .getPublicUrl(filePath);
+
+      setForm(prev => ({ ...prev, introVideoUrl: publicUrl }));
+      setVideoUploaded(true);
+      setVideoUploadProgress(100);
+    } catch (err) {
+      console.error('[video-upload]', err);
+      setVideoError('Something went wrong during upload. Please try again.');
+    } finally {
+      setVideoUploading(false);
+    }
+  };
+
+  const handleVideoRemove = () => {
+    setVideoFile(null);
+    setVideoPreviewUrl('');
+    setVideoUploaded(false);
+    setVideoUploadProgress(0);
+    setVideoError('');
+    setForm(prev => ({ ...prev, introVideoUrl: '' }));
+    if (videoInputRef.current) videoInputRef.current.value = '';
+  };
+
   // ── Submit with Supabase v2 async/await ──────────────────
   const handleSubmit = async () => {
     if (!validateStep(4)) return;
@@ -199,6 +293,7 @@ export default function PanditOnboardPage() {
       bank_account:     form.bankAccount,
       ifsc_code:        form.ifsc,
       bank_holder:      form.bankHolder || form.name,
+      intro_video_url:  form.introVideoUrl || null,
       status:           'pending',
       is_verified:      false,
       rating:           0,
@@ -492,7 +587,212 @@ export default function PanditOnboardPage() {
                   </Field>
                 </div>
               </div>
-              <div style={{ background: 'rgba(255,107,0,0.07)', border: '1px dashed rgba(255,107,0,0.25)', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'rgba(255,168,80,0.75)' }}>
+
+              {/* ── INTRO VIDEO UPLOAD ── */}
+              <div style={{ marginTop: 28 }}>
+                <label style={{
+                  color: 'rgba(255,248,240,0.55)',
+                  fontSize: 11, fontWeight: 700,
+                  letterSpacing: 1, display: 'block', marginBottom: 8,
+                }}>
+                  🎬 INTRO VIDEO <span style={{ color: C.gold }}>(Recommended)</span>
+                </label>
+
+                {/* Why it matters */}
+                <div style={{
+                  background: 'rgba(212,160,23,0.08)',
+                  border: '1px solid rgba(212,160,23,0.2)',
+                  borderRadius: 10, padding: '10px 14px',
+                  marginBottom: 14, fontSize: 13,
+                  color: 'rgba(255,248,240,0.65)',
+                  lineHeight: 1.6,
+                }}>
+                  📈 <strong style={{ color: C.gold }}>3x more bookings</strong> — Pandits with
+                  an intro video receive significantly more booking requests.
+                  Record a 30–60 second video introducing yourself, your
+                  specializations, and your experience.
+                </div>
+
+                {/* Drop zone — shown when no file selected */}
+                {!videoFile && (
+                  <div
+                    onClick={() => videoInputRef.current?.click()}
+                    style={{
+                      border: '2px dashed rgba(212,160,23,0.3)',
+                      borderRadius: 14,
+                      padding: '32px 20px',
+                      textAlign: 'center',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      background: 'rgba(255,255,255,0.02)',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.borderColor = 'rgba(255,107,0,0.5)';
+                      e.currentTarget.style.background = 'rgba(255,107,0,0.04)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.borderColor = 'rgba(212,160,23,0.3)';
+                      e.currentTarget.style.background = 'rgba(255,255,255,0.02)';
+                    }}
+                  >
+                    <div style={{ fontSize: 40, marginBottom: 10 }}>🎬</div>
+                    <p style={{ color: C.gold, fontWeight: 700, margin: '0 0 4px', fontSize: 15 }}>
+                      Click to select your intro video
+                    </p>
+                    <p style={{ color: 'rgba(255,248,240,0.4)', fontSize: 12, margin: 0 }}>
+                      MP4, MOV or WebM · Max 50MB · 30–90 seconds recommended
+                    </p>
+                  </div>
+                )}
+
+                {/* Hidden file input */}
+                <input
+                  ref={videoInputRef}
+                  type="file"
+                  accept="video/mp4,video/quicktime,video/webm"
+                  onChange={handleVideoSelect}
+                  style={{ display: 'none' }}
+                />
+
+                {/* Video selected — preview + upload */}
+                {videoFile && (
+                  <div style={{
+                    background: 'rgba(255,255,255,0.04)',
+                    border: '1px solid rgba(212,160,23,0.2)',
+                    borderRadius: 14, overflow: 'hidden',
+                  }}>
+                    {/* Preview */}
+                    <video
+                      src={videoPreviewUrl}
+                      controls
+                      style={{ width: '100%', maxHeight: 240, background: '#000', display: 'block' }}
+                    />
+
+                    {/* File info + actions */}
+                    <div style={{ padding: '14px 16px' }}>
+                      <div style={{
+                        display: 'flex', alignItems: 'center',
+                        justifyContent: 'space-between', flexWrap: 'wrap', gap: 10,
+                        marginBottom: 12,
+                      }}>
+                        <div>
+                          <p style={{ color: C.gold, fontWeight: 700, margin: 0, fontSize: 14 }}>
+                            📄 {videoFile.name}
+                          </p>
+                          <p style={{ color: 'rgba(255,248,240,0.4)', margin: '2px 0 0', fontSize: 12 }}>
+                            {(videoFile.size / (1024 * 1024)).toFixed(1)} MB
+                          </p>
+                        </div>
+                        {!videoUploading && (
+                          <button
+                            onClick={handleVideoRemove}
+                            style={{
+                              background: 'rgba(239,68,68,0.1)',
+                              border: '1px solid rgba(239,68,68,0.3)',
+                              color: '#f87171', borderRadius: 8,
+                              padding: '6px 14px', cursor: 'pointer',
+                              fontSize: 12, fontWeight: 700,
+                              fontFamily: 'inherit',
+                            }}
+                          >
+                            ✕ Remove
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Upload progress bar */}
+                      {videoUploading && (
+                        <div style={{ marginBottom: 12 }}>
+                          <div style={{
+                            display: 'flex', justifyContent: 'space-between',
+                            marginBottom: 6, fontSize: 12,
+                            color: 'rgba(255,248,240,0.55)',
+                          }}>
+                            <span>Uploading...</span>
+                            <span>{videoUploadProgress}%</span>
+                          </div>
+                          <div style={{
+                            height: 6, background: 'rgba(255,255,255,0.1)',
+                            borderRadius: 99, overflow: 'hidden',
+                          }}>
+                            <div style={{
+                              height: '100%',
+                              width: videoUploadProgress + '%',
+                              background: 'linear-gradient(90deg, #FF6B00, #F0C040)',
+                              borderRadius: 99,
+                              transition: 'width 0.3s ease',
+                            }} />
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Upload success */}
+                      {videoUploaded && (
+                        <div style={{
+                          display: 'flex', alignItems: 'center', gap: 8,
+                          color: '#22c55e', fontSize: 13, fontWeight: 700,
+                          marginBottom: 10,
+                        }}>
+                          ✅ Video uploaded successfully!
+                        </div>
+                      )}
+
+                      {/* Upload button */}
+                      {!videoUploaded && !videoUploading && (
+                        <button
+                          onClick={handleVideoUpload}
+                          style={{
+                            width: '100%',
+                            background: `linear-gradient(135deg, ${C.accent}, #D4A017)`,
+                            color: '#fff', border: 'none',
+                            borderRadius: 10, padding: '12px',
+                            fontWeight: 800, fontSize: 14,
+                            cursor: 'pointer', fontFamily: 'inherit',
+                          }}
+                        >
+                          ⬆️ Upload Video
+                        </button>
+                      )}
+
+                      {/* Change video link */}
+                      {videoUploaded && (
+                        <button
+                          onClick={handleVideoRemove}
+                          style={{
+                            background: 'none', border: 'none',
+                            color: 'rgba(255,248,240,0.4)', fontSize: 12,
+                            cursor: 'pointer', fontFamily: 'inherit',
+                            textDecoration: 'underline', padding: 0, marginTop: 4,
+                          }}
+                        >
+                          Change video
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Video error */}
+                {videoError && (
+                  <div style={{
+                    color: '#f87171', fontSize: 12,
+                    marginTop: 8, display: 'flex', alignItems: 'center', gap: 4,
+                  }}>
+                    ⚠️ {videoError}
+                  </div>
+                )}
+
+                {/* Skip hint */}
+                <p style={{
+                  color: 'rgba(255,248,240,0.3)',
+                  fontSize: 11, margin: '8px 0 0', textAlign: 'center',
+                }}>
+                  You can also add your video later from your pandit dashboard
+                </p>
+              </div>
+              {/* ── END VIDEO UPLOAD ── */}
+
+              <div style={{ background: 'rgba(255,107,0,0.07)', border: '1px dashed rgba(255,107,0,0.25)', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'rgba(255,168,80,0.75)', marginTop: 24 }}>
                 📋 Documents verified within <strong style={{ color: '#FF9F40' }}>48 hours</strong>. SMS and WhatsApp confirmation sent after approval.
               </div>
             </div>
