@@ -33,19 +33,63 @@ const C = {
   text:   'rgba(255,248,240,0.88)',
   sub:    'rgba(255,248,240,0.45)',
   border: 'rgba(212,160,23,0.22)',
+  errBorder: 'rgba(239,68,68,0.7)',
 };
 
-const inputStyle = {
-  padding: '11px 14px', border: `1.5px solid ${C.border}`, borderRadius: 10,
-  fontFamily: 'Nunito, sans-serif', fontSize: 13.5, color: C.text,
-  background: 'rgba(255,248,240,0.05)', outline: 'none',
-  width: '100%', boxSizing: 'border-box',
+// ── Validators ────────────────────────────────────────────
+const VALIDATORS = {
+  name:          v => !v.trim()                                          ? 'Full name is required.'               : null,
+  phone:         v => !/^\d{10}$/.test(v.replace(/\D/g,''))             ? 'Enter a valid 10-digit phone number.' : null,
+  email:         v => v && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)       ? 'Enter a valid email address.'         : null,
+  city:          v => !v.trim()                                          ? 'City is required.'                    : null,
+  pincode:       v => v && !/^\d{6}$/.test(v)                           ? 'Pincode must be 6 digits.'            : null,
+  experience:    v => !v                                                 ? 'Select your experience level.'        : null,
+  specializations: v => v.length === 0                                  ? 'Select at least one specialization.'  : null,
+  languages:     v => v.length === 0                                     ? 'Select at least one language.'        : null,
+  aadhar:        v => v && v.replace(/\D/g,'').length !== 12            ? 'Aadhaar must be 12 digits.'           : null,
+  pan:           v => v && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(v)         ? 'Enter a valid PAN (e.g. ABCDE1234F).' : null,
+  bankAccount:   v => !v.trim()                                          ? 'Bank account number is required.'     : null,
+  ifsc:          v => !v.trim()                                          ? 'IFSC code is required.'               : null,
+  accountHolder: v => null, // optional field
 };
+
+const STEP_FIELDS = {
+  1: ['name', 'phone', 'email', 'city', 'pincode'],
+  2: ['experience', 'specializations', 'languages'],
+  3: ['aadhar', 'pan'],
+  4: ['bankAccount', 'ifsc'],
+};
+
+// ── Inline components ─────────────────────────────────────
+function FieldError({ msg }) {
+  if (!msg) return null;
+  return (
+    <div style={{ color: '#f87171', fontSize: 11.5, fontWeight: 600, marginTop: 4, fontFamily: 'Nunito, sans-serif' }}>
+      ⚠ {msg}
+    </div>
+  );
+}
+
+const getInputStyle = (hasError) => ({
+  padding: '11px 14px',
+  border: `1.5px solid ${hasError ? C.errBorder : C.border}`,
+  borderRadius: 10,
+  fontFamily: 'Nunito, sans-serif',
+  fontSize: 13.5,
+  color: C.text,
+  background: hasError ? 'rgba(239,68,68,0.04)' : 'rgba(255,248,240,0.05)',
+  outline: 'none',
+  width: '100%',
+  boxSizing: 'border-box',
+  transition: 'border-color 0.18s',
+});
+
 const labelStyle = {
   fontSize: 11, fontWeight: 700, color: 'rgba(240,192,64,0.7)',
   textTransform: 'uppercase', letterSpacing: '.8px',
   marginBottom: 6, display: 'block',
 };
+
 const chipStyle = (active) => ({
   padding: '7px 14px', borderRadius: 20,
   border: `1px solid ${active ? 'rgba(240,192,64,0.6)' : 'rgba(240,192,64,0.2)'}`,
@@ -64,11 +108,23 @@ function Field({ label, children }) {
   );
 }
 
+// ── Auto-formatters ────────────────────────────────────────
+const fmtPhone   = v => v.replace(/\D/g, '').slice(0, 10);
+const fmtAadhar  = v => {
+  const d = v.replace(/\D/g, '').slice(0, 12);
+  return d.replace(/(\d{4})(?=\d)/g, '$1 ').trim();
+};
+const fmtPAN     = v => v.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 10);
+const fmtIFSC    = v => v.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 11);
+const fmtPincode = v => v.replace(/\D/g, '').slice(0, 6);
+
 export default function PanditOnboardPage() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const [form, setForm] = useState({
     name: '', phone: '', email: '', city: '', pincode: '',
@@ -83,81 +139,96 @@ export default function PanditOnboardPage() {
     return { ...p, [field]: arr.includes(val) ? arr.filter(x => x !== val) : [...arr, val] };
   });
 
-  // Per-step validation
-  const validate = () => {
-    if (step === 1) {
-      if (!form.name.trim()) return 'Full name is required.';
-      const digits = form.phone.replace(/\D/g, '');
-      if (digits.length < 10 || digits.length > 12) return 'Enter a valid 10-digit phone number.';
-      if (!form.city.trim()) return 'City is required.';
-    }
-    if (step === 2) {
-      if (!form.experience) return 'Select your experience level.';
-      if (form.specializations.length === 0) return 'Select at least one specialization.';
-      if (form.languages.length === 0) return 'Select at least one language.';
-    }
-    if (step === 3) {
-      if (form.aadhar && form.aadhar.replace(/\D/g, '').length !== 12)
-        return 'Aadhaar number must be 12 digits.';
-    }
-    if (step === 4) {
-      if (!form.bankAccount.trim() || !form.ifsc.trim())
-        return 'Bank account and IFSC are required.';
-    }
-    return null;
+  // ── Per-field validation on blur ──────────────────────────
+  const validateField = (key) => {
+    // map bankHolder → accountHolder for VALIDATORS key
+    const validatorKey = key === 'bankHolder' ? 'accountHolder' : key;
+    const validator = VALIDATORS[validatorKey];
+    if (!validator) return;
+    const val = form[key];
+    const msg = validator(val);
+    setFieldErrors(prev => ({ ...prev, [key]: msg || null }));
   };
 
-  const [error, setError] = useState('');
+  // ── Per-step validation before Next ──────────────────────
+  const validateStep = (s) => {
+    const keys = STEP_FIELDS[s] || [];
+    const errors = {};
+    let hasError = false;
+    keys.forEach(key => {
+      const validatorKey = key === 'bankHolder' ? 'accountHolder' : key;
+      const validator = VALIDATORS[validatorKey];
+      if (!validator) return;
+      const val = form[key];
+      const msg = validator(val);
+      if (msg) { errors[key] = msg; hasError = true; }
+    });
+    setFieldErrors(prev => ({ ...prev, ...errors }));
+    return !hasError;
+  };
 
   const handleNext = () => {
-    const err = validate();
-    if (err) { setError(err); return; }
+    if (!validateStep(step)) return;
     setError('');
     setStep(s => Math.min(s + 1, 4));
   };
-  const handleBack = () => { setError(''); setStep(s => Math.max(s - 1, 1)); };
 
+  const handleBack = () => {
+    setError('');
+    setStep(s => Math.max(s - 1, 1));
+  };
+
+  // ── Submit with Supabase v2 async/await ──────────────────
   const handleSubmit = async () => {
-    const err = validate();
-    if (err) { setError(err); return; }
+    if (!validateStep(4)) return;
     setSubmitting(true);
-    try {
-      await supabase.from('pandits').insert({
-        name:             form.name,
-        phone:            form.phone,
-        email:            form.email || null,
-        city:             form.city,
-        pincode:          form.pincode || null,
-        experience_years: parseInt(form.experience) || 0,
-        specializations:  form.specializations,
-        languages:        form.languages,
-        bio:              form.bio || null,
-        aadhar_number:    form.aadhar || null,
-        pan_number:       form.pan || null,
-        bank_account:     form.bankAccount,
-        ifsc_code:        form.ifsc,
-        bank_holder:      form.bankHolder || form.name,
-        status:           'pending',
-        is_verified:      false,
-        rating:           0,
-        bookings_count:   0,
-        created_at:       new Date().toISOString(),
-      });
+    setError('');
 
-      // Notify admin
-      await supabase.from('notifications').insert({
-        type:    'new_pandit_application',
-        title:   'New Pandit Application',
-        message: `${form.name} from ${form.city} has applied to join BhaktiGo.`,
-        data:    { name: form.name, phone: form.phone, city: form.city },
-      }).catch(() => {}); // non-critical
+    const { error: insertError } = await supabase.from('pandits').insert({
+      name:             form.name,
+      phone:            form.phone.replace(/\D/g, ''),
+      email:            form.email || null,
+      city:             form.city,
+      pincode:          form.pincode || null,
+      experience_years: parseInt(form.experience) || 0,
+      specializations:  form.specializations,
+      languages:        form.languages,
+      bio:              form.bio || null,
+      aadhar_number:    form.aadhar ? form.aadhar.replace(/\s/g, '') : null,
+      pan_number:       form.pan || null,
+      bank_account:     form.bankAccount,
+      ifsc_code:        form.ifsc,
+      bank_holder:      form.bankHolder || form.name,
+      status:           'pending',
+      is_verified:      false,
+      rating:           0,
+      bookings_count:   0,
+      created_at:       new Date().toISOString(),
+    });
 
-      setSubmitted(true);
-    } catch (e) {
-      console.error('[pandit-onboard]', e);
-      setError(e.message || 'Submission failed. Please try again.');
+    if (insertError) {
+      console.error('[pandit-onboard]', insertError);
+      if (insertError.code === '23505') {
+        setError('This phone number is already registered. Go to your dashboard or use a different number.');
+      } else {
+        setError(insertError.message || 'Submission failed. Please try again.');
+      }
+      setSubmitting(false);
+      return;
     }
+
+    // Fire-and-forget admin notification — non-critical
+    supabase.from('notifications').insert({
+      type:    'new_pandit_application',
+      title:   'New Pandit Application',
+      message: `${form.name} from ${form.city} has applied to join BhaktiGo.`,
+      data:    { name: form.name, phone: form.phone, city: form.city },
+    }).then(({ error: notifError }) => {
+      if (notifError) console.warn('[pandit-onboard] notification insert failed (non-critical):', notifError.message);
+    });
+
     setSubmitting(false);
+    setSubmitted(true);
   };
 
   // ── Success screen ──────────────────────────────────────
@@ -268,20 +339,60 @@ export default function PanditOnboardPage() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <div style={{ gridColumn: '1 / -1' }}>
                   <Field label="Full Name *">
-                    <input style={inputStyle} value={form.name} onChange={e => set('name', e.target.value)} placeholder="Pandit Ram Sharma" />
+                    <input
+                      style={getInputStyle(!!fieldErrors.name)}
+                      value={form.name}
+                      onChange={e => set('name', e.target.value)}
+                      onBlur={() => validateField('name')}
+                      placeholder="Pandit Ram Sharma"
+                    />
+                    <FieldError msg={fieldErrors.name} />
                   </Field>
                 </div>
                 <Field label="Phone Number *">
-                  <input style={inputStyle} value={form.phone} onChange={e => set('phone', e.target.value)} placeholder="+91 XXXXX XXXXX" />
+                  <input
+                    style={getInputStyle(!!fieldErrors.phone)}
+                    value={form.phone}
+                    onChange={e => set('phone', fmtPhone(e.target.value))}
+                    onBlur={() => validateField('phone')}
+                    placeholder="10-digit mobile number"
+                    maxLength={10}
+                    inputMode="numeric"
+                  />
+                  <FieldError msg={fieldErrors.phone} />
                 </Field>
                 <Field label="Email (optional)">
-                  <input style={inputStyle} type="email" value={form.email} onChange={e => set('email', e.target.value)} placeholder="you@example.com" />
+                  <input
+                    style={getInputStyle(!!fieldErrors.email)}
+                    type="email"
+                    value={form.email}
+                    onChange={e => set('email', e.target.value)}
+                    onBlur={() => validateField('email')}
+                    placeholder="you@example.com"
+                  />
+                  <FieldError msg={fieldErrors.email} />
                 </Field>
                 <Field label="City *">
-                  <input style={inputStyle} value={form.city} onChange={e => set('city', e.target.value)} placeholder="Delhi, Mumbai, Kashi..." />
+                  <input
+                    style={getInputStyle(!!fieldErrors.city)}
+                    value={form.city}
+                    onChange={e => set('city', e.target.value)}
+                    onBlur={() => validateField('city')}
+                    placeholder="Delhi, Mumbai, Kashi..."
+                  />
+                  <FieldError msg={fieldErrors.city} />
                 </Field>
                 <Field label="Pincode">
-                  <input style={inputStyle} value={form.pincode} onChange={e => set('pincode', e.target.value)} placeholder="110001" maxLength={6} />
+                  <input
+                    style={getInputStyle(!!fieldErrors.pincode)}
+                    value={form.pincode}
+                    onChange={e => set('pincode', fmtPincode(e.target.value))}
+                    onBlur={() => validateField('pincode')}
+                    placeholder="110001"
+                    maxLength={6}
+                    inputMode="numeric"
+                  />
+                  <FieldError msg={fieldErrors.pincode} />
                 </Field>
               </div>
             </div>
@@ -292,16 +403,24 @@ export default function PanditOnboardPage() {
             <div>
               <h3 style={{ fontFamily: 'Cinzel, serif', color: C.gold, marginBottom: 20, fontSize: 16 }}>🕉️ Professional Details</h3>
               <Field label="Years of Experience *">
-                <select style={{ ...inputStyle, cursor: 'pointer' }} value={form.experience} onChange={e => set('experience', e.target.value)}>
+                <select
+                  style={{ ...getInputStyle(!!fieldErrors.experience), cursor: 'pointer' }}
+                  value={form.experience}
+                  onChange={e => set('experience', e.target.value)}
+                  onBlur={() => validateField('experience')}
+                >
                   <option value="">Select experience...</option>
                   {EXP_OPTIONS.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
                 </select>
+                <FieldError msg={fieldErrors.experience} />
               </Field>
 
               <Field label="Specializations * (select all that apply)">
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
                   {SPECIALIZATION_OPTIONS.map(s => (
-                    <button key={s} type="button" onClick={() => toggle('specializations', s)} style={chipStyle(form.specializations.includes(s))}>
+                    <button key={s} type="button"
+                      onClick={() => { toggle('specializations', s); setFieldErrors(p => ({ ...p, specializations: null })); }}
+                      style={chipStyle(form.specializations.includes(s))}>
                       {s}
                     </button>
                   ))}
@@ -309,21 +428,25 @@ export default function PanditOnboardPage() {
                 <div style={{ color: C.sub, fontSize: 11, marginTop: 6 }}>
                   {form.specializations.length} selected
                 </div>
+                <FieldError msg={fieldErrors.specializations} />
               </Field>
 
               <Field label="Languages * (select all)">
                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 4 }}>
                   {LANGUAGE_OPTIONS.map(l => (
-                    <button key={l} type="button" onClick={() => toggle('languages', l)} style={chipStyle(form.languages.includes(l))}>
+                    <button key={l} type="button"
+                      onClick={() => { toggle('languages', l); setFieldErrors(p => ({ ...p, languages: null })); }}
+                      style={chipStyle(form.languages.includes(l))}>
                       {l}
                     </button>
                   ))}
                 </div>
+                <FieldError msg={fieldErrors.languages} />
               </Field>
 
               <Field label="Short Bio (max 300 chars)">
                 <textarea
-                  style={{ ...inputStyle, minHeight: 80, resize: 'vertical' }}
+                  style={{ ...getInputStyle(false), minHeight: 80, resize: 'vertical' }}
                   value={form.bio}
                   onChange={e => set('bio', e.target.value.slice(0, 300))}
                   placeholder="Your lineage, guru, areas of expertise..."
@@ -344,23 +467,28 @@ export default function PanditOnboardPage() {
                 <div style={{ gridColumn: '1 / -1' }}>
                   <Field label="Aadhaar Number * (12 digits)">
                     <input
-                      style={inputStyle}
-                      maxLength={12}
+                      style={getInputStyle(!!fieldErrors.aadhar)}
+                      maxLength={14}
                       value={form.aadhar}
-                      onChange={e => set('aadhar', e.target.value.replace(/\D/g, ''))}
+                      onChange={e => set('aadhar', fmtAadhar(e.target.value))}
+                      onBlur={() => validateField('aadhar')}
                       placeholder="XXXX XXXX XXXX"
+                      inputMode="numeric"
                     />
+                    <FieldError msg={fieldErrors.aadhar} />
                   </Field>
                 </div>
                 <div style={{ gridColumn: '1 / -1' }}>
                   <Field label="PAN Number (optional)">
                     <input
-                      style={inputStyle}
+                      style={getInputStyle(!!fieldErrors.pan)}
                       maxLength={10}
                       value={form.pan}
-                      onChange={e => set('pan', e.target.value.toUpperCase())}
+                      onChange={e => set('pan', fmtPAN(e.target.value))}
+                      onBlur={() => validateField('pan')}
                       placeholder="ABCDE1234F"
                     />
+                    <FieldError msg={fieldErrors.pan} />
                   </Field>
                 </div>
               </div>
@@ -380,17 +508,38 @@ export default function PanditOnboardPage() {
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
                 <div style={{ gridColumn: '1 / -1' }}>
                   <Field label="Account Holder Name">
-                    <input style={inputStyle} value={form.bankHolder} onChange={e => set('bankHolder', e.target.value)} placeholder="As on bank passbook" />
+                    <input
+                      style={getInputStyle(false)}
+                      value={form.bankHolder}
+                      onChange={e => set('bankHolder', e.target.value)}
+                      placeholder="As on bank passbook"
+                    />
                   </Field>
                 </div>
                 <div style={{ gridColumn: '1 / -1' }}>
                   <Field label="Bank Account Number *">
-                    <input style={inputStyle} value={form.bankAccount} onChange={e => set('bankAccount', e.target.value)} placeholder="Account number for payouts" />
+                    <input
+                      style={getInputStyle(!!fieldErrors.bankAccount)}
+                      value={form.bankAccount}
+                      onChange={e => set('bankAccount', e.target.value.replace(/\D/g, ''))}
+                      onBlur={() => validateField('bankAccount')}
+                      placeholder="Account number for payouts"
+                      inputMode="numeric"
+                    />
+                    <FieldError msg={fieldErrors.bankAccount} />
                   </Field>
                 </div>
                 <div style={{ gridColumn: '1 / -1' }}>
                   <Field label="IFSC Code *">
-                    <input style={inputStyle} value={form.ifsc} onChange={e => set('ifsc', e.target.value.toUpperCase())} placeholder="e.g. SBIN0001234" />
+                    <input
+                      style={getInputStyle(!!fieldErrors.ifsc)}
+                      value={form.ifsc}
+                      onChange={e => set('ifsc', fmtIFSC(e.target.value))}
+                      onBlur={() => validateField('ifsc')}
+                      placeholder="e.g. SBIN0001234"
+                      maxLength={11}
+                    />
+                    <FieldError msg={fieldErrors.ifsc} />
                   </Field>
                 </div>
               </div>
@@ -412,7 +561,7 @@ export default function PanditOnboardPage() {
               </button>
             ) : (
               <button onClick={handleSubmit} disabled={submitting}
-                style={{ flex: 1, background: `linear-gradient(135deg, ${C.accent}, #D4A017)`, color: '#fff', border: 'none', borderRadius: 20, padding: '13px', fontWeight: 900, cursor: 'pointer', fontSize: 15, fontFamily: 'inherit', boxShadow: '0 6px 20px rgba(255,107,0,0.35)' }}>
+                style={{ flex: 1, background: submitting ? 'rgba(255,107,0,0.4)' : `linear-gradient(135deg, ${C.accent}, #D4A017)`, color: '#fff', border: 'none', borderRadius: 20, padding: '13px', fontWeight: 900, cursor: submitting ? 'not-allowed' : 'pointer', fontSize: 15, fontFamily: 'inherit', boxShadow: '0 6px 20px rgba(255,107,0,0.35)' }}>
                 {submitting ? '⏳ Submitting...' : '🙏 Submit Application'}
               </button>
             )}
