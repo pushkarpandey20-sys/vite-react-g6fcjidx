@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../store/AppCtx';
 import { Toast } from '../components/common/UIElements';
@@ -24,6 +24,21 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
   const location = useLocation();
   const path = location.pathname;
   const [sidebarOpen, setSidebarOpen] = React.useState(false);
+
+  // Close sidebar on every route change
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname]);
+
+  // Lock body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (sidebarOpen && window.innerWidth <= 768) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [sidebarOpen]);
 
   const isUser = path.startsWith('/user');
   const isPandit = path.startsWith('/pandit');
@@ -83,7 +98,7 @@ export default function MainLayout({ children, sidebar, portalLabel, portalColor
       </nav>
 
 
-      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)} />}
+      <div className={`sidebar-overlay${sidebarOpen ? ' visible' : ''}`} onClick={() => setSidebarOpen(false)} />
 
       <div className="layout">
         <div className={`sidebar-wrap ${sidebarOpen ? 'sidebar-open' : ''}`}>
