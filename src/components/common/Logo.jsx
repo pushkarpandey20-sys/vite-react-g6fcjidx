@@ -11,16 +11,15 @@ export const LogoIcon = ({ size = 24, color = "#F0C040" }) => (
 );
 
 export const BhaktiGoLogo = ({ size = 32, showText = true, textColor = "#F0C040", taglineColor = "rgba(255,248,240,0.5)" }) => {
-  const isSmall = typeof window !== 'undefined' && window.innerWidth < 480;
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: isSmall ? '8px' : '12px' }}>
-      <LogoIcon size={isSmall ? size * 0.8 : size} />
+    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+      <LogoIcon size={size} />
       {showText && (
         <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <span style={{ fontFamily: 'Cinzel, serif', color: textColor, fontSize: isSmall ? 14 : size * 0.6, fontWeight: 900, lineHeight: 1 }}>BhaktiGo</span>
-          {!isSmall && (
-            <span style={{ fontSize: size * 0.22, color: taglineColor, letterSpacing: '0.3px', marginTop: '4px', fontWeight: 600, textTransform: 'uppercase', whiteSpace: 'nowrap' }}>Bridging You to Divine Services</span>
-          )}
+          {/* logo-name font-size controlled by CSS class */}
+          <span className="logo-name" style={{ color: textColor, lineHeight: 1 }}>BhaktiGo</span>
+          {/* logo-tagline hidden at ≤900px via CSS */}
+          <span className="logo-tagline" style={{ color: taglineColor, marginTop: 3 }}>Bridging You to Divine Services</span>
         </div>
       )}
     </div>
