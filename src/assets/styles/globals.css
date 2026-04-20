@@ -117,12 +117,23 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 12px;
   height: 64px;
   border-bottom: 2.5px solid #FF6B00;
   position: sticky;
   top: 0;
   z-index: 200;
   box-shadow: 0 4px 20px rgba(255, 107, 0, 0.08);
+}
+
+/* Left group: hamburger (mobile) + logo + portal badge */
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  flex-shrink: 1;
+  overflow: hidden;
 }
 
 .hamburger {
@@ -234,12 +245,7 @@ body {
   color: #FF6B00;
 }
 
-.nav-r {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  position: relative;
-}
+/* nav-r desktop base defined in HAMBURGER MENU section below */
 
 .icon-btn {
   width: 38px;
@@ -2332,18 +2338,21 @@ body {
 /* =============================================
    HAMBURGER MENU & MOBILE SIDEBAR
    ============================================= */
+
+/* Hamburger: hidden on desktop — CSS controls display, NOT inline styles */
 .hamburger {
-  display: none;
+  display: none;       /* desktop: hidden */
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   gap: 5px;
-  width: 38px;
-  height: 38px;
+  width: 36px;
+  height: 36px;
   background: rgba(255,255,255,.07);
   border: 1px solid rgba(212,160,23,.3);
   border-radius: 10px;
   cursor: pointer;
-  padding: 8px;
+  padding: 7px;
   flex-shrink: 0;
 }
 
@@ -2353,6 +2362,24 @@ body {
   background: var(--gl);
   border-radius: 2px;
   transition: all .3s;
+}
+
+/* nav-r: right actions group */
+.nav-r {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+/* nav-username: hidden on very small screens */
+.nav-username {
+  display: inline;
+}
+
+/* nav-logout-btn: hide on small screens */
+.nav-logout-btn {
+  display: flex;
 }
 
 .sidebar-wrap {
@@ -2375,11 +2402,12 @@ body {
 @media (max-width: 768px) {
   /* Nav */
   .tnav {
-    padding: 0 14px;
+    padding: 0 12px;
     height: 56px;
     gap: 8px;
   }
 
+  /* Show hamburger on mobile — no inline style override */
   .hamburger {
     display: flex;
   }
@@ -2392,14 +2420,30 @@ body {
     font-size: 16px;
   }
 
+  /* Portal badge: hide on mobile, takes too much space */
   .nav-portal-badge {
     display: none;
+  }
+
+  /* Nav actions: tighter gap on mobile */
+  .nav-r {
+    gap: 6px;
   }
 
   .icon-btn {
     width: 32px;
     height: 32px;
     font-size: 13px;
+  }
+
+  /* Nav test login: hide on mobile */
+  .nav-test-login {
+    display: none !important;
+  }
+
+  /* Nav logout label: hide on mobile */
+  .nav-logout-btn {
+    display: none;
   }
 
   /* Layout — full height on mobile too, content scrolls inside */
@@ -4472,32 +4516,19 @@ input, select, textarea { max-width: 100% !important; }
    MOBILE FIXES — all screens ≤ 768px
    ══════════════════════════════════════════════════ */
 
-/* ── Header: compact nav-r on small screens ─────── */
+/* ── Header: compact on medium-small screens ─────── */
 @media (max-width: 640px) {
-  .nav-r { gap: 6px; }
-
-  /* Truncate long user names */
-  .nav-r > div:last-child {
-    max-width: 100px;
-    overflow: hidden;
-  }
-  .nav-r > div:last-child > div:first-child {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 72px;
-    font-size: 11px !important;
-  }
-  /* Shrink padding on user pill */
-  .nav-r > div:last-child {
-    padding: 4px 8px !important;
-  }
+  .nav-r { gap: 5px; }
+  .nav-user-pill { padding: 4px 8px !important; }
+  .nav-username  { font-size: 11px !important; max-width: 60px; overflow: hidden; text-overflow: ellipsis; }
 }
 
-@media (max-width: 400px) {
-  /* Hide "Logout" text on very small phones, keep the username */
-  .nav-r > div:last-child > div:nth-child(2) { display: none; }
-  .nav-r > div:last-child { padding: 4px 6px !important; }
+@media (max-width: 420px) {
+  /* Very small: hide username text, show just the icon */
+  .nav-username  { display: none !important; }
+  .nav-logout-btn { display: none !important; }
+  .nav-user-pill { padding: 4px 8px !important; }
+  .nav-r         { gap: 4px !important; }
 }
 
 /* ── Pandit Marketplace: filter bar horizontal scroll ── */
